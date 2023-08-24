@@ -35,7 +35,7 @@
 ```
 src
 ├── @type      #define commons type use in project
-├── assets     #contain file image, svg, animation config, ... for project
+├── assets     #contain file image, svg, animation config, ... in project
 │
 ├── components
 │   ├── bases   #define base component for project
