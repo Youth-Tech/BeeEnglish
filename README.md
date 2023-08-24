@@ -5,9 +5,9 @@
 1. [Technical](#technical)
 2. [Project Scaffolding](#project-scaffolding)
 3. [Alias](#alias)
-4. [🚀 Getting Started](#🚀-getting-started)
-5. [Core Component](#core-component)
-6. [Custom Component](#custom-component)
+4. [Core Component](#core-component)
+5. [Custom Component](#custom-component)
+6. [🚀 Getting Started](#🚀-getting-started)
 7. [How to create new Service](#how-to-create-new-api-service)
 8. [How to create new Flow](#how-to-create-new-flow)
 9. [How to use Rive Animation](#how-to-use-rive-animation)
@@ -95,31 +95,6 @@ src
 - @screens: ./src/screens
 - @themes: ./src/themes
 - @utils: ./src/utils
-
-## 🚀 Getting Started
-
-### 1. Installation
-
-```
-yarn install
-
-# To build iOS app
-cd ios
-pod install
-cd ..
-```
-
-### 2. Run Android
-
-```
-yarn android
-```
-
-### 3. Run IOS
-
-```
-yarn ios
-```
 
 ## Core Component
 
@@ -293,6 +268,31 @@ yarn ios
             }}
         />
          ```
+
+## 🚀 Getting Started
+
+### 1. Installation
+
+```
+yarn install
+
+# To build iOS app
+cd ios
+pod install
+cd ..
+```
+
+### 2. Run Android
+
+```
+yarn android
+```
+
+### 3. Run IOS
+
+```
+yarn ios
+```
 
 ## How to create new `Api Service`
 
