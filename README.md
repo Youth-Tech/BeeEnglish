@@ -231,7 +231,7 @@ src
     | labelSize         | `FontKeys` or `number`                       | `undefined`   |         |
     | labelColor        | `string`                                     | `white`       |         |
     | fontFamily        | `bold` or `semiBold` or `regular` or `light` | `regular`     |         |
-    | labelStyle        | `TextStyle`                                  | `undefine`    |         |
+    | labelStyle        | `TextStyle`                                  | `undefined`   |         |
     | shadowHeight      | `number`                                     | 5             |         |
     | buttonRadius      | `number`                                     | 5             |         |
     | buttonColor       | `string`                                     | `primary`     |         |
