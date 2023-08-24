@@ -32,7 +32,7 @@
 
 ## Project Scaffolding
 
-```
+```bash
 src
 ├── @type      #define commons type use in project
 ├── assets     #contain file image, svg, animation config, ... in project
@@ -124,13 +124,8 @@ src
 
   - **How to use**
 
-    ```
-    <CircleProgress
-      size={150}
-      step={50}
-      totalSteps={100}
-      strokeWidth={10}
-     />
+    ```javascript
+    <CircleProgress size={150} step={50} totalSteps={100} strokeWidth={10} />
     ```
 
 - Progress
@@ -149,15 +144,15 @@ src
 
   - **How to use**
 
-    ```
-     <Progress
-       strokeHeight={10}
-       step={80}
-       totalSteps={100}
-       progressContainerStyles={{
-         paddingHorizontal: 10,
-       }}
-     />
+    ```javascript
+    <Progress
+      strokeHeight={10}
+      step={80}
+      totalSteps={100}
+      progressContainerStyles={{
+        paddingHorizontal: 10,
+      }}
+    />
     ```
 
 - LinearGradient
@@ -174,7 +169,7 @@ src
 
   - **How to use**
 
-    ```
+    ```javascript
     <LinearGradient
       colors={['#FFEFAD', '#FFC107']}
       containerStyle={{ flex: 1 }}
@@ -198,26 +193,26 @@ src
 
   - **How to use**
 
-         ```
-         <ShadowBlock
-            row
-            space="between"
-            paddingHorizontal={20}
-            marginTop={20}
-            containerPaddingHorizontal={20}
-         >
-           <Block width={10} height={10} backgroundColor="red" />
-           <Progress
-               step={10}
-               totalSteps={100}
-               strokeHeight={10}
-               progressContainerStyles={{
-                 flex: 1,
-                 marginStart: 10,
-               }}
-           />
-         </ShadowBlock>
-         ```
+    ```javascript
+    <ShadowBlock
+      row
+      space="between"
+      paddingHorizontal={20}
+      marginTop={20}
+      containerPaddingHorizontal={20}
+    >
+      <Block width={10} height={10} backgroundColor="red" />
+      <Progress
+        step={10}
+        totalSteps={100}
+        strokeHeight={10}
+        progressContainerStyles={{
+          flex: 1,
+          marginStart: 10,
+        }}
+      />
+    </ShadowBlock>
+    ```
 
 - ShadowButton
 
@@ -244,39 +239,40 @@ src
 
   - **How to use**
 
-         ```
-         <ShadowButton
-            buttonHeight={45}
-            buttonBorderSize={2}
-            buttonBorderColor={
-              <Block style={StyleSheet.absoluteFill}>
-                <LinearGradient
-                  colors={['#FFEFAD', '#FFC107']}
-                  containerStyle={{ width: '100%', height: '100%' }}
-                />
-              </Block>
-          }
-            shadowHeight={10}
-            buttonRadius={8}
-            shadowButtonColor="#FFC107"
-            buttonColor="#FFEFAD"
-            labelSize={'h2'}
-            fontFamily="bold"
-            labelColor="primaryText"
-            onPress={() => {
-              console.log('press')
-            }}
-        />
-         ```
+    ```javascript
+    <ShadowButton
+      buttonHeight={45}
+      buttonBorderSize={2}
+      buttonBorderColor={
+        <Block style={StyleSheet.absoluteFill}>
+          <LinearGradient
+            colors={['#FFEFAD', '#FFC107']}
+            containerStyle={{ width: '100%', height: '100%' }}
+          />
+        </Block>
+      }
+      shadowHeight={10}
+      buttonRadius={8}
+      shadowButtonColor="#FFC107"
+      buttonColor="#FFEFAD"
+      labelSize={'h2'}
+      fontFamily="bold"
+      labelColor="primaryText"
+      onPress={() => {
+        console.log('press')
+      }}
+    />
+    ```
 
 ## 🚀 Getting Started
 
 ### 1. Installation
 
-```
+```bash
 yarn install
 
 # To build iOS app
+
 cd ios
 pod install
 cd ..
@@ -284,13 +280,13 @@ cd ..
 
 ### 2. Run Android
 
-```
+```bash
 yarn android
 ```
 
 ### 3. Run IOS
 
-```
+```bash
 yarn ios
 ```
 
@@ -300,7 +296,7 @@ yarn ios
 
    **Example**
 
-```
+```javascript
 import { apiService } from './apiService'
 import { EndPoint } from './endPoint'
 import {
@@ -312,44 +308,43 @@ import {
 } from './type'
 
 export const videoService = apiService.injectEndpoints({
-  endpoints: (builder) => ({
-    getAllVideo: builder.query<GetAllVideoResponse, void>({
-      query: () => EndPoint.getAllVideo,
-      keepUnusedDataFor: 10,
+    endpoints: (builder) => ({
+        getAllVideo: builder.query<GetAllVideoResponse, void>({
+            query: () => EndPoint.getAllVideo,
+            keepUnusedDataFor: 10,
+        }),
+        getRelatedVideos: builder.query<Video[], RelatedVideosRequest>({
+            query: (input) => {
+              return {
+                url: EndPoint.getAllVideo,
+                params: input,
+              }
+            },
+            keepUnusedDataFor: 10,
+            transformResponse: (response: any) => response.data,
+        }),
+        getVideo: builder.query<GetVideoResponse, string>({
+            query: (id) => EndPoint.getVideoById(id),
+            keepUnusedDataFor: 10,
+        }),
+        geVideoPagination: builder.query<GetAllVideoResponse, QueryArgs>({
+            query: (args) => {
+              return {
+                url: EndPoint.getAllVideo,
+                params: args,
+              }
+            },
+            keepUnusedDataFor: 10,
+          }),
     }),
-    getRelatedVideos: builder.query<Video[], RelatedVideosRequest>({
-      query: (input) => {
-        return {
-          url: EndPoint.getAllVideo,
-          params: input,
-        }
-      },
-      keepUnusedDataFor: 10,
-      transformResponse: (response: any) => response.data,
-    }),
-    getVideo: builder.query<GetVideoResponse, string>({
-      query: (id) => EndPoint.getVideoById(id),
-      keepUnusedDataFor: 10,
-    }),
-
-    geVideoPagination: builder.query<GetAllVideoResponse, QueryArgs>({
-      query: (args) => {
-        return {
-          url: EndPoint.getAllVideo,
-          params: args,
-        }
-      },
-      keepUnusedDataFor: 10,
-    }),
-  }),
 })
 
 export const {
-  useGetAllVideoQuery,
-  useGetVideoQuery,
-  useLazyGetRelatedVideosQuery,
-  useLazyGeVideoPaginationQuery,
-  useGeVideoPaginationQuery
+    useGetAllVideoQuery,
+    useGetVideoQuery,
+    useLazyGetRelatedVideosQuery,
+    useLazyGeVideoPaginationQuery,
+    useGeVideoPaginationQuery
 } = videoService
 ```
 
