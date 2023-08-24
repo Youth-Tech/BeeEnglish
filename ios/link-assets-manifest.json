@@ -1,0 +1,41 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Linotte_Bold.ttf",
+      "sha1": "941d779ac7706a0e2b4b558945c5a6fcf96c6448"
+    },
+    {
+      "path": "src/assets/fonts/Linotte_Heavy.ttf",
+      "sha1": "5a901bef5d3ee6cf951a6d8bc102157744c20cf4"
+    },
+    {
+      "path": "src/assets/fonts/Linotte_Light.ttf",
+      "sha1": "9663d2e609db61083ffac0c8152e430aa5d6a817"
+    },
+    {
+      "path": "src/assets/fonts/Linotte_Regular.ttf",
+      "sha1": "bc3edb368c9e9c4db06b8890db073f6420836206"
+    },
+    {
+      "path": "src/assets/fonts/Linotte_Semi_Bold.ttf",
+      "sha1": "ec05192b0309806880cbeca92aaf3a9e76392257"
+    },
+    {
+      "path": "src/assets/fonts/Quicksand-Bold.ttf",
+      "sha1": "8727a6ae26c6646a7f25bfe6560e19c9265ea87c"
+    },
+    {
+      "path": "src/assets/fonts/Quicksand-Light.ttf",
+      "sha1": "739d87992cf1cd96cff0c9c32e40927385a38146"
+    },
+    {
+      "path": "src/assets/fonts/Quicksand-Regular.ttf",
+      "sha1": "6eebfcb02f142c6e2bf58f7fcb31f10ec914a0ed"
+    },
+    {
+      "path": "src/assets/fonts/Quicksand-SemiBold.ttf",
+      "sha1": "43fdbf795bb0b7cc5b0d3dbcbdef0cdec0f29ca9"
+    }
+  ]
+}
