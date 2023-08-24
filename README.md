@@ -162,7 +162,7 @@ src
     | Name           | Type                                   | Default value | Require |
     | -------------- | -------------------------------------- | ------------- | ------- |
     | colors         | `string[]`                             |               | ✅      |
-    | containerStyle | `number`                               | `{}`          |         |
+    | containerStyle | `ViewStyle`                            | `{}`          |         |
     | orientation    | `horizontal` or `vertical` or `number` | `vertical`    |         |
     | revers         | `boolean`                              | `false`       |         |
     | transform      | `Partial<TransformedProps>`            | `{}`          |         |
