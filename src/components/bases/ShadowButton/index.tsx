@@ -20,18 +20,19 @@ const BlockAnimated = Animated.createAnimatedComponent(Block)
 
 export const ShadowButton: React.FC<ButtonShadowProps> = (props) => {
   const {
-    buttonHeight,
-    buttonWidth,
+    disabled,
     labelSize,
-    labelColor = 'white',
-    fontFamily = 'regular',
     labelStyle,
-    buttonColor = 'primary',
+    buttonWidth,
+    buttonHeight,
     containerStyle,
-    shadowButtonColor = 'greyLight',
     shadowHeight = 5,
     buttonRadius = 5,
     buttonBorderSize = 0,
+    labelColor = 'white',
+    fontFamily = 'regular',
+    buttonColor = 'primary',
+    shadowButtonColor = 'greyLight',
     buttonBorderColor = 'white',
 
     ...rest
@@ -41,7 +42,9 @@ export const ShadowButton: React.FC<ButtonShadowProps> = (props) => {
   const buttonBlockStyle: {} = React.useMemo(() => {
     return [
       {
-        backgroundColor: handleColor(colors, shadowButtonColor),
+        backgroundColor: !disabled
+          ? handleColor(colors, shadowButtonColor)
+          : handleColor(colors, 'greyLight'),
         marginHorizontal: 5,
         borderRadius: normalize.m(buttonRadius),
       },
@@ -82,17 +85,21 @@ export const ShadowButton: React.FC<ButtonShadowProps> = (props) => {
   )
 
   const renderBorderButton = React.useMemo(() => {
-    if (typeof buttonBorderColor === 'string') {
+    if (typeof buttonBorderColor === 'string' || disabled) {
       return (
         <Block
           style={baseStyles.absoluteFill}
-          backgroundColor={handleColor(colors, buttonBorderColor)}
+          backgroundColor={
+            disabled
+              ? 'greyLight'
+              : handleColor(colors, buttonBorderColor as string)
+          }
         />
       )
     }
 
     return buttonBorderColor
-  }, [buttonBorderColor])
+  }, [buttonBorderColor, disabled])
 
   React.useEffect(() => {
     buttonShadowHeight.value = -shadowHeight
@@ -100,6 +107,7 @@ export const ShadowButton: React.FC<ButtonShadowProps> = (props) => {
 
   return (
     <Pressable
+      disabled={disabled}
       onPressIn={handlePressInAnimation}
       onPressOut={handlePressOutAnimation}
       {...rest}
@@ -116,7 +124,10 @@ export const ShadowButton: React.FC<ButtonShadowProps> = (props) => {
         >
           {renderBorderButton}
           <Block
-            backgroundColor={handleColor(colors, buttonColor)}
+            backgroundColor={handleColor(
+              colors,
+              !disabled ? buttonColor : '#ccc',
+            )}
             width={'100%'}
             height={'100%'}
             overflow="hidden"

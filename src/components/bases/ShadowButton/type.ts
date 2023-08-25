@@ -113,6 +113,15 @@ export interface ButtonShadowProps extends PressableProps {
    *
    */
   shadowButtonColor?: string
+
+  /**
+   *
+   * ```
+   * disabled='boolean' <=> { disabled: boolean | undefined }
+   * ```
+   *
+   */
+  disabled?: boolean
   // /**
   //  *
   //  * ```

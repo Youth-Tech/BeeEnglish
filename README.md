@@ -235,6 +235,7 @@ src
     | shadowHeight      | `number`                                     | 5             |         |
     | buttonRadius      | `number`                                     | 5             |         |
     | buttonColor       | `string`                                     | `primary`     |         |
+    | disabled          | `boolean`                                    | `undefined`   |         |
     | shadowButtonColor | `string`                                     | `greyLight`   |         |
 
   - **How to use**
@@ -289,6 +290,8 @@ yarn android
 ```bash
 yarn ios
 ```
+
+c
 
 ## How to create new `Api Service`
 

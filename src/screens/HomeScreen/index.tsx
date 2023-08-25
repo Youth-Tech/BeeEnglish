@@ -44,28 +44,31 @@ export const HomeScreen: React.FC = () => {
           totalSteps={100}
           strokeWidth={10}
         />
-        <ShadowButton
-          buttonHeight={45}
-          buttonBorderSize={2}
-          buttonBorderColor={
-            <Block style={StyleSheet.absoluteFill}>
-              <LinearGradient
-                colors={['#FFEFAD', '#FFC107']}
-                containerStyle={{ width: '100%', height: '100%' }}
-              />
-            </Block>
-          }
-          shadowHeight={10}
-          buttonRadius={8}
-          shadowButtonColor="#FFC107"
-          buttonColor="#FFEFAD"
-          labelSize={'h2'}
-          fontFamily="bold"
-          labelColor="primaryText"
-          onPress={() => {
-            console.log('press')
-          }}
-        />
+        <Block width={'50%'}>
+          <ShadowButton
+            disabled
+            buttonHeight={45}
+            buttonBorderSize={2}
+            buttonBorderColor={
+              <Block style={StyleSheet.absoluteFill}>
+                <LinearGradient
+                  colors={['#FFEFAD', '#FFC107']}
+                  containerStyle={{ width: '100%', height: '100%' }}
+                />
+              </Block>
+            }
+            shadowHeight={10}
+            buttonRadius={8}
+            shadowButtonColor="#FFC107"
+            buttonColor="#FFEFAD"
+            labelSize={'h2'}
+            fontFamily="bold"
+            labelColor="primaryText"
+            onPress={() => {
+              console.log('press')
+            }}
+          />
+        </Block>
         <ShadowBlock
           row
           space="between"
