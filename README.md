@@ -362,3 +362,5 @@ export const {
 ## How to use Rive Animation ?
 
 - Official [document](https://help.rive.app/runtimes/overview/react-native) from Rive
+
+**From [Youth-Tech](https://github.com/Youth-Tech) with 💖**
