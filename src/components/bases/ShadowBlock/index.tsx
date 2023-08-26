@@ -3,6 +3,7 @@ import { Block } from '../Block'
 import { useTheme } from '@themes'
 import { ShadowBlockProps } from './type'
 import { handleColor } from '@components/utils'
+import { Text } from '../Text'
 
 /**
  * Create a block with awesome shadow
@@ -11,11 +12,13 @@ import { handleColor } from '@components/utils'
 
 export const ShadowBlock: React.FC<ShadowBlockProps> = React.memo((props) => {
   const {
+    flex,
     margin,
     marginTop,
     marginLeft,
     radius = 8,
     marginRight,
+    shadowLabel,
     height = 45,
     marginBottom,
     marginVertical,
@@ -23,10 +26,19 @@ export const ShadowBlock: React.FC<ShadowBlockProps> = React.memo((props) => {
     shadowHeight = 5,
     borderColor = '#ccc',
     marginHorizontal = 0,
+    shadowLabelTextStyle,
     backgroundColor = 'white',
+    shadowPosition = 'bottom',
+    shadowLabelContainerStyle,
+    shadowBackgroundColor = '#ccc',
+
+    containerPaddingTop,
+    containerPaddingRight,
+    containerPaddingLeft,
+    containerPaddingBottom,
     containerPaddingVertical,
     containerPaddingHorizontal,
-    shadowBackgroundColor = '#ccc',
+
     ...rest
   } = props
   const { colors } = useTheme()
@@ -36,42 +48,65 @@ export const ShadowBlock: React.FC<ShadowBlockProps> = React.memo((props) => {
       height={height}
       margin={margin}
       marginTop={marginTop}
+      flex={flex ? flex : 0}
       marginLeft={marginLeft}
       marginRight={marginRight}
       marginBottom={marginBottom}
       marginVertical={marginVertical}
+      paddingTop={containerPaddingTop}
+      paddingLeft={containerPaddingLeft}
       marginHorizontal={marginHorizontal}
+      paddingRight={containerPaddingRight}
+      paddingBottom={containerPaddingBottom}
       paddingVertical={containerPaddingVertical}
       paddingHorizontal={containerPaddingHorizontal}
     >
       <Block
         flex
-        style={{
-          backgroundColor: handleColor(colors, shadowBackgroundColor),
-        }}
+        column
         {...rest}
-        radius={radius}
-        borderColor="transparent"
         padding={0}
-        paddingHorizontal={0}
-        paddingVertical={0}
+        radius={radius}
+        paddingTop={0}
         paddingLeft={0}
         paddingRight={0}
         paddingBottom={0}
+        paddingVertical={0}
         isPaddingIos={false}
-        paddingTop={0}
+        paddingHorizontal={0}
+        borderColor="transparent"
+        backgroundColor={handleColor(colors, shadowBackgroundColor)}
       >
+        {shadowPosition === 'top' && (
+          <Block
+            {...shadowLabelContainerStyle}
+            backgroundColor="transparent"
+            style={{ transform: [{ translateY: shadowHeight }] }}
+          >
+            {shadowLabel && (
+              <Text {...shadowLabelTextStyle}>{shadowLabel}</Text>
+            )}
+          </Block>
+        )}
         <Block
           flex
-          borderWidth={borderWidth}
-          borderColor={borderColor}
-          style={{
-            backgroundColor: handleColor(colors, backgroundColor),
-            transform: [{ translateY: -shadowHeight }],
-          }}
-          radius={radius}
           alignCenter
           justifyCenter
+          radius={radius}
+          borderLeftWidth={borderWidth}
+          borderRightWidth={borderWidth}
+          borderBottomWidth={borderWidth}
+          borderColor={handleColor(colors, shadowBackgroundColor)}
+          borderTopWidth={shadowPosition === 'top' ? 0 : borderWidth}
+          style={{
+            backgroundColor: handleColor(colors, backgroundColor),
+            transform: [
+              {
+                translateY:
+                  shadowHeight * (shadowPosition === 'bottom' ? -1 : 1),
+              },
+            ],
+          }}
           {...rest}
         />
       </Block>

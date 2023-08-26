@@ -1,10 +1,27 @@
 import { BlockProps } from '../Block/types'
+import { CommonTextProps } from '../Text/type'
 
 export interface ShadowBlockProps extends BlockProps {
   /**
    * shadow height of component
    */
   shadowHeight?: number
+  /**
+   * position of shadow
+   */
+  shadowPosition?: 'top' | 'bottom'
+  /**
+   * position of shadow
+   */
+  shadowLabel?: string
+  /**
+   * define style for shadow label
+   */
+  shadowLabelTextStyle?: CommonTextProps
+  /**
+   * define style for shadow label container
+   */
+  shadowLabelContainerStyle?: BlockProps
   /**
    * ```
    * shadowBackgroundColor='string' <=> { color: string | `ColorKeys` }
@@ -24,4 +41,28 @@ export interface ShadowBlockProps extends BlockProps {
    * ```
    */
   containerPaddingHorizontal?: number
+  /**
+   * ```
+   * containerPaddingRight='number' <=> { paddingRight: number }
+   * ```
+   */
+  containerPaddingRight?: number
+  /**
+   * ```
+   * containerPaddingLeft='number' <=> { paddingLeft: number }
+   * ```
+   */
+  containerPaddingLeft?: number
+  /**
+   * ```
+   * containerPaddingTop='number' <=> { paddingTop: number }
+   * ```
+   */
+  containerPaddingTop?: number
+  /**
+   * ```
+   * containerPaddingBottom='number' <=> { paddingBottom: number }
+   * ```
+   */
+  containerPaddingBottom?: number
 }

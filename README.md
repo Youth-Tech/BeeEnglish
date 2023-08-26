@@ -184,21 +184,29 @@ src
     - **Component is extended all props from `Block` component**
     - **External Props**
 
-    | Name                       | Type     | Default value | Require |
-    | -------------------------- | -------- | ------------- | ------- |
-    | shadowHeight               | `number` | 5             |         |
-    | shadowBackgroundColor      | `string` | `#ccc`        |         |
-    | containerPaddingVertical   | `number` | `undefined`   |         |
-    | containerPaddingHorizontal | `number` | `undefined`   |         |
+    | Name                       | Type              | Default value | Require |
+    | -------------------------- | ----------------- | ------------- | ------- |
+    | shadowHeight               | `number`          | 5             |         |
+    | shadowPosition             | `top` or `bottom` | `bottom`      |         |
+    | shadowLabel                | `string`          | `undefined`   |         |
+    | shadowLabelTextStyle       | `CommonTextProps` | `undefined`   |         |
+    | shadowLabelContainerStyle  | `BlockProps`      | `undefined`   |         |
+    | shadowBackgroundColor      | `string`          | `#ccc`        |         |
+    | containerPaddingVertical   | `number`          | `undefined`   |         |
+    | containerPaddingHorizontal | `number`          | `undefined`   |         |
+    | containerPaddingRight      | `number`          | `undefined`   |         |
+    | containerPaddingLeft       | `number`          | `undefined`   |         |
+    | containerPaddingTop        | `number`          | `undefined`   |         |
+    | containerPaddingBottom     | `number`          | `undefined`   |         |
 
   - **How to use**
 
     ```javascript
     <ShadowBlock
       row
+      marginTop={20}
       space="between"
       paddingHorizontal={20}
-      marginTop={20}
       containerPaddingHorizontal={20}
     >
       <Block width={10} height={10} backgroundColor="red" />
