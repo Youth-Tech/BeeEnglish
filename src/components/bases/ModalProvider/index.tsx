@@ -116,7 +116,9 @@ export const ModalProvider = React.forwardRef<any, ModalProviderProps>(
             style={[StyleSheet.absoluteFill, rOpacityStyle]}
             onPress={handleDismiss}
           >
-            <Block flex>{backDropComponent}</Block>
+            <Block flex backgroundColor="transparent">
+              {backDropComponent}
+            </Block>
           </AnimatedPressable>
         )}
         {position === 'bottom' && _visible && (
