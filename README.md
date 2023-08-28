@@ -34,52 +34,52 @@
 
 ```bash
 src
-├── @type      #define commons type use in project
-├── assets     #contain file image, svg, animation config, ... in project
+├── @type                     #define commons type use in project
+├── assets                    #contain file image, svg, animation config, ... in project
 │
 ├── components
-│   ├── bases   #define base component for project
-│   ├── commons #define custom component for project
-│   └── utils   #define utils for component
+│   ├── bases                 #define base component for project
+│   ├── commons               #define custom component for project
+│   └── utils                 #define utils for component
 │
-├── hooks       #define custom hook
+├── hooks                     #define custom hook
 ├── navigation
-│   ├── index.ts     #export all method, variable, and components
-│   ├── routes.ts    #define all screen route in project
-│   ├── RootStack.tsx      #contain all stack in project
-│   ├── RootApp.tsx     #contain RootStack, loading modal, message modal
-│   └── NavigationService.ts     #define 'navigationRef' and all method to interact with it
+│   ├── index.ts              #export all method, variable, and components
+│   ├── routes.ts             #define all screen route in project
+│   ├── RootStack.tsx         #contain all stack in project
+│   ├── RootApp.tsx           #contain RootStack, loading modal, message modal
+│   └── NavigationService.ts  #define 'navigationRef' and all method to interact with it
 │
 ├── reduxs
 │   ├── apis
-│   │   ├── services    #define all method fetching data in project
+│   │   ├── services          #define all method fetching data in project
 │   │   │   ├── pokemon.ts
-│   │   │   └── index.tsx      #export all service
+│   │   │   └── index.tsx     #export all service
 │   │   ├── apiService.ts     #define common method to call api with re-auth
 │   │   └── endPoints.ts      #define all end point for api
-│   ├── reducers     #define all reducer in project
-│   ├── store     #define store for project with Redux Persist - MMKV storage
-│   └── selectors    #define all selector in project
+│   ├── reducers              #define all reducer in project
+│   ├── store                 #define store for project with Redux Persist - MMKV storage
+│   └── selectors             #define all selector in project
 │
 ├── screens
 │   ├── HomeScreen
-│   │   ├── components     #define common component for screen
-│   │   ├── index.tsx      #define and export screen component
-│   │   └── type.ts     #define common type for screen
+│   │   ├── components        #define common component for screen
+│   │   ├── index.tsx         #define and export screen component
+│   │   └── type.ts           #define common type for screen
 │   ├── ...
-│   └── index.ts     #export all screen
+│   └── index.ts              #export all screen
 │
 ├── themes
-│   ├── baseStyles.ts      #define base style for style sheet create by method 'makeStyles'
-│   ├── colors.ts    #define color palette
-│   ├── font.ts    #define font, fontSize in project
-│   ├── normalize.ts    #define responsive method
-│   ├── style.ts    #define utils, type, hook for style of project theme
-│   └── index.ts     #export all theme method and constants
+│   ├── baseStyles.ts         #define base style for style sheet create by method 'makeStyles'
+│   ├── colors.ts             #define color palette
+│   ├── font.ts               #define font, fontSize in project
+│   ├── normalize.ts          #define responsive method
+│   ├── style.ts              #define utils, type, hook for style of project theme
+│   └── index.ts              #export all theme method and constants
 │
 ├── utils
 │   ├── ...
-│   └── helper.ts     #define helper function for project
+│   └── helper.ts             #define helper function for project
 │
 └── App.tsx
 ```
