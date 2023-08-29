@@ -16,7 +16,7 @@ import {
 
 export const HomeScreen: React.FC = () => {
   const [value, setValue] = React.useState('')
-  const modalRef = useRef(null)
+  const modalRef = useRef<typeof ModalProvider>(null)
   const ref = useRef(null)
   const handleOpen = useCallback(() => {
     modalRef.current?.openModal()
