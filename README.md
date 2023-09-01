@@ -359,6 +359,7 @@ src
 
   - **How to use**
     Line chart will be changed based on the data provided
+
     ```javascript
     const data = [
       { id: 0, label: 'Mon', x: 0, y: 0 },
@@ -369,32 +370,17 @@ src
       { id: 5, label: 'Sat', x: 5, y: 50 },
       { id: 6, label: 'Sun', x: 6, y: 40 },
     ]
-type Props = {}
-export const TestScreen = (props: Props) => {
-const handleItemClick = (item: LineChartData) => {
-console.log(`Item ${item.id} clicked`)
-    }
-    return (
-    <View style={styles.container}>
-    <View style={styles.chartWrapper}>
     <LineChart
-                      width={widthScreen}
-                      height={300}
-                      data={data}
-                      haveDots
-                      haveXAxis
-                      haveHorizontalGuides
-                      lineColor="#FFEFAD"
-                      onItemClick={handleItemClick}
-                    />
-    </View>
-    </View>
-    )
-    }
-
-````
-
-
+      width={widthScreen}
+      height={300}
+      data={data}
+      haveDots
+      haveXAxis
+      haveHorizontalGuides
+      lineColor="#FFEFAD"
+      onItemClick={handleItemClick}
+        />
+    ```
 
 ## 🚀 Getting Started
 
@@ -408,7 +394,7 @@ yarn install
 cd ios
 pod install
 cd ..
-````
+```
 
 ### 2. Run Android
 
