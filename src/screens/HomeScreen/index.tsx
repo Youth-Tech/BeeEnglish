@@ -13,11 +13,12 @@ import {
   ShadowBlock,
   ModalProvider,
 } from '@components'
+import { ModalProviderFunction } from '@components/bases/ModalProvider/type'
 
 export const HomeScreen: React.FC = () => {
   const [value, setValue] = React.useState('')
-  const modalRef = useRef<typeof ModalProvider>(null)
   const ref = useRef(null)
+  const modalRef = useRef<ModalProviderFunction>(null)
   const handleOpen = useCallback(() => {
     modalRef.current?.openModal()
   }, [])

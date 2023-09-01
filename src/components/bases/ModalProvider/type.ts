@@ -38,3 +38,8 @@ export interface ModalProviderProps {
      */
     onDismiss?: () => void,
 }
+
+export interface ModalProviderFunction {
+    openModal: () => void;
+    dismissModal: () => void
+}

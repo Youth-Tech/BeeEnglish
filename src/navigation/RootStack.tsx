@@ -15,7 +15,10 @@ const screenOptions = {
 const RootStack = () => {
   return (
     <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Navigator
+        screenOptions={screenOptions}
+        initialRouteName="HOME_SCREEN_1"
+      >
         <Stack.Screen name="HOME_SCREEN" component={HomeScreen} />
         <Stack.Screen name="HOME_SCREEN_1" component={TestScreen} />
       </Stack.Navigator>
