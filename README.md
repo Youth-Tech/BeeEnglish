@@ -369,32 +369,32 @@ src
       { id: 5, label: 'Sat', x: 5, y: 50 },
       { id: 6, label: 'Sun', x: 6, y: 40 },
     ]
+    ```
+
 type Props = {}
 export const TestScreen = (props: Props) => {
 const handleItemClick = (item: LineChartData) => {
 console.log(`Item ${item.id} clicked`)
-    }
-    return (
-    <View style={styles.container}>
-    <View style={styles.chartWrapper}>
-    <LineChart
-                      width={widthScreen}
-                      height={300}
-                      data={data}
-                      haveDots
-                      haveXAxis
-                      haveHorizontalGuides
-                      lineColor="#FFEFAD"
-                      onItemClick={handleItemClick}
-                    />
-    </View>
-    </View>
-    )
-    }
+}
+return (
+<View style={styles.container}>
+<View style={styles.chartWrapper}>
+<LineChart
+          width={widthScreen}
+          height={300}
+          data={data}
+          haveDots
+          haveXAxis
+          haveHorizontalGuides
+          lineColor="#FFEFAD"
+          onItemClick={handleItemClick}
+        />
+</View>
+</View>
+)
+}
 
 ````
-
-
 
 ## 🚀 Getting Started
 
