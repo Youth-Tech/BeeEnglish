@@ -394,7 +394,9 @@ return (
 )
 }
 
-````
+```
+
+```
 
 ## 🚀 Getting Started
 
@@ -408,7 +410,7 @@ yarn install
 cd ios
 pod install
 cd ..
-````
+```
 
 ### 2. Run Android
 
