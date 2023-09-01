@@ -11,6 +11,7 @@ import { ProgressCircleProps } from './type'
 import { useTheme } from '@themes'
 import { withSpringConfig } from '@assets'
 import { handleColor } from '@components/utils'
+import { Text } from '../Text'
 
 const AnimatedCircleSvg = Animated.createAnimatedComponent(Circle)
 
@@ -22,6 +23,7 @@ export const CircleProgress: React.FC<ProgressCircleProps> = (props) => {
     totalStepsColor = 'greyLight',
     size,
     strokeWidth = 10,
+    progressValueProps,
   } = props
 
   const { colors, normalize } = useTheme()
@@ -74,6 +76,16 @@ export const CircleProgress: React.FC<ProgressCircleProps> = (props) => {
           />
         </G>
       </Svg>
+      <Block absolute>
+        <Text
+          fontFamily="semiBold"
+          size={'h3'}
+          color="primary"
+          {...progressValueProps}
+        >
+          {step}%
+        </Text>
+      </Block>
     </Block>
   )
 }

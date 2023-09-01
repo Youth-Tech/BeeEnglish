@@ -111,16 +111,17 @@ src
 
   - **Props**
 
-    | Name                                    | Type        | Default value | Require |
-    | --------------------------------------- | ----------- | ------------- | ------- |
-    | step                                    | `number`    |               | ✅      |
-    | totalStep                               | `number`    |               | ✅      |
-    | size                                    | `number`    |               | ✅      |
-    | strokeWidth                             | `number`    | 10            |         |
-    | totalStepColor                          | `string`    | `primary`     |         |
-    | stepColor                               | `string`    | `greyLight`   |         |
-    | progressContainerStyles                 | `ViewStyle` | `{}`          |         |
-    | onCompleteAnimation(isFinish?: boolean) | `Function`  | `()=>{}`      |         |
+    | Name                                    | Type              | Default value | Require |
+    | --------------------------------------- | ----------------- | ------------- | ------- |
+    | step                                    | `number`          |               | ✅      |
+    | totalStep                               | `number`          |               | ✅      |
+    | size                                    | `number`          |               | ✅      |
+    | strokeWidth                             | `number`          | 10            |         |
+    | totalStepColor                          | `string`          | `primary`     |         |
+    | stepColor                               | `string`          | `greyLight`   |         |
+    | progressContainerStyles                 | `ViewStyle`       | `{}`          |         |
+    | progressValueProps                      | `CommonTextProps` | `undefined`   |         |
+    | onCompleteAnimation(isFinish?: boolean) | `Function`        | `()=>{}`      |         |
 
   - **How to use**
 
