@@ -291,43 +291,44 @@ src
     | onDismiss         | `void function`               | `undefined`        |         |
 
   - **How to use**
-    Wrap the component as a container to use
-    ```javascript
-    const ref = useRef(null)
-    const modalRef = useRef<ModalProviderFunction>(null)
-    const handleOpen = useCallback(() => {
-    modalRef.current?.openModal()
-    }, [])
-    const handleDismiss = useCallback(() => {
-    modalRef.current?.dismissModal()
-    }, [])
-    const onShow = useCallback(() => {
-    console.log('Modal opened')
-    }, [])
-    const onDissmiss = useCallback(() => {
-    console.log('Modal closed')
-    }, [])
-    return (
-    <ModalProvider
-      ref={modalRef}
-      position="bottom"
-      animationType="fade"
-      onShow={onShow}
-      onDismiss={onDissmiss}
-      modalComponent={
-        <Block flex alignCenter justifyCenter radius={15}>
-          <Pressable
-            style={{ backgroundColor: 'red', padding: 50 }}
-            onPress={handleDismiss}
-          >
-            <Text>Press me</Text>
-          </Pressable>
-        </Block>
-      }
-    >
-     your code here
-    </ModalProvider>
-    ```
+  - Wrap the component as a container to use
+
+  ```javascript
+  const ref = useRef(null)
+  const modalRef = useRef<ModalProviderFunction>(null)
+  const handleOpen = useCallback(() => {
+  modalRef.current?.openModal()
+  }, [])
+  const handleDismiss = useCallback(() => {
+  modalRef.current?.dismissModal()
+  }, [])
+  const onShow = useCallback(() => {
+  console.log('Modal opened')
+  }, [])
+  const onDissmiss = useCallback(() => {
+  console.log('Modal closed')
+  }, [])
+  return (
+  <ModalProvider
+    ref={modalRef}
+    position="bottom"
+    animationType="fade"
+    onShow={onShow}
+    onDismiss={onDissmiss}
+    modalComponent={
+      <Block flex alignCenter justifyCenter radius={15}>
+        <Pressable
+          style={{ backgroundColor: 'red', padding: 50 }}
+          onPress={handleDismiss}
+        >
+          <Text>Press me</Text>
+        </Pressable>
+      </Block>
+    }
+  >
+   your code here
+  </ModalProvider>
+  ```
 
 - LineChart
 
@@ -335,7 +336,7 @@ src
 
     | Name                 | Type             | Default value | Require |
     | -------------------- | ---------------- | ------------- | ------- |
-    | data                 | `Array    `      | `undefined`   | ✅      |
+    | data                 | `Array`          | `undefined`   | ✅      |
     | width                | `number`         | `undefined`   | ✅      |
     | height               | `number`         | `undefined`   | ✅      |
     | precision            | `number`         | 0             |         |
@@ -358,29 +359,29 @@ src
     | onItemClick          | `void functioin` | `undefined`   |         |
 
   - **How to use**
-    Line chart will be changed based on the data provided
+  - Line chart will be changed based on the data provided
 
-    ```javascript
-    const data = [
-      { id: 0, label: 'Mon', x: 0, y: 0 },
-      { id: 1, label: 'Tues', x: 1, y: 4 },
-      { id: 2, label: 'Wed', x: 2, y: 30 },
-      { id: 3, label: 'Thur', x: 3, y: 15 },
-      { id: 4, label: 'Fri', x: 4, y: 40 },
-      { id: 5, label: 'Sat', x: 5, y: 50 },
-      { id: 6, label: 'Sun', x: 6, y: 40 },
-    ]
-    <LineChart
-      width={widthScreen}
-      height={300}
-      data={data}
-      haveDots
-      haveXAxis
-      haveHorizontalGuides
-      lineColor="#FFEFAD"
-      onItemClick={handleItemClick}
-        />
-    ```
+  ```javascript
+  const data = [
+    { id: 0, label: 'Mon', x: 0, y: 0 },
+    { id: 1, label: 'Tues', x: 1, y: 4 },
+    { id: 2, label: 'Wed', x: 2, y: 30 },
+    { id: 3, label: 'Thur', x: 3, y: 15 },
+    { id: 4, label: 'Fri', x: 4, y: 40 },
+    { id: 5, label: 'Sat', x: 5, y: 50 },
+    { id: 6, label: 'Sun', x: 6, y: 40 },
+  ]
+  <LineChart
+    width={widthScreen}
+    height={300}
+    data={data}
+    haveDots
+    haveXAxis
+    haveHorizontalGuides
+    lineColor="#FFEFAD"
+    onItemClick={handleItemClick}
+      />
+  ```
 
 ## 🚀 Getting Started
 
@@ -407,8 +408,6 @@ yarn android
 ```bash
 yarn ios
 ```
-
-c
 
 ## How to create new `Api Service`
 

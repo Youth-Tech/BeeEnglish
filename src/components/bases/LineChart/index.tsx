@@ -3,7 +3,7 @@ import { Circle, Polyline, Svg, Text } from 'react-native-svg'
 import { LineChartProps } from './type'
 import { fontFamily, useTheme } from '@themes'
 import { handleColor } from '@components/utils'
-export const LineChart: React.FC<LineChartProps> = (props) => {
+export const LineChart: React.FC<LineChartProps> = React.memo((props) => {
   const { colors, font } = useTheme()
   const {
     data,
@@ -192,4 +192,4 @@ export const LineChart: React.FC<LineChartProps> = (props) => {
       {haveDots && <CustomDots />}
     </Svg>
   )
-}
+})

@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet } from 'react-native'
+import { StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import React from 'react'
 import { ModalProviderProps } from './type'
 import { Block } from '@components'
@@ -28,7 +28,9 @@ export const ModalProvider = React.forwardRef<any, ModalProviderProps>(
     const { colors } = useTheme()
     const [_visible, set_visible] = React.useState<boolean>(false)
     const AnimatedBlock = Animated.createAnimatedComponent(Block)
-    const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+    const AnimatedTouchable = Animated.createAnimatedComponent(
+      TouchableWithoutFeedback,
+    )
     const ModalSpringConfig: SpringConfig = {
       mass: 1,
       damping: 15,
@@ -111,15 +113,18 @@ export const ModalProvider = React.forwardRef<any, ModalProviderProps>(
       <Block flex>
         {children}
         {_visible && (
-          <AnimatedPressable
-            backgroundColor="rgba(0,0,0,0.5)"
-            style={[StyleSheet.absoluteFill, rOpacityStyle]}
+          <AnimatedTouchable
+            style={[
+              StyleSheet.absoluteFill,
+              rOpacityStyle,
+              { backgroundColor: 'rgba(0,0,0,0.5)' },
+            ]}
             onPress={handleDismiss}
           >
             <Block flex backgroundColor="transparent">
               {backDropComponent}
             </Block>
-          </AnimatedPressable>
+          </AnimatedTouchable>
         )}
         {position === 'bottom' && _visible && (
           <AnimatedBlock
@@ -180,5 +185,3 @@ export const ModalProvider = React.forwardRef<any, ModalProviderProps>(
     )
   },
 )
-
-const styles = StyleSheet.create({})
