@@ -14,9 +14,10 @@ import {
   ModalProvider,
 } from '@components'
 import { ModalProviderFunction } from '@components/bases/ModalProvider/type'
-
+import { useTranslation } from 'react-i18next';
 export const HomeScreen: React.FC = () => {
   const [value, setValue] = React.useState('')
+  const { t } = useTranslation();
   const ref = useRef(null)
   const modalRef = useRef<ModalProviderFunction>(null)
   const handleOpen = useCallback(() => {
@@ -31,6 +32,9 @@ export const HomeScreen: React.FC = () => {
   const onDissmiss = useCallback(() => {
     console.log('Modal closed')
   }, [])
+  const changeLanguage = (lng) => {
+
+  }
   return (
     <ModalProvider
       ref={modalRef}
