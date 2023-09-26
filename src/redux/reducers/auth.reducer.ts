@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-type AuthState = {
+export type AuthState = {
   token?: string
   refreshToken?: string
 }
@@ -23,5 +23,5 @@ const authSlice = createSlice({
   },
 })
 
-export const { authToken } = authSlice.actions
+export const { authToken: setAuthTokenAction } = authSlice.actions
 export const AuthReducer = authSlice.reducer

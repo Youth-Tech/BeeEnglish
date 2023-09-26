@@ -4,7 +4,7 @@ export type FontSize = {
   /**
    * 28
    */
-  h0: number
+  heading: number
   /**
    * 24
    */
@@ -42,7 +42,7 @@ export const font: Font = {
     /**
      * 28
      */
-    h0: normalize.m(28),
+    heading: normalize.m(28),
     /**
      * 24
      */

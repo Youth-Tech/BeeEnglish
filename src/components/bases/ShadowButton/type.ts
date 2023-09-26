@@ -47,41 +47,6 @@ export interface ButtonShadowProps extends PressableProps {
   /**
    *
    * ```
-   * labelSize={number} <=> { fontSize: number | `FontKeys` }
-   * ```
-   *
-   */
-  labelSize?: FontKeys | number
-  /**
-   *
-   * ```
-   * labelColor='string' <=> { color: string | `ColorKeys` }
-   *
-   * `ColorKeys` base on App Theme (@themes/color)
-   * ```
-   *
-   */
-  labelColor?: string
-  /**
-   *
-   * ```
-   * fontFamily='string'<=> { fontFamily: string }
-   * ```
-   *
-   */
-  fontFamily?: 'bold' | 'semiBold' | 'regular' | 'light'
-  /**
-   *
-   * ```
-   * advance style of button label
-   * ```
-   *
-   */
-  labelStyle?: TextStyle
-
-  /**
-   *
-   * ```
    * bottom_shadow for button
    * ```
    *
@@ -94,7 +59,7 @@ export interface ButtonShadowProps extends PressableProps {
    * ```
    *
    */
-  buttonRadius: number
+  buttonRadius?: number
   /**
    *
    * ```

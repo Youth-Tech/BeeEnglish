@@ -117,7 +117,7 @@ src
     | totalStep                               | `number`          |               | ✅      |
     | size                                    | `number`          |               | ✅      |
     | strokeWidth                             | `number`          | 10            |         |
-    | totalStepColor                          | `string`          | `primary`     |         |
+    | totalStepColor                          | `string`          | `orange`      |         |
     | stepColor                               | `string`          | `greyLight`   |         |
     | progressContainerStyles                 | `ViewStyle`       | `{}`          |         |
     | progressValueProps                      | `CommonTextProps` | `undefined`   |         |
@@ -138,7 +138,7 @@ src
     | step                                    | `number`    |               | ✅      |
     | totalStep                               | `number`    |               | ✅      |
     | strokeHeight                            | `number`    | 10            |         |
-    | totalStepColor                          | `string`    | `primary`     |         |
+    | totalStepColor                          | `string`    | `orange`      |         |
     | stepColor                               | `string`    | `greyLight`   |         |
     | progressContainerStyles                 | `ViewStyle` | `{}`          |         |
     | onCompleteAnimation(isFinish?: boolean) | `Function`  | `()=>{}`      |         |
@@ -230,22 +230,18 @@ src
     - **Component is extended all props from `Pressable` (native component from ReactNative) component**
     - **External Props**
 
-    | Name              | Type                                         | Default value | Require |
-    | ----------------- | -------------------------------------------- | ------------- | ------- |
-    | buttonWidth       | `number` or `string`                         | 5             |         |
-    | buttonHeight      | `number` or `string`                         | `#ccc`        |         |
-    | buttonBorderSize  | `number`                                     | `undefined`   |         |
-    | buttonBorderColor | `string` or `ReactNode`                      | `undefined`   |         |
-    | containerStyle    | `ViewStyle`                                  | `undefined`   |         |
-    | labelSize         | `FontKeys` or `number`                       | `undefined`   |         |
-    | labelColor        | `string`                                     | `white`       |         |
-    | fontFamily        | `bold` or `semiBold` or `regular` or `light` | `regular`     |         |
-    | labelStyle        | `TextStyle`                                  | `undefined`   |         |
-    | shadowHeight      | `number`                                     | 5             |         |
-    | buttonRadius      | `number`                                     | 5             |         |
-    | buttonColor       | `string`                                     | `primary`     |         |
-    | disabled          | `boolean`                                    | `undefined`   |         |
-    | shadowButtonColor | `string`                                     | `greyLight`   |         |
+    | Name              | Type                    | Default value | Require |
+    | ----------------- | ----------------------- | ------------- | ------- |
+    | buttonWidth       | `number` or `string`    | 5             |         |
+    | buttonHeight      | `number` or `string`    | `#ccc`        |         |
+    | buttonBorderSize  | `number`                | `undefined`   |         |
+    | buttonBorderColor | `string` or `ReactNode` | `undefined`   |         |
+    | containerStyle    | `ViewStyle`             | `undefined`   |         |
+    | shadowHeight      | `number`                | 5             |         |
+    | buttonRadius      | `number`                | 5             |         |
+    | buttonColor       | `string`                | `primary`     |         |
+    | disabled          | `boolean`               | `undefined`   |         |
+    | shadowButtonColor | `string`                | `greyLight`   |         |
 
   - **How to use**
 

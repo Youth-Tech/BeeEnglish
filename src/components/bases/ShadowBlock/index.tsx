@@ -10,7 +10,7 @@ import { Text } from '../Text'
  * @see https://www.figma.com/file/QniAD9a1zQX8Vn12K89a0n/UI?type=design&node-id=227-1784&mode=design&t=VeIGgE2wQFQ4JnWB-0
  */
 
-export const ShadowBlock: React.FC<ShadowBlockProps> = React.memo((props) => {
+export const ShadowBlock: React.FC<ShadowBlockProps> = (props) => {
   const {
     flex,
     margin,
@@ -112,4 +112,4 @@ export const ShadowBlock: React.FC<ShadowBlockProps> = React.memo((props) => {
       </Block>
     </Block>
   )
-})
+}

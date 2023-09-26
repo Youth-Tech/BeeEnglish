@@ -64,7 +64,7 @@ export interface InputProps extends TextInputProps {
   /**
    * Error message
    */
-  error?: React.ReactNode
+  error?: React.ReactNode | string
 
   /**
    * Style of error message if error is string

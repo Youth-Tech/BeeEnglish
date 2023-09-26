@@ -1,5 +1,6 @@
 import i18next from 'i18next'
 import { initReactI18next } from 'react-i18next'
+
 import { locales } from './locales'
 import RNLanguageDetector from './languageDetector'
 
@@ -11,8 +12,10 @@ const resources = {
     translation: locales.vi.resource,
   },
 }
-i18next.use(initReactI18next).use(RNLanguageDetector).init({
+
+i18next.use(RNLanguageDetector).use(initReactI18next).init({
   resources,
   compatibilityJSON: 'v3',
 })
+
 export default i18next
