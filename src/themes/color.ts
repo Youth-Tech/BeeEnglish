@@ -1,108 +1,95 @@
 export const colors = {
   dark: {
-    //default don't delete
-    primaryText: '#000000',
-    secondaryText: '#898989',
-    error: '#f02849',
-    inputBG: '#edf4f4',
-    primary: '#1877f2',
-    focus: '#1850f2',
-    background: '#FAFBFC',
-    border: '#e4e6eb',
-    white: '#FFFFFF',
-    disabled: '#a2ccf2',
-    oceanBlue: '#0077b6',
-    veryLightPink: '#bcbcbc',
-    lightBlue: '#96d3f2',
-    trackColor: '#96d3f2',
-    placeholder: '#bcbcbc',
+    black: '#171725',
+    white: '#ffffff',
 
-    // add color below....
-    greenDark: '#009E3A',
-    greenPrimary: '#76C836',
-    greenLight: '#BDEF8E',
-    greenLighter: '#E8FED7',
-    greyDark: '#666C8E',
-    greyPrimary: '#7C82A1',
-    greyLight: '#ACAFC3',
-    greyLighter: '#F3F4F6',
-    blackDark: '#000000',
-    blackPrimary: '#2D2D2D',
-    blackLight: '#3D3D3D',
-    blackLighter: '#8F8F8F',
-    purpleDark: '#2536A7',
-    purplePrimary: '#475AD7',
-    purpleLight: '#8A96E5',
-    purpleLighter: '#EEF0FB',
-    redDark: '#8B0000',
-    redPrimary: '#CF2406',
-    redLight: '#EF5E5B',
-    redLighter: '#FFCCCB',
+    red: '#FF7256',
+    redThick: '#FF4B4D',
+    redButton: '#BC2F31',
+    redLight: '#FFDFE3',
+
+    blue: '#4C6AC5',
+    bluePrimary: '#4285F4',
+
+    purpleLight: '#C584F8',
+    purpleDark: '#1D1B3E',
+    purplePrimary: '#1D1B3E',
+
+    brown: '#422911',
+
+    orangeThick: '#FE7D43',
+    orangeDark: '#F4B80A',
+    orangePrimary: '#FFC107',
+    orangeSecondary: '#FEB94F',
+    orangeLight: '#FFEFAD',
+    orangeLighter: '#FFEFAD',
+
+    greyDark: '#92929D',
+    greyPrimary: '#92929D',
+    greyLight: '#E5E5E5',
+    greyLighter: '#F1F1F5',
+
+    yellowPrimary: '#FCFF00',
+    yellowDark: '#FFCC08',
+
+    greenDark: '#002800',
+    greenPrimary: '#0A381C',
+    greenLight: '#70773A',
+    greenLighter: '#22B07D',
+    greenDarkButton: '#056F49',
+    greenPrimary2: '#174B3E',
+
     transparent: 'transparent',
-    black: '#000000',
-    strokeBottomIcon: '#33363F',
 
-    TextActive: '#4169E1',
-    TextInActive: '#a7b6e3',
-
-    // shadow
-    shadow: '#e8e9e9',
-
-    // bottom menu
-    bottomMenu: '#F9F2F2',
+    textLabel: '#9796A1',
+    borderColor: '#EEEEEE',
+    placeholderColor: '#C4C4C4',
   },
   light: {
-    //default don't delete
-    primaryText: '#000000',
-    secondaryText: '#898989',
-    error: '#f02849',
-    inputBG: '#edf4f4',
-    primary: '#1877f2',
-    focus: '#1850f2',
-    background: '#FAFBFC',
-    border: '#e4e6eb',
-    white: '#FFFFFF',
-    disabled: '#a2ccf2',
-    oceanBlue: '#0077b6',
-    veryLightPink: '#bcbcbc',
-    lightBlue: '#96d3f2',
-    trackColor: '#96d3f2',
-    placeholder: '#bcbcbc',
+    black: '#171725',
+    white: '#ffffff',
 
-    // add color below...
-    greenDark: '#009E3A',
-    greenPrimary: '#76C836',
-    greenLight: '#BDEF8E',
-    greenLighter: '#E8FED7',
-    greyDark: '#666C8E',
-    greyPrimary: '#7C82A1',
-    greyLight: '#ACAFC3',
-    greyLighter: '#F3F4F6',
-    blackDark: '#000000',
-    blackPrimary: '#2D2D2D',
-    blackLight: '#3D3D3D',
-    blackLighter: '#8F8F8F',
-    purpleDark: '#2536A7',
-    purplePrimary: '#475AD7',
-    purpleLight: '#8A96E5',
-    purpleLighter: '#EEF0FB',
-    redDark: '#8B0000',
-    redPrimary: '#CF2406',
-    redLight: '#EF5E5B',
-    redLighter: '#FFCCCB',
+    red: '#FF7256',
+    redThick: '#FF4B4D',
+    redButton: '#BC2F31',
+    redLight: '#FFDFE3',
+
+    blue: '#4C6AC5',
+    bluePrimary: '#4285F4',
+
+    purpleLight: '#C584F8',
+    purpleDark: '#1D1B3E',
+    purplePrimary: '#1D1B3E',
+
+    brown: '#422911',
+
+    orangeThick: '#FE7D43',
+    orangeDark: '#F4B80A',
+    orangePrimary: '#FFC107',
+    orangeSecondary: '#FEB94F',
+    orangeLight: '#FFEFAD',
+    orangeLighter: '#FFEFAD',
+
+    greyDark: '#92929D',
+    greyPrimary: '#92929D',
+    greyLight: '#E5E5E5',
+    greyLighter: '#F1F1F5',
+
+    yellowPrimary: '#FCFF00',
+    yellowDark: '#FFCC08',
+
+    greenDark: '#002800',
+    greenPrimary: '#0A381C',
+    greenLight: '#70773A',
+    greenLighter: '#22B07D',
+    greenDarkButton: '#056F49',
+    greenPrimary2: '#174B3E',
+
     transparent: 'transparent',
-    black: '#000000',
-    strokeBottomIcon: '#33363F',
 
-    // problem text
-    TextActive: '#4169E1',
-    TextInActive: '#a7b6e3',
-
-    // shadow
-    shadow: '#e8e9e9',
-
-    // bottom menu
-    bottomMenu: '#F9F2F2',
+    textLabel: '#9796A1',
+    borderColor: '#EEEEEE',
+    placeholder: '#C4C4C4',
   },
 }
 

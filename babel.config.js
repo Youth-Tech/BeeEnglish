@@ -11,7 +11,7 @@ module.exports = {
           '@components': './src/components',
           '@hooks': './src/hooks',
           '@navigation': './src/navigation',
-          '@reduxs': './src/reduxs',
+          '@redux': './src/redux',
           '@screens': './src/screens',
           '@themes': './src/themes',
           '@utils': './src/utils',
@@ -20,4 +20,4 @@ module.exports = {
     ],
     'react-native-reanimated/plugin',
   ],
-};
+}

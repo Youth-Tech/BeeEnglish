@@ -3,14 +3,18 @@ export const locales = {
     nativeName: 'English',
     resource: {
       'sign-up': 'Sign up',
-      'login': 'Login',
+      login: 'Login',
+      vi: 'Vietnamese',
+      en: 'English',
     },
   },
   vi: {
     nativeName: 'Tiếng Việt',
     resource: {
       'sign-up': 'Đăng ký',
-      'login': 'Đăng nhập',
+      login: 'Đăng nhập',
+      vi: 'Tiếng Việt',
+      en: 'Tiếng Anh',
     },
   },
 }
