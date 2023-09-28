@@ -11,7 +11,7 @@
       "@components": ["components"],
       "@hooks": ["hooks"],
       "@navigation": ["navigation"],
-      "@reduxs": ["reduxs"],
+      "@redux": ["redux"],
       "@screens": ["screens"],
       "@themes": ["themes"],
       "@utils": ["utils"],
@@ -22,7 +22,7 @@
       "@hooks/*": ["hooks/*"],
       "@navigation/*": ["navigation/*"],
       "@screens/*": ["screens/*"],
-      "@reduxs/*": ["reduxs/*"],
+      "@redux/*": ["redux/*"],
       "@themes/*": ["themes/*"],
       "@utils/*": ["utils/*"],
       "@types/*": ["@types/*"]

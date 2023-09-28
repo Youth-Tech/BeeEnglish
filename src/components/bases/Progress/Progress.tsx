@@ -18,7 +18,7 @@ export const Progress: React.FC<ProgressProps> = (props) => {
   const {
     step,
     totalSteps,
-    stepColor = 'primary',
+    stepColor = 'orange',
     totalStepsColor = 'greyLight',
     strokeHeight = 10,
     progressContainerStyles,

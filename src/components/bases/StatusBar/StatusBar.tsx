@@ -30,7 +30,7 @@ export const StatusBar: FC<StatusBarProps> = (props) => {
         translucent
         animated
         barStyle={themeStore === 'dark' ? 'light-content' : 'dark-content'}
-        backgroundColor={statusColor || theme.colors.background}
+        backgroundColor={statusColor || theme.colors.white}
       />
     </View>
   )

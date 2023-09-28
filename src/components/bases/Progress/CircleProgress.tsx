@@ -19,7 +19,7 @@ export const CircleProgress: React.FC<ProgressCircleProps> = (props) => {
   const {
     step,
     totalSteps,
-    stepColor = 'primary',
+    stepColor = 'orange',
     totalStepsColor = 'greyLight',
     size,
     strokeWidth = 10,

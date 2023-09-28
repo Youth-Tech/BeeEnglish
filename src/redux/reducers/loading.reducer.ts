@@ -21,6 +21,7 @@ const loadingSlices = createSlice({
   },
 })
 
-export const { setLoadingStatus } = loadingSlices.actions
+export const { setLoadingStatus: setLoadingStatusAction } =
+  loadingSlices.actions
 
 export const LoadingReducer = loadingSlices.reducer

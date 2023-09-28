@@ -1,15 +1,15 @@
-import React from 'react'
-import { Pressable, GestureResponderEvent } from 'react-native'
-import { Block } from '../Block'
-import { Text } from '../Text'
-import { ButtonShadowProps } from './type'
-import { isNumber, handleColor } from '@components/utils'
-import { baseStyles, useTheme } from '@themes'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated'
+import React from 'react'
+import { Pressable, GestureResponderEvent } from 'react-native'
+
+import { Block } from '../Block'
+import { ButtonShadowProps } from './type'
+import { baseStyles, useTheme } from '@themes'
+import { isNumber, handleColor } from '@components/utils'
 
 const BlockAnimated = Animated.createAnimatedComponent(Block)
 
@@ -20,17 +20,14 @@ const BlockAnimated = Animated.createAnimatedComponent(Block)
 
 export const ShadowButton: React.FC<ButtonShadowProps> = (props) => {
   const {
+    children,
     disabled,
-    labelSize,
-    labelStyle,
     buttonWidth,
     buttonHeight,
     containerStyle,
     shadowHeight = 5,
     buttonRadius = 5,
     buttonBorderSize = 0,
-    labelColor = 'white',
-    fontFamily = 'regular',
     buttonColor = 'primary',
     shadowButtonColor = 'greyLight',
     buttonBorderColor = 'white',
@@ -135,14 +132,7 @@ export const ShadowButton: React.FC<ButtonShadowProps> = (props) => {
             alignCenter
             justifyCenter
           >
-            <Text
-              fontFamily={fontFamily}
-              color={labelColor}
-              size={labelSize}
-              style={[{ alignSelf: 'center' }, { ...labelStyle }]}
-            >
-              Check
-            </Text>
+            {children}
           </Block>
         </BlockAnimated>
       </Block>

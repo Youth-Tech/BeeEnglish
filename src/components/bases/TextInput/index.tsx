@@ -15,7 +15,7 @@ import { Block, Text } from '@components'
 import { InputProps } from './types'
 import { handleFontSize, isString } from '@components/utils'
 
-const MIN_HEIGHT_INPUT = 45
+const DEFAULT_HEIGHT_INPUT = 63
 
 export const TextInput = forwardRef<any, InputProps>((props, ref) => {
   const inputRef = useRef<any>(null)
@@ -32,7 +32,7 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
     inputContainerStyle,
     style,
     fontFamily = 'regular',
-    size = 14,
+    size = 'h4',
     disabled,
     disabledInputStyle,
     leftIcon,
@@ -62,9 +62,9 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
   const _renderLabel = () => {
     if (isString(label)) {
       return (
-        <Text marginBottom={4} color="primaryText" style={labelStyle}>
+        <Text marginBottom={4} color="textLabel" size="h3" style={labelStyle}>
           {label}
-          {required && <Text color="error"> *</Text>}
+          {required && <Text color="red"> *</Text>}
         </Text>
       )
     }
@@ -74,7 +74,7 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
   const _renderError = () => {
     if (isString(error)) {
       return (
-        <Text color="error" style={errorStyle}>
+        <Text color="red" style={errorStyle}>
           {error}
         </Text>
       )
@@ -85,8 +85,8 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
   const inputInitStyle: any = StyleSheet.flatten([
     fontFamilyApp[fontFamily],
     {
-      color: colors.primaryText,
-      minHeight: MIN_HEIGHT_INPUT,
+      color: colors.black,
+      minHeight: DEFAULT_HEIGHT_INPUT,
       flex: 1,
       fontSize: handleFontSize(size),
       borderRadius: 8,
@@ -94,8 +94,8 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
       paddingRight: rightIcon || props.secureTextEntry ? 0 : 16,
     },
     disabled && {
-      backgroundColor: colors.disabled,
-      color: colors.placeholder,
+      backgroundColor: colors.greyLight,
+      color: colors.greyDark,
     },
     disabled && disabledInputStyle,
     !!numberOfLines && {
@@ -108,7 +108,7 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
 
   const _renderIcon = (isRight?: boolean) => {
     const defaultIconStyle = {
-      minHeight: MIN_HEIGHT_INPUT,
+      minHeight: DEFAULT_HEIGHT_INPUT,
       paddingHorizontal: 16,
       opacity: disabled ? 0.5 : 1,
       justifyContent: 'center' as ViewStyle['justifyContent'],
@@ -117,7 +117,11 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
     if (secureTextEntry && isRight && !rightIcon) {
       return (
         <Pressable
-          onPress={() => setSecureEye((prev) => !prev)}
+          onPress={() => {
+            if (!disabled) {
+              setSecureEye((prev) => !prev)
+            }
+          }}
           style={defaultIconStyle}
         >
           {!secureEye ? <EyeOn /> : <EyeOff />}
@@ -157,7 +161,8 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
         underlineColorAndroid="transparent"
         style={inputInitStyle}
         autoCorrect={false}
-        placeholderTextColor={colors.placeholder}
+        placeholderTextColor={disabled ? colors.greyDark : colors.greyLight}
+        selectionColor={showError ? colors.orangeDark : colors.orangeDark}
         editable={!disabled}
         {...rest}
         value={value}
@@ -185,26 +190,29 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
   const checkStyleBlock: { justifyContent: 'space-between' | 'flex-end' } = {
     justifyContent: showError && error ? 'space-between' : 'flex-end',
   }
+
   return (
-    <Block style={containerStyle} margin={1}>
+    <Block style={containerStyle}>
       {!!label && _renderLabel()}
       <TouchableWithoutFeedback
         onPress={() => {
-          inputRef.current?.focus()
+          if (!disabled) {
+            inputRef.current?.focus()
+          }
         }}
       >
         <Block
           row
           alignCenter
-          backgroundColor="inputBG"
+          backgroundColor={disabled ? 'greyLight' : 'white'}
           radius={8}
           borderWidth={1}
           borderColor={
             !hideFocus && error && showError
-              ? colors.error
+              ? colors.red
               : isFocused
-              ? colors.greenDark
-              : colors.greyLight
+              ? colors.orangeDark
+              : colors.borderColor
           }
           style={inputContainerStyle}
         >
