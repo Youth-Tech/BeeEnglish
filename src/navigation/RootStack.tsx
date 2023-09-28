@@ -17,7 +17,7 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="HOME_SCREEN"
+        initialRouteName="Navigate_Screen"
       >
         <Stack.Screen name="HOME_SCREEN" component={HomeScreen} />
         <Stack.Screen name="HOME_SCREEN_1" component={TestScreen} />
