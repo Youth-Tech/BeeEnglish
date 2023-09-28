@@ -5,8 +5,7 @@ import { Provider } from 'react-redux'
 
 import { PersistGate } from 'redux-persist/lib/integration/react'
 import RootApp from '@navigation/RootApp'
-import { SplashScreen } from '@screens'
-import { Container } from '@components'
+
 
 const App = () => {
   return (
