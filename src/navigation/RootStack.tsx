@@ -3,7 +3,7 @@ import React from 'react'
 
 import { navigationRef } from './NavigationServices'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { HomeScreen, TestScreen } from '@screens'
+import { HomeScreen, NavigateScreen, SplashScreen, TestScreen } from '@screens'
 
 const Stack = createNativeStackNavigator()
 const screenOptions = {
@@ -17,10 +17,13 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="HOME_SCREEN"
+        initialRouteName="Navigate_Screen"
       >
         <Stack.Screen name="HOME_SCREEN" component={HomeScreen} />
         <Stack.Screen name="HOME_SCREEN_1" component={TestScreen} />
+        <Stack.Screen name="Splash_Screen" component={SplashScreen} />
+        <Stack.Screen name="Navigate_Screen" component={NavigateScreen} />
+        
       </Stack.Navigator>
     </NavigationContainer>
   )

@@ -27,7 +27,7 @@ export const TestScreen = (props: Props) => {
   const handleItemClick = (item: LineChartData) => {
     console.log(`Item ${item.id} clicked`)
   }
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const ChangeLanguage = (lng: LanguageType) => {
     i18next.changeLanguage(lng)
   }
@@ -57,16 +57,15 @@ export const TestScreen = (props: Props) => {
       </Text>
       <Block width={'50%'}>
         <ShadowButton
-          labelSize={'h2'}
           buttonRadius={8}
-          fontFamily="bold"
           buttonHeight={45}
           shadowHeight={10}
           buttonBorderSize={2}
           buttonColor="#FFEFAD"
-          labelColor="primaryText"
           shadowButtonColor="#FFC107"
-          onPress={() => { ChangeLanguage('en') }}
+          onPress={() => {
+            ChangeLanguage('en')
+          }}
           buttonBorderColor={
             <Block style={StyleSheet.absoluteFill}>
               <LinearGradient
@@ -79,16 +78,15 @@ export const TestScreen = (props: Props) => {
       </Block>
       <Block width={'50%'}>
         <ShadowButton
-          labelSize={'h2'}
           buttonRadius={8}
-          fontFamily="bold"
           buttonHeight={45}
           shadowHeight={10}
           buttonBorderSize={2}
           buttonColor="#FFEFAD"
-          labelColor="primaryText"
           shadowButtonColor="#FFC107"
-          onPress={() => { ChangeLanguage('vi') }}
+          onPress={() => {
+            ChangeLanguage('vi')
+          }}
           buttonBorderColor={
             <Block style={StyleSheet.absoluteFill}>
               <LinearGradient
