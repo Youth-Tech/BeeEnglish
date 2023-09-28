@@ -191,7 +191,7 @@ export interface CommonTextProps extends DefaultStyleProps, RNTextProps {
    * ```
    *
    */
-  textDecorationLine?: 'solid' | 'double' | 'dotted' | 'dashed'
+  textDecorationLine?: 'solid' | 'double' | 'dotted' | 'dashed' | 'underline'
 
   /**
    *
