@@ -39,8 +39,6 @@ export const NavigateScreen = () => {
             buttonRadius={8}
             shadowButtonColor="#FFEFAD"
             buttonColor="#FFC107"
-            labelSize={'h3'}
-            fontFamily="bold"
             onPress={() => {
               console.log('press')
             }}
