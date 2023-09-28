@@ -43,7 +43,7 @@ export const NavigateScreen = () => {
               console.log('press')
             }}
           >
-            <Text>Đã có hoặc tạo tài khoản</Text>
+            <Text size={16} fontFamily='bold' color='white' >Đã có hoặc tạo tài khoản</Text>
           </ShadowButton>
           <Text
             marginTop={20}
