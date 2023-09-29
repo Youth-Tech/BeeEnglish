@@ -1,6 +1,5 @@
 import React from 'react'
-import { FontKeys } from '@themes'
-import { ViewStyle, TextStyle, PressableProps } from 'react-native'
+import { ViewStyle, PressableProps } from 'react-native'
 
 export interface ButtonShadowProps extends PressableProps {
   /**

@@ -16,6 +16,7 @@
       "@themes": ["themes"],
       "@utils": ["utils"],
       "@types": ["@types"],
+      "@services": ["@services"],
 
       "@assets/*": ["assets/*"],
       "@components/*": ["components/*"],
@@ -25,7 +26,8 @@
       "@redux/*": ["redux/*"],
       "@themes/*": ["themes/*"],
       "@utils/*": ["utils/*"],
-      "@types/*": ["@types/*"]
+      "@types/*": ["@types/*"],
+      "@services/*": ["@services/*"]
     },
     "target": "esnext",
     "module": "commonjs",

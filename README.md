@@ -20,7 +20,7 @@
 - Routing and Navigation
   - [React Navigation](https://reactnavigation.org/docs/getting-started) for native mobile
 - Connect API
-  - [RTK Query](https://redux-toolkit.js.org/rtk-query/usage/queries) of Redux Toolkit
+  - [Axios](https://axios-http.com/vi/docs/intro)
 - Local Storage
   - [MMKV](https://github.com/mrousavy/react-native-mmkv) for React Native
   - [Redux Persist](https://github.com/rt2zz/redux-persist)
@@ -50,13 +50,7 @@ src
 │   ├── RootApp.tsx           #contain RootStack, loading modal, message modal
 │   └── NavigationService.ts  #define 'navigationRef' and all method to interact with it
 │
-├── reduxs
-│   ├── apis
-│   │   ├── services          #define all method fetching data in project
-│   │   │   ├── pokemon.ts
-│   │   │   └── index.tsx     #export all service
-│   │   ├── apiService.ts     #define common method to call api with re-auth
-│   │   └── endPoints.ts      #define all end point for api
+├── redux                     #define all end point for api
 │   ├── reducers              #define all reducer in project
 │   ├── store                 #define store for project with Redux Persist - MMKV storage
 │   └── selectors             #define all selector in project
@@ -68,6 +62,11 @@ src
 │   │   └── type.ts           #define common type for screen
 │   ├── ...
 │   └── index.ts              #export all screen
+│
+├── services
+│   ├── PokemonService.ts     #define all method to connect api of service
+│   ├── ...
+│   └── index.ts              #export all service
 │
 ├── themes
 │   ├── baseStyles.ts         #define base style for style sheet create by method 'makeStyles'
@@ -91,10 +90,11 @@ src
 - @components: ./src/components
 - @hooks: ./src/hooks
 - @navigation: ./src/navigation
-- @reduxs: ./src/reduxs
+- @redux: ./src/reduxs
 - @screens: ./src/screens
 - @themes: ./src/themes
 - @utils: ./src/utils
+- @services: ./src/services
 
 ## Core Component
 
@@ -261,9 +261,6 @@ src
       buttonRadius={8}
       shadowButtonColor="#FFC107"
       buttonColor="#FFEFAD"
-      labelSize={'h2'}
-      fontFamily="bold"
-      labelColor="primaryText"
       onPress={() => {
         console.log('press')
       }}
@@ -404,66 +401,6 @@ yarn android
 ```bash
 yarn ios
 ```
-
-## How to create new `Api Service`
-
-1. Go to `service` folder at `src/reduxs/apis` and define new `service`
-
-   **Example**
-
-```javascript
-import { apiService } from './apiService'
-import { EndPoint } from './endPoint'
-import {
-  GetAllVideoResponse,
-  GetVideoResponse,
-  QueryArgs,
-  Video,
-  RelatedVideosRequest,
-} from './type'
-
-export const videoService = apiService.injectEndpoints({
-    endpoints: (builder) => ({
-        getAllVideo: builder.query<GetAllVideoResponse, void>({
-            query: () => EndPoint.getAllVideo,
-            keepUnusedDataFor: 10,
-        }),
-        getRelatedVideos: builder.query<Video[], RelatedVideosRequest>({
-            query: (input) => {
-              return {
-                url: EndPoint.getAllVideo,
-                params: input,
-              }
-            },
-            keepUnusedDataFor: 10,
-            transformResponse: (response: any) => response.data,
-        }),
-        getVideo: builder.query<GetVideoResponse, string>({
-            query: (id) => EndPoint.getVideoById(id),
-            keepUnusedDataFor: 10,
-        }),
-        geVideoPagination: builder.query<GetAllVideoResponse, QueryArgs>({
-            query: (args) => {
-              return {
-                url: EndPoint.getAllVideo,
-                params: args,
-              }
-            },
-            keepUnusedDataFor: 10,
-          }),
-    }),
-})
-
-export const {
-    useGetAllVideoQuery,
-    useGetVideoQuery,
-    useLazyGetRelatedVideosQuery,
-    useLazyGeVideoPaginationQuery,
-    useGeVideoPaginationQuery
-} = videoService
-```
-
-2. After that, go to `index.ts` file at `src/reduxs/apis/service` and export your `service`
 
 ## How to create new `Flow`
 

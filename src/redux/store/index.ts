@@ -12,7 +12,6 @@ import { rootReducer } from '@redux/reducers'
 import { configureStore } from '@reduxjs/toolkit'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 import reduxStorage from './storage'
-import { apiService } from '@redux/apis/apiService'
 
 export type RootState = ReturnType<typeof rootReducer>
 
@@ -30,7 +29,6 @@ const createDebugger = require('redux-flipper').default
 export const store = configureStore({
   reducer: {
     root: persistedReducer,
-    [apiService.reducerPath]: apiService.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     __DEV__
@@ -38,14 +36,12 @@ export const store = configureStore({
           serializableCheck: {
             ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
           },
-        })
-          .concat(apiService.middleware)
-          .concat(createDebugger())
+        }).concat(createDebugger())
       : getDefaultMiddleware({
           serializableCheck: {
             ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
           },
-        }).concat(apiService.middleware),
+        }),
 })
 
 export const persistor = persistStore(store)
