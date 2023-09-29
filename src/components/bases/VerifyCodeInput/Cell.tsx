@@ -76,6 +76,6 @@ const useStyles = makeStyles<CellProps>()(({ colors, normalize }) => ({
     backgroundColor: colors.orangeDark,
     position: 'absolute',
     width: normalize.m(2),
-    height: normalize.m(height! - 30),
+    height: normalize.m(height! - 35),
   }),
 }))

@@ -4,7 +4,7 @@ import { initReactI18next } from 'react-i18next'
 import { locales } from './locales'
 import RNLanguageDetector from './languageDetector'
 
-const resources = {
+export const resources = {
   en: {
     translation: locales.en.resource,
   },
