@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableWithoutFeedback } from 'react-native'
+import { Pressable, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import React from 'react'
 import { ModalProviderProps } from './type'
 import { Block } from '@components'
@@ -28,9 +28,7 @@ export const ModalProvider = React.forwardRef<any, ModalProviderProps>(
     const { colors } = useTheme()
     const [_visible, set_visible] = React.useState<boolean>(false)
     const AnimatedBlock = Animated.createAnimatedComponent(Block)
-    const AnimatedTouchable = Animated.createAnimatedComponent(
-      TouchableWithoutFeedback,
-    )
+    const AnimatedTouchable = Animated.createAnimatedComponent(Pressable)
     const ModalSpringConfig: SpringConfig = {
       mass: 1,
       damping: 15,

@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
-import { updateConfigAction } from '@redux/reducers'
+// import { updateConfigAction } from '@redux/reducers'
 import { Block, Container, ShadowButton, Text, TextInput } from '@components'
 import { font, fontFamily } from '@themes'
 
