@@ -21,12 +21,12 @@ export function goBack() {
   if (navigationRef.current?.canGoBack()) {
     navigationRef.current?.goBack()
   } else {
-    navigateAndReset([{ name: 'MAIN' }], 0)
+    navigateAndReset([{ name: 'BOTTOM_TAB' }], 0)
   }
 }
 
 export function navigateAndReset(
-  routes: { name: string; params?: any }[],
+  routes: { name: RouteKeys; params?: any }[],
   index: number,
 ) {
   navigationRef.current?.dispatch(
@@ -37,11 +37,11 @@ export function navigateAndReset(
   )
 }
 
-export function push(name: string, params?: any) {
+export function push(name: RouteKeys, params?: any) {
   navigationRef.current?.dispatch(StackActions.push(name, params))
 }
 
-export function replace(name: string, params?: any) {
+export function replace(name: RouteKeys, params?: any) {
   navigationRef.current?.dispatch(StackActions.replace(name, params))
 }
 
