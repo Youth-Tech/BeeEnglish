@@ -1,4 +1,5 @@
 export * from './HomeScreen'
 export * from './TestScreen'
+export * from './VerificationCodeScreen'
 export * from './SplashScreen'
 export * from './NavigateScreen'

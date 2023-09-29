@@ -4,10 +4,12 @@ import {
   StackActions,
 } from '@react-navigation/native'
 import React from 'react'
+import { RootStackParamList, RouteKeys } from './routes'
 
-export const navigationRef = React.createRef<NavigationContainerRef<any>>()
+export const navigationRef =
+  React.createRef<NavigationContainerRef<RootStackParamList>>()
 
-export function navigate(name: string, params?: any, key?: string) {
+export function navigate(name: RouteKeys, params?: any, key?: string) {
   if (key) {
     navigationRef.current?.navigate({ key, name, params })
     return
