@@ -39,3 +39,9 @@ export type StackPropsPhoneRegistrationScreen = NativeStackScreenProps<
   RootStackParamList,
   'PHONE_REGISTRATION_SCREEN'
 >
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends RootStackParamList {}
+  }
+}
