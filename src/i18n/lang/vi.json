@@ -11,12 +11,10 @@
     "sub_label_code_verify": "Vui lòng nhập mã xác thực được gửi tới email {{val}}",
     "send_again": "Gửi lại",
     "without_code": "Tôi không nhận được mã code!",
-
     "continue_button": "Tiếp tục",
-
-    "send_password": "Gửi mật khẩu",
+    "send_password": "Đổi mật khẩu",
     "label_send_password": "Nhập email của bạn để nhận mã xác thực",
-    "change_password": "Đổi mật khẩu",
+    "change_password": "Nhập mật khẩu",
     "label_new_password": "Nhập password mới của bạn"
   }
 }

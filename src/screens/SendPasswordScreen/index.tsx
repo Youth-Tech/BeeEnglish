@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Container,
   TextInput,
@@ -13,21 +13,29 @@ import { useTranslation } from 'react-i18next'
 
 export const SendPasswordScreen = () => {
   const { t } = useTranslation()
+  const [value, setValue] = React.useState<string>('')
+
   return (
     <Container>
       <DismissKeyBoardBlock>
         <Block flex paddingHorizontal={24} paddingTop={10}>
           <BackArrow fill={'black'} onPress={goBack} />
-          <Text color="black" size={'heading'} fontFamily="bold" marginTop={20}>
+          <Text color="black" size={'heading'} fontFamily="bold" marginTop={20} lineHeight={34}>
             {t('send_password')}
           </Text>
           <Text size={'h4'} color={'textLabel'} marginTop={15} lineHeight={18}>
             {t('label_send_password')}
           </Text>
-          <Block marginTop={20} marginBottom={20}>
-            <TextInput placeholder="Email" textContentType="emailAddress" />
+          <Block marginTop={25} marginBottom={20}>
+            <TextInput
+              placeholder="Email"
+              textContentType="emailAddress"
+              value={value}
+              onChangeText={setValue}
+            />
           </Block>
-          <Block marginTop={20} marginBottom={20}>
+        </Block>
+        <Block marginTop={50} marginBottom={50} marginLeft={50} marginRight={50} >
             <ShadowButton
               buttonHeight={40}
               buttonBorderSize={2}
@@ -42,7 +50,6 @@ export const SendPasswordScreen = () => {
               </Text>
             </ShadowButton>
           </Block>
-        </Block>
       </DismissKeyBoardBlock>
     </Container>
   )
