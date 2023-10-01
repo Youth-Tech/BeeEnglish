@@ -68,6 +68,7 @@ export const Register = (props: Props) => {
     const name_inputRef = React.useRef<DocumentSelectionState>()
     const email_inputRef = React.useRef<DocumentSelectionState>()
     const password_inputRef = React.useRef<DocumentSelectionState>()
+
     const onSubmit = () => {
         console.log('handleSubmit')
     }
@@ -134,8 +135,6 @@ export const Register = (props: Props) => {
                             shadowHeight={7}
                             containerStyle={{
                                 alignSelf: 'center',
-                            }}
-                            style={{
                                 marginTop: normalize.v(57.4),
                             }}
                         >

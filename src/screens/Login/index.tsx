@@ -117,12 +117,11 @@ export const Login = (props: Props) => {
                                 secureTextEntry
                             />
                         </Block>
-                        <Block alignCenter>
+                        <Block alignCenter marginTop={125.4}>
                             <Pressable
                                 style={{
                                     alignItems: 'center',
                                     width: normalize.h(200),
-                                    marginTop: normalize.v(125.4),
                                 }}
                                 onPress={forgotPassword}
                             >
@@ -141,8 +140,6 @@ export const Login = (props: Props) => {
                             shadowHeight={7}
                             containerStyle={{
                                 alignSelf: 'center',
-                            }}
-                            style={{
                                 marginTop: normalize.v(26),
                             }}
                             disabled={disabledLogin}
