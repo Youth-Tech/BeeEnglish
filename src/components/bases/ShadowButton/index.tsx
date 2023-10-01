@@ -53,7 +53,6 @@ export const ShadowButton: React.FC<ButtonShadowProps> = (props) => {
           ? normalize.h(buttonHeight)
           : buttonHeight,
       },
-      { ...containerStyle },
     ]
   }, [props])
 
@@ -108,6 +107,7 @@ export const ShadowButton: React.FC<ButtonShadowProps> = (props) => {
       onPressIn={handlePressInAnimation}
       onPressOut={handlePressOutAnimation}
       {...rest}
+      style={containerStyle}
     >
       <Block style={buttonBlockStyle}>
         <BlockAnimated
