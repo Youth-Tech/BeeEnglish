@@ -9,6 +9,7 @@ import {
   PhoneRegistrationScreen,
   TestScreen,
   VerificationCodeScreen,
+  PasswordResetScreen,
 } from '@screens'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -24,13 +25,13 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="PHONE_REGISTRATION_SCREEN"
+        initialRouteName="RESET_PASSWORD_SCREEN"
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
           <Stack.Screen
-            name="PHONE_REGISTRATION_SCREEN"
-            component={PhoneRegistrationScreen}
+            name="RESET_PASSWORD_SCREEN"
+            component={PasswordResetScreen}
           />
           <Stack.Screen
             name="VERIFICATION_CODE_SCREEN"

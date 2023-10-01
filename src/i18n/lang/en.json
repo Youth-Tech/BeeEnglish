@@ -12,6 +12,11 @@
     "send_again": "Send again",
     "without_code": "I did not receive the code!",
 
-    "continue_button": "Continue"
+    "continue_button": "Continue",
+
+    "send_password": "Send password",
+    "label_send_password": "Enter your email to receive the verification code",
+    "change_password": "Change password",
+    "label_new_password": "Enter your new password"
   }
 }

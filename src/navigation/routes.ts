@@ -10,6 +10,8 @@ export const AUTH_ROUTE = {
 
   VERIFICATION_CODE_SCREEN: 'VERIFICATION_CODE_SCREEN',
   PHONE_REGISTRATION_SCREEN: 'PHONE_REGISTRATION_SCREEN',
+  RESET_PASSWORD_SCREEN: 'RESET_PASSWORD_SCREEN',
+
 } as const
 
 export const PUBLIC_ROUTE = {
@@ -24,6 +26,7 @@ export type RootStackParamList = {
   [AUTH_ROUTE.PROFILE_SCREEN]: undefined
   [AUTH_ROUTE.VERIFICATION_CODE_SCREEN]: undefined
   [AUTH_ROUTE.PHONE_REGISTRATION_SCREEN]: undefined
+  [AUTH_ROUTE.RESET_PASSWORD_SCREEN]: undefined
 
   [PUBLIC_ROUTE.SPLASH_SCREEN]: undefined
 }
@@ -39,9 +42,3 @@ export type StackPropsPhoneRegistrationScreen = NativeStackScreenProps<
   RootStackParamList,
   'PHONE_REGISTRATION_SCREEN'
 >
-
-declare global {
-  namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
-  }
-}
