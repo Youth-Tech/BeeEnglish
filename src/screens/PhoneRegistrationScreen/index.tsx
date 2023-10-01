@@ -58,10 +58,8 @@ export const PhoneRegistrationScreen = () => {
             buttonColor={colors.orangePrimary}
             shadowHeight={7}
             containerStyle={{
-              alignSelf: 'center',
-            }}
-            style={{
               marginTop: normalize.v(160),
+              alignSelf: 'center',
             }}
           >
             <Text color="white" fontFamily="bold" size={'h3'}>

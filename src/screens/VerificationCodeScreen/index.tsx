@@ -7,6 +7,7 @@ import {
   DismissKeyBoardBlock,
   Text,
   VerifyCodeInput,
+  VerifyCodeInputRefFunction,
 } from '@components'
 import { useTheme } from '@themes'
 import { BackArrow } from '@assets'
@@ -15,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 
 export const VerificationCodeScreen = () => {
   const [value, setValue] = React.useState<string>('')
+  const verifyCodeInputRef = React.createRef<VerifyCodeInputRefFunction>()
 
   const { t } = useTranslation()
 
@@ -29,6 +31,10 @@ export const VerificationCodeScreen = () => {
     console.log('submit with value', value)
     ToastAndroid.show('submit with value ' + value, ToastAndroid.SHORT)
   }
+
+  React.useEffect(()=>{
+    verifyCodeInputRef.current?.focus()
+  }, [])
 
   return (
     <Container>
@@ -45,6 +51,7 @@ export const VerificationCodeScreen = () => {
           </Text>
 
           <VerifyCodeInput
+            ref={verifyCodeInputRef}
             onEnd={onSubmit}
             canSubmitOnEnd={true}
             cellCount={4}
