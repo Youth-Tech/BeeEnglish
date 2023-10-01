@@ -94,3 +94,4 @@ export const colors = {
 }
 
 export type ThemeColor = typeof colors
+export type ColorsMode = keyof typeof colors.dark
