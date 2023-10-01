@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 // import { updateConfigAction } from '@redux/reducers'
 import { Block, Container, ShadowButton, Text, TextInput } from '@components'
 import { font, fontFamily } from '@themes'
+import {Icon, LeftArrow} from "@assets/icons/IconSystem";
 
 export const HomeScreen = () => {
   const [t] = useTranslation()
@@ -29,6 +30,8 @@ export const HomeScreen = () => {
             {t('vi')}
           </Text>
         </ShadowButton>
+
+          <Icon state={"Logout"} size={23}/>
 
         <ShadowButton
           buttonWidth={200}

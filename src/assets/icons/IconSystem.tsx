@@ -616,41 +616,6 @@ const BackGame = ({fill = initialState.fill, stroke = initialState.stroke, ...pr
     </Svg>
 )
 
-export enum IconState {
-    LeftArrow = "LeftArrow",
-    RightArrow = "RightArrow",
-    Profile = "Profile",
-    Microphone = "Microphone",
-    SendPaper = "SendPaper",
-    Setting = "Setting",
-    MenuHeading = "MenuHeading",
-    Comment = "Comment",
-    MuteAudio = "MuteAudio",
-    WaveAudio = "WaveAudio",
-    Bookmark = "Bookmark",
-    Player = "Player",
-    RePlay = "RePlay",
-    DisLike = "DisLike",
-    Like = "Like",
-    Cancel = "Cancel",
-    SendComment = "SendComment",
-    PenBrush = "PenBrush",
-    Password = "Password",
-    Crown = "Crown",
-    Notification = "Notification",
-    Agree = "Agree",
-    Lock = "Lock",
-    StartFill = "StartFill",
-    StartOutLine = "StartOutLine",
-    Logout = "Logout",
-    About = "About",
-    History = "History",
-    Dictionary = "Dictionary",
-    ShowPassword = "ShowPassword",
-    HidePassword = "HidePassword",
-    BackGame = "BackGame",
-}
-
 const Icons = {
     LeftArrow: {
         state: "LeftArrow",
@@ -783,7 +748,7 @@ const Icons = {
 }
 
 interface PropsIcon extends Props{
-    state: keyof typeof IconState
+    state: keyof typeof Icons
 }
 export const Icon: React.FC<PropsIcon> = ({state, ...props}) => {
     return Icons[state].icon(props);
