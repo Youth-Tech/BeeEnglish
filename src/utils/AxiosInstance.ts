@@ -61,13 +61,13 @@ const ApiUtil = {
   put: <ResponseType>(url: string, body: {}) =>
     AxiosInstance().put<ResponseType>(url, body).then(responseBody),
 
-  delete: <ResponseType>(url: string, body: {}) =>
-    AxiosInstance().delete<ResponseType>(url, body).then(responseBody),
+  delete: <ResponseType>(url: string) =>
+    AxiosInstance().delete<ResponseType>(url).then(responseBody),
 
   postFile: <ResponseType>(url: string, body: {}) =>
     AxiosInstance('multipart/form-data')
       .post<ResponseType>(url, body)
       .then(responseBody),
-}
+} as const
 
 export default ApiUtil

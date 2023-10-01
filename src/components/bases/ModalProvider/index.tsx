@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, TouchableWithoutFeedback } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import React from 'react'
 import { ModalProviderProps } from './type'
 import { Block } from '@components'

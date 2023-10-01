@@ -5,7 +5,11 @@ import { navigationRef } from './NavigationServices'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { RootStackParamList } from './routes'
 import { RootBottomTab } from './RootBottomTab'
-import { TestScreen, VerificationCodeScreen } from '@screens'
+import {
+  PhoneRegistrationScreen,
+  TestScreen,
+  VerificationCodeScreen,
+} from '@screens'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -20,10 +24,14 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="VERIFICATION_CODE_SCREEN"
+        initialRouteName="PHONE_REGISTRATION_SCREEN"
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
+          <Stack.Screen
+            name="PHONE_REGISTRATION_SCREEN"
+            component={PhoneRegistrationScreen}
+          />
           <Stack.Screen
             name="VERIFICATION_CODE_SCREEN"
             component={VerificationCodeScreen}

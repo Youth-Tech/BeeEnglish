@@ -185,4 +185,4 @@ export const PokemonService = {
   getPokemonByName(name: string) {
     return ApiUtil.get<PokemonType>(`pokemon/${name}`)
   },
-}
+} as const

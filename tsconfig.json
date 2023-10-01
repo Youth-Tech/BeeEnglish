@@ -16,7 +16,8 @@
       "@themes": ["themes"],
       "@utils": ["utils"],
       "@types": ["@types"],
-      "@services": ["@services"],
+      "@services": ["services"],
+      "@i18n": ["i18n"],
 
       "@assets/*": ["assets/*"],
       "@components/*": ["components/*"],
@@ -27,7 +28,8 @@
       "@themes/*": ["themes/*"],
       "@utils/*": ["utils/*"],
       "@types/*": ["@types/*"],
-      "@services/*": ["@services/*"]
+      "@services/*": ["services/*"],
+      "@i18n/*": ["i18n/*"]
     },
     "target": "esnext",
     "module": "commonjs",

@@ -10,5 +10,6 @@
     "reduxjs",
     "reduxs"
   ],
+  "cSpell.ignorePaths": ["./src/i18n/lang"],
   "editor.formatOnSave": true
 }

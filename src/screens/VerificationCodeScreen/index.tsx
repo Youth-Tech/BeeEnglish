@@ -1,22 +1,83 @@
 import React from 'react'
-import { Block, Container, VerifyCodeInput } from '@components'
+import { Keyboard, ToastAndroid } from 'react-native'
+
+import {
+  Block,
+  Container,
+  DismissKeyBoardBlock,
+  Text,
+  VerifyCodeInput,
+  VerifyCodeInputRefFunction,
+} from '@components'
+import { useTheme } from '@themes'
+import { BackArrow } from '@assets'
+import { goBack } from '@navigation'
+import { useTranslation } from 'react-i18next'
 
 export const VerificationCodeScreen = () => {
   const [value, setValue] = React.useState<string>('')
+  const verifyCodeInputRef = React.createRef<VerifyCodeInputRefFunction>()
+
+  const { t } = useTranslation()
+
+  const { normalize } = useTheme()
+
+  const onReceiveAgain = () => {
+    console.log('onReceiveAgain')
+  }
+
+  const onSubmit = (value: string) => {
+    Keyboard.dismiss()
+    console.log('submit with value', value)
+    ToastAndroid.show('submit with value ' + value, ToastAndroid.SHORT)
+  }
+
+  React.useEffect(()=>{
+    verifyCodeInputRef.current?.focus()
+  }, [])
 
   return (
     <Container>
-      <Block flex>
-        <VerifyCodeInput
-          onEnd={(value: string) => {
-            console.log('submit with value', value)
-          }}
-          canSubmitOnEnd={true}
-          cellCount={4}
-          value={value}
-          setValue={setValue}
-        />
-      </Block>
+      <DismissKeyBoardBlock>
+        <Block flex paddingHorizontal={24} paddingTop={10}>
+          <BackArrow fill={'black'} onPress={goBack} />
+
+          <Text color="black" size={'heading'} fontFamily="bold" marginTop={20}>
+            {t('verify_account')}
+          </Text>
+
+          <Text size={'h4'} color={'textLabel'} marginTop={15} lineHeight={18}>
+            {t('sub_label_code_verify', { val: 'vutran789jjjj@gmail.com' })}
+          </Text>
+
+          <VerifyCodeInput
+            ref={verifyCodeInputRef}
+            onEnd={onSubmit}
+            canSubmitOnEnd={true}
+            cellCount={4}
+            value={value}
+            setValue={setValue}
+            inputContainerStyle={{
+              marginTop: normalize.m(120),
+            }}
+          />
+
+          <Block row marginTop={38} justifyCenter>
+            <Text size={'h4'} color={'greySuperDark'} fontFamily="bold">
+              {t('without_code').concat(' ')}
+            </Text>
+
+            <Text
+              onPress={onReceiveAgain}
+              color="orangeDark"
+              fontFamily="bold"
+              size={'h4'}
+            >
+              {t('send_again')}
+            </Text>
+          </Block>
+        </Block>
+      </DismissKeyBoardBlock>
     </Container>
   )
 }

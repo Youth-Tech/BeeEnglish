@@ -9,6 +9,7 @@ export const AUTH_ROUTE = {
   PROFILE_SCREEN: 'PROFILE_SCREEN',
 
   VERIFICATION_CODE_SCREEN: 'VERIFICATION_CODE_SCREEN',
+  PHONE_REGISTRATION_SCREEN: 'PHONE_REGISTRATION_SCREEN',
 } as const
 
 export const PUBLIC_ROUTE = {
@@ -22,6 +23,7 @@ export type RootStackParamList = {
   [AUTH_ROUTE.LEARNING_SCREEN]: undefined
   [AUTH_ROUTE.PROFILE_SCREEN]: undefined
   [AUTH_ROUTE.VERIFICATION_CODE_SCREEN]: undefined
+  [AUTH_ROUTE.PHONE_REGISTRATION_SCREEN]: undefined
 
   [PUBLIC_ROUTE.SPLASH_SCREEN]: undefined
 }
@@ -32,3 +34,14 @@ export type StackPropsVerificationCodeScreen = NativeStackScreenProps<
   RootStackParamList,
   'VERIFICATION_CODE_SCREEN'
 >
+
+export type StackPropsPhoneRegistrationScreen = NativeStackScreenProps<
+  RootStackParamList,
+  'PHONE_REGISTRATION_SCREEN'
+>
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends RootStackParamList {}
+  }
+}

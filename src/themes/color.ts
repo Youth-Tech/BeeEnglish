@@ -24,6 +24,7 @@ export const colors = {
     orangeLight: '#FFEFAD',
     orangeLighter: '#FFEFAD',
 
+    greySuperDark: '#5B5B5E',
     greyDark: '#92929D',
     greyPrimary: '#92929D',
     greyLight: '#E5E5E5',
@@ -70,6 +71,7 @@ export const colors = {
     orangeLight: '#FFEFAD',
     orangeLighter: '#FFEFAD',
 
+    greySuperDark: '#5B5B5E',
     greyDark: '#92929D',
     greyPrimary: '#92929D',
     greyLight: '#E5E5E5',

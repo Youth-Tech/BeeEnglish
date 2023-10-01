@@ -1,0 +1,17 @@
+{
+  "nativeName": "English",
+  "resource": {
+    "sign-up": "Sign up",
+    "login": "Login",
+    "vi": "Vietnamese",
+    "en": "English",
+    "verify_account": "Verify Account",
+    "sub_label_verify_account": "Please enter your phone number to verify your account",
+    "label_code_verify": "Verify Code",
+    "sub_label_code_verify": "Please enter your verify code is sent to email {{val}}",
+    "send_again": "Send again",
+    "without_code": "I did not receive the code!",
+
+    "continue_button": "Continue"
+  }
+}
