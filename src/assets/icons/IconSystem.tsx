@@ -741,6 +741,27 @@ const BackGame = ({
   </Svg>
 )
 
+const Back = ({
+                    fill = initialState.fill,
+                    stroke = initialState.stroke,
+                    ...props
+                  }: Props) => (
+    <Svg
+        width={props.size || props.width || 24}
+        height={props.size || props.height || 24}
+        fill="none"
+        {...props}
+    >
+      <Path
+          stroke={stroke}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M19.5 12h-15m0 0 6.75 6.75M4.5 12l6.75-6.75"
+      />
+    </Svg>
+)
+
 const Icons = {
   LeftArrow: {
     state: 'LeftArrow',
@@ -870,6 +891,10 @@ const Icons = {
     state: 'BackGame',
     icon: BackGame,
   },
+  Back: {
+    state: 'Back',
+    icon: Back,
+  }
 }
 
 interface PropsIcon extends Props {
