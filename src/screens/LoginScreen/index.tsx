@@ -8,7 +8,7 @@ import {
   Text,
   TextInput,
 } from '@components'
-import { BackArrow } from '@assets'
+import { BackArrow, Icon } from '@assets'
 import { goBack, navigate } from '@navigation'
 import { useTheme } from '@themes'
 import { useTranslation } from 'react-i18next'
@@ -19,9 +19,9 @@ type Props = {}
 export const LoginScreen = (props: Props) => {
   const { colors, normalize } = useTheme()
   const { t } = useTranslation()
-  const [email, setemail] = React.useState('')
-  const [password, setpassword] = React.useState('')
-  const [disabledLogin, setdisabledLogin] = React.useState(true)
+  const [email, setEmail] = React.useState('')
+  const [password, setPassword] = React.useState('')
+  const [disabledLogin, setDisabledLogin] = React.useState(true)
   const passwordInputRef = React.useRef<DocumentSelectionState>()
   const onSubmit = () => {
     console.log('handleSubmit')
@@ -29,13 +29,13 @@ export const LoginScreen = (props: Props) => {
   const goRegister = () => {
     navigate('REGISTER_SCREEN')
   }
-  const forgotPassword = () => {}
-  const handleLoginGoogle = () => {}
-  const handleLoginFacebook = () => {}
+  const forgotPassword = () => { }
+  const handleLoginGoogle = () => { }
+  const handleLoginFacebook = () => { }
   React.useEffect(() => {
     email.length > 0 && password.length > 0
-      ? setdisabledLogin(false)
-      : setdisabledLogin(true)
+      ? setDisabledLogin(false)
+      : setDisabledLogin(true)
   }, [email, password])
 
   return (
@@ -43,7 +43,7 @@ export const LoginScreen = (props: Props) => {
       <DismissKeyBoardBlock>
         <Block flex paddingHorizontal={24} paddingTop={10} space="between">
           <Block>
-            <BackArrow fill={'black'} onPress={goBack} />
+            <Icon state='Back' onPress={goBack} />
             <Text
               color={colors.black}
               size={'heading'}
@@ -56,7 +56,7 @@ export const LoginScreen = (props: Props) => {
               <TextInput
                 label={'E-mail'}
                 placeholder="example@gmail.com"
-                onChangeText={setemail}
+                onChangeText={setEmail}
                 value={email}
                 returnKeyType="next"
                 onSubmitEditing={() => passwordInputRef.current?.focus()}
@@ -68,7 +68,7 @@ export const LoginScreen = (props: Props) => {
                 ref={passwordInputRef}
                 label={t('password')}
                 placeholder="•••••••••••••"
-                onChangeText={setpassword}
+                onChangeText={setPassword}
                 value={password}
                 secureTextEntry
               />

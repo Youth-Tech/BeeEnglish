@@ -9,16 +9,16 @@ import {
   Text,
   TextInput,
 } from '@components'
-import { BackArrow } from '@assets'
+import { Icon } from '@assets'
 import { goBack, navigate } from '@navigation'
 import { useTheme } from '@themes'
 import { useTranslation } from 'react-i18next'
 export const RegisterScreen = () => {
   const { colors, normalize } = useTheme()
   const { t } = useTranslation()
-  const [name, setname] = React.useState('')
-  const [email, setemail] = React.useState('')
-  const [password, setpassword] = React.useState('')
+  const [name, setName] = React.useState('')
+  const [email, setEmail] = React.useState('')
+  const [password, setPassword] = React.useState('')
 
   const emailInputRef = React.useRef<DocumentSelectionState>()
   const passwordInputRef = React.useRef<DocumentSelectionState>()
@@ -29,14 +29,14 @@ export const RegisterScreen = () => {
   const goLogin = () => {
     navigate('LOGIN_SCREEN')
   }
-  const handleLoginGoogle = () => {}
-  const handleLoginFacebook = () => {}
+  const handleLoginGoogle = () => { }
+  const handleLoginFacebook = () => { }
   return (
     <Container>
       <DismissKeyBoardBlock>
         <Block flex paddingHorizontal={24} paddingTop={10} space="between">
           <Block>
-            <BackArrow fill={'black'} onPress={goBack} />
+            <Icon state='Back' onPress={goBack} />
             <Text
               color={colors.black}
               size={'heading'}
@@ -49,7 +49,7 @@ export const RegisterScreen = () => {
               <TextInput
                 label={t('fullname')}
                 placeholder={t('fullname_placeholder')}
-                onChangeText={setname}
+                onChangeText={setName}
                 value={name}
                 returnKeyType="next"
                 onSubmitEditing={() => emailInputRef.current?.focus()}
@@ -61,7 +61,7 @@ export const RegisterScreen = () => {
                 ref={emailInputRef}
                 label={'E-mail'}
                 placeholder="example@gmail.com"
-                onChangeText={setemail}
+                onChangeText={setEmail}
                 value={email}
                 returnKeyType="next"
                 onSubmitEditing={() => passwordInputRef.current?.focus()}
@@ -73,7 +73,7 @@ export const RegisterScreen = () => {
                 ref={passwordInputRef}
                 label={t('password')}
                 placeholder="•••••••••••••"
-                onChangeText={setpassword}
+                onChangeText={setPassword}
                 value={password}
                 secureTextEntry
               />
