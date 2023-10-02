@@ -7,20 +7,28 @@ import {
   DismissKeyBoardBlock,
   Text,
 } from '@components'
-import { BackArrow } from '@assets'
-import { goBack } from '@navigation'
+import { Icon } from '@assets'
+import { goBack, navigate } from '@navigation'
 import { useTranslation } from 'react-i18next'
 
 export const SendPasswordScreen = () => {
   const { t } = useTranslation()
-  const [value, setValue] = React.useState<string>('')
-
+  const [emailAddress, setemailAddress] = React.useState<string>('')
+  const goRegister = () => {
+    navigate('RESET_PASSWORD_SCREEN')
+  }
   return (
     <Container>
       <DismissKeyBoardBlock>
         <Block flex paddingHorizontal={24} paddingTop={10}>
-          <BackArrow fill={'black'} onPress={goBack} />
-          <Text color="black" size={'heading'} fontFamily="bold" marginTop={20} lineHeight={34}>
+          <Icon state="Back" onPress={goBack} />
+          <Text
+            color="black"
+            size={'heading'}
+            fontFamily="bold"
+            marginTop={20}
+            lineHeight={34}
+          >
             {t('send_password')}
           </Text>
           <Text size={'h4'} color={'textLabel'} marginTop={15} lineHeight={18}>
@@ -28,28 +36,31 @@ export const SendPasswordScreen = () => {
           </Text>
           <Block marginTop={25} marginBottom={20}>
             <TextInput
-              placeholder="Email"
+              placeholder="abc@gmail.com"
               textContentType="emailAddress"
-              value={value}
-              onChangeText={setValue}
+              value={emailAddress}
+              onChangeText={setemailAddress}
             />
           </Block>
-        </Block>
-        <Block marginTop={50} marginBottom={50} marginLeft={50} marginRight={50} >
+          <Block justifyCenter alignCenter marginTop={178}>
             <ShadowButton
               buttonHeight={40}
               buttonBorderSize={2}
               buttonBorderColor={'orangePrimary'}
               shadowHeight={10}
               buttonRadius={8}
+              buttonWidth={200}
               shadowButtonColor={'orangeLighter'}
-              onPress={() => {}}
+              onPress={() => {
+                goRegister()
+              }}
             >
               <Text fontFamily="bold" size={'h3'} color="white">
                 {t('send_password')}
               </Text>
             </ShadowButton>
           </Block>
+        </Block>
       </DismissKeyBoardBlock>
     </Container>
   )

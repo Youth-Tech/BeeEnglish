@@ -7,7 +7,7 @@ import {
   Container,
   DismissKeyBoardBlock,
 } from '@components'
-import { BackArrow } from '@assets'
+import { Icon } from '@assets'
 import { goBack } from '@navigation'
 import { useTranslation } from 'react-i18next'
 import { DocumentSelectionState } from 'react-native'
@@ -27,7 +27,7 @@ export const PasswordResetScreen = () => {
     <Container>
       <DismissKeyBoardBlock>
         <Block flex paddingHorizontal={24} paddingTop={10}>
-          <BackArrow fill={'black'} onPress={goBack} />
+          <Icon state='Back' onPress={goBack} />
           <Text
             color="black"
             size={'heading'}
@@ -52,6 +52,7 @@ export const PasswordResetScreen = () => {
               returnKeyType="next"
               blurOnSubmit={false}
               onSubmitEditing={handlePasswordSubmit}
+              keyboardType='phone-pad'
             />
           </Block>
           <Block marginBottom={25}>
@@ -63,10 +64,10 @@ export const PasswordResetScreen = () => {
               onChangeText={setConfirm}
               secureTextEntry
               ref={confirmRef}
+              keyboardType='phone-pad'
             />
           </Block>
-        </Block>
-        <Block flex alignCenter>
+          <Block marginTop={48} alignCenter>
           <ShadowButton
             buttonHeight={40}
             buttonBorderSize={2}
@@ -81,6 +82,7 @@ export const PasswordResetScreen = () => {
               {t('change_password')}
             </Text>
           </ShadowButton>
+          </Block>
         </Block>
       </DismissKeyBoardBlock>
     </Container>
