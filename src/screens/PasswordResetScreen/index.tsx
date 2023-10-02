@@ -42,7 +42,7 @@ export const PasswordResetScreen = () => {
           </Text>
           <Block marginTop={25} marginBottom={25}>
             <TextInput
-              label="Mật khẩu"
+              label="Password"
               placeholder="•••••••••••••"
               textContentType="password"
               value={password}
@@ -50,12 +50,13 @@ export const PasswordResetScreen = () => {
               secureTextEntry
               ref={passwordRef}
               returnKeyType="next"
+              blurOnSubmit={false}
               onSubmitEditing={handlePasswordSubmit}
             />
           </Block>
           <Block marginBottom={25}>
             <TextInput
-              label="Nhập lại mật khẩu"
+              label="Confirm Password"
               placeholder="•••••••••••••"
               textContentType="password"
               value={confirm}
@@ -65,12 +66,7 @@ export const PasswordResetScreen = () => {
             />
           </Block>
         </Block>
-        <Block
-          marginTop={50}
-          marginBottom={50}
-          marginLeft={50}
-          marginRight={50}
-        >
+        <Block flex alignCenter>
           <ShadowButton
             buttonHeight={40}
             buttonBorderSize={2}
@@ -78,6 +74,7 @@ export const PasswordResetScreen = () => {
             shadowHeight={10}
             buttonRadius={8}
             shadowButtonColor={'orangeLighter'}
+            buttonWidth={200}
             onPress={() => {}}
           >
             <Text fontFamily="bold" size={'h3'} color="white">
