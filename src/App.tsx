@@ -1,11 +1,13 @@
+import {persistor, store} from '@redux/store'
 import React from 'react'
-import { Provider } from 'react-redux'
-import { PersistGate } from 'redux-persist/lib/integration/react'
+import {Provider} from 'react-redux'
 
-import '@i18n/i18n'
-import RootApp from '@navigation/RootApp'
-import { PokemonService } from '@services'
-import { persistor, store } from '@redux/store'
+import {PersistGate} from 'redux-persist/lib/integration/react'
+
+import './i18n/i18n'
+import {PokemonService} from 'services'
+import RootApp from "@navigation/RootApp";
+// import RootApp from '@navigation/RootApp'
 
 const App = () => {
   React.useEffect(() => {
@@ -15,9 +17,8 @@ const App = () => {
       console.log(res)
     }
 
-    callApi()
+    callApi().then()
   }, [])
-
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

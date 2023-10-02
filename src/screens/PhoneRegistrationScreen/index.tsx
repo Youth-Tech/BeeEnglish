@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { goBack, navigate } from '@navigation'
-import { BackArrow, VietNamFlag } from '@assets'
+import { Icon, VietNamFlag } from '@assets'
 import { makeStyles, normalize, useTheme } from '@themes'
 import {
   Block,
@@ -30,7 +30,7 @@ export const PhoneRegistrationScreen = () => {
     <Container>
       <DismissKeyBoardBlock>
         <Block flex paddingHorizontal={24} paddingTop={10}>
-          <BackArrow fill={'black'} onPress={goBack} />
+          <Icon state='Back' onPress={goBack} />
 
           <Text color="black" size={'heading'} fontFamily="bold" marginTop={20}>
             {t('verify_account')}
@@ -58,10 +58,8 @@ export const PhoneRegistrationScreen = () => {
             buttonColor={colors.orangePrimary}
             shadowHeight={7}
             containerStyle={{
-              alignSelf: 'center',
-            }}
-            style={{
               marginTop: normalize.v(160),
+              alignSelf: 'center',
             }}
           >
             <Text color="white" fontFamily="bold" size={'h3'}>
