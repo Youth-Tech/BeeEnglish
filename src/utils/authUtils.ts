@@ -1,8 +1,5 @@
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next'
 import { GoogleSignin as GoogleSignIn } from '@react-native-google-signin/google-signin'
-import { useAppDispatch, useAppSelector } from '@hooks'
-import { setAuthState } from '@redux/reducers'
-import { getAuthProvider } from '@redux/selectors'
 import { Provider } from '@configs'
 
 export const signingWithGoogle = async () => {
