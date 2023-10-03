@@ -1,13 +1,14 @@
-import { MMKVStore } from '@redux/store'
 import axios, {
   AxiosRequestHeaders,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios'
+import { BASE_URL } from '@configs'
+import { MMKVStore } from '@redux/store'
 
 const AxiosInstance = (contentType = 'application/json') => {
   const axiosInstance = axios.create({
-    baseURL: 'https://pokeapi.co/api/v2/',
+    baseURL: BASE_URL,
   })
 
   axiosInstance.interceptors.request.use(

@@ -10,7 +10,7 @@ import {
   TestScreen,
   VerificationCodeScreen,
   LoginScreen,
-  RegisterScreen
+  RegisterScreen,
 } from '@screens'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
