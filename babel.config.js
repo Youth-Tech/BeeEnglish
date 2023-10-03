@@ -17,6 +17,7 @@ module.exports = {
           '@utils': './src/utils',
           '@services': './src/services',
           '@i18n': './src/i18n',
+          '@configs': './src/configs',
         },
       },
     ],
