@@ -7,11 +7,11 @@
     "login": "Đăng nhập",
     "fullname": "Họ và tên",
     "password": "Mật khẩu",
-    "have_account":"Đã có tài khoản",
-    "dont_have_account":"Chưa có tài khoản",
-    "forgot_password":"Quên mật khẩu",       
-    "login_with":"Đăng nhập với",   
-    "fullname_placeholder":"Nguyễn Văn A",    
+    "confirm_password": "Nhập lại mật khẩu",
+    "have_account": "Đã có tài khoản",
+    "dont_have_account": "Chưa có tài khoản",
+    "login_with": "Đăng nhập với",
+    "fullname_placeholder": "Nguyễn Văn A",
     "verify_account": "Xác thực tài khoản",
     "sub_label_verify_account": "Nhập số điện thoại để xác thực tài khoản của bạn",
     "label_code_verify": "Mã xác thực",
@@ -19,9 +19,11 @@
     "send_again": "Gửi lại",
     "without_code": "Tôi không nhận được mã code!",
     "continue_button": "Tiếp tục",
-    "send_password": "Đổi mật khẩu",
+    "send": "Gửi",
     "label_send_password": "Nhập email của bạn để nhận mã xác thực",
-    "change_password": "Nhập mật khẩu",
-    "label_new_password": "Nhập password mới của bạn"
+    "change_password": "Đổi mật khẩu",
+    "enter_password": "Nhập mật khẩu",
+    "label_new_password": "Nhập mật khẩu mới của bạn",
+    "forgot_password": "Quên mật khẩu"
   }
 }

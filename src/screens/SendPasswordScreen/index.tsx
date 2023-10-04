@@ -29,7 +29,7 @@ export const SendPasswordScreen = () => {
             marginTop={20}
             lineHeight={34}
           >
-            {t('send_password')}
+            {t('change_password')}
           </Text>
           <Text size={'h4'} color={'textLabel'} marginTop={15} lineHeight={18}>
             {t('label_send_password')}
@@ -56,7 +56,7 @@ export const SendPasswordScreen = () => {
               }}
             >
               <Text fontFamily="bold" size={'h3'} color="white">
-                {t('send_password')}
+                {t('send')}
               </Text>
             </ShadowButton>
           </Block>
