@@ -1,27 +1,30 @@
+import { Provider } from '@configs'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export type AuthState = {
   token?: string
   refreshToken?: string
+  providerId?: Provider
 }
 
 const defaultAuthState: AuthState = {
   token: undefined,
   refreshToken: undefined,
+  providerId: undefined,
 }
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: defaultAuthState,
   reducers: {
-    authToken(_: AuthState, action: PayloadAction<AuthState>) {
+    setAuthState(state: AuthState, action: PayloadAction<AuthState>) {
       return {
-        token: action.payload.token,
-        refreshToken: action.payload.refreshToken,
+        ...state,
+        ...action.payload,
       }
     },
   },
 })
 
-export const { authToken: setAuthTokenAction } = authSlice.actions
+export const { setAuthState } = authSlice.actions
 export const AuthReducer = authSlice.reducer

@@ -18,6 +18,7 @@
       "@types": ["@types"],
       "@services": ["services"],
       "@i18n": ["i18n"],
+      "@configs": ["configs"],
 
       "@assets/*": ["assets/*"],
       "@components/*": ["components/*"],
@@ -29,7 +30,8 @@
       "@utils/*": ["utils/*"],
       "@types/*": ["@types/*"],
       "@services/*": ["services/*"],
-      "@i18n/*": ["i18n/*"]
+      "@i18n/*": ["i18n/*"],
+      "@configs/*": ["configs/*"]
     },
     "target": "esnext",
     "module": "commonjs",

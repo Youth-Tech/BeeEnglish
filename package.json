@@ -15,6 +15,10 @@
     "build_apk": "cd android && ./gradlew assembleRelease"
   },
   "dependencies": {
+    "@notifee/react-native": "^7.8.0",
+    "@react-native-firebase/app": "^18.5.0",
+    "@react-native-firebase/messaging": "^18.5.0",
+    "@react-native-google-signin/google-signin": "^10.0.1",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
@@ -24,7 +28,9 @@
     "react": "18.2.0",
     "react-i18next": "^13.2.2",
     "react-native": "0.72.4",
+    "react-native-device-info": "^10.11.0",
     "react-native-fast-image": "^8.6.3",
+    "react-native-fbsdk-next": "^12.1.0",
     "react-native-flipper": "^0.212.0",
     "react-native-gesture-handler": "^2.12.1",
     "react-native-mmkv": "^2.10.1",

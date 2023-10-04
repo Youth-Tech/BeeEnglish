@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "764039569244",
+    "firebase_url": "https://beeenglish-df902-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "beeenglish-df902",
+    "storage_bucket": "beeenglish-df902.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764039569244:android:994dd69a159c4c67f32b99",
+        "android_client_info": {
+          "package_name": "com.beeenglish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764039569244-sn1f8hu77h7vikneilbvhuc6i0or9ns3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAp2ix2yrtVXaCw1Zff50cFH-usd6ry9o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764039569244-fmd6tejnm8edfaoe3defb234rahu2n3m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

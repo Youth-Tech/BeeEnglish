@@ -4,12 +4,16 @@
     "LGSVG",
     "Linotte",
     "MMKV",
+    "notifee",
     "persistor",
     "Pressable",
     "Reauth",
     "reduxjs",
     "reduxs"
   ],
-  "cSpell.ignorePaths": ["./src/i18n/lang"],
+  "cSpell.ignorePaths": [
+    "./src/i18n/lang",
+    "./android/app/google-services.json"
+  ],
   "editor.formatOnSave": true
 }
