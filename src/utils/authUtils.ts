@@ -48,7 +48,7 @@ export const signOut = (
   try {
     if (providerId === 0) {
       GoogleSignIn.signOut()
-    } else {
+    } else if (providerId === 1) {
       LoginManager.logOut()
     }
 

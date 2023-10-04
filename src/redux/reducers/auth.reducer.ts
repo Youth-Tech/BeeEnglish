@@ -20,9 +20,7 @@ const authSlice = createSlice({
     setAuthState(state: AuthState, action: PayloadAction<AuthState>) {
       return {
         ...state,
-        token: action.payload.token,
-        refreshToken: action.payload.refreshToken,
-        providerId: action.payload.providerId,
+        ...action.payload,
       }
     },
   },
