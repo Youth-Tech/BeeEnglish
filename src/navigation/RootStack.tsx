@@ -5,7 +5,15 @@ import { navigationRef } from './NavigationServices'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { RootStackParamList } from './routes'
 import { RootBottomTab } from './RootBottomTab'
-import { TestScreen, PasswordResetScreen, SendPasswordScreen } from '@screens'
+import {
+  PhoneRegistrationScreen,
+  TestScreen,
+  VerificationCodeScreen,
+  LoginScreen,
+  RegisterScreen,
+  PasswordResetScreen,
+  SendPasswordScreen
+} from '@screens'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 

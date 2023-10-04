@@ -1,12 +1,13 @@
-import {persistor, store} from '@redux/store'
+import { persistor, store } from '@redux/store'
 import React from 'react'
-import {Provider} from 'react-redux'
+import { Provider } from 'react-redux'
 
-import {PersistGate} from 'redux-persist/lib/integration/react'
+import { PersistGate } from 'redux-persist/lib/integration/react'
 
 import './i18n/i18n'
-import {PokemonService} from 'services'
-import RootApp from "@navigation/RootApp";
+import '@configs'
+import { PokemonService } from 'services'
+import RootApp from '@navigation/RootApp'
 // import RootApp from '@navigation/RootApp'
 
 const App = () => {
