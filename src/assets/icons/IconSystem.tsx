@@ -17,6 +17,7 @@ const initialState: Props = {
   fill: myColors.black,
   stroke: myColors.black,
   size: 24,
+  strokeWidth: 0.3,
 }
 const LeftArrow = ({
   fill = initialState.fill,
@@ -264,7 +265,7 @@ const Bookmark = ({
     <Path
       fill={fill}
       stroke={stroke}
-      strokeWidth={0.3}
+      strokeWidth={props.strokeWidth || 0.3}
       d="M15.2 1H4.575c-.697.01-1.36.274-1.847.735a2.347 2.347 0 0 0-.748 1.73v14.078c-.002.282.085.557.25.793.166.236.402.422.68.534.264.116.56.155.848.114a1.51 1.51 0 0 0 .77-.346l4.977-4.084a.675.675 0 0 1 .4-.13c.146 0 .287.046.4.13l4.977 4.084c.215.182.483.301.771.342.288.042.583.004.848-.11a1.53 1.53 0 0 0 .68-.534c.165-.236.252-.511.25-.793V3.464a2.282 2.282 0 0 0-.193-.94 2.433 2.433 0 0 0-.568-.8 2.653 2.653 0 0 0-.858-.536A2.815 2.815 0 0 0 15.2 1Zm1.664 16.543a.546.546 0 0 1-.093.323.61.61 0 0 1-.27.22.608.608 0 0 1-.623-.086l-4.976-4.075a1.649 1.649 0 0 0-1.014-.344c-.372 0-.73.122-1.014.344L3.897 18a.608.608 0 0 1-.623.086.61.61 0 0 1-.27-.22.545.545 0 0 1-.093-.323V3.464c-.008-.416.163-.819.475-1.12.312-.3.74-.473 1.19-.482h10.623c.45.009.878.182 1.19.483.312.3.483.703.475 1.12v14.078Z"
     />
   </Svg>
@@ -742,24 +743,24 @@ const BackGame = ({
 )
 
 const Back = ({
-                    fill = initialState.fill,
-                    stroke = initialState.stroke,
-                    ...props
-                  }: Props) => (
-    <Svg
-        width={props.size || props.width || 24}
-        height={props.size || props.height || 24}
-        fill="none"
-        {...props}
-    >
-      <Path
-          stroke={stroke}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M19.5 12h-15m0 0 6.75 6.75M4.5 12l6.75-6.75"
-      />
-    </Svg>
+  fill = initialState.fill,
+  stroke = initialState.stroke,
+  ...props
+}: Props) => (
+  <Svg
+    width={props.size || props.width || 24}
+    height={props.size || props.height || 24}
+    fill="none"
+    {...props}
+  >
+    <Path
+      stroke={stroke}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.5}
+      d="M19.5 12h-15m0 0 6.75 6.75M4.5 12l6.75-6.75"
+    />
+  </Svg>
 )
 
 const Icons = {
@@ -894,50 +895,48 @@ const Icons = {
   Back: {
     state: 'Back',
     icon: Back,
-  }
+  },
 }
 
 interface PropsIcon extends Props {
-    state: keyof typeof Icons
+  state: keyof typeof Icons
 }
 
-export const Icon: React.FC<PropsIcon> = ({state, ...props}) => {
-    return Icons[state].icon(props);
+export const Icon: React.FC<PropsIcon> = ({ state, ...props }) => {
+  return Icons[state].icon(props)
 }
 
 export {
-    LeftArrow,
-    RightArrow,
-    Profile,
-    Microphone,
-    SendPaper,
-    Setting,
-    MenuHeading,
-    Comment,
-    MuteAudio,
-    WaveAudio,
-    Bookmark,
-    Player,
-    RePlay,
-    DisLike,
-    Like,
-    Cancel,
-    SendComment,
-    PenBrush,
-    Password,
-    Crown,
-    Notification,
-    Agree,
-    Lock,
-    StartFill,
-    StartOutLine,
-    Logout,
-    About,
-    History,
-    Dictionary,
-    ShowPassword,
-    HidePassword,
-    BackGame
+  LeftArrow,
+  RightArrow,
+  Profile,
+  Microphone,
+  SendPaper,
+  Setting,
+  MenuHeading,
+  Comment,
+  MuteAudio,
+  WaveAudio,
+  Bookmark,
+  Player,
+  RePlay,
+  DisLike,
+  Like,
+  Cancel,
+  SendComment,
+  PenBrush,
+  Password,
+  Crown,
+  Notification,
+  Agree,
+  Lock,
+  StartFill,
+  StartOutLine,
+  Logout,
+  About,
+  History,
+  Dictionary,
+  ShowPassword,
+  HidePassword,
+  BackGame,
 }
-
-
