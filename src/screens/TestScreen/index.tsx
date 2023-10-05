@@ -11,6 +11,7 @@ export const TestScreen = () => {
           title={'Family verry happy and children'}
           image={images.Flower2}
           progress={0}
+         
         ></NewsProgress>
       </Block>
 
