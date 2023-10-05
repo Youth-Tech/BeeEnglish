@@ -6,11 +6,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { RootStackParamList } from './routes'
 import { RootBottomTab } from './RootBottomTab'
 import {
-  PhoneRegistrationScreen,
   TestScreen,
   VerificationCodeScreen,
   LoginScreen,
   RegisterScreen,
+  PasswordResetScreen,
+  SendPasswordScreen,
+  EmailRegistrationScreen,
 } from '@screens'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -26,21 +28,29 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="LOGIN_SCREEN"
+        initialRouteName="SPLASH_SCREEN"
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
           <Stack.Screen
-            name="PHONE_REGISTRATION_SCREEN"
-            component={PhoneRegistrationScreen}
+            name="RESET_PASSWORD_SCREEN"
+            component={PasswordResetScreen}
+          />
+          <Stack.Screen
+            name="SEND_PASSWORD_SCREEN"
+            component={SendPasswordScreen}
+          />
+          <Stack.Screen name="LOGIN_SCREEN" component={LoginScreen} />
+          <Stack.Screen name="REGISTER_SCREEN" component={RegisterScreen} />
+          <Stack.Screen name="SPLASH_SCREEN" component={TestScreen} />
+          <Stack.Screen
+            name="EMAIL_REGISTRATION_SCREEN"
+            component={EmailRegistrationScreen}
           />
           <Stack.Screen
             name="VERIFICATION_CODE_SCREEN"
             component={VerificationCodeScreen}
           />
-          <Stack.Screen name="SPLASH_SCREEN" component={TestScreen} />
-          <Stack.Screen name="LOGIN_SCREEN" component={LoginScreen} />
-          <Stack.Screen name="REGISTER_SCREEN" component={RegisterScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

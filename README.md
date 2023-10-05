@@ -16,19 +16,19 @@
 
 - Package Management: [Yarn](https://yarnpkg.com/)
 - State Management
-    - [Redux](https://redux-toolkit.js.org/introduction/getting-started)
+  - [Redux](https://redux-toolkit.js.org/introduction/getting-started)
 - Routing and Navigation
-    - [React Navigation](https://reactnavigation.org/docs/getting-started) for native mobile
+  - [React Navigation](https://reactnavigation.org/docs/getting-started) for native mobile
 - Connect API
-    - [Axios](https://axios-http.com/vi/docs/intro)
+  - [Axios](https://axios-http.com/vi/docs/intro)
 - Local Storage
-    - [MMKV](https://github.com/mrousavy/react-native-mmkv) for React Native
-    - [Redux Persist](https://github.com/rt2zz/redux-persist)
+  - [MMKV](https://github.com/mrousavy/react-native-mmkv) for React Native
+  - [Redux Persist](https://github.com/rt2zz/redux-persist)
 - Animation Handler
-    - [Reanimated3](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/)
-    - [React Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/docs/)
-    - [React Native Animated API](https://reactnative.dev/docs/animated)
-    - [Rive](https://help.rive.app/runtimes/overview/react-native) for React Native
+  - [Reanimated3](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/)
+  - [React Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/docs/)
+  - [React Native Animated API](https://reactnative.dev/docs/animated)
+  - [Rive](https://help.rive.app/runtimes/overview/react-native) for React Native
 
 ## Project Scaffolding
 
@@ -110,182 +110,182 @@ src
 
 - Circle Progress
 
-    - **Props**
+  - **Props**
 
-      | Name                                    | Type              | Default value | Require |
-          |-----------------------------------------|-------------------|---------------|---------|
-      | step                                    | `number`          |               | ✅       |
-      | totalStep                               | `number`          |               | ✅       |
-      | size                                    | `number`          |               | ✅       |
-      | strokeWidth                             | `number`          | 10            |         |
-      | totalStepColor                          | `string`          | `orange`      |         |
-      | stepColor                               | `string`          | `greyLight`   |         |
-      | progressContainerStyles                 | `ViewStyle`       | `{}`          |         |
-      | progressValueProps                      | `CommonTextProps` | `undefined`   |         |
-      | onCompleteAnimation(isFinish?: boolean) | `Function`        | `()=>{}`      |         |
+    | Name                                    | Type              | Default value | Require |
+    | --------------------------------------- | ----------------- | ------------- | ------- |
+    | step                                    | `number`          |               | ✅      |
+    | totalStep                               | `number`          |               | ✅      |
+    | size                                    | `number`          |               | ✅      |
+    | strokeWidth                             | `number`          | 10            |         |
+    | totalStepColor                          | `string`          | `orange`      |         |
+    | stepColor                               | `string`          | `greyLight`   |         |
+    | progressContainerStyles                 | `ViewStyle`       | `{}`          |         |
+    | progressValueProps                      | `CommonTextProps` | `undefined`   |         |
+    | onCompleteAnimation(isFinish?: boolean) | `Function`        | `()=>{}`      |         |
 
-    - **How to use**
+  - **How to use**
 
-      ```javascript
-      <CircleProgress size={150} step={50} totalSteps={100} strokeWidth={10} />
-      ```
+    ```javascript
+    <CircleProgress size={150} step={50} totalSteps={100} strokeWidth={10} />
+    ```
 
 - Progress
 
-    - **Props**
+  - **Props**
 
-      | Name                                    | Type        | Default value | Require |
-          |-----------------------------------------|-------------|---------------|---------|
-      | step                                    | `number`    |               | ✅       |
-      | totalStep                               | `number`    |               | ✅       |
-      | strokeHeight                            | `number`    | 10            |         |
-      | totalStepColor                          | `string`    | `orange`      |         |
-      | stepColor                               | `string`    | `greyLight`   |         |
-      | progressContainerStyles                 | `ViewStyle` | `{}`          |         |
-      | onCompleteAnimation(isFinish?: boolean) | `Function`  | `()=>{}`      |         |
+    | Name                                    | Type        | Default value | Require |
+    | --------------------------------------- | ----------- | ------------- | ------- |
+    | step                                    | `number`    |               | ✅      |
+    | totalStep                               | `number`    |               | ✅      |
+    | strokeHeight                            | `number`    | 10            |         |
+    | totalStepColor                          | `string`    | `orange`      |         |
+    | stepColor                               | `string`    | `greyLight`   |         |
+    | progressContainerStyles                 | `ViewStyle` | `{}`          |         |
+    | onCompleteAnimation(isFinish?: boolean) | `Function`  | `()=>{}`      |         |
 
-    - **How to use**
+  - **How to use**
 
-      ```javascript
-      <Progress
-        strokeHeight={10}
-        step={80}
-        totalSteps={100}
-        progressContainerStyles={{
-          paddingHorizontal: 10,
-        }}
-      />
-      ```
+    ```javascript
+    <Progress
+      strokeHeight={10}
+      step={80}
+      totalSteps={100}
+      progressContainerStyles={{
+        paddingHorizontal: 10,
+      }}
+    />
+    ```
 
 - LinearGradient
 
-    - **Props**
+  - **Props**
 
-      | Name           | Type                                   | Default value | Require |
-          |----------------|----------------------------------------|---------------|---------|
-      | colors         | `string[]`                             |               | ✅       |
-      | containerStyle | `ViewStyle`                            | `{}`          |         |
-      | orientation    | `horizontal` or `vertical` or `number` | `vertical`    |         |
-      | revers         | `boolean`                              | `false`       |         |
-      | transform      | `Partial<TransformedProps>`            | `{}`          |         |
+    | Name           | Type                                   | Default value | Require |
+    | -------------- | -------------------------------------- | ------------- | ------- |
+    | colors         | `string[]`                             |               | ✅      |
+    | containerStyle | `ViewStyle`                            | `{}`          |         |
+    | orientation    | `horizontal` or `vertical` or `number` | `vertical`    |         |
+    | revers         | `boolean`                              | `false`       |         |
+    | transform      | `Partial<TransformedProps>`            | `{}`          |         |
 
-    - **How to use**
+  - **How to use**
 
-      ```javascript
-      <LinearGradient
-        colors={['#FFEFAD', '#FFC107']}
-        containerStyle={{ flex: 1 }}
-        transform={{ rotation: 20 }}
-      />
-      ```
+    ```javascript
+    <LinearGradient
+      colors={['#FFEFAD', '#FFC107']}
+      containerStyle={{ flex: 1 }}
+      transform={{ rotation: 20 }}
+    />
+    ```
 
 - ShadowBlock
 
-    - **Props**
+  - **Props**
 
-        - **Component is extended all props from `Block` component**
-        - **External Props**
+    - **Component is extended all props from `Block` component**
+    - **External Props**
 
-      | Name                       | Type              | Default value | Require |
-          |----------------------------|-------------------|---------------|---------|
-      | shadowHeight               | `number`          | 5             |         |
-      | shadowPosition             | `top` or `bottom` | `bottom`      |         |
-      | shadowLabel                | `string`          | `undefined`   |         |
-      | shadowLabelTextStyle       | `CommonTextProps` | `undefined`   |         |
-      | shadowLabelContainerStyle  | `BlockProps`      | `undefined`   |         |
-      | shadowBackgroundColor      | `string`          | `#ccc`        |         |
-      | containerPaddingVertical   | `number`          | `undefined`   |         |
-      | containerPaddingHorizontal | `number`          | `undefined`   |         |
-      | containerPaddingRight      | `number`          | `undefined`   |         |
-      | containerPaddingLeft       | `number`          | `undefined`   |         |
-      | containerPaddingTop        | `number`          | `undefined`   |         |
-      | containerPaddingBottom     | `number`          | `undefined`   |         |
+    | Name                       | Type              | Default value | Require |
+    | -------------------------- | ----------------- | ------------- | ------- |
+    | shadowHeight               | `number`          | 5             |         |
+    | shadowPosition             | `top` or `bottom` | `bottom`      |         |
+    | shadowLabel                | `string`          | `undefined`   |         |
+    | shadowLabelTextStyle       | `CommonTextProps` | `undefined`   |         |
+    | shadowLabelContainerStyle  | `BlockProps`      | `undefined`   |         |
+    | shadowBackgroundColor      | `string`          | `#ccc`        |         |
+    | containerPaddingVertical   | `number`          | `undefined`   |         |
+    | containerPaddingHorizontal | `number`          | `undefined`   |         |
+    | containerPaddingRight      | `number`          | `undefined`   |         |
+    | containerPaddingLeft       | `number`          | `undefined`   |         |
+    | containerPaddingTop        | `number`          | `undefined`   |         |
+    | containerPaddingBottom     | `number`          | `undefined`   |         |
 
-    - **How to use**
+  - **How to use**
 
-      ```javascript
-      <ShadowBlock
-        row
-        marginTop={20}
-        space="between"
-        paddingHorizontal={20}
-        containerPaddingHorizontal={20}
-      >
-        <Block width={10} height={10} backgroundColor="red" />
-        <Progress
-          step={10}
-          totalSteps={100}
-          strokeHeight={10}
-          progressContainerStyles={{
-            flex: 1,
-            marginStart: 10,
-          }}
-        />
-      </ShadowBlock>
-      ```
+    ```javascript
+    <ShadowBlock
+      row
+      marginTop={20}
+      space="between"
+      paddingHorizontal={20}
+      containerPaddingHorizontal={20}
+    >
+      <Block width={10} height={10} backgroundColor="red" />
+      <Progress
+        step={10}
+        totalSteps={100}
+        strokeHeight={10}
+        progressContainerStyles={{
+          flex: 1,
+          marginStart: 10,
+        }}
+      />
+    </ShadowBlock>
+    ```
 
 - ShadowButton
 
-    - **Props**
+  - **Props**
 
-        - **Component is extended all props from `Pressable` (native component from ReactNative) component**
-        - **External Props**
+    - **Component is extended all props from `Pressable` (native component from ReactNative) component**
+    - **External Props**
 
-      | Name              | Type                    | Default value | Require |
-          |-------------------|-------------------------|---------------|---------|
-      | buttonWidth       | `number` or `string`    | 5             |         |
-      | buttonHeight      | `number` or `string`    | `#ccc`        |         |
-      | buttonBorderSize  | `number`                | `undefined`   |         |
-      | buttonBorderColor | `string` or `ReactNode` | `undefined`   |         |
-      | containerStyle    | `ViewStyle`             | `undefined`   |         |
-      | shadowHeight      | `number`                | 5             |         |
-      | buttonRadius      | `number`                | 5             |         |
-      | buttonColor       | `string`                | `primary`     |         |
-      | disabled          | `boolean`               | `undefined`   |         |
-      | shadowButtonColor | `string`                | `greyLight`   |         |
+    | Name              | Type                    | Default value | Require |
+    | ----------------- | ----------------------- | ------------- | ------- |
+    | buttonWidth       | `number` or `string`    | 5             |         |
+    | buttonHeight      | `number` or `string`    | `#ccc`        |         |
+    | buttonBorderSize  | `number`                | `undefined`   |         |
+    | buttonBorderColor | `string` or `ReactNode` | `undefined`   |         |
+    | containerStyle    | `ViewStyle`             | `undefined`   |         |
+    | shadowHeight      | `number`                | 5             |         |
+    | buttonRadius      | `number`                | 5             |         |
+    | buttonColor       | `string`                | `primary`     |         |
+    | disabled          | `boolean`               | `undefined`   |         |
+    | shadowButtonColor | `string`                | `greyLight`   |         |
 
-    - **How to use**
+  - **How to use**
 
-      ```javascript
-      <ShadowButton
-        buttonHeight={45}
-        buttonBorderSize={2}
-        buttonBorderColor={
-          <Block style={StyleSheet.absoluteFill}>
-            <LinearGradient
-              colors={['#FFEFAD', '#FFC107']}
-              containerStyle={{ width: '100%', height: '100%' }}
-            />
-          </Block>
-        }
-        shadowHeight={10}
-        buttonRadius={8}
-        shadowButtonColor="#FFC107"
-        buttonColor="#FFEFAD"
-        onPress={() => {
-          console.log('press')
-        }}
-      />
-      ```
+    ```javascript
+    <ShadowButton
+      buttonHeight={45}
+      buttonBorderSize={2}
+      buttonBorderColor={
+        <Block style={StyleSheet.absoluteFill}>
+          <LinearGradient
+            colors={['#FFEFAD', '#FFC107']}
+            containerStyle={{ width: '100%', height: '100%' }}
+          />
+        </Block>
+      }
+      shadowHeight={10}
+      buttonRadius={8}
+      shadowButtonColor="#FFC107"
+      buttonColor="#FFEFAD"
+      onPress={() => {
+        console.log('press')
+      }}
+    />
+    ```
 
 - ModalProvider
 
-    - **Props**
+  - **Props**
 
-      | Name              | Type                          | Default value      | Require |
-          |-------------------|-------------------------------|--------------------|---------|
-      | children          | `ReactNode`                   | `auto produce`     | ✅       |
-      | position          | `top` or `bottom` or `center` | `bottom`           |         |
-      | modalHeight       | `number`                      | 279                |         |
-      | animationType     | `fade` or `slide`             | `fade`             |         |
-      | modalComponent    | `ReactNode`                   | `undefined`        |         |
-      | backDropComponent | `ReactNode`                   | `Default backdrop` |         |
-      | labelColor        | `string`                      | `white`            |         |
-      | onShow            | `void function`               | `undefined`        |         |
-      | onDismiss         | `void function`               | `undefined`        |         |
+    | Name              | Type                          | Default value      | Require |
+    | ----------------- | ----------------------------- | ------------------ | ------- |
+    | children          | `ReactNode`                   | `auto produce`     | ✅      |
+    | position          | `top` or `bottom` or `center` | `bottom`           |         |
+    | modalHeight       | `number`                      | 279                |         |
+    | animationType     | `fade` or `slide`             | `fade`             |         |
+    | modalComponent    | `ReactNode`                   | `undefined`        |         |
+    | backDropComponent | `ReactNode`                   | `Default backdrop` |         |
+    | labelColor        | `string`                      | `white`            |         |
+    | onShow            | `void function`               | `undefined`        |         |
+    | onDismiss         | `void function`               | `undefined`        |         |
 
-    - **How to use**
-    - Wrap the component as a container to use
+  - **How to use**
+  - Wrap the component as a container to use
 
   ```javascript
   const ref = useRef(null)
@@ -326,34 +326,34 @@ src
 
 - LineChart
 
-    - **Props**
+  - **Props**
 
-      | Name                 | Type             | Default value | Require |
-          |----------------------|------------------|---------------|---------|
-      | data                 | `Array`          | `undefined`   | ✅       |
-      | width                | `number`         | `undefined`   | ✅       |
-      | height               | `number`         | `undefined`   | ✅       |
-      | precision            | `number`         | 0             |         |
-      | haveVerticalGuides   | `boolean`        | `false`       |         |
-      | haveHorizontalGuides | `boolean`        | `false`       |         |
-      | haveXAxis            | `boolean`        | `false`       |         |
-      | haveYAxis            | `boolean`        | `false`       |         |
-      | axisStrokeWidth      | `number`         | 0.5           |         |
-      | axisStrokeColor      | `string`         | `#E5E5E5`     |         |
-      | haveDots             | `boolean`        | `false`       |         |
-      | dotsColor            | `string`         | `##FFC107`    |         |
-      | dotsStrokeColor      | `string`         | `#FFFFFF`     |         |
-      | dotsStrokeWidth      | `number`         | 2             |         |
-      | rDots                | `number`         | 8             |         |
-      | labelColor           | `string`         | `#171725`     |         |
-      | labelFontSize        | `string`         | `h5`          |         |
-      | labelFontFamily      | `string`         | `semibold`    |         |
-      | lineColor            | `string`         | `#FFEFAD`     |         |
-      | lineWidth            | `number`         | 2             |         |
-      | onItemClick          | `void functioin` | `undefined`   |         |
+    | Name                 | Type             | Default value | Require |
+    | -------------------- | ---------------- | ------------- | ------- |
+    | data                 | `Array`          | `undefined`   | ✅      |
+    | width                | `number`         | `undefined`   | ✅      |
+    | height               | `number`         | `undefined`   | ✅      |
+    | precision            | `number`         | 0             |         |
+    | haveVerticalGuides   | `boolean`        | `false`       |         |
+    | haveHorizontalGuides | `boolean`        | `false`       |         |
+    | haveXAxis            | `boolean`        | `false`       |         |
+    | haveYAxis            | `boolean`        | `false`       |         |
+    | axisStrokeWidth      | `number`         | 0.5           |         |
+    | axisStrokeColor      | `string`         | `#E5E5E5`     |         |
+    | haveDots             | `boolean`        | `false`       |         |
+    | dotsColor            | `string`         | `##FFC107`    |         |
+    | dotsStrokeColor      | `string`         | `#FFFFFF`     |         |
+    | dotsStrokeWidth      | `number`         | 2             |         |
+    | rDots                | `number`         | 8             |         |
+    | labelColor           | `string`         | `#171725`     |         |
+    | labelFontSize        | `string`         | `h5`          |         |
+    | labelFontFamily      | `string`         | `semibold`    |         |
+    | lineColor            | `string`         | `#FFEFAD`     |         |
+    | lineWidth            | `number`         | 2             |         |
+    | onItemClick          | `void functioin` | `undefined`   |         |
 
-    - **How to use**
-    - Line chart will be changed based on the data provided
+  - **How to use**
+  - Line chart will be changed based on the data provided
 
   ```javascript
   const data = [

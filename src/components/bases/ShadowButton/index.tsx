@@ -1,7 +1,8 @@
 import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
+  runOnJS,
   withTiming,
+  useSharedValue,
+  useAnimatedStyle,
 } from 'react-native-reanimated'
 import React from 'react'
 import { Pressable, GestureResponderEvent } from 'react-native'
@@ -20,6 +21,7 @@ const BlockAnimated = Animated.createAnimatedComponent(Block)
 
 export const ShadowButton: React.FC<ButtonShadowProps> = (props) => {
   const {
+    onPress,
     children,
     disabled,
     buttonWidth,
@@ -64,6 +66,10 @@ export const ShadowButton: React.FC<ButtonShadowProps> = (props) => {
     }
   }, [shadowHeight])
 
+  const onPressCallback = (e: GestureResponderEvent) => {
+    onPress && onPress(e)
+  }
+
   const handlePressInAnimation = React.useCallback(
     (e: GestureResponderEvent) => {
       buttonShadowHeight.value = withTiming(0, { duration: 100 })
@@ -74,7 +80,11 @@ export const ShadowButton: React.FC<ButtonShadowProps> = (props) => {
 
   const handlePressOutAnimation = React.useCallback(
     (e: GestureResponderEvent) => {
-      buttonShadowHeight.value = withTiming(-shadowHeight, { duration: 100 })
+      buttonShadowHeight.value = withTiming(
+        -shadowHeight,
+        { duration: 100 },
+        () => runOnJS(onPressCallback)(e),
+      )
       rest?.onPressOut && rest?.onPressOut(e)
     },
     [shadowHeight],

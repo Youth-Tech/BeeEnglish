@@ -1,41 +1,34 @@
 {
   "project_info": {
-    "project_number": "576584192864",
-    "project_id": "bee-english-fbc1e",
-    "storage_bucket": "bee-english-fbc1e.appspot.com"
+    "project_number": "764039569244",
+    "firebase_url": "https://beeenglish-df902-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "beeenglish-df902",
+    "storage_bucket": "beeenglish-df902.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:576584192864:android:551094a368054628de8405",
+        "mobilesdk_app_id": "1:764039569244:android:994dd69a159c4c67f32b99",
         "android_client_info": {
           "package_name": "com.beeenglish"
         }
       },
       "oauth_client": [
         {
-          "client_id": "576584192864-ecod7mrki32pktadrceovivfomjq53im.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.beeenglish",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
-          "client_id": "576584192864-iggba821mdf1k736mi4f002ghe55j1ir.apps.googleusercontent.com",
+          "client_id": "764039569244-sn1f8hu77h7vikneilbvhuc6i0or9ns3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBXh-1EBEkaVKrgSCq1Jg_M63C52b2MQ6o"
+          "current_key": "AIzaSyDAp2ix2yrtVXaCw1Zff50cFH-usd6ry9o"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "576584192864-iggba821mdf1k736mi4f002ghe55j1ir.apps.googleusercontent.com",
+              "client_id": "764039569244-fmd6tejnm8edfaoe3defb234rahu2n3m.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

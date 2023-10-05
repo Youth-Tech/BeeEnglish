@@ -2,13 +2,13 @@ import { Provider } from '@configs'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export type AuthState = {
-  token?: string
+  accessToken?: string
   refreshToken?: string
   providerId?: Provider
 }
 
 const defaultAuthState: AuthState = {
-  token: undefined,
+  accessToken: undefined,
   refreshToken: undefined,
   providerId: undefined,
 }
@@ -20,9 +20,7 @@ const authSlice = createSlice({
     setAuthState(state: AuthState, action: PayloadAction<AuthState>) {
       return {
         ...state,
-        token: action.payload.token,
-        refreshToken: action.payload.refreshToken,
-        providerId: action.payload.providerId,
+        ...action.payload,
       }
     },
   },

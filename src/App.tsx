@@ -1,25 +1,49 @@
 import { persistor, store } from '@redux/store'
 import React from 'react'
+import {
+  createChannelId,
+  getFCMToken,
+  notificationListener,
+  requestUserPermission,
+} from '@utils/notificationUtils'
 import { Provider } from 'react-redux'
+import notifee, { EventType } from '@notifee/react-native'
 
 import { PersistGate } from 'redux-persist/lib/integration/react'
 
 import './i18n/i18n'
 import '@configs'
-import { PokemonService } from 'services'
 import RootApp from '@navigation/RootApp'
-// import RootApp from '@navigation/RootApp'
 
 const App = () => {
-  React.useEffect(() => {
-    const callApi = async () => {
-      const res = await PokemonService.getPokemonByName('ditto')
+  const handleRequestPostNotification = async () => {
+    const isGranted = await requestUserPermission()
+    if (isGranted) {
+      let fcmToken = await getFCMToken()
+      console.log(fcmToken)
 
-      console.log(res)
+      notificationListener()
+      createChannelId()
+    } else {
+      console.log('User denied!')
     }
+  }
 
-    callApi().then()
+  React.useEffect(() => {
+    handleRequestPostNotification()
+
+    return notifee.onForegroundEvent(({ type, detail }) => {
+      switch (type) {
+        case EventType.DISMISSED:
+          console.log('User dismissed notification', detail.notification)
+          break
+        case EventType.PRESS:
+          console.log('User pressed notification', detail.notification)
+          break
+      }
+    })
   }, [])
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
