@@ -109,6 +109,7 @@ export const VerifyCodeInput = React.forwardRef<
           ref={verifyInputRef}
           onChangeText={_onChangeText}
           keyboardType="number-pad"
+          autoFocus
           caretHidden
           value={value}
         />

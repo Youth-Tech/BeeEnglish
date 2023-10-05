@@ -1,10 +1,19 @@
 import axios, {
-  AxiosRequestHeaders,
   AxiosResponse,
+  AxiosRequestHeaders,
   InternalAxiosRequestConfig,
 } from 'axios'
 import { BASE_URL } from '@configs'
 import { MMKVStore } from '@redux/store'
+import { TokenService } from '@services'
+
+export interface RefreshTokenRes {
+  message: string
+  data: {
+    refreshToken: string
+    accessToken: string
+  }
+}
 
 const AxiosInstance = (contentType = 'application/json') => {
   const axiosInstance = axios.create({
@@ -28,14 +37,28 @@ const AxiosInstance = (contentType = 'application/json') => {
 
   axiosInstance.interceptors.response.use(
     (res) => res,
-    (error) => {
+    async (error) => {
       const originalConfig = error.config
 
-      if (error.response.status === 401 && !originalConfig._retry) {
+      if (error?.response?.status === 401 && !originalConfig._retry) {
         originalConfig._retry = true
 
         try {
           //refresh token
+          const refreshToken = TokenService.getRefreshToken()
+          const res = await axiosInstance.post<RefreshTokenRes>(
+            '/auth/refresh-token',
+            {
+              refreshToken,
+            },
+          )
+
+          if (res.status === 200) {
+            const { accessToken, refreshToken } = res.data.data
+
+            TokenService.setAccessToken(accessToken)
+            TokenService.setRefreshToken(refreshToken)
+          }
 
           return axiosInstance(originalConfig)
         } catch (_error) {
@@ -50,7 +73,7 @@ const AxiosInstance = (contentType = 'application/json') => {
 }
 
 const responseBody = <ResponseType>(response: AxiosResponse<ResponseType>) =>
-  response.data
+  response
 
 const ApiUtil = {
   get: <ResponseType>(url: string) =>
