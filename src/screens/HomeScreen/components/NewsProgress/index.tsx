@@ -40,8 +40,9 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
           >
             <Icon
               state="Bookmark"
-              stroke={colors.orangePrimary}
+              stroke={'red'}
               strokeWidth={1.5}
+              fill='transparent'
             />
           </Block>
         </Block>
