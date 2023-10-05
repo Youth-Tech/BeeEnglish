@@ -1,6 +1,6 @@
 import { RootState } from '@hooks'
 
-export const getToken = (state: RootState) => state.root.auth.token
+export const getAccessToken = (state: RootState) => state.root.auth.accessToken
 
 export const getRefreshToken = (state: RootState) =>
   state.root.auth.refreshToken
