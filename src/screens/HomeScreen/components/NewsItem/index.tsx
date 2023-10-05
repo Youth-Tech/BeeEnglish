@@ -1,7 +1,8 @@
 import React from 'react'
 import { Block, Text, Image } from '@components'
-import { images } from '@assets'
 import { ImageRequireSource, Pressable } from 'react-native'
+import { useTheme } from '@themes'
+
 interface NewsItemProps {
   title: string
   image: ImageRequireSource
@@ -13,25 +14,25 @@ export const NewsItem: React.FC<NewsItemProps> = ({
   image,
   onPress,
 }) => {
+  const { normalize } = useTheme()
   return (
     <Pressable onPress={onPress}>
-      <Block row shadow radius={10}>
+      <Block row shadow radius={normalize.m(10)} width={normalize.h(280)}>
         <Image
-          radius={5}
-          width={40}
-          height={40}
+          radius={normalize.m(5)}
+          width={normalize.h(40)}
+          height={normalize.h(40)}
           source={image}
-          margin={10}
+          margin={normalize.m(10)}
           resizeMode="cover"
         />
-        <Block width={250}>
-          <Text
-            numberOfLines={2}
-            marginLeft={5}
-            marginTop={12}
-            size={'h3'}
-            fontFamily="semiBold"
-          >
+        <Block
+          width="75%"
+          radius={normalize.m(10)}
+          paddingHorizontal={normalize.h(10)}
+          paddingVertical={normalize.v(12)}
+        >
+          <Text numberOfLines={2} size={'h3'} fontFamily="semiBold">
             {title}
           </Text>
         </Block>

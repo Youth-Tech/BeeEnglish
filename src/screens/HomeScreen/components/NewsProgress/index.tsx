@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useTheme } from '@themes'
 import { Block, Text, Image } from '@components'
 import { Icon } from '@assets'
@@ -8,6 +8,7 @@ interface NewsProgressProps {
   title: string
   image: ImageRequireSource
   progress: number
+  onPressBookMark?: () => void
   onPress?: () => void
 }
 
@@ -15,40 +16,58 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
   title,
   image,
   progress,
+  onPressBookMark,
   onPress,
 }) => {
-  const { colors } = useTheme()
-
+  const { colors, normalize } = useTheme()
   const combinedText = `${progress}%`
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  const toggleBookmark = () => {
+    setIsBookmarked(!isBookmarked);
+    onPressBookMark && onPressBookMark();
+  };
   return (
     <Pressable onPress={onPress}>
-      <Block shadow width={142} radius={10} elevation={5} overflow="hidden">
+      <Block
+        shadow
+        width={normalize.h(142)}
+        radius={normalize.v(10)}
+        elevation={5}
+        overflow="hidden"
+      >
         <Block>
-          <Block marginTop={3} alignCenter>
-            <Image radius={10} width={152} height={110} source={image}></Image>
+          <Block margin={normalize.m(3)} alignCenter>
+            <Image
+              radius={normalize.m(10)}
+              width="100%"
+              height={normalize.v(110)}
+              source={image}
+            ></Image>
           </Block>
           <Block
-            width={26}
-            height={30}
+            width={normalize.h(26)}
+            height={normalize.v(30)}
             backgroundColor={colors.white}
             alignCenter
             justifyCenter
-            borderBottomLeftRadius={10}
-            borderBottomRightRadius={10}
+            borderBottomLeftRadius={normalize.m(10)}
+            borderBottomRightRadius={normalize.m(10)}
             absolute
-            right={20}
+            right={normalize.h(10)}
           >
             <Icon
               state="Bookmark"
-              stroke={'red'}
+              stroke={colors.orangeDark}
               strokeWidth={1.5}
-              fill='transparent'
+              onPress={toggleBookmark}
+              fill={isBookmarked ? colors.orangeDark : 'transparent'} 
             />
           </Block>
         </Block>
         <Text
-          marginLeft={6}
-          marginTop={10}
+          marginLeft={normalize.h(6)}
+          marginTop={normalize.v(10)}
           fontFamily="regular"
           size={'h5'}
           color={colors.black}
@@ -56,11 +75,11 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
           {title}
         </Text>
         <Text
-          marginLeft={6}
+          marginLeft={normalize.h(6)}
           fontFamily="bold"
           size={'h5'}
-          marginBottom={10}
-          marginTop={20}
+          marginBottom={normalize.v(10)}
+          marginTop={normalize.v(20)}
           color={colors.orangeDark}
         >
           {combinedText}
