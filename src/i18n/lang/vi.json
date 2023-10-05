@@ -13,7 +13,7 @@
     "login_with": "Đăng nhập với",
     "fullname_placeholder": "Nguyễn Văn A",
     "verify_account": "Xác thực tài khoản",
-    "sub_label_verify_account": "Nhập số điện thoại để xác thực tài khoản của bạn",
+    "sub_label_verify_account": "Nhập email để xác thực tài khoản của bạn",
     "label_code_verify": "Mã xác thực",
     "sub_label_code_verify": "Vui lòng nhập mã xác thực được gửi tới email {{val}}",
     "send_again": "Gửi lại",

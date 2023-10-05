@@ -34,8 +34,9 @@ export const LoginScreen = (props: Props) => {
   const [password, setPassword] = React.useState('')
   const [disabledLogin, setDisabledLogin] = React.useState(true)
   const passwordInputRef = React.useRef<DocumentSelectionState>()
+
   const onSubmit = () => {
-    console.log('handleSubmit')
+    navigate('EMAIL_REGISTRATION_SCREEN')
   }
   const goRegister = () => {
     navigate('REGISTER_SCREEN')

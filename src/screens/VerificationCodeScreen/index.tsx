@@ -1,18 +1,18 @@
 import React from 'react'
 import { Keyboard, ToastAndroid } from 'react-native'
+import { useTranslation } from 'react-i18next'
 
 import {
+  Text,
   Block,
   Container,
-  DismissKeyBoardBlock,
-  Text,
   VerifyCodeInput,
+  DismissKeyBoardBlock,
   VerifyCodeInputRefFunction,
 } from '@components'
 import { useTheme } from '@themes'
 import { BackArrow } from '@assets'
 import { goBack } from '@navigation'
-import { useTranslation } from 'react-i18next'
 
 export const VerificationCodeScreen = () => {
   const [value, setValue] = React.useState<string>('')
@@ -31,10 +31,6 @@ export const VerificationCodeScreen = () => {
     console.log('submit with value', value)
     ToastAndroid.show('submit with value ' + value, ToastAndroid.SHORT)
   }
-
-  React.useEffect(()=>{
-    verifyCodeInputRef.current?.focus()
-  }, [])
 
   return (
     <Container>

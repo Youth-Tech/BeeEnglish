@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { goBack, navigate } from '@navigation'
-import { Icon, VietNamFlag } from '@assets'
+import { Icon } from '@assets'
 import { makeStyles, normalize, useTheme } from '@themes'
 import {
   Block,
@@ -13,7 +13,7 @@ import {
   TextInput,
 } from '@components'
 
-export const PhoneRegistrationScreen = () => {
+export const EmailRegistrationScreen = () => {
   const [phoneNumber, setPhoneNumber] = React.useState('')
   const { t } = useTranslation()
 
@@ -30,7 +30,7 @@ export const PhoneRegistrationScreen = () => {
     <Container>
       <DismissKeyBoardBlock>
         <Block flex paddingHorizontal={24} paddingTop={10}>
-          <Icon state='Back' onPress={goBack} />
+          <Icon state="Back" onPress={goBack} />
 
           <Text color="black" size={'heading'} fontFamily="bold" marginTop={20}>
             {t('verify_account')}
@@ -45,8 +45,9 @@ export const PhoneRegistrationScreen = () => {
             value={phoneNumber}
             onChangeText={setPhoneNumber}
             keyboardType="number-pad"
-            leftIcon={<VietNamFlag />}
             inputStyle={styles.inputStyle}
+            placeholder="example@gamil.com"
+            autoFocus
           />
 
           <ShadowButton

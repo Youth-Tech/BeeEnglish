@@ -13,7 +13,7 @@
     "login_with": "Login with",
     "fullname_placeholder": "John Smith",
     "verify_account": "Verify Account",
-    "sub_label_verify_account": "Please enter your phone number to verify your account",
+    "sub_label_verify_account": "Please enter your email to verify your account",
     "label_code_verify": "Verify Code",
     "sub_label_code_verify": "Please enter your verify code is sent to email {{val}}",
     "send_again": "Send again",
