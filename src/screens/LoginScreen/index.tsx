@@ -1,9 +1,9 @@
+import React from 'react'
 import {
   Pressable,
   DocumentSelectionState,
   KeyboardAvoidingView,
 } from 'react-native'
-import React from 'react'
 import {
   Block,
   Container,
@@ -12,15 +12,22 @@ import {
   Text,
   TextInput,
 } from '@components'
-import { BackArrow, Icon } from '@assets'
+import { Icon } from '@assets'
 import { goBack, navigate } from '@navigation'
 import { useTheme } from '@themes'
 import { useTranslation } from 'react-i18next'
 import { SocialLoginButton } from '@components'
+import { signingWithGoogle } from '@utils/authUtils'
+import { AuthService } from '@services/AuthService'
+import { DeviceInfoConfig, Provider } from '@configs'
+import { useAppDispatch } from '@hooks'
+import { setAuthState } from '@redux/reducers'
+import { TokenService } from '@services'
 
 type Props = {}
 
 export const LoginScreen = (props: Props) => {
+  const dispatch = useAppDispatch()
   const { colors, normalize } = useTheme()
   const { t } = useTranslation()
   const [email, setEmail] = React.useState('')
@@ -33,9 +40,41 @@ export const LoginScreen = (props: Props) => {
   const goRegister = () => {
     navigate('REGISTER_SCREEN')
   }
-  const forgotPassword = () => { }
-  const handleLoginGoogle = () => { }
-  const handleLoginFacebook = () => { }
+  const forgotPassword = () => {}
+
+  const handleLoginGoogle = async () => {
+    try {
+      const resOAuth = await signingWithGoogle()
+      console.log(resOAuth)
+      console.log(DeviceInfoConfig.deviceId)
+      console.log(DeviceInfoConfig.deviceName)
+
+      const res = await AuthService.oAuthLogin({
+        accessToken: resOAuth as string,
+        deviceId: DeviceInfoConfig.deviceId,
+        deviceName: DeviceInfoConfig.deviceName,
+        provider: Provider.Google,
+      })
+      console.log(res)
+
+      if (res.status === 200 && res.data.data) {
+        const { accessToken, refreshToken } = res.data.data
+        dispatch(
+          setAuthState({
+            providerId: Provider.Google,
+          }),
+        )
+
+        TokenService.setRefreshToken(refreshToken)
+        TokenService.setAccessToken(accessToken)
+      }
+    } catch (error) {
+      console.error('Error login with Google', error.message)
+    }
+  }
+
+  const handleLoginFacebook = () => {}
+
   React.useEffect(() => {
     email.length > 0 && password.length > 0
       ? setDisabledLogin(false)

@@ -1,7 +1,9 @@
 import { GoogleSignin as GoogleSignIn } from '@react-native-google-signin/google-signin'
+import DeviceInfoConfig from './deviceInfo'
 
 export * from './enums'
 export * from './constants'
+export { DeviceInfoConfig }
 
 GoogleSignIn.configure({
   webClientId:
