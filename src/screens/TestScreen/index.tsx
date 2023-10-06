@@ -1,12 +1,13 @@
 import React from 'react'
 import { Block, CircleProgress, Container, Progress } from '@components'
+import LessonProgressItem from '@screens/HomeScreen/components/LessonProgress'
 
 export const TestScreen = () => {
   return (
     <Container>
       <Block flex>
         <Progress
-          step={80}
+          step={100}
           totalSteps={100}
           progressContainerStyles={[
             {
@@ -24,6 +25,14 @@ export const TestScreen = () => {
             fontFamily: 'light',
           }}
         />
+        <Block marginTop={20} alignCenter>
+          <LessonProgressItem />
+          <LessonProgressItem />
+          <LessonProgressItem />
+          <LessonProgressItem />
+          <LessonProgressItem />
+     
+        </Block>
       </Block>
     </Container>
   )
