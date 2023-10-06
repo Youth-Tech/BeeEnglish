@@ -1,5 +1,5 @@
 import React from 'react'
-import { ViewStyle, PressableProps } from 'react-native'
+import { ViewStyle, PressableProps, StyleProp } from 'react-native'
 
 export interface ButtonShadowProps extends PressableProps {
   /**
@@ -42,7 +42,7 @@ export interface ButtonShadowProps extends PressableProps {
    * ```
    *
    */
-  containerStyle?: ViewStyle
+  containerStyle?: StyleProp<ViewStyle>
   /**
    *
    * ```

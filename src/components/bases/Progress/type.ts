@@ -1,10 +1,5 @@
-import { ViewStyle } from 'react-native'
-import { NumberProp } from 'react-native-svg'
 import { CommonTextProps } from '../Text/type'
-
-export interface ProgressContainerStyleType extends Omit<ViewStyle, 'width'> {
-  width?: NumberProp
-}
+import { StyleProp, ViewStyle } from 'react-native'
 
 export type ProgressCircleProps = {
   /**
@@ -48,7 +43,7 @@ export type ProgressCircleProps = {
   /**
    *  style for container progress component
    */
-  progressContainerStyles?: ProgressContainerStyleType
+  progressContainerStyles?: StyleProp<ViewStyle>
 
   /**
    *  props for label progress value

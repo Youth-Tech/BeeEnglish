@@ -1,4 +1,5 @@
 import React from 'react'
+import { StyleSheet } from 'react-native'
 import { Svg, Circle, G } from 'react-native-svg'
 import Animated, {
   useDerivedValue,
@@ -17,13 +18,14 @@ const AnimatedCircleSvg = Animated.createAnimatedComponent(Circle)
 
 export const CircleProgress: React.FC<ProgressCircleProps> = (props) => {
   const {
+    size,
     step,
     totalSteps,
-    stepColor = 'orange',
-    totalStepsColor = 'greyLight',
-    size,
     strokeWidth = 10,
     progressValueProps,
+    stepColor = 'orange',
+    progressContainerStyles,
+    totalStepsColor = 'greyLight',
   } = props
 
   const { colors, normalize } = useTheme()
@@ -47,8 +49,20 @@ export const CircleProgress: React.FC<ProgressCircleProps> = (props) => {
     }
   }, [step, totalSteps, size])
 
+  const _progressContainerStyles: {} = [
+    progressContainerStyles && {
+      ...StyleSheet.flatten(progressContainerStyles),
+    },
+  ]
+
   return (
-    <Block width={_size} height={_size} alignCenter justifyCenter>
+    <Block
+      width={_size}
+      height={_size}
+      alignCenter
+      justifyCenter
+      style={_progressContainerStyles}
+    >
       <Svg width={_size} height={_size} viewBox={`0 0 ${_size} ${_size}`}>
         <G rotation={-90} originX={_size / 2} originY={_size / 2}>
           {/* Background Circle */}
@@ -80,7 +94,7 @@ export const CircleProgress: React.FC<ProgressCircleProps> = (props) => {
         <Text
           fontFamily="semiBold"
           size={'h3'}
-          color="primary"
+          color="black"
           {...progressValueProps}
         >
           {step}%
