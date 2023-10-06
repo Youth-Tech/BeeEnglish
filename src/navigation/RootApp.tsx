@@ -63,6 +63,8 @@ export const RootApp = () => {
           bottom={0}
           alignCenter
           justifyCenter
+          backgroundColor="black"
+          opacity={0.5}
         >
           <ActivityIndicator color={colors.orangeDark} />
         </Block>
