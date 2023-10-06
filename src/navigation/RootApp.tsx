@@ -69,7 +69,7 @@ export const RootApp = () => {
           <ActivityIndicator color={colors.orangeDark} />
         </Block>
       )}
-      {!!!netInfo.isConnected && (
+      {!netInfo.isConnected && (
         <Block
           absolute
           left={0}
