@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextInput, StyleSheet, ViewStyle } from 'react-native'
+import { TextInput, StyleSheet, ViewStyle, StyleProp } from 'react-native'
 import { Block } from '../Block'
 import { makeStyles, normalize } from '@themes'
 import { Cell } from './Cell'
@@ -19,7 +19,7 @@ export interface VerifyCodeInputProps {
   canSubmitOnEnd?: boolean
   onEnd?: (vale: string) => void
 
-  inputContainerStyle?: ViewStyle
+  inputContainerStyle?: StyleProp<ViewStyle>
 }
 
 export const VerifyCodeInput = React.forwardRef<
@@ -127,7 +127,7 @@ VerifyCodeInput.defaultProps = {
 
 const useStyle = makeStyles<Partial<VerifyCodeInputProps>>()(({}) => ({
   inputStyle: ({ inputContainerStyle }) => ({
-    ...inputContainerStyle,
+    ...StyleSheet.flatten(inputContainerStyle),
   }),
   inputTextStyle: {
     opacity: 0,

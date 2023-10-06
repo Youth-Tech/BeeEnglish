@@ -1,4 +1,5 @@
 import React from 'react'
+import { StyleSheet } from 'react-native'
 import { Svg, G, Rect } from 'react-native-svg'
 import Animated, {
   useAnimatedProps,
@@ -52,7 +53,9 @@ export const Progress: React.FC<ProgressProps> = (props) => {
   }
 
   const _progressContainerStyles: {} = [
-    progressContainerStyles && { ...progressContainerStyles },
+    progressContainerStyles && {
+      ...StyleSheet.flatten(progressContainerStyles),
+    },
   ]
 
   return (
