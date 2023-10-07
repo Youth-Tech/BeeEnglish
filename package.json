@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@notifee/react-native": "^7.8.0",
+    "@react-native-community/netinfo": "^9.4.1",
     "@react-native-firebase/app": "^18.5.0",
     "@react-native-firebase/messaging": "^18.5.0",
     "@react-native-google-signin/google-signin": "^10.0.1",

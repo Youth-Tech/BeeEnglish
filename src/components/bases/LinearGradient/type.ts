@@ -1,4 +1,4 @@
-import { ViewStyle } from 'react-native'
+import { StyleProp, ViewStyle } from 'react-native'
 import { TransformedProps } from 'react-native-svg'
 
 export interface LinearGradientProps {
@@ -13,7 +13,7 @@ export interface LinearGradientProps {
    * Style for component
    * ```
    */
-  containerStyle?: ViewStyle
+  containerStyle?: StyleProp<ViewStyle>
   /**
    *
    * Orientation for color gradient

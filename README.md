@@ -112,17 +112,17 @@ src
 
   - **Props**
 
-    | Name                                    | Type              | Default value | Require |
-    | --------------------------------------- | ----------------- | ------------- | ------- |
-    | step                                    | `number`          |               | ✅      |
-    | totalStep                               | `number`          |               | ✅      |
-    | size                                    | `number`          |               | ✅      |
-    | strokeWidth                             | `number`          | 10            |         |
-    | totalStepColor                          | `string`          | `orange`      |         |
-    | stepColor                               | `string`          | `greyLight`   |         |
-    | progressContainerStyles                 | `ViewStyle`       | `{}`          |         |
-    | progressValueProps                      | `CommonTextProps` | `undefined`   |         |
-    | onCompleteAnimation(isFinish?: boolean) | `Function`        | `()=>{}`      |         |
+    | Name                                    | Type                   | Default value | Require |
+    | --------------------------------------- | ---------------------- | ------------- | ------- |
+    | step                                    | `number`               |               | ✅      |
+    | totalStep                               | `number`               |               | ✅      |
+    | size                                    | `number`               |               | ✅      |
+    | strokeWidth                             | `number`               | 10            |         |
+    | totalStepColor                          | `string`               | `orange`      |         |
+    | stepColor                               | `string`               | `greyLight`   |         |
+    | progressContainerStyles                 | `StyleProp<ViewStyle>` | `{}`          |         |
+    | progressValueProps                      | `CommonTextProps`      | `undefined`   |         |
+    | onCompleteAnimation(isFinish?: boolean) | `Function`             | `()=>{}`      |         |
 
   - **How to use**
 
@@ -134,15 +134,15 @@ src
 
   - **Props**
 
-    | Name                                    | Type        | Default value | Require |
-    | --------------------------------------- | ----------- | ------------- | ------- |
-    | step                                    | `number`    |               | ✅      |
-    | totalStep                               | `number`    |               | ✅      |
-    | strokeHeight                            | `number`    | 10            |         |
-    | totalStepColor                          | `string`    | `orange`      |         |
-    | stepColor                               | `string`    | `greyLight`   |         |
-    | progressContainerStyles                 | `ViewStyle` | `{}`          |         |
-    | onCompleteAnimation(isFinish?: boolean) | `Function`  | `()=>{}`      |         |
+    | Name                                    | Type                   | Default value | Require |
+    | --------------------------------------- | ---------------------- | ------------- | ------- |
+    | step                                    | `number`               |               | ✅      |
+    | totalStep                               | `number`               |               | ✅      |
+    | strokeHeight                            | `number`               | 10            |         |
+    | totalStepColor                          | `string`               | `orange`      |         |
+    | stepColor                               | `string`               | `greyLight`   |         |
+    | progressContainerStyles                 | `StyleProp<ViewStyle>` | `{}`          |         |
+    | onCompleteAnimation(isFinish?: boolean) | `Function`             | `()=>{}`      |         |
 
   - **How to use**
 
@@ -164,7 +164,7 @@ src
     | Name           | Type                                   | Default value | Require |
     | -------------- | -------------------------------------- | ------------- | ------- |
     | colors         | `string[]`                             |               | ✅      |
-    | containerStyle | `ViewStyle`                            | `{}`          |         |
+    | containerStyle | `StyleProp<ViewStyle>`                 | `{}`          |         |
     | orientation    | `horizontal` or `vertical` or `number` | `vertical`    |         |
     | revers         | `boolean`                              | `false`       |         |
     | transform      | `Partial<TransformedProps>`            | `{}`          |         |
@@ -237,7 +237,7 @@ src
     | buttonHeight      | `number` or `string`    | `#ccc`        |         |
     | buttonBorderSize  | `number`                | `undefined`   |         |
     | buttonBorderColor | `string` or `ReactNode` | `undefined`   |         |
-    | containerStyle    | `ViewStyle`             | `undefined`   |         |
+    | containerStyle    | `StyleProp<ViewStyle>`  | `undefined`   |         |
     | shadowHeight      | `number`                | 5             |         |
     | buttonRadius      | `number`                | 5             |         |
     | buttonColor       | `string`                | `primary`     |         |

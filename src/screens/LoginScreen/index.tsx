@@ -1,36 +1,39 @@
-import React from 'react'
 import {
   Pressable,
-  DocumentSelectionState,
   KeyboardAvoidingView,
+  DocumentSelectionState,
 } from 'react-native'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+
 import {
-  Block,
-  Container,
-  DismissKeyBoardBlock,
-  ShadowButton,
   Text,
+  Block,
   TextInput,
+  Container,
+  ShadowButton,
+  DismissKeyBoardBlock,
 } from '@components'
 import { Icon } from '@assets'
-import { goBack, navigate } from '@navigation'
 import { useTheme } from '@themes'
-import { useTranslation } from 'react-i18next'
+import { useAppDispatch } from '@hooks'
+import { TokenService } from '@services'
 import { SocialLoginButton } from '@components'
-import { signingWithGoogle } from '@utils/authUtils'
 import { AuthService } from '@services/AuthService'
 import { DeviceInfoConfig, Provider } from '@configs'
-import { useAppDispatch } from '@hooks'
-import { setAuthState } from '@redux/reducers'
-import { TokenService } from '@services'
+import { goBack, navigate, replace } from '@navigation'
+import { setAuthState, setLoadingStatusAction } from '@redux/reducers'
+import { signingWithFacebook, signingWithGoogle } from '@utils/authUtils'
 
 export const LoginScreen = () => {
+  const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { colors, normalize } = useTheme()
-  const { t } = useTranslation()
+
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [disabledLogin, setDisabledLogin] = React.useState(true)
+
   const passwordInputRef = React.useRef<DocumentSelectionState>()
 
   const onSubmit = () => {
@@ -41,38 +44,40 @@ export const LoginScreen = () => {
   }
   const forgotPassword = () => {}
 
-  const handleLoginGoogle = async () => {
+  const handleLoginOAuth = async (providerId: number) => {
+    dispatch(setLoadingStatusAction(true))
     try {
-      const resOAuth = await signingWithGoogle()
-      console.log(resOAuth)
-      console.log(DeviceInfoConfig.deviceId)
-      console.log(DeviceInfoConfig.deviceName)
+      const loginHandle =
+        providerId == Provider.Facebook
+          ? signingWithFacebook
+          : signingWithGoogle
+
+      const resOAuth = await loginHandle()
 
       const res = await AuthService.oAuthLogin({
         accessToken: resOAuth as string,
         deviceId: DeviceInfoConfig.deviceId,
         deviceName: DeviceInfoConfig.deviceName,
-        provider: Provider.Google,
+        provider: providerId,
       })
-      console.log(res)
 
-      if (res.status === 200 && res.data.data) {
+      if (res.status === 200 && res.data?.data) {
         const { accessToken, refreshToken } = res.data.data
         dispatch(
           setAuthState({
-            providerId: Provider.Google,
+            providerId: providerId,
           }),
         )
 
-        TokenService.setRefreshToken(refreshToken)
         TokenService.setAccessToken(accessToken)
+        TokenService.setRefreshToken(refreshToken)
+        replace('BOTTOM_TAB')
       }
     } catch (error) {
-      console.error('Error login with Google', error.message)
+      console.log(`Error login with ${Provider[providerId]}`, error.message)
     }
+    dispatch(setLoadingStatusAction(false))
   }
-
-  const handleLoginFacebook = () => {}
 
   React.useEffect(() => {
     email.length > 0 && password.length > 0
@@ -178,12 +183,12 @@ export const LoginScreen = () => {
                 <SocialLoginButton
                   name="Google"
                   icon="google"
-                  onPress={handleLoginGoogle}
+                  onPress={() => handleLoginOAuth(Provider.Google)}
                 />
                 <SocialLoginButton
                   name="Facebook"
                   icon="facebook"
-                  onPress={handleLoginFacebook}
+                  onPress={() => handleLoginOAuth(Provider.Facebook)}
                 />
               </Block>
             </Block>

@@ -26,14 +26,17 @@ export const Container: FC<ContainerProps> = (props) => {
       style={[styles.root, style]}
     >
       <StatusBar statusColor={statusColor} />
-      <Wrapper style={{ flex: 1, backgroundColor: colors.white }}>
+      <Wrapper
+        style={{ flex: 1, backgroundColor: colors.white }}
+        keyboardShouldPersistTaps="handled"
+      >
         {children}
       </Wrapper>
     </SafeAreaView>
   )
 }
 
-const useStyles = makeStyles<ContainerProps>()(({ }) => ({
+const useStyles = makeStyles<ContainerProps>()(({}) => ({
   root: ({ backgroundColor }) => ({
     flex: 1,
     backgroundColor: backgroundColor,

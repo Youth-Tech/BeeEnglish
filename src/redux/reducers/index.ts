@@ -2,13 +2,13 @@ import { combineReducers } from '@reduxjs/toolkit'
 
 import { AuthReducer } from './auth.reducer'
 import { ThemeReducer } from './theme.reducer'
-import { LoadingReducer } from './loading.reducer'
+import { AppStateReducer } from './appState.reducer'
 import { ConfigReducer } from './config.reducer'
 
 export const rootReducer = combineReducers({
   auth: AuthReducer,
   themeApp: ThemeReducer,
-  loading: LoadingReducer,
+  appState: AppStateReducer,
   config: ConfigReducer,
 
   // ...other reducers here
@@ -17,5 +17,5 @@ export const rootReducer = combineReducers({
 
 export * from './auth.reducer'
 export * from './config.reducer'
-export * from './loading.reducer'
+export * from './appState.reducer'
 export * from './theme.reducer'
