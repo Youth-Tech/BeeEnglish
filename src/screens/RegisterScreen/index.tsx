@@ -3,7 +3,7 @@ import {
   DocumentSelectionState,
   KeyboardAvoidingView,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import {
   Block,
   Container,
@@ -17,6 +17,7 @@ import { Icon } from '@assets'
 import { goBack, navigate } from '@navigation'
 import { useTheme } from '@themes'
 import { useTranslation } from 'react-i18next'
+import {debounce} from 'lodash';
 
 export const RegisterScreen = () => {
   const { colors, normalize } = useTheme()
@@ -32,35 +33,72 @@ export const RegisterScreen = () => {
   const emailInputRef = React.useRef<DocumentSelectionState>()
   const passwordInputRef = React.useRef<DocumentSelectionState>()
 
-  const onSubmit = () => {
-    console.log('handleSubmit')
-  }
-  const goLogin = () => {
-    navigate('LOGIN_SCREEN')
-  }
+
   const handleLoginGoogle = () => {}
   const handleLoginFacebook = () => {}
-  React.useEffect(() => {
-    email.length > 0 && password.length > 0
+  useEffect(() => {
+    email.length > 0 && password.length >= 6 && name.length >= 3
       ? setDisabledLogin(false)
       : setDisabledLogin(true)
-  }, [email, password])
+  }, [email, password, name])
 
-  const onCheckGmail = () => {
+  const onCheckEmail = (value: string) => {
     const pattern =
       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-    if (pattern.test(email)) setCheckMail(true)
+    if (pattern.test(value)) setCheckMail(true);
     else setCheckMail(false)
   }
 
-  const onCheckPass = () => {
-    if (password.length >= 6) setCheckPass(true)
+  const onCheckPass = (value: string) => {
+    if (value.length >= 6) setCheckPass(true);
     else setCheckPass(false)
   }
-  const onCheckFullName = () => {
-    const pattern = /^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$/
-    if (name.length >= 3 && pattern.test(name)) setCheckFullName(true)
-    else setCheckFullName(false)
+  const onCheckFullName = (value: string) => {
+
+    const pattern = /^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}/
+    console.log(value.length >= 3 && pattern.test(value))
+    if (value.length >= 3 && pattern.test(value)) setCheckFullName(true);
+    else setCheckFullName(false);
+  }
+
+  const checkError = debounce((value: string, type: 'email' | 'pass' | 'name') => {
+    switch (type) {
+      case 'email':
+        if(!checkMail) onCheckEmail(value);
+        break;
+      case 'pass':
+        if(!checkPass) onCheckPass(value);
+        break;
+      case 'name':
+        if(!checkFullName) onCheckFullName(value);
+        break;
+    }
+  }, 300);
+  const showError = (type: 'email' | 'pass' | 'name') => {
+    switch (type) {
+      case 'email':
+        if(email.length === 0) return 'Email is required';
+        if (!checkMail) return 'Email invalidate';
+        break;
+      case 'pass':
+        if(password.length === 0) return 'Password is required';
+        if (password.length < 6) return 'Password must be at least 6 characters';
+        if (!checkPass) return 'Password invalidate';
+        break;
+      case 'name':
+        if(name.length === 0) return 'Full name is required';
+        if (name.length < 3) return 'Full name must be at least 3 characters';
+        if (!checkFullName) return 'Full name invalidate';
+        break;
+    }
+    return '';
+  };
+
+  const goLogin = () => {
+    navigate('LOGIN_SCREEN')
+  }
+  const onSubmit = () => {
+    console.log("Vừa nhấn vô")
   }
 
   return (
@@ -82,19 +120,20 @@ export const RegisterScreen = () => {
                 <TextInput
                   label={t('full_name')}
                   placeholder={t('full_name_placeholder')}
-                  onChangeText={setName}
+                  onChangeText={value => {
+                    setName(value);
+                    checkError(value,'name');
+                  }}
                   value={name}
                   returnKeyType="next"
                   onSubmitEditing={() => emailInputRef.current?.focus()}
                   blurOnSubmit={false}
-                  style={{
-                    backgroundColor: checkMail ? colors.white : colors.redLight,
-                    color: checkMail ? colors.black : colors.red,
-                  }}
                   placeholderTextColor={
-                    checkMail ? colors.placeholder : colors.red
+                    checkFullName ? colors.placeholder : colors.red
                   }
-                  onBlur={onCheckFullName}
+                  error={showError("name")}
+                  showError={!checkFullName}
+                  onBlur={() => onCheckFullName(name)}
                 />
               </Block>
               <Block marginTop={25}>
@@ -102,18 +141,20 @@ export const RegisterScreen = () => {
                   ref={emailInputRef}
                   label={'E-mail'}
                   placeholder="example@gmail.com"
-                  onChangeText={setEmail}
+                  onChangeText={value => {
+                    setEmail(value);
+                    checkError(value, 'email');
+                  }}
                   value={email}
                   returnKeyType="next"
                   onSubmitEditing={() => passwordInputRef.current?.focus()}
                   blurOnSubmit={true}
-                  style={{
-                    color: checkMail ? colors.black : colors.red,
-                  }}
                   placeholderTextColor={
                     checkMail ? colors.placeholder : colors.red
                   }
-                  onBlur={onCheckGmail}
+                  error={showError("email")}
+                  showError={!checkMail}
+                  onBlur={()=> onCheckEmail(email)}
                 />
               </Block>
               <Block marginTop={25}>
@@ -121,23 +162,19 @@ export const RegisterScreen = () => {
                   ref={passwordInputRef}
                   label={t('password')}
                   placeholder="•••••••••••••"
-                  onChangeText={setPassword}
+                  onChangeText={value => {
+                    setPassword(value);
+                    checkError(value, 'pass');
+                  }}
                   value={password}
                   secureTextEntry
                   blurOnSubmit={true}
-                  style={{
-                    color: checkMail ? colors.black : colors.red,
-                  }}
                   placeholderTextColor={
-                    checkMail ? colors.placeholder : colors.red
+                    checkPass ? colors.placeholder : colors.red
                   }
-                  inputContainerStyle={{
-                    backgroundColor: checkPass ? colors.white : colors.redLight,
-                  }}
-                  containerStyle={{
-                    borderColor: checkPass ? colors.black : colors.red,
-                  }}
-                  onBlur={onCheckPass}
+                  error={showError("pass")}
+                  showError={!checkPass}
+                  onBlur={()=> onCheckPass(password)}
                 />
               </Block>
 
