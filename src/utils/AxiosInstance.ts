@@ -18,11 +18,12 @@ export interface RefreshTokenRes {
 const AxiosInstance = (contentType = 'application/json') => {
   const axiosInstance = axios.create({
     baseURL: BASE_URL,
+    timeout: 7000,
   })
 
   axiosInstance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-      const token = MMKVStore.getString('auth.accessToken')
+      const token = TokenService.getAccessToken()
 
       config.headers = {
         Authorization: `Bearer ${token}`,
