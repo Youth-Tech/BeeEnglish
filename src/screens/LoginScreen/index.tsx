@@ -24,9 +24,7 @@ import { useAppDispatch } from '@hooks'
 import { setAuthState } from '@redux/reducers'
 import { TokenService } from '@services'
 
-type Props = {}
-
-export const LoginScreen = (props: Props) => {
+export const LoginScreen = () => {
   const dispatch = useAppDispatch()
   const { colors, normalize } = useTheme()
   const { t } = useTranslation()
@@ -83,9 +81,9 @@ export const LoginScreen = (props: Props) => {
   }, [email, password])
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }}>
-      <Container hasScroll>
-        <DismissKeyBoardBlock>
+    <KeyboardAvoidingView style={{ flex: 1}}>
+      <Container>
+        <DismissKeyBoardBlock style={{flex: 1}}>
           <Block flex paddingHorizontal={24} paddingTop={10} space="between">
             <Block>
               <Icon state="Back" onPress={goBack} />
@@ -133,7 +131,7 @@ export const LoginScreen = (props: Props) => {
               </Block>
               <ShadowButton
                 onPress={onSubmit}
-                buttonHeight={45}
+                buttonHeight={35}
                 buttonWidth={194}
                 buttonRadius={10}
                 shadowButtonColor={colors.orangeLighter}

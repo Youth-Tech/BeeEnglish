@@ -3,7 +3,7 @@ import {
   DocumentSelectionState,
   KeyboardAvoidingView,
 } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Block,
   Container,
@@ -17,12 +17,17 @@ import { Icon } from '@assets'
 import { goBack, navigate } from '@navigation'
 import { useTheme } from '@themes'
 import { useTranslation } from 'react-i18next'
+
 export const RegisterScreen = () => {
   const { colors, normalize } = useTheme()
   const { t } = useTranslation()
   const [name, setName] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
+  const [disabledLogin, setDisabledLogin] = React.useState(true)
+  const [checkMail, setCheckMail] = useState(true)
+  const [checkPass, setCheckPass] = useState(true)
+  const [checkFullName, setCheckFullName] = useState(true)
 
   const emailInputRef = React.useRef<DocumentSelectionState>()
   const passwordInputRef = React.useRef<DocumentSelectionState>()
@@ -33,11 +38,34 @@ export const RegisterScreen = () => {
   const goLogin = () => {
     navigate('LOGIN_SCREEN')
   }
-  const handleLoginGoogle = () => { }
-  const handleLoginFacebook = () => { }
+  const handleLoginGoogle = () => {}
+  const handleLoginFacebook = () => {}
+  React.useEffect(() => {
+    email.length > 0 && password.length > 0
+      ? setDisabledLogin(false)
+      : setDisabledLogin(true)
+  }, [email, password])
+
+  const onCheckGmail = () => {
+    const pattern =
+      /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+    if (pattern.test(email)) setCheckMail(true)
+    else setCheckMail(false)
+  }
+
+  const onCheckPass = () => {
+    if (password.length >= 6) setCheckPass(true)
+    else setCheckPass(false)
+  }
+  const onCheckFullName = () => {
+    const pattern = /^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$/
+    if (name.length >= 3 && pattern.test(name)) setCheckFullName(true)
+    else setCheckFullName(false)
+  }
+
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
-      <Container hasScroll>
+      <Container>
         <DismissKeyBoardBlock>
           <Block flex paddingHorizontal={24} paddingTop={10} space="between">
             <Block>
@@ -52,13 +80,21 @@ export const RegisterScreen = () => {
               </Text>
               <Block marginTop={25}>
                 <TextInput
-                  label={t('fullname')}
-                  placeholder={t('fullname_placeholder')}
+                  label={t('full_name')}
+                  placeholder={t('full_name_placeholder')}
                   onChangeText={setName}
                   value={name}
                   returnKeyType="next"
                   onSubmitEditing={() => emailInputRef.current?.focus()}
                   blurOnSubmit={false}
+                  style={{
+                    backgroundColor: checkMail ? colors.white : colors.redLight,
+                    color: checkMail ? colors.black : colors.red,
+                  }}
+                  placeholderTextColor={
+                    checkMail ? colors.placeholder : colors.red
+                  }
+                  onBlur={onCheckFullName}
                 />
               </Block>
               <Block marginTop={25}>
@@ -70,7 +106,14 @@ export const RegisterScreen = () => {
                   value={email}
                   returnKeyType="next"
                   onSubmitEditing={() => passwordInputRef.current?.focus()}
-                  blurOnSubmit={false}
+                  blurOnSubmit={true}
+                  style={{
+                    color: checkMail ? colors.black : colors.red,
+                  }}
+                  placeholderTextColor={
+                    checkMail ? colors.placeholder : colors.red
+                  }
+                  onBlur={onCheckGmail}
                 />
               </Block>
               <Block marginTop={25}>
@@ -81,17 +124,32 @@ export const RegisterScreen = () => {
                   onChangeText={setPassword}
                   value={password}
                   secureTextEntry
+                  blurOnSubmit={true}
+                  style={{
+                    color: checkMail ? colors.black : colors.red,
+                  }}
+                  placeholderTextColor={
+                    checkMail ? colors.placeholder : colors.red
+                  }
+                  inputContainerStyle={{
+                    backgroundColor: checkPass ? colors.white : colors.redLight,
+                  }}
+                  containerStyle={{
+                    borderColor: checkPass ? colors.black : colors.red,
+                  }}
+                  onBlur={onCheckPass}
                 />
               </Block>
 
               <ShadowButton
                 onPress={onSubmit}
-                buttonHeight={45}
+                buttonHeight={35}
                 buttonWidth={194}
                 buttonRadius={10}
                 shadowButtonColor={colors.orangeLighter}
                 buttonColor={colors.orangePrimary}
                 shadowHeight={7}
+                disabled={disabledLogin}
                 containerStyle={{
                   alignSelf: 'center',
                   marginTop: normalize.v(57.4),

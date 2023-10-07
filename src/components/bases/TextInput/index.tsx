@@ -15,7 +15,7 @@ import { Block, Text } from '@components'
 import { InputProps } from './types'
 import { handleFontSize, isString } from '@components/utils'
 
-const DEFAULT_HEIGHT_INPUT = 63
+const DEFAULT_HEIGHT_INPUT = 45
 
 export const TextInput = forwardRef<any, InputProps>((props, ref) => {
   const inputRef = useRef<any>(null)
@@ -108,7 +108,7 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
 
   const _renderIcon = (isRight?: boolean) => {
     const defaultIconStyle = {
-      minHeight: DEFAULT_HEIGHT_INPUT,
+      // minHeight: DEFAULT_HEIGHT_INPUT,
       paddingHorizontal: 16,
       opacity: disabled ? 0.5 : 1,
       justifyContent: 'center' as ViewStyle['justifyContent'],
