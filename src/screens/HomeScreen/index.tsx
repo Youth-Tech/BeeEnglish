@@ -10,7 +10,7 @@ import DailyTask from './components/DailyTask'
 import ToolItem from './components/ToolItem'
 import { View, FlatList } from 'react-native'
 import LessonProgressItem from './components/LessonProgress'
-import { NewsProgress } from './components'
+import { NewsItem, NewsProgress } from './components'
 
 const learningData = [
   {
@@ -85,14 +85,14 @@ export const HomeScreen = () => {
   const [t] = useTranslation()
   const dispatch = useDispatch()
   const { colors, normalize } = useTheme()
-  const onPressDictionary = () => {}
-  const onPressVideo = () => {}
+  const onPressDictionary = () => { }
+  const onPressVideo = () => { }
   return (
     <Container hasScroll>
       <Block flex backgroundColor={colors.white} paddingHorizontal={20}>
-        <Block row alignCenter space="between" backgroundColor="transparent">
-          <Block row backgroundColor="transparent">
-            <Block row backgroundColor="transparent">
+        <Block row alignCenter space="between">
+          <Block row>
+            <Block row>
               <Image
                 width={45}
                 height={45}
@@ -102,16 +102,11 @@ export const HomeScreen = () => {
                 }}
                 resizeMode="cover"
               />
-              <Block justifyCenter marginLeft={8} backgroundColor="transparent">
+              <Block justifyCenter marginLeft={8}>
                 <Text size={'h4'} fontFamily="semiBold" color={colors.black}>
                   Hey, Duy Vo
                 </Text>
-                <Block
-                  row
-                  alignCenter
-                  marginTop={4}
-                  backgroundColor="transparent"
-                >
+                <Block row alignCenter marginTop={4}>
                   <Text size={'h5'} fontFamily="semiBold">
                     Chào buổi sáng
                   </Text>
@@ -126,7 +121,7 @@ export const HomeScreen = () => {
           </Block>
           <Icon state="Fire" />
         </Block>
-        <Block marginTop={10} backgroundColor="transparent">
+        <Block marginTop={10}>
           <DailyTask
             icon="LearnBook"
             taskName="Học bài 15 phút"
@@ -137,7 +132,7 @@ export const HomeScreen = () => {
             }}
           />
         </Block>
-        <Block marginTop={17} backgroundColor="transparent">
+        <Block marginTop={17}>
           <Text size={'h2'} fontFamily="bold" color={colors.black}>
             {t('tools')}
           </Text>
@@ -152,14 +147,21 @@ export const HomeScreen = () => {
             </View>
           </Block>
         </Block>
-        <Block marginTop={17} backgroundColor="transparent">
-          <Text size={'h2'} fontFamily="bold" color={colors.black}>
-            {t('learning')}
-          </Text>
-          <FlatList
-            data={learningData}
-            keyExtractor={(item) => item.id + ''}
-            renderItem={({ item, index }) => (
+      </Block>
+      <Block marginTop={17}>
+        <Text
+          size={'h2'}
+          fontFamily="bold"
+          color={colors.black}
+          marginLeft={20}
+        >
+          {t('learning')}
+        </Text>
+        <FlatList
+          data={learningData}
+          keyExtractor={(item) => item.id + ''}
+          renderItem={({ item, index }) => (
+            <View style={index === 0 ? { marginStart: normalize.h(20) } : {}}>
               <LessonProgressItem
                 lessonLabel={item.lessonLabel}
                 progress={item.progress}
@@ -170,32 +172,67 @@ export const HomeScreen = () => {
                 }}
                 index={index}
               />
-            )}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{ marginTop: normalize.v(10) }}
-          />
-        </Block>
-        <Block marginTop={17} backgroundColor="transparent">
-          <Text size={'h2'} fontFamily="bold" color={colors.black}>
-            {t('watched')}
-          </Text>
-          <FlatList
-            data={newsData}
-            keyExtractor={(item) => item.id + ''}
-            renderItem={({ item, index }) => (
+            </View>
+          )}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={{ marginTop: normalize.v(10) }}
+        />
+      </Block>
+      <Block marginTop={17}>
+        <Text
+          size={'h2'}
+          fontFamily="bold"
+          color={colors.black}
+          marginLeft={20}
+        >
+          {t('watched')}
+        </Text>
+        <FlatList
+          data={newsData}
+          keyExtractor={(item) => item.id + ''}
+          renderItem={({ item, index }) => (
+            <View
+              style={
+                index === 0
+                  ? { marginStart: normalize.h(20) }
+                  : { marginStart: normalize.h(10) }
+              }
+            >
               <NewsProgress
                 title={item.newsTitle}
                 image={item.image}
                 progress={item.progress}
                 index={index}
               />
-            )}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{ marginTop: normalize.v(10) }}
-          />
-        </Block>
+            </View>
+          )}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={{ marginTop: normalize.v(10) }}
+        />
+      </Block>
+      <Block marginTop={17}>
+        <Text
+          size={'h2'}
+          fontFamily="bold"
+          color={colors.black}
+          marginLeft={20}
+        >
+          {t('news')}
+        </Text>
+        <FlatList
+          data={newsData}
+          keyExtractor={(item) => item.id + ''}
+          renderItem={({ item, index }) => (
+            <View style={{ marginHorizontal: normalize.h(20) }}>
+              <NewsItem title={item.newsTitle} image={item.image} />
+            </View>
+          )}
+          scrollEnabled={false}
+          showsHorizontalScrollIndicator={false}
+          style={{ marginTop: normalize.v(10) }}
+        />
       </Block>
     </Container>
   )

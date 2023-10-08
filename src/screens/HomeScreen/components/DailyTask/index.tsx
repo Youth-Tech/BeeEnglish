@@ -26,13 +26,7 @@ const DailyTask = (props: Props) => {
         radius={10}
         backgroundColor="white"
       >
-        <Block
-          flex
-          row
-          alignCenter
-          backgroundColor="transparent"
-          paddingLeft={19}
-        >
+        <Block flex row alignCenter paddingLeft={19}>
           <Icon state={icon} />
           <Text
             size={'h3'}
@@ -47,7 +41,6 @@ const DailyTask = (props: Props) => {
         <Block
           width={24}
           height={33}
-          backgroundColor="transparent"
           justifyCenter
           alignCenter
           absolute
@@ -56,7 +49,6 @@ const DailyTask = (props: Props) => {
           <Block
             style={baseStyles.absoluteFill}
             zIndex={1}
-            backgroundColor="transparent"
             justifyCenter
             alignCenter
           >
@@ -72,18 +64,8 @@ const DailyTask = (props: Props) => {
             resizeMode="contain"
           />
         </Block>
-        <Block
-          backgroundColor="transparent"
-          style={[baseStyles.absoluteFill, { top: -10 }]}
-          alignCenter
-        >
-          <Block
-            backgroundColor="transparent"
-            width={149}
-            height={20}
-            justifyCenter
-            alignCenter
-          >
+        <Block style={[baseStyles.absoluteFill, { top: -10 }]} alignCenter>
+          <Block width={149} height={20} justifyCenter alignCenter>
             <Text
               size={'h5'}
               fontFamily="bold"

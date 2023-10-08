@@ -32,7 +32,9 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
   return (
     <Pressable
       onPress={onPress}
-      style={[index > 0 ? { marginStart: normalize.h(15) } : {}]}
+      style={[
+        { marginVertical: normalize.v(5) },
+      ]}
     >
       <Block
         shadow
