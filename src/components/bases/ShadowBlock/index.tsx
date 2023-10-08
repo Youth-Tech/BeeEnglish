@@ -13,6 +13,7 @@ import { Text } from '../Text'
 export const ShadowBlock: React.FC<ShadowBlockProps> = (props) => {
   const {
     flex,
+    style,
     margin,
     marginTop,
     marginLeft,
@@ -42,6 +43,20 @@ export const ShadowBlock: React.FC<ShadowBlockProps> = (props) => {
     ...rest
   } = props
   const { colors } = useTheme()
+
+  const containerStyle = [
+    {
+      backgroundColor: handleColor(colors, backgroundColor),
+    },
+    style,
+    {
+      transform: [
+        {
+          translateY: shadowHeight * (shadowPosition === 'bottom' ? -1 : 1),
+        },
+      ],
+    },
+  ]
 
   return (
     <Block
@@ -90,24 +105,13 @@ export const ShadowBlock: React.FC<ShadowBlockProps> = (props) => {
         )}
         <Block
           flex
-          alignCenter
-          justifyCenter
           radius={radius}
           borderLeftWidth={borderWidth}
           borderRightWidth={borderWidth}
           borderBottomWidth={borderWidth}
           borderColor={handleColor(colors, shadowBackgroundColor)}
           borderTopWidth={shadowPosition === 'top' ? 0 : borderWidth}
-          style={{
-            backgroundColor: handleColor(colors, backgroundColor),
-            transform: [
-              {
-                translateY:
-                  shadowHeight * (shadowPosition === 'bottom' ? -1 : 1),
-              },
-            ],
-          }}
-          {...rest}
+          style={containerStyle}
         />
       </Block>
     </Block>
