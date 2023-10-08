@@ -112,6 +112,7 @@ export const ShadowBlock: React.FC<ShadowBlockProps> = (props) => {
           borderColor={handleColor(colors, shadowBackgroundColor)}
           borderTopWidth={shadowPosition === 'top' ? 0 : borderWidth}
           style={containerStyle}
+          {...rest}
         />
       </Block>
     </Block>
