@@ -1,4 +1,3 @@
-import { Pressable } from 'react-native'
 import React from 'react'
 import { Text, Block, Container, ShadowButton, Image } from '@components'
 import { Icon, images } from '@assets'
