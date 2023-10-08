@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Text,
   Block,
@@ -9,14 +9,41 @@ import {
 } from '@components'
 import { Icon, images } from '@assets'
 import { useTheme } from '@themes'
+import { Pressable } from 'react-native'
+import { goBack, navigate } from '@navigation'
 
 export const ExamTestScreen = () => {
   const { colors } = useTheme()
+  const [activeBlock, setActiveBlock] = useState(0)
+  const [activeButton, setActiveButton] = useState(false)
+  const onPressChange = (blockNumber: React.SetStateAction<number>) => {
+    setActiveBlock(blockNumber)
+    if (activeBlock == 1 || activeBlock == 2) {
+      setActiveButton(false)
+    }
+  }
+  const onPressButton = () => {
+    setActiveButton(true)
+  }
+  const goAboutTheTest = () => {
+    if (activeBlock === 1 && activeButton === true) {
+      navigate('ABOUT_THE_TEST_SCREEN')
+    } else if (activeBlock === 2) {
+      console.log('tôi chưa cập nhật màn hình này!')
+    } else {
+      console.log('Bạn phải chọn một trình độ trước khi tiếp tục!')
+    }
+  }
+
+  useEffect(() => {
+    goAboutTheTest()
+  }, [activeBlock, activeButton])
+
   return (
     <Container>
       <Block flex>
         <Block row alignCenter paddingHorizontal={25}>
-          <Icon state="Back" />
+          <Icon state="Back" onPress={goBack} />
         </Block>
         <Block marginTop={25} paddingHorizontal={25}>
           <Text size={'heading'} fontFamily="bold">
@@ -24,14 +51,18 @@ export const ExamTestScreen = () => {
           </Text>
         </Block>
         <Block marginTop={65} alignCenter>
-          <ShadowBlock
-            shadowHeight={3}
-            width={320}
-            height={100}
-            paddingHorizontal={20}
-          >
-            <Block row>
-              <Block padding={10}>
+          <Pressable onPress={() => onPressChange(1)}>
+            <ShadowBlock
+              shadowBackgroundColor={
+                activeBlock === 1 ? colors.orangeDark : colors.greyDark
+              }
+              shadowHeight={3}
+              width={'100%'}
+              height={100}
+              row
+              paddingHorizontal={13}
+            >
+              <Block paddingVertical={10}>
                 <Image source={images.BeeDiscovery} width={66} height={80} />
               </Block>
               <Block paddingHorizontal={10} paddingVertical={25}>
@@ -42,17 +73,21 @@ export const ExamTestScreen = () => {
                   Bắt đầu ngay!
                 </Text>
               </Block>
-            </Block>
-          </ShadowBlock>
-          <ShadowBlock
-            width={320}
-            height={100}
-            paddingHorizontal={20}
-            marginTop={30}
-            shadowHeight={3}
-          >
-            <Block row>
-              <Block padding={10}>
+            </ShadowBlock>
+          </Pressable>
+          <Pressable onPress={() => onPressChange(2)}>
+            <ShadowBlock
+              shadowBackgroundColor={
+                activeBlock === 2 ? colors.orangeDark : colors.greyDark
+              }
+              shadowHeight={3}
+              width={'100%'}
+              height={100}
+              row
+              marginTop={30}
+              paddingHorizontal={13}
+            >
+              <Block paddingVertical={10}>
                 <Image source={images.BeeGraduated} width={66} height={80} />
               </Block>
               <Block paddingHorizontal={10} paddingVertical={25}>
@@ -63,8 +98,8 @@ export const ExamTestScreen = () => {
                   Trả lời một số câu hỏi nào!
                 </Text>
               </Block>
-            </Block>
-          </ShadowBlock>
+            </ShadowBlock>
+          </Pressable>
         </Block>
       </Block>
       <Block marginBottom={80} paddingHorizontal={80}>
@@ -76,9 +111,7 @@ export const ExamTestScreen = () => {
           buttonRadius={8}
           shadowButtonColor={colors.orangeLighter}
           buttonColor={colors.orangePrimary}
-          onPress={() => {
-            console.log('press')
-          }}
+          onPress={onPressButton}
         >
           <Text size={'h3'} fontFamily="bold" color={colors.white}>
             Tiếp tục

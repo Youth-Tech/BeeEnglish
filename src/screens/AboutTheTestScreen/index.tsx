@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, Block, Container, ShadowButton, Image } from '@components'
 import { Icon, images } from '@assets'
 import { useTheme } from '@themes'
-
+import { goBack } from '@navigation'
 export const AboutTheTestScreen = () => {
   const { colors } = useTheme()
   return (
@@ -10,7 +10,7 @@ export const AboutTheTestScreen = () => {
       <Block flex>
         <Block row alignCenter paddingHorizontal={25}>
           <Block>
-            <Icon state="Back" />
+            <Icon state="Back" onPress={goBack} />
           </Block>
           <Block flex paddingRight={25}>
             <Text size={'h2'} fontFamily="bold" center>
@@ -18,7 +18,7 @@ export const AboutTheTestScreen = () => {
             </Text>
           </Block>
         </Block>
-        <Block marginTop={130} paddingHorizontal={25}>
+        <Block marginTop={120} paddingHorizontal={25}>
           <Text size={'h2'} fontFamily="bold" numberOfLines={2} center>
             Thực hiện bài kiểm tra để chúng tôi biết năng lực của bạn
           </Text>
@@ -26,15 +26,15 @@ export const AboutTheTestScreen = () => {
         <Block marginTop={40} alignCenter>
           <Image
             source={images.BeeHello}
-            width={183}
+            width={175}
             height={229}
-            resizeMode="cover"
+            resizeMode="contain"
           />
         </Block>
       </Block>
       <Block marginBottom={40} paddingHorizontal={20}>
         <ShadowButton
-          buttonHeight={40}
+          buttonHeight={35}
           buttonBorderSize={2}
           buttonBorderColor={colors.orangeLight}
           shadowHeight={6}
