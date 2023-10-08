@@ -32,7 +32,7 @@ export const AboutTheTestScreen = () => {
           />
         </Block>
       </Block>
-      <Block marginBottom={40} marginHorizontal={20}>
+      <Block marginBottom={40} paddingHorizontal={20}>
         <ShadowButton
           buttonHeight={40}
           buttonBorderSize={2}
