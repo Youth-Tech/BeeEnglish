@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { useTheme } from '@themes'
+import { normalize, useTheme } from '@themes'
 import { Block, Text, Image } from '@components'
 import { Icon } from '@assets'
 import { ImageRequireSource, Pressable } from 'react-native'
 
 interface NewsProgressProps {
+  index: number
   title: string
   image: string
   progress: number
@@ -13,6 +14,7 @@ interface NewsProgressProps {
 }
 
 export const NewsProgress: React.FC<NewsProgressProps> = ({
+  index,
   title,
   image,
   progress,
@@ -28,7 +30,10 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
     onPressBookMark && onPressBookMark()
   }
   return (
-    <Pressable onPress={onPress}>
+    <Pressable
+      onPress={onPress}
+      style={[index > 0 ? { marginStart: normalize.h(15) } : {}]}
+    >
       <Block
         shadow
         width={142}
@@ -44,7 +49,7 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
             width="100%"
             height={110}
             source={{
-              uri: 'https://static.wikia.nocookie.net/nisekoi/images/c/c6/Chitoge-nisekoi.png/revision/latest?cb=20150603043239',
+              uri: image,
             }}
           />
           <Pressable onPress={toggleBookmark}>
@@ -71,7 +76,7 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
           <Text
             paddingLeft={3}
             fontFamily="regular"
-            size={'h5'}
+            size={'h4'}
             color={colors.black}
             numberOfLines={3}
             lineHeight={18}

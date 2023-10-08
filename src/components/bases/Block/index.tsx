@@ -58,7 +58,7 @@ export const Block = React.forwardRef<any, BlockProps>((props, ref) => {
     borderBottomLeftRadius,
     borderBottomRightRadius,
     shadow,
-    backgroundColor = '#fff',
+    backgroundColor = 'transparent',
     padding,
     margin,
     wrap,

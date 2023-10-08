@@ -24,6 +24,17 @@
     "change_password": "Change password",
     "enter_password": "Enter password",
     "label_new_password": "Enter your new password",
-    "forgot_password": "Forgot password"
+    "forgot_password": "Forgot password",
+
+
+    "good_morning":"Good morning",
+    "good_afternoon":"Good afternoon",
+    "good_evening":"Good evening",
+    "daily_task":"Daily Task",
+    "tools":"Tools",
+    "learning":"Learning",
+    "watched":"Watched",
+    "news":"News",
+    "dictionary":"Dictionary"
   }
 }

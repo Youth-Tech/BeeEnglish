@@ -3,71 +3,199 @@ import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
 import { updateConfigAction } from '@redux/reducers'
-import { Block, Container, ShadowButton, Text, TextInput } from '@components'
-import { font, fontFamily } from '@themes'
-import { Icon, LeftArrow } from '@assets/icons/IconSystem'
+import { Block, Container, Image, Text } from '@components'
+import { useTheme } from '@themes'
+import { Icon } from '@assets'
+import DailyTask from './components/DailyTask'
+import ToolItem from './components/ToolItem'
+import { View, FlatList } from 'react-native'
+import LessonProgressItem from './components/LessonProgress'
+import { NewsProgress } from './components'
 
+const learningData = [
+  {
+    id: 1,
+    lessonLabel: `Lesson 1: Bữa sáng cùng gia đình`,
+    topicName: 'Gia đình',
+    topicImage: `https://clipart-library.com/image_gallery/372235.png`,
+    progress: 50,
+  },
+  {
+    id: 2,
+    lessonLabel: `Lesson 2: Bữa sáng cùng gia đình`,
+    topicName: 'Công sở',
+    topicImage: `https://clipart-library.com/2023/business-persons-meeting-clipart-md.png`,
+    progress: 10,
+  },
+  {
+    id: 3,
+    lessonLabel: `Lesson 6: Bữa sáng cùng gia đình`,
+    topicName: 'Trường học',
+    topicImage: `https://media.istockphoto.com/id/639973478/vector/people-and-education-group-of-happy-students-with-books.jpg?s=612x612&w=0&k=20&c=fVA-VABlOliuVKSWk1h6mOgH6PKimTfPEKG4qzueQQY=`,
+    progress: 23.5,
+  },
+  {
+    id: 4,
+    lessonLabel: `Lesson 3: Bữa sáng cùng gia đình`,
+    topicName: 'Tiệc tùng',
+    topicImage: `https://cutewallpaper.org/24/happy-people-clip-art/1375620031.jpg`,
+    progress: 75.5,
+  },
+  {
+    id: 5,
+    lessonLabel: `Lesson 4: Bữa sáng cùng gia đình`,
+    topicName: 'Du lịch',
+    topicImage: `https://clipart-library.com/image_gallery/372235.png`,
+    progress: 60,
+  },
+]
+const newsData = [
+  {
+    id: 1,
+    newsTitle: `Bữa sáng cùng gia đình`,
+    image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
+    progress: 50,
+  },
+  {
+    id: 2,
+    newsTitle: `Bữa sáng cùng gia đình`,
+    image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
+    progress: 50,
+  },
+  {
+    id: 3,
+    newsTitle: `Bữa sáng cùng gia đình`,
+    image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
+    progress: 50,
+  },
+  {
+    id: 4,
+    newsTitle: `Bữa sáng cùng gia đình`,
+    image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
+    progress: 50,
+  },
+  {
+    id: 5,
+    newsTitle: `Bữa sáng cùng gia đình`,
+    image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
+    progress: 50,
+  },
+]
 export const HomeScreen = () => {
   const [t] = useTranslation()
   const dispatch = useDispatch()
-
+  const { colors, normalize } = useTheme()
+  const onPressDictionary = () => {}
+  const onPressVideo = () => {}
   return (
-    <Container>
-      <Block flex backgroundColor="white">
-        <ShadowButton
-          buttonWidth={200}
-          buttonHeight={60}
-          shadowButtonColor="orangeLight"
-          buttonColor="orange"
-          containerStyle={{
-            marginTop: 20,
-          }}
-          onPress={() => {
-            dispatch(updateConfigAction({ lang: 'vi' }))
-          }}
-        >
-          <Text fontFamily="bold" size={'heading'}>
-            {t('vi')}
+    <Container hasScroll>
+      <Block flex backgroundColor={colors.white} paddingHorizontal={20}>
+        <Block row alignCenter space="between" backgroundColor="transparent">
+          <Block row backgroundColor="transparent">
+            <Block row backgroundColor="transparent">
+              <Image
+                width={45}
+                height={45}
+                radius={22.5}
+                source={{
+                  uri: 'https://i.pinimg.com/736x/9b/88/51/9b88513699abae664fc34b23c3d0a6d3.jpg',
+                }}
+                resizeMode="cover"
+              />
+              <Block justifyCenter marginLeft={8} backgroundColor="transparent">
+                <Text size={'h4'} fontFamily="semiBold" color={colors.black}>
+                  Hey, Duy Vo
+                </Text>
+                <Block
+                  row
+                  alignCenter
+                  marginTop={4}
+                  backgroundColor="transparent"
+                >
+                  <Text size={'h5'} fontFamily="semiBold">
+                    Chào buổi sáng
+                  </Text>
+                  <Icon
+                    state="Tree"
+                    fill={colors.greyPrimary}
+                    style={{ marginStart: normalize.h(3) }}
+                  />
+                </Block>
+              </Block>
+            </Block>
+          </Block>
+          <Icon state="Fire" />
+        </Block>
+        <Block marginTop={10} backgroundColor="transparent">
+          <DailyTask
+            icon="LearnBook"
+            taskName="Học bài 15 phút"
+            finishedTask={0}
+            totalTask={5}
+            onPress={() => {
+              console.log('streak screen')
+            }}
+          />
+        </Block>
+        <Block marginTop={17} backgroundColor="transparent">
+          <Text size={'h2'} fontFamily="bold" color={colors.black}>
+            {t('tools')}
           </Text>
-        </ShadowButton>
-
-        <Icon state={'Logout'} size={23} />
-
-        <ShadowButton
-          buttonWidth={200}
-          buttonHeight={60}
-          shadowButtonColor="orangeLight"
-          buttonColor="orange"
-          shadowHeight={10}
-          containerStyle={{
-            marginTop: 20,
-          }}
-          onPress={() => {
-            dispatch(updateConfigAction({ lang: 'en' }))
-          }}
-        >
-          <Text fontFamily="bold" size={'heading'}>
-            {t('en')}
+          <Block row marginTop={18}>
+            <ToolItem
+              icon="DictionaryColorized"
+              name={t('dictionary')}
+              onPress={onPressDictionary}
+            />
+            <View style={{ marginStart: normalize.h(28) }}>
+              <ToolItem icon="Video" name="Video" onPress={onPressVideo} />
+            </View>
+          </Block>
+        </Block>
+        <Block marginTop={17} backgroundColor="transparent">
+          <Text size={'h2'} fontFamily="bold" color={colors.black}>
+            {t('learning')}
           </Text>
-        </ShadowButton>
-        <TextInput
-          label="Alo"
-          containerStyle={{
-            borderCurve: 'circular',
-            marginHorizontal: 20,
-          }}
-        />
-        <TextInput
-          label="Alo"
-          containerStyle={{
-            borderCurve: 'circular',
-            marginHorizontal: 20,
-          }}
-          labelStyle={{
-            fontFamily: fontFamily.bold,
-            fontSize: font.size.h3,
-          }}
-        />
+          <FlatList
+            data={learningData}
+            keyExtractor={(item) => item.id + ''}
+            renderItem={({ item, index }) => (
+              <LessonProgressItem
+                lessonLabel={item.lessonLabel}
+                progress={item.progress}
+                topicImage={item.topicImage}
+                topicName={item.topicName}
+                onPress={() => {
+                  console.log('item:' + item.id)
+                }}
+                index={index}
+              />
+            )}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={{ marginTop: normalize.v(10) }}
+          />
+        </Block>
+        <Block marginTop={17} backgroundColor="transparent">
+          <Text size={'h2'} fontFamily="bold" color={colors.black}>
+            {t('watched')}
+          </Text>
+          <FlatList
+            data={newsData}
+            keyExtractor={(item) => item.id + ''}
+            renderItem={({ item, index }) => (
+              <NewsProgress
+                title={item.newsTitle}
+                image={item.image}
+                progress={item.progress}
+                index={index}
+              />
+            )}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={{ marginTop: normalize.v(10) }}
+          />
+        </Block>
       </Block>
     </Container>
   )

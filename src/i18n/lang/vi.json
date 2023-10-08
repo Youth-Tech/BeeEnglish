@@ -24,6 +24,17 @@
     "change_password": "Đổi mật khẩu",
     "enter_password": "Nhập mật khẩu",
     "label_new_password": "Nhập mật khẩu mới của bạn",
-    "forgot_password": "Quên mật khẩu"
+    "forgot_password": "Quên mật khẩu",
+
+    
+    "good_morning":"Chào buổi sáng",
+    "good_afternoon":"Chào buổi trưa",
+    "good_evening":"Chào buổi tối",
+    "daily_task":"Nhiệm vụ hằng ngày",
+    "tools":"Tiện ích",
+    "learning":"Đang học",
+    "watched":"Đã xem",
+    "news":"Tin tức",
+    "dictionary":"Từ điển"
   }
 }
