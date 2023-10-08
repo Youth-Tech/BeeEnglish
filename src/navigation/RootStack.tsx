@@ -13,6 +13,7 @@ import {
   PasswordResetScreen,
   SendPasswordScreen,
   EmailRegistrationScreen,
+  AboutTheTestScreen,
 } from '@screens'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -28,7 +29,7 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="LOGIN_SCREEN"
+        initialRouteName="ABOUT_THE_TEST_SCREEN"
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -43,6 +44,7 @@ const RootStack = () => {
           <Stack.Screen name="LOGIN_SCREEN" component={LoginScreen} />
           <Stack.Screen name="REGISTER_SCREEN" component={RegisterScreen} />
           <Stack.Screen name="SPLASH_SCREEN" component={TestScreen} />
+          <Stack.Screen name="ABOUT_THE_TEST_SCREEN" component={AboutTheTestScreen} />
           <Stack.Screen
             name="EMAIL_REGISTRATION_SCREEN"
             component={EmailRegistrationScreen}
