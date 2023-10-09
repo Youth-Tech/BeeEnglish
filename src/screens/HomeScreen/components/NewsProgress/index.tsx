@@ -30,12 +30,7 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
     onPressBookMark && onPressBookMark()
   }
   return (
-    <Pressable
-      onPress={onPress}
-      style={[
-        { marginVertical: normalize.v(5) },
-      ]}
-    >
+    <Pressable onPress={onPress} style={[{ marginVertical: normalize.v(5) }]}>
       <Block
         shadow
         width={142}

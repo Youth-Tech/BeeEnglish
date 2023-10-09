@@ -24,14 +24,13 @@ export const TestScreen = () => {
             size: 10,
             fontFamily: 'light',
           }}
-        />
+        /> 
         <Block marginTop={20} alignCenter>
           <LessonProgressItem />
           <LessonProgressItem />
           <LessonProgressItem />
           <LessonProgressItem />
           <LessonProgressItem />
-     
         </Block>
       </Block>
     </Container>

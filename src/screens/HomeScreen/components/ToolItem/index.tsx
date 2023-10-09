@@ -10,7 +10,7 @@ interface Props {
   onPress: () => void
 }
 
-const ToolItem = (props: Props) => {
+export const ToolItem = (props: Props) => {
   const { icon, name, onPress } = props
   const { colors } = useTheme()
   return (
@@ -29,7 +29,3 @@ const ToolItem = (props: Props) => {
     </Pressable>
   )
 }
-
-export default ToolItem
-
-const styles = StyleSheet.create({})

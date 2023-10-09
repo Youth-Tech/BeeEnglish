@@ -6,11 +6,14 @@ import { updateConfigAction } from '@redux/reducers'
 import { Block, Container, Image, Text } from '@components'
 import { useTheme } from '@themes'
 import { Icon } from '@assets'
-import DailyTask from './components/DailyTask'
-import ToolItem from './components/ToolItem'
 import { View, FlatList } from 'react-native'
-import LessonProgressItem from './components/LessonProgress'
-import { NewsItem, NewsProgress } from './components'
+import {
+  NewsItem,
+  NewsProgress,
+  DailyTask,
+  LessonProgressItem,
+  ToolItem,
+} from './components'
 
 const learningData = [
   {
