@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react'
 import {
   Text,
   Block,
+  Image,
   Container,
   ShadowButton,
-  Image,
   ShadowBlock,
 } from '@components'
-import { Icon, images } from '@assets'
+import React, { useState, useEffect } from 'react'
+
 import { useTheme } from '@themes'
+import { Icon, images } from '@assets'
 import { Pressable } from 'react-native'
 import { goBack, navigate } from '@navigation'
 
@@ -50,16 +51,16 @@ export const ExamTestScreen = () => {
             Trình Độ Hiện Tại Của Bạn?
           </Text>
         </Block>
-        <Block marginTop={65} alignCenter>
+        <Block marginTop={65} paddingHorizontal={25}>
           <Pressable onPress={() => onPressChange(1)}>
             <ShadowBlock
-              shadowBackgroundColor={
+              row
+              shadowColor={
                 activeBlock === 1 ? colors.orangeDark : colors.greyDark
               }
               shadowHeight={3}
               width={'100%'}
               height={100}
-              row
               paddingHorizontal={13}
             >
               <Block paddingVertical={10}>
@@ -77,7 +78,7 @@ export const ExamTestScreen = () => {
           </Pressable>
           <Pressable onPress={() => onPressChange(2)}>
             <ShadowBlock
-              shadowBackgroundColor={
+              shadowColor={
                 activeBlock === 2 ? colors.orangeDark : colors.greyDark
               }
               shadowHeight={3}
