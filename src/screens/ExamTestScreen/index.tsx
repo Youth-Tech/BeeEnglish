@@ -17,7 +17,7 @@ export const ExamTestScreen = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
   const [activeBlock, setActiveBlock] = useState(0)
-  const onPressChange = (blockNumber: React.SetStateAction<number>) => {
+  const onPressChange = (blockNumber: number) => {
     setActiveBlock(blockNumber)
   }
   const goAboutTheTest = () => {
