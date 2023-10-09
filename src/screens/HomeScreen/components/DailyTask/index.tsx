@@ -1,4 +1,4 @@
-import { StyleSheet, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 import React from 'react'
 import { Block, Image, LinearGradient, Text } from '@components'
 import { baseStyles, useTheme } from '@themes'
@@ -13,7 +13,7 @@ interface Props {
   onPress: () => void
 }
 
-const DailyTask = (props: Props) => {
+export const DailyTask = (props: Props) => {
   const { icon, taskName, finishedTask, totalTask, onPress } = props
   const { colors } = useTheme()
   const { t } = useTranslation()
@@ -90,7 +90,3 @@ const DailyTask = (props: Props) => {
     </Pressable>
   )
 }
-
-export default DailyTask
-
-const styles = StyleSheet.create({})
