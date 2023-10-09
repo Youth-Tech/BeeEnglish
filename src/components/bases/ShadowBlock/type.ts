@@ -24,11 +24,11 @@ export interface ShadowBlockProps extends BlockProps {
   shadowLabelContainerStyle?: BlockProps
   /**
    * ```
-   * shadowBackgroundColor='string' <=> { color: string | `ColorKeys` }
+   * shadowColor='string' <=> { color: string | `ColorKeys` }
    * `ColorKeys` base on App Theme (@themes/color)
    * ```
    */
-  shadowBackgroundColor?: string
+  shadowColor?: string
   /**
    * ```
    * containerPaddingVertical='string' <=> { paddingVertical: number }
