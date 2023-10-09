@@ -6,28 +6,22 @@ import {
   ShadowButton,
   ShadowBlock,
 } from '@components'
-import React, { useState, useEffect } from 'react'
-
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useTheme } from '@themes'
 import { Icon, images } from '@assets'
 import { Pressable } from 'react-native'
 import { goBack, navigate } from '@navigation'
 
 export const ExamTestScreen = () => {
+  const { t } = useTranslation()
   const { colors } = useTheme()
   const [activeBlock, setActiveBlock] = useState(0)
-  const [activeButton, setActiveButton] = useState(false)
   const onPressChange = (blockNumber: React.SetStateAction<number>) => {
     setActiveBlock(blockNumber)
-    if (activeBlock == 1 || activeBlock == 2) {
-      setActiveButton(false)
-    }
-  }
-  const onPressButton = () => {
-    setActiveButton(true)
   }
   const goAboutTheTest = () => {
-    if (activeBlock === 1 && activeButton === true) {
+    if (activeBlock === 1) {
       navigate('ABOUT_THE_TEST_SCREEN')
     } else if (activeBlock === 2) {
       console.log('tôi chưa cập nhật màn hình này!')
@@ -36,19 +30,15 @@ export const ExamTestScreen = () => {
     }
   }
 
-  useEffect(() => {
-    goAboutTheTest()
-  }, [activeBlock, activeButton])
-
   return (
     <Container>
       <Block flex>
-        <Block row alignCenter paddingHorizontal={25}>
+        <Block row paddingHorizontal={25}>
           <Icon state="Back" onPress={goBack} />
         </Block>
         <Block marginTop={25} paddingHorizontal={25}>
           <Text size={'heading'} fontFamily="bold">
-            Trình Độ Hiện Tại Của Bạn?
+            {t('your_current_level')}
           </Text>
         </Block>
         <Block marginTop={65} paddingHorizontal={25}>
@@ -68,10 +58,10 @@ export const ExamTestScreen = () => {
               </Block>
               <Block paddingHorizontal={10} paddingVertical={25}>
                 <Text fontFamily="semiBold" size={'h3'}>
-                  Lần đầu bạn học tiếng anh?
+                  {t('first_time_you_learn_english')}
                 </Text>
                 <Text lineHeight={40} fontFamily="regular" size={'h4'}>
-                  Bắt đầu ngay!
+                  {t('start_immediately')}
                 </Text>
               </Block>
             </ShadowBlock>
@@ -93,10 +83,10 @@ export const ExamTestScreen = () => {
               </Block>
               <Block paddingHorizontal={10} paddingVertical={25}>
                 <Text fontFamily="semiBold" size={'h3'}>
-                  Đã biết tiếng Anh trước đó
+                  {t('already_know_english_before')}
                 </Text>
                 <Text lineHeight={40} fontFamily="regular" size={'h4'}>
-                  Trả lời một số câu hỏi nào!
+                  {t('lets_answer_some_questions')}
                 </Text>
               </Block>
             </ShadowBlock>
@@ -105,6 +95,7 @@ export const ExamTestScreen = () => {
       </Block>
       <Block marginBottom={80} paddingHorizontal={80}>
         <ShadowButton
+          disabled={activeBlock == 0}
           buttonHeight={40}
           buttonBorderSize={2}
           buttonBorderColor={colors.orangePrimary}
@@ -112,10 +103,10 @@ export const ExamTestScreen = () => {
           buttonRadius={8}
           shadowButtonColor={colors.orangeLighter}
           buttonColor={colors.orangePrimary}
-          onPress={onPressButton}
+          onPress={goAboutTheTest}
         >
           <Text size={'h3'} fontFamily="bold" color={colors.white}>
-            Tiếp tục
+            {t('continue_button')}
           </Text>
         </ShadowButton>
       </Block>

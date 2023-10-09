@@ -24,6 +24,13 @@
     "change_password": "Đổi mật khẩu",
     "enter_password": "Nhập mật khẩu",
     "label_new_password": "Nhập mật khẩu mới của bạn",
-    "forgot_password": "Quên mật khẩu"
+    "forgot_password": "Quên mật khẩu",
+    "your_current_level":"Trình Độ Hiện Tại Của Bạn?",
+    "first_time_you_learn_english":"Lần đầu bạn học tiếng anh?",
+    "start_immediately":"Bắt đầu ngay!",
+    "already_know_english_before":"Đã biết tiếng Anh trước đó",
+    "lets_answer_some_questions":"Trả lời một số câu hỏi nào!",
+    "test":"Bài kiểm tra",
+    "take_the_test_to_let_us_know_your_capabilities":"Thực hiện bài kiểm tra để chúng tôi biết năng lực của bạn"
   }
 }

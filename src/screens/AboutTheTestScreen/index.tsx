@@ -3,8 +3,11 @@ import { Text, Block, Container, ShadowButton, Image } from '@components'
 import { Icon, images } from '@assets'
 import { useTheme } from '@themes'
 import { goBack } from '@navigation'
+import { useTranslation } from 'react-i18next'
+
 export const AboutTheTestScreen = () => {
   const { colors } = useTheme()
+  const { t } = useTranslation()
   return (
     <Container>
       <Block flex>
@@ -14,27 +17,29 @@ export const AboutTheTestScreen = () => {
           </Block>
           <Block flex paddingRight={25}>
             <Text size={'h2'} fontFamily="bold" center>
-              Bài kiểm tra
+              {t('test')}
             </Text>
           </Block>
         </Block>
-        <Block marginTop={120} paddingHorizontal={25}>
-          <Text size={'h2'} fontFamily="bold" numberOfLines={2} center>
-            Thực hiện bài kiểm tra để chúng tôi biết năng lực của bạn
-          </Text>
-        </Block>
-        <Block marginTop={40} alignCenter>
-          <Image
-            source={images.BeeHello}
-            width={175}
-            height={229}
-            resizeMode="contain"
-          />
+        <Block alignCenter justifyCenter flex>
+          <Block paddingHorizontal={25}>
+            <Text size={'h2'} fontFamily="bold" numberOfLines={2} center>
+              {t('take_the_test_to_let_us_know_your_capabilities')}
+            </Text>
+          </Block>
+          <Block paddingTop={20}>
+            <Image
+              source={images.BeeHello}
+              width={175}
+              height={229}
+              resizeMode="contain"
+            />
+          </Block>
         </Block>
       </Block>
       <Block marginBottom={40} paddingHorizontal={20}>
         <ShadowButton
-          buttonHeight={35}
+          buttonHeight={40}
           buttonBorderSize={2}
           buttonBorderColor={colors.orangeLight}
           shadowHeight={6}
@@ -46,7 +51,7 @@ export const AboutTheTestScreen = () => {
           }}
         >
           <Text size={'h3'} fontFamily="semiBold" color={colors.black}>
-            Tiếp tục
+            {t('continue_button')}
           </Text>
         </ShadowButton>
       </Block>
