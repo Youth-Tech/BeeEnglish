@@ -2,6 +2,7 @@ import { Pressable, StyleSheet } from 'react-native'
 import React from 'react'
 import { Block, CircleProgress, Image, ShadowBlock, Text } from '@components'
 import { colors, normalize, useTheme } from '@themes'
+import { Circle, Svg } from 'react-native-svg'
 
 type TThemeColor = { primary: string; secondary: string }
 const COLORS: Array<TThemeColor> = [
@@ -139,24 +140,30 @@ export const LessonProgressItem = (props: LessonProgressItemProps) => {
         height={'100%'}
         overflow="hidden"
       >
-        <Block
-          width={53}
-          height={53}
-          backgroundColor={theme?.secondary}
-          radius={26.5}
-          absolute
-          left={-23}
-          top={-14.5}
-        />
-        <Block
-          width={80}
-          height={80}
-          backgroundColor={theme?.secondary}
-          radius={40}
-          absolute
-          right={-50}
-          bottom={-40}
-        />
+        <Block width={53} height={53} absolute>
+          <Svg width={'100%'} height={'100%'} viewBox="0 0 53 53">
+            <Circle
+              cx={53}
+              cy={53}
+              r={26.5}
+              x={-50}
+              y={-40}
+              fill={theme?.secondary}
+            />
+          </Svg>
+        </Block>
+        <Block width={80} height={80} absolute right={-50} bottom={-40}>
+          <Svg width={'100%'} height={'100%'} viewBox="0 0 80 80">
+            <Circle
+              cx={80}
+              cy={80}
+              r={40}
+              x={-50}
+              y={-40}
+              fill={theme?.secondary}
+            />
+          </Svg>
+        </Block>
       </ShadowBlock>
     </Pressable>
   )

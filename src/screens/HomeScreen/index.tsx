@@ -226,7 +226,14 @@ export const HomeScreen = () => {
           data={newsData}
           keyExtractor={(item) => item.id + ''}
           renderItem={({ item, index }) => (
-            <View style={{ marginHorizontal: normalize.h(20) }}>
+            <View
+              style={[
+                { marginHorizontal: normalize.h(20) },
+                index === newsData.length - 1
+                  ? { marginBottom: normalize.v(19) }
+                  : {},
+              ]}
+            >
               <NewsItem title={item.newsTitle} image={item.image} />
             </View>
           )}
