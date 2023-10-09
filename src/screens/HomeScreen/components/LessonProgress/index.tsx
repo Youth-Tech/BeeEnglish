@@ -128,10 +128,12 @@ export const LessonProgressItem = (props: LessonProgressItemProps) => {
         </Block>
       </Block>
       <ShadowBlock
-        shadowBackgroundColor={theme?.primary}
+        shadowColor={theme?.primary}
         width={'100%'}
         height={'100%'}
         overflow="hidden"
+        borderWidth={2}
+        shadowHeight={3}
       >
         <Block width={53} height={53} absolute>
           <Svg width={'100%'} height={'100%'} viewBox="0 0 53 53">
