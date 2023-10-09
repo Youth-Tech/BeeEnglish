@@ -56,7 +56,7 @@ export const ExamTestScreen = () => {
               <Block paddingVertical={10}>
                 <Image source={images.BeeDiscovery} width={66} height={80} />
               </Block>
-              <Block paddingHorizontal={10} paddingVertical={25}>
+              <Block paddingHorizontal={5} paddingVertical={25}>
                 <Text fontFamily="semiBold" size={'h3'}>
                   {t('first_time_you_learn_english')}
                 </Text>
@@ -81,7 +81,7 @@ export const ExamTestScreen = () => {
               <Block paddingVertical={10}>
                 <Image source={images.BeeGraduated} width={66} height={80} />
               </Block>
-              <Block paddingHorizontal={10} paddingVertical={25}>
+              <Block paddingHorizontal={5} paddingVertical={25}>
                 <Text fontFamily="semiBold" size={'h3'}>
                   {t('already_know_english_before')}
                 </Text>
