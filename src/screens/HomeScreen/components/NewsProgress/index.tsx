@@ -40,7 +40,7 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
         overflow="hidden"
         backgroundColor={colors.white}
       >
-        <Block padding={3} flex backgroundColor={colors.white}>
+        <Block padding={3} flex>
           <Image
             radius={10}
             width="100%"
@@ -49,23 +49,22 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
               uri: image,
             }}
           />
-          <Pressable onPress={toggleBookmark}>
+          <Pressable
+            onPress={toggleBookmark}
+            style={{ position: 'absolute', right: 10 }}
+          >
             <Block
               width={26}
               height={30}
               backgroundColor={colors.white}
               alignCenter
               justifyCenter
-              absolute
-              right={10}
               borderBottomLeftRadius={10}
               borderBottomRightRadius={10}
-              bottom={75}
             >
               <Icon
                 state="Bookmark"
                 stroke={colors.orangeDark}
-                strokeWidth={1.5}
                 fill={isBookmarked ? colors.orangeDark : 'transparent'}
               />
             </Block>

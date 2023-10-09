@@ -64,14 +64,8 @@ export const LessonProgressItem = (props: LessonProgressItemProps) => {
         bottom={5}
         paddingHorizontal={13}
       >
-        <Block backgroundColor="transparent" row space="between">
-          <Block
-            flex
-            backgroundColor="transparent"
-            paddingLeft={20}
-            row
-            alignEnd
-          >
+        <Block row space="between">
+          <Block flex paddingLeft={20} row alignEnd>
             <Image
               width={67}
               height={70}
@@ -80,7 +74,7 @@ export const LessonProgressItem = (props: LessonProgressItemProps) => {
               resizeMode="contain"
             />
 
-            <Block flex backgroundColor="transparent">
+            <Block flex>
               <Text
                 numberOfLines={1}
                 size={'h3'}
@@ -93,7 +87,6 @@ export const LessonProgressItem = (props: LessonProgressItemProps) => {
             </Block>
           </Block>
           <Block
-            backgroundColor="transparent"
             alignSelf="flex-start"
             row
             alignCenter
