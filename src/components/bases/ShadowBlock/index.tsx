@@ -117,7 +117,8 @@ export const ShadowBlock: React.FC<ShadowBlockProps> = (props) => {
           </Block>
         )}
         <Block
-          flex
+          flex 
+          {...rest}
           radius={radius}
           borderLeftWidth={borderWidth}
           borderRightWidth={borderWidth}
@@ -125,9 +126,6 @@ export const ShadowBlock: React.FC<ShadowBlockProps> = (props) => {
           borderColor={handleColor(colors, shadowColor)}
           borderTopWidth={shadowPosition === 'top' ? 0 : borderWidth}
           style={containerStyle}
-          {...rest}
-        />
-          {...rest}
         >
           {children}
         </Block>
