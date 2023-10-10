@@ -4,15 +4,17 @@ import { useTranslation } from 'react-i18next'
 import { Block, Container, Image, Text } from '@components'
 import { useTheme } from '@themes'
 import { Icon } from '@assets'
-import { View, FlatList } from 'react-native'
+import { View, FlatList, ListRenderItemInfo, Pressable } from 'react-native'
 import {
   NewsItem,
+  NewsItemProps,
   NewsProgress,
+  NewsProgressProps,
   DailyTask,
   LessonProgressItem,
+  LessonProgressItemProps,
   ToolItem,
 } from './components'
-
 const learningData = [
   {
     id: 1,
@@ -53,31 +55,31 @@ const learningData = [
 const newsData = [
   {
     id: 1,
-    newsTitle: `Bữa sáng cùng gia đình`,
+    title: `Bữa sáng cùng gia đình`,
     image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
     progress: 50,
   },
   {
     id: 2,
-    newsTitle: `Bữa sáng cùng gia đình`,
+    title: `Bữa sáng cùng gia đình`,
     image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
     progress: 50,
   },
   {
     id: 3,
-    newsTitle: `Bữa sáng cùng gia đình`,
+    title: `Bữa sáng cùng gia đình`,
     image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
     progress: 50,
   },
   {
     id: 4,
-    newsTitle: `Bữa sáng cùng gia đình`,
+    title: `Bữa sáng cùng gia đình`,
     image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
     progress: 50,
   },
   {
     id: 5,
-    newsTitle: `Bữa sáng cùng gia đình`,
+    title: `Bữa sáng cùng gia đình`,
     image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
     progress: 50,
   },
@@ -88,6 +90,96 @@ export const HomeScreen = () => {
   const { colors, normalize } = useTheme()
   const onPressDictionary = () => { }
   const onPressVideo = () => { }
+  const onLearningWatchMore = () => { }
+  const renderLessonProgressItem = ({
+    index,
+    item,
+  }: ListRenderItemInfo<LessonProgressItemProps>) => {
+    return (
+      <View
+        style={[
+          index === 0 ? { marginStart: normalize.h(20) } : {},
+          { flexDirection: 'row', alignItems: 'center' },
+        ]}
+        key={`item-${index}`}
+      >
+        <LessonProgressItem
+          lessonLabel={item.lessonLabel}
+          progress={item.progress}
+          topicImage={item.topicImage}
+          topicName={item.topicName}
+          onPress={() => {
+            console.log('item:' + index)
+          }}
+          index={index}
+        />
+        {index === learningData.length - 1 && (
+          <Pressable onPress={onLearningWatchMore}>
+            <Block
+              padding={10}
+              marginHorizontal={20}
+              backgroundColor={colors.orangePrimary}
+              radius={50}
+            >
+              <Icon state="RightArrow" stroke={colors.white} />
+            </Block>
+          </Pressable>
+        )}
+      </View>
+    )
+  }
+  const renderNewsProgressItem = ({
+    index,
+    item,
+  }: ListRenderItemInfo<NewsProgressProps>) => {
+    return (
+      <View
+        style={[
+          index === 0
+            ? { marginStart: normalize.h(20) }
+            : { marginStart: normalize.h(10) }
+          , { flexDirection: 'row', alignItems: 'center' }]}
+        key={`item-${index}`}
+      >
+        <NewsProgress
+          title={item.title}
+          image={item.image}
+          progress={item.progress}
+          index={index}
+        />
+        {index === newsData.length - 1 && (
+          <Pressable onPress={onLearningWatchMore}>
+            <Block
+              padding={10}
+              marginHorizontal={20}
+              backgroundColor={colors.orangePrimary}
+              radius={50}
+            >
+              <Icon state="RightArrow" stroke={colors.white} />
+            </Block>
+          </Pressable>
+        )}
+      </View>
+    )
+  }
+  const renderNewsItem = ({
+    index,
+    item,
+  }: ListRenderItemInfo<NewsItemProps>) => {
+    return (
+      <View
+        style={[
+          { marginHorizontal: normalize.h(20) },
+          index === newsData.length - 1
+            ? { marginBottom: normalize.v(19) }
+            : {},
+        ]}
+        key={`item-${index}`}
+      >
+        <NewsItem title={item.title} image={item.image} />
+      </View>
+    )
+  }
   return (
     <Container hasScroll>
       <Block flex backgroundColor={colors.white} paddingHorizontal={20}>
@@ -160,21 +252,8 @@ export const HomeScreen = () => {
         </Text>
         <FlatList
           data={learningData}
-          keyExtractor={(item) => item.id + ''}
-          renderItem={({ item, index }) => (
-            <View style={index === 0 ? { marginStart: normalize.h(20) } : {}}>
-              <LessonProgressItem
-                lessonLabel={item.lessonLabel}
-                progress={item.progress}
-                topicImage={item.topicImage}
-                topicName={item.topicName}
-                onPress={() => {
-                  console.log('item:' + item.id)
-                }}
-                index={index}
-              />
-            </View>
-          )}
+          keyExtractor={(_, index) => `item-${index}`}
+          renderItem={renderLessonProgressItem}
           horizontal
           showsHorizontalScrollIndicator={false}
           style={{ marginTop: normalize.v(10) }}
@@ -191,23 +270,8 @@ export const HomeScreen = () => {
         </Text>
         <FlatList
           data={newsData}
-          keyExtractor={(item) => item.id + ''}
-          renderItem={({ item, index }) => (
-            <View
-              style={
-                index === 0
-                  ? { marginStart: normalize.h(20) }
-                  : { marginStart: normalize.h(10) }
-              }
-            >
-              <NewsProgress
-                title={item.newsTitle}
-                image={item.image}
-                progress={item.progress}
-                index={index}
-              />
-            </View>
-          )}
+          keyExtractor={(_, index) => `item-${index}`}
+          renderItem={renderNewsProgressItem}
           horizontal
           showsHorizontalScrollIndicator={false}
           style={{ marginTop: normalize.v(10) }}
@@ -224,19 +288,8 @@ export const HomeScreen = () => {
         </Text>
         <FlatList
           data={newsData}
-          keyExtractor={(item) => item.id + ''}
-          renderItem={({ item, index }) => (
-            <View
-              style={[
-                { marginHorizontal: normalize.h(20) },
-                index === newsData.length - 1
-                  ? { marginBottom: normalize.v(19) }
-                  : {},
-              ]}
-            >
-              <NewsItem title={item.newsTitle} image={item.image} />
-            </View>
-          )}
+          keyExtractor={(_, index) => `item-${index}`}
+          renderItem={renderNewsItem}
           scrollEnabled={false}
           showsHorizontalScrollIndicator={false}
           style={{ marginTop: normalize.v(10) }}

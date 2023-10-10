@@ -27,13 +27,13 @@ const COLORS: Array<TThemeColor> = [
     secondary: colors.dark.red,
   },
 ]
-interface LessonProgressItemProps {
-  index: number
+export interface LessonProgressItemProps {
+  index?: number
   topicName: string
   topicImage: string
   lessonLabel: string
   progress: number
-  onPress: () => void
+  onPress?: () => void
 }
 export const LessonProgressItem = (props: LessonProgressItemProps) => {
   const { index, topicImage, topicName, lessonLabel, progress, onPress } = props
@@ -51,7 +51,7 @@ export const LessonProgressItem = (props: LessonProgressItemProps) => {
     <Pressable
       style={[
         styles.container,
-        index > 0 ? { marginStart: normalize.h(15) } : {},
+        index! > 0 ? { marginStart: normalize.h(15) } : {},
       ]}
       onPress={onPress}
     >
@@ -132,7 +132,7 @@ export const LessonProgressItem = (props: LessonProgressItemProps) => {
         width={'100%'}
         height={'100%'}
         overflow="hidden"
-        borderWidth={2}
+        borderWidth={1.1}
         shadowHeight={3}
       >
         <Block width={53} height={53} absolute>

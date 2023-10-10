@@ -59,6 +59,7 @@ const RightArrow = ({
       strokeLinejoin="round"
       strokeWidth={2}
       d="m9 18 6-6-6-6"
+
     />
   </Svg>
 )

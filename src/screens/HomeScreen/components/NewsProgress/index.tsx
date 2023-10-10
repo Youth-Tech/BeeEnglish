@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { normalize, useTheme } from '@themes'
 import { Block, Text, Image } from '@components'
 import { Icon } from '@assets'
-import { ImageRequireSource, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 
-interface NewsProgressProps {
-  index: number
+export interface NewsProgressProps {
+  index?: number
   title: string
   image: string
   progress: number

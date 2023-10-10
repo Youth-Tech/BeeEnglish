@@ -1,9 +1,9 @@
 import React from 'react'
 import { Block, Text, Image } from '@components'
-import { ImageRequireSource, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 import { useTheme } from '@themes'
 
-interface NewsItemProps {
+export interface NewsItemProps {
   title: string
   image: string
   onPress?: () => void
