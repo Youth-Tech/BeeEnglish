@@ -8,13 +8,15 @@ import '@configs'
 import './i18n/i18n'
 import { RootApp } from '@navigation'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-
+import {Host} from 'react-native-portalize'
 const App = () => {
   return (
     <Provider store={store}>
       <SafeAreaProvider>
         <PersistGate loading={null} persistor={persistor}>
+          <Host>
           <RootApp />
+          </Host>
         </PersistGate>
       </SafeAreaProvider>
     </Provider>

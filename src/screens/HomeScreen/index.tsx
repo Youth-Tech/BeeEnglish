@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Block, Container, Image, Text } from '@components'
+import { Block, Container, Image, Modal, Text } from '@components'
 import { useTheme } from '@themes'
 import { Icon } from '@assets'
 import { View, FlatList, ListRenderItemInfo, Pressable } from 'react-native'
@@ -15,6 +15,9 @@ import {
   LessonProgressItemProps,
   ToolItem,
 } from './components'
+import { Portal, Host } from 'react-native-portalize'
+import { widthScreen } from '@utils/helpers'
+import { ModalFunction } from '@components/bases/Modal/type'
 const learningData = [
   {
     id: 1,
@@ -88,9 +91,9 @@ export const HomeScreen = () => {
   const [t] = useTranslation()
   const dispatch = useDispatch()
   const { colors, normalize } = useTheme()
-  const onPressDictionary = () => { }
-  const onPressVideo = () => { }
-  const onLearningWatchMore = () => { }
+  const onPressDictionary = () => {}
+  const onPressVideo = () => {}
+  const onLearningWatchMore = () => {}
   const renderLessonProgressItem = ({
     index,
     item,
@@ -137,8 +140,9 @@ export const HomeScreen = () => {
         style={[
           index === 0
             ? { marginStart: normalize.h(20) }
-            : { marginStart: normalize.h(10) }
-          , { flexDirection: 'row', alignItems: 'center' }]}
+            : { marginStart: normalize.h(10) },
+          { flexDirection: 'row', alignItems: 'center' },
+        ]}
         key={`item-${index}`}
       >
         <NewsProgress

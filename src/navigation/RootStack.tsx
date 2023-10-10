@@ -5,6 +5,7 @@ import { navigationRef } from './NavigationServices'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { RootStackParamList } from './routes'
 import { RootBottomTab } from './RootBottomTab'
+import { Host } from 'react-native-portalize'
 import {
   TestScreen,
   VerificationCodeScreen,
@@ -30,7 +31,7 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="BOTTOM_TAB"
+        initialRouteName="SPLASH_SCREEN"
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -45,7 +46,10 @@ const RootStack = () => {
           <Stack.Screen name="LOGIN_SCREEN" component={LoginScreen} />
           <Stack.Screen name="REGISTER_SCREEN" component={RegisterScreen} />
           <Stack.Screen name="SPLASH_SCREEN" component={TestScreen} />
-          <Stack.Screen name="ABOUT_THE_TEST_SCREEN" component={AboutTheTestScreen} />
+          <Stack.Screen
+            name="ABOUT_THE_TEST_SCREEN"
+            component={AboutTheTestScreen}
+          />
           <Stack.Screen name="EXAM_TEST_SCREEN" component={ExamTestScreen} />
           <Stack.Screen
             name="EMAIL_REGISTRATION_SCREEN"
