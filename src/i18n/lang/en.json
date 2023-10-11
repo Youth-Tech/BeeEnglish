@@ -31,6 +31,22 @@
     "is_too_short": " must be at least 6 characters",
     "is_too_long": " must be at most 30 characters",
     "is_full_name": " must be at least 3 characters",
-    "is_not_same": " does not match"
+    "is_not_same": " does not match",
+    "good_morning": "Good morning",
+    "good_afternoon": "Good afternoon",
+    "good_evening": "Good evening",
+    "daily_task": "Daily Task",
+    "tools": "Tools",
+    "learning": "Learning",
+    "watched": "Watched",
+    "news": "News",
+    "dictionary": "Dictionary",
+    "your_current_level": "Your current level ?",
+    "first_time_you_learn_english": "First time you learn English?",
+    "start_immediately": "Start immediately!",
+    "already_know_english_before": "Already know English before",
+    "lets_answer_some_questions": "Let's answer some questions!",
+    "test": "Exam Test",
+    "take_the_test_to_let_us_know_your_capabilities": "Take the test to let us know your capabilities"
   }
 }

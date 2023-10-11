@@ -12,8 +12,8 @@ import {
 import { useTheme } from '@themes'
 import RootStack from './RootStack'
 import { useAppSelector } from '@hooks'
-import { getIsLoading } from '@redux/selectors'
 import { Block, Text } from '@components'
+import { getIsLoading } from '@redux/selectors'
 
 export const RootApp = () => {
   const netInfo = useNetInfo()

@@ -6,7 +6,6 @@ import { makeStyles, useTheme } from '@themes'
 
 import { StatusBar } from '../StatusBar'
 import { Block } from '../Block'
-
 export type ContainerProps = {
   statusColor?: string
   edges?: Edge[]
@@ -29,6 +28,7 @@ export const Container: FC<ContainerProps> = (props) => {
       <Wrapper
         style={{ flex: 1, backgroundColor: colors.white }}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
         {children}
       </Wrapper>
