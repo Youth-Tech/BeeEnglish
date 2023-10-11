@@ -1,21 +1,19 @@
-import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
-
-import { navigationRef } from './NavigationServices'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { RootStackParamList } from './routes'
 import { RootBottomTab } from './RootBottomTab'
-import { Host } from 'react-native-portalize'
+import { navigationRef } from './NavigationServices'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import {
   TestScreen,
-  VerificationCodeScreen,
   LoginScreen,
-  RegisterScreen,
-  PasswordResetScreen,
-  SendPasswordScreen,
-  EmailRegistrationScreen,
-  AboutTheTestScreen,
   ExamTestScreen,
+  RegisterScreen,
+  SendPasswordScreen,
+  AboutTheTestScreen,
+  PasswordResetScreen,
+  VerificationCodeScreen,
+  EmailRegistrationScreen,
 } from '@screens'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()

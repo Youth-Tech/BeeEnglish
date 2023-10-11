@@ -1,8 +1,16 @@
-import React, { useCallback } from 'react'
-import { Block, CircleProgress, Container, Modal, Progress } from '@components'
-import { widthScreen } from '@utils/helpers'
-import { ModalFunction } from '@components/bases/Modal/type'
+import {
+  Text,
+  Image,
+  Modal,
+  Block,
+  Progress,
+  Container,
+  CircleProgress,
+} from '@components'
+import { images } from '@assets'
 import { Button } from 'react-native'
+import React, { useCallback } from 'react'
+import { ModalFunction } from '@components/bases/Modal/type'
 
 export const TestScreen = () => {
   const modalRef = React.useRef<ModalFunction>(null)
@@ -40,6 +48,7 @@ export const TestScreen = () => {
             modalRef.current?.openModal()
           }}
         />
+
         <Modal
           position="bottom"
           ref={modalRef}
@@ -47,19 +56,26 @@ export const TestScreen = () => {
           onDismiss={onDismiss}
         >
           <Block
+            height={279}
             backgroundColor="white"
-            width={widthScreen - 40}
-            height={300}
-            radius={20}
             alignCenter
-            justifyCenter
+            radius={20}
+            paddingTop={40}
+            marginHorizontal={20}
+            marginBottom={20}
           >
-            <Button
-              title="Close Modal"
-              onPress={() => {
-                modalRef.current?.dismissModal()
-              }}
+            <Image
+              source={images.BeeHello}
+              width={89}
+              height={98}
+              resizeMode="contain"
             />
+            <Text>Ban co muon thoat</Text>
+            <Text>Ban co muon thoat</Text>
+            <Block row width={'100%'} justifyCenter>
+              <Button title="Co" />
+              <Button title="Khong" />
+            </Block>
           </Block>
         </Modal>
       </Block>

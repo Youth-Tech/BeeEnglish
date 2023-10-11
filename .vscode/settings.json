@@ -15,5 +15,5 @@
     "./src/i18n/lang",
     "./android/app/google-services.json"
   ],
-  "editor.formatOnSave": false
+  "editor.formatOnSave": true
 }
