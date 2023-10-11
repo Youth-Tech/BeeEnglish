@@ -10,7 +10,7 @@ import {
 import { BackArrow } from '@assets'
 import { goBack } from '@navigation'
 import { useTranslation } from 'react-i18next'
-import { DocumentSelectionState, KeyboardAvoidingView, ScrollView } from 'react-native'
+import { DocumentSelectionState, KeyboardAvoidingView } from 'react-native'
 
 
 export const PasswordResetScreen = () => {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Container,
   TextInput,
@@ -10,12 +10,36 @@ import {
 import { Icon } from '@assets'
 import { goBack, navigate } from '@navigation'
 import { useTranslation } from 'react-i18next'
+import { useTheme } from '@themes'
+import { AuthService } from '@services/AuthService'
 
 export const SendPasswordScreen = () => {
   const { t } = useTranslation()
-  const [emailAddress, setemailAddress] = React.useState<string>('')
-  const goRegister = () => {
-    navigate('RESET_PASSWORD_SCREEN')
+  const { normalize, colors } = useTheme()
+  const [email, setEmail] = React.useState('')
+  const [emailError, setEmailError] = useState('')
+  const [checkMail, setCheckMail] = useState(true)
+
+  const onCheckEmail = (value: string) => {
+    const pattern =
+      /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+    if (pattern.test(value)) setCheckMail(true)
+    else setCheckMail(false)
+  }
+  const showError = () => {
+    if (email.length === 0) return `${t('email')}${t('is_required')}`
+    if (!checkMail) return `${t('email')}${t('is_invalid')}`
+    return ''
+  }
+
+  const onSubmit = () => {
+    AuthService.sendVerifyCode({ email })
+    navigate('VERIFICATION_CODE_SCREEN')
+  }
+
+  const onDisabled = (value: string) => {
+    if (value.length === 0) return true
+    return !checkMail
   }
   return (
     <Container>
@@ -36,26 +60,35 @@ export const SendPasswordScreen = () => {
           </Text>
           <Block marginTop={25} marginBottom={20}>
             <TextInput
-              placeholder="abc@gmail.com"
+              placeholder="example@gmail.com"
               textContentType="emailAddress"
-              value={emailAddress}
-              onChangeText={setemailAddress}
+              value={email}
+              onChangeText={setEmail}
+              error={showError()}
+              showError={!checkMail}
+              onBlur={() => onCheckEmail(email)}
+              onSubmitEditing={onSubmit}
             />
+            {emailError !== '' && (
+              <Text color="red" size={'h4'} marginTop={5}>
+                {emailError}
+              </Text>
+            )}
           </Block>
           <Block justifyCenter alignCenter marginTop={178}>
             <ShadowButton
+              onPress={onSubmit}
               buttonHeight={40}
-              buttonBorderSize={2}
-              buttonBorderColor={'orangePrimary'}
-              shadowHeight={10}
-              buttonRadius={8}
               buttonWidth={200}
-              shadowButtonColor={'orangeLighter'}
-              onPress={() => {
-                goRegister()
-              }}
+              buttonRadius={10}
+              buttonBorderSize={2}
+              shadowButtonColor={colors.orangeLighter}
+              buttonBorderColor={colors.orangePrimary}
+              buttonColor={colors.orangePrimary}
+              disabled={onDisabled(email)}
+              shadowHeight={7}
             >
-              <Text fontFamily="bold" size={'h3'} color="white">
+              <Text color="white" fontFamily="bold" size={'h3'}>
                 {t('send')}
               </Text>
             </ShadowButton>

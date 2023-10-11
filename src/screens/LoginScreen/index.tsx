@@ -41,7 +41,9 @@ export const LoginScreen = (props: Props) => {
   const goRegister = () => {
     navigate('REGISTER_SCREEN')
   }
-  const forgotPassword = () => {}
+  const forgotPassword = () => {
+    navigate('SEND_PASSWORD_SCREEN')
+  }
 
   const handleLoginGoogle = async () => {
     try {
