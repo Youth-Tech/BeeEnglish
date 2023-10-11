@@ -22,17 +22,10 @@ export const TestScreen = () => {
   }, [])
   return (
     <Container>
-      <Block flex>
-        <Progress
-          step={100}
-          totalSteps={100}
-          progressContainerStyles={[
-            {
-              width: 80,
-            },
-          ]}
-        />
-        <CircleProgress
+      <Block flex padding={10}>
+        <SoundProgress
+          ref={iconRef}
+          fill={colors.blue}
           size={50}
           step={10}
           totalSteps={100}
