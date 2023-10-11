@@ -9,14 +9,15 @@ import Animated, {
   SlideOutDown,
 } from 'react-native-reanimated'
 import { Block } from '../Block'
-import { Container } from '../Container'
 import { ModalFunction, ModalProps } from './type'
+import { getStatusBarHeight } from '../StatusBar/status_bar_height'
 const AnimatedBlock = Animated.createAnimatedComponent(Block)
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 export const Modal = React.forwardRef<ModalFunction, ModalProps>(
   (props, ref) => {
     const { position, children, onShow, onDismiss } = props
     const [visible, setVisible] = React.useState<boolean>(false)
+    const STATUS_BAR_HEIGHT = getStatusBarHeight()
     const handleCloseModal = () => {
       setVisible(false)
       onDismiss?.()
@@ -42,33 +43,32 @@ export const Modal = React.forwardRef<ModalFunction, ModalProps>(
     return (
       <Portal>
         {visible && (
-          <Container>
-            <Block flex row>
-              <AnimatedPressable
-                style={[
-                  baseStyles.absoluteFill,
-                  { backgroundColor: 'rgba(0,0,0,0.5)' },
-                ]}
-                entering={FadeIn}
-                exiting={FadeOut}
-                onPress={handleCloseModal}
-              />
-              <AnimatedBlock
-                entering={SlideInDown}
-                exiting={SlideOutDown}
-                flex
-                alignSelf={
-                  position === 'top'
-                    ? 'flex-start'
-                    : position === 'bottom'
+          <Block flex row>
+            <AnimatedPressable
+              style={[
+                baseStyles.absoluteFill,
+                { backgroundColor: 'rgba(0,0,0,0.5)' },
+              ]}
+              entering={FadeIn}
+              exiting={FadeOut}
+              onPress={handleCloseModal}
+            />
+            <AnimatedBlock
+              entering={SlideInDown}
+              exiting={SlideOutDown}
+              flex
+              alignSelf={
+                position === 'top'
+                  ? 'flex-start'
+                  : position === 'bottom'
                     ? 'flex-end'
                     : 'center'
-                }
-              >
-                {children}
-              </AnimatedBlock>
-            </Block>
-          </Container>
+              }
+              style={position === 'top' ? { marginTop: STATUS_BAR_HEIGHT } : {}}
+            >
+              {children}
+            </AnimatedBlock>
+          </Block>
         )}
       </Portal>
     )

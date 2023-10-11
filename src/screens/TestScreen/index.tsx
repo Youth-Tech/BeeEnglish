@@ -23,18 +23,6 @@ export const TestScreen = () => {
   return (
     <Container>
       <Block flex padding={10}>
-        <SoundProgress
-          ref={iconRef}
-          fill={colors.blue}
-          size={50}
-          step={10}
-          totalSteps={100}
-          strokeWidth={5}
-          progressValueProps={{
-            size: 10,
-            fontFamily: 'light',
-          }}
-        />
         <Button
           title="Open Modal"
           onPress={() => {
@@ -55,7 +43,6 @@ export const TestScreen = () => {
             radius={20}
             paddingTop={40}
             marginHorizontal={20}
-            marginBottom={20}
           >
             <Image
               source={images.BeeHello}
