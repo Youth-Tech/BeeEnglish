@@ -13,7 +13,7 @@ import { useTheme } from '@themes'
 import RootStack from './RootStack'
 import { useAppSelector } from '@hooks'
 import { getIsLoading } from '@redux/selectors'
-import { Block, StatusBar, Text } from '@components'
+import { Block, Text } from '@components'
 
 export const RootApp = () => {
   const netInfo = useNetInfo()
@@ -52,7 +52,6 @@ export const RootApp = () => {
 
   return (
     <>
-      <StatusBar />
       {isLoading && (
         <Block
           absolute

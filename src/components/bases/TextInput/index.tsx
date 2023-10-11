@@ -31,7 +31,7 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
     showError,
     inputContainerStyle,
     style,
-    fontFamily = 'regular',
+    fontFamily = 'semiBold',
     size = 'h4',
     disabled,
     disabledInputStyle,
@@ -83,7 +83,9 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
   }
 
   const inputInitStyle: any = StyleSheet.flatten([
-    fontFamilyApp[fontFamily],
+    {
+      fontFamily: fontFamilyApp[fontFamily],
+    },
     {
       color: colors.black,
       minHeight: DEFAULT_HEIGHT_INPUT,
@@ -102,6 +104,7 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
       height: handleFontSize(size) * 1.6 * numberOfLines,
     },
     style,
+
   ])
 
   const [secureEye, setSecureEye] = useState(true)

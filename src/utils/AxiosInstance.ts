@@ -4,7 +4,6 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios'
 import { BASE_URL } from '@configs'
-import { MMKVStore } from '@redux/store'
 import { TokenService } from '@services'
 
 export interface RefreshTokenRes {
@@ -47,6 +46,7 @@ const AxiosInstance = (contentType = 'application/json') => {
         try {
           //refresh token
           const refreshToken = TokenService.getRefreshToken()
+          console.log(refreshToken)
           const res = await axiosInstance.post<RefreshTokenRes>(
             '/auth/refresh-token',
             {

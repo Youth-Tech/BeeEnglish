@@ -9,6 +9,7 @@ import './i18n/i18n'
 import { RootApp } from '@navigation'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
+
 const App = () => {
   return (
     <Provider store={store}>
