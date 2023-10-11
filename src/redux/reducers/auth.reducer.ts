@@ -1,12 +1,13 @@
 import { Provider } from '@configs'
+import { TokenService } from '@services'
+import { signIn } from '@redux/actions/auth.action'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import {signIn} from "@redux/actions/auth.action";
 
 export type AuthState = {
   accessToken?: string
   refreshToken?: string
-  providerId?: Provider,
-  email?: string,
+  providerId?: Provider
+  email?: string
 }
 
 const defaultAuthState: AuthState = {
@@ -31,14 +32,15 @@ const authSlice = createSlice({
         ...state,
         email: action.payload,
       }
-    }
+    },
   },
   extraReducers: (builder) => {
-    builder
-        .addCase(signIn.fulfilled, (state, action) => {
-          state.accessToken = action.payload.data.tokens.accessToken;
-          state.refreshToken = action.payload.data.tokens.refreshToken;
-        })
+    builder.addCase(signIn.fulfilled, (_, action) => {
+      TokenService.setAccessToken(action.payload.tokens.data.tokens.accessToken)
+      TokenService.setRefreshToken(
+        action.payload.tokens.data.tokens.refreshToken,
+      )
+    })
   },
 })
 

@@ -1,4 +1,5 @@
 import APIUtils from "@utils/AxiosInstance";
+import {AxiosRequestHeaders} from "axios";
 
 const enum endPoints {
     getUserData = "user/me",
@@ -24,8 +25,15 @@ export interface UserData {
     provider: string,
     refreshToken: string,
 }
+export type UserStateResponse = {
+    data: UserData,
+}
 export const UserService = {
-    getUserData() {
-        return APIUtils.get<UserData>(endPoints.getUserData);
+    getUserData(token: string) {
+        return APIUtils.get<UserStateResponse>(endPoints.getUserData, {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        } as AxiosRequestHeaders);
     },
 } as const

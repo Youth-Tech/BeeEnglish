@@ -144,15 +144,14 @@ export const RegisterScreen = () => {
     dispatch(setEmailSignIn(email));
   }
 
+  const emailUser = store.email;
+  const isVerified = store.isVerified;
   useEffect(() => {
-    const emailUser = store.email;
-    const isVerified = store.isVerified;
-    console.log(emailUser)
+    // console.log("Email: ", emailUser, "isVerified: ", isVerified)
     if(emailUser && !isVerified) {
       navigate("VERIFICATION_CODE_SCREEN" );
     }
-  }, [store]);
-
+  }, [emailUser, isVerified]);
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>

@@ -1,10 +1,10 @@
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import {UserService} from "@services/UserService";
+// import { createAsyncThunk } from '@reduxjs/toolkit'
+// import {UserData, UserService} from '@services/UserService'
 
-export const getUserData = createAsyncThunk(
-    'auth/getMe',
-    async () => {
-        const response = await UserService.getUserData();
-        return response.data;
-    }
-)
+// export const getUserData = createAsyncThunk<UserData, string>(
+//   'auth/getMe',
+//   async (token) => {
+//     const response = await UserService.getUserData(token)
+//     return response.data
+//   },
+// )
