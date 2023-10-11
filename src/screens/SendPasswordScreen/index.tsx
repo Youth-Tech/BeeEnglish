@@ -15,9 +15,8 @@ import { AuthService } from '@services/AuthService'
 
 export const SendPasswordScreen = () => {
   const { t } = useTranslation()
-  const { normalize, colors } = useTheme()
+  const { colors } = useTheme()
   const [email, setEmail] = React.useState('')
-  const [emailError, setEmailError] = useState('')
   const [checkMail, setCheckMail] = useState(true)
 
   const onCheckEmail = (value: string) => {
@@ -69,11 +68,6 @@ export const SendPasswordScreen = () => {
               onBlur={() => onCheckEmail(email)}
               onSubmitEditing={onSubmit}
             />
-            {emailError !== '' && (
-              <Text color="red" size={'h4'} marginTop={5}>
-                {emailError}
-              </Text>
-            )}
           </Block>
           <Block justifyCenter alignCenter marginTop={178}>
             <ShadowButton
