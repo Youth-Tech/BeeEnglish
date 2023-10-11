@@ -1,37 +1,31 @@
 import React from 'react'
-import { Block, CircleProgress, Container, Progress } from '@components'
-import LessonProgressItem from '@screens/HomeScreen/components/LessonProgress'
+import { Block, Container } from '@components'
+import { Icon, SoundProgress, SoundProgressFcRef } from '@assets'
+import { useTheme } from '@themes'
 
 export const TestScreen = () => {
+  const { colors } = useTheme()
+  const iconRef = React.useRef<SoundProgressFcRef>(null)
+
   return (
     <Container>
-      <Block flex>
-        <Progress
-          step={100}
-          totalSteps={100}
-          progressContainerStyles={[
-            {
-              width: 80,
-            },
-          ]}
-        />
-        <CircleProgress
+      <Block flex padding={10}>
+        <SoundProgress
+          ref={iconRef}
+          fill={colors.blue}
           size={50}
-          step={10}
-          totalSteps={100}
-          strokeWidth={5}
-          progressValueProps={{
-            size: 10,
-            fontFamily: 'light',
+          onPress={() => {
+            iconRef.current?.start()
+            console.log('chayj nef')
           }}
-        /> 
-        <Block marginTop={20} alignCenter>
-          <LessonProgressItem />
-          <LessonProgressItem />
-          <LessonProgressItem />
-          <LessonProgressItem />
-          <LessonProgressItem />
-        </Block>
+        />
+
+        <Icon
+          state="Cancel"
+          onPress={() => {
+            iconRef.current?.pause()
+          }}
+        />
       </Block>
     </Container>
   )
