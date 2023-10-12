@@ -7,6 +7,7 @@ import { Host } from 'react-native-portalize'
 import { persistor, store } from '@redux/store'
 import { PersistGate } from 'redux-persist/lib/integration/react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+
 const App = () => {
   return (
     <Provider store={store}>

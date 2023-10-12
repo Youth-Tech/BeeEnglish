@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { signIn, verifyAccount } from '@redux/actions/auth.action'
 
 type AppState = {
   isLoading: boolean
@@ -18,6 +19,27 @@ const appStateSlice = createSlice({
     ) => {
       state.isLoading = action.payload
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(signIn.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(signIn.fulfilled, (state) => {
+        state.isLoading = false
+      })
+      .addCase(signIn.rejected, (state) => {
+        state.isLoading = false
+      })
+      .addCase(verifyAccount.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(verifyAccount.fulfilled, (state) => {
+        state.isLoading = false
+      })
+      .addCase(verifyAccount.rejected, (state) => {
+        state.isLoading = false
+      })
   },
 })
 
