@@ -12,3 +12,5 @@ export * from './RegisterScreen'
 export * from './AboutTheTestScreen'
 export * from './ExamTestScreen'
 
+export * from './SavedWordScreen'
+export * from './DetailWordScreen'

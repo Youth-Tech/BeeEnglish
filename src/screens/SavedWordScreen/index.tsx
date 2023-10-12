@@ -5,9 +5,9 @@ import {
   Block,
   Text,
 } from '@components'
-import { navigate } from '@navigation'
+import { goBack, navigate } from '@navigation'
 import { useTranslation } from 'react-i18next'
-import { BackArrow } from '@assets'
+import { BackArrow, Icon } from '@assets'
 
 export const SavedWordScreen = () => {
   const { t } = useTranslation()
@@ -19,7 +19,7 @@ export const SavedWordScreen = () => {
         <DismissKeyBoardBlock>
           <Block flex>
             <Block paddingHorizontal={24} paddingTop={10}>
-              <BackArrow fill={'black'} onPress={goBack} />
+            <Icon state="Back" onPress={goBack} />
               <Text
                 color="black"
                 size={'heading'}

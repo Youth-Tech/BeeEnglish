@@ -43,7 +43,8 @@ export type RootStackParamList = {
   [PUBLIC_ROUTE.ABOUT_THE_TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.EXAM_TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.TEST_SCREEN]: undefined
-
+  [AUTH_ROUTE.SAVED_WORD_SCREEN]: undefined
+  [AUTH_ROUTE.DETAIL_WORD_SCREEN]: undefined
 }
 
 export type RouteKeys = keyof typeof AUTH_ROUTE | keyof typeof PUBLIC_ROUTE
