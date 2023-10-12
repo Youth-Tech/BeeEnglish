@@ -19,6 +19,10 @@ export const AUTH_ROUTE = {
 
 export const PUBLIC_ROUTE = {
   SPLASH_SCREEN: 'SPLASH_SCREEN',
+  ABOUT_THE_TEST_SCREEN: 'ABOUT_THE_TEST_SCREEN',
+  EXAM_TEST_SCREEN: 'EXAM_TEST_SCREEN',
+
+  TEST_SCREEN: 'TEST_SCREEN',
 } as const
 
 export type RootStackParamList = {
@@ -35,6 +39,9 @@ export type RootStackParamList = {
   [AUTH_ROUTE.REGISTER_SCREEN]: undefined
   [PUBLIC_ROUTE.SPLASH_SCREEN]: undefined
   [AUTH_ROUTE.DICTIONARY_SCREEN] : undefined
+  [PUBLIC_ROUTE.ABOUT_THE_TEST_SCREEN]: undefined
+  [PUBLIC_ROUTE.EXAM_TEST_SCREEN]: undefined
+  [PUBLIC_ROUTE.TEST_SCREEN]: undefined
 }
 
 export type RouteKeys = keyof typeof AUTH_ROUTE | keyof typeof PUBLIC_ROUTE

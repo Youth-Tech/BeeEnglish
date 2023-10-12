@@ -1,19 +1,21 @@
-import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
-
-import { navigationRef } from './NavigationServices'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { RootStackParamList } from './routes'
 import { RootBottomTab } from './RootBottomTab'
+import { navigationRef } from './NavigationServices'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import {
   TestScreen,
-  VerificationCodeScreen,
   LoginScreen,
+  ExamTestScreen,
   RegisterScreen,
-  PasswordResetScreen,
   SendPasswordScreen,
+  AboutTheTestScreen,
+  PasswordResetScreen,
+  VerificationCodeScreen,
   EmailRegistrationScreen,
   DictionaryScreen,
+  SplashScreen,
 } from '@screens'
 
 
@@ -44,8 +46,13 @@ const RootStack = () => {
           />
           <Stack.Screen name="LOGIN_SCREEN" component={LoginScreen} />
           <Stack.Screen name="REGISTER_SCREEN" component={RegisterScreen} />
-          <Stack.Screen name="SPLASH_SCREEN" component={TestScreen} />
+          <Stack.Screen name="SPLASH_SCREEN" component={SplashScreen} />
           <Stack.Screen name="DICTIONARY_SCREEN" component={DictionaryScreen} />
+          <Stack.Screen
+            name="ABOUT_THE_TEST_SCREEN"
+            component={AboutTheTestScreen}
+          />
+          <Stack.Screen name="EXAM_TEST_SCREEN" component={ExamTestScreen} />
           <Stack.Screen
             name="EMAIL_REGISTRATION_SCREEN"
             component={EmailRegistrationScreen}
@@ -54,6 +61,7 @@ const RootStack = () => {
             name="VERIFICATION_CODE_SCREEN"
             component={VerificationCodeScreen}
           />
+          <Stack.Screen name="TEST_SCREEN" component={TestScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

@@ -12,8 +12,8 @@ import {
 import { useTheme } from '@themes'
 import RootStack from './RootStack'
 import { useAppSelector } from '@hooks'
+import { Block, Text } from '@components'
 import { getIsLoading } from '@redux/selectors'
-import { Block, StatusBar, Text } from '@components'
 
 export const RootApp = () => {
   const netInfo = useNetInfo()
@@ -52,7 +52,6 @@ export const RootApp = () => {
 
   return (
     <>
-      <StatusBar />
       {isLoading && (
         <Block
           absolute
@@ -69,7 +68,7 @@ export const RootApp = () => {
           <ActivityIndicator color={colors.orangeDark} />
         </Block>
       )}
-      {!!!netInfo.isConnected && (
+      {!netInfo.isConnected && (
         <Block
           absolute
           left={0}
