@@ -112,17 +112,17 @@ src
 
   - **Props**
 
-    | Name                                    | Type              | Default value | Require |
-    | --------------------------------------- | ----------------- | ------------- | ------- |
-    | step                                    | `number`          |               | ✅      |
-    | totalStep                               | `number`          |               | ✅      |
-    | size                                    | `number`          |               | ✅      |
-    | strokeWidth                             | `number`          | 10            |         |
-    | totalStepColor                          | `string`          | `orange`      |         |
-    | stepColor                               | `string`          | `greyLight`   |         |
-    | progressContainerStyles                 | `ViewStyle`       | `{}`          |         |
-    | progressValueProps                      | `CommonTextProps` | `undefined`   |         |
-    | onCompleteAnimation(isFinish?: boolean) | `Function`        | `()=>{}`      |         |
+    | Name                                    | Type                   | Default value | Require |
+    | --------------------------------------- | ---------------------- | ------------- | ------- |
+    | step                                    | `number`               |               | ✅      |
+    | totalStep                               | `number`               |               | ✅      |
+    | size                                    | `number`               |               | ✅      |
+    | strokeWidth                             | `number`               | 10            |         |
+    | totalStepColor                          | `string`               | `orange`      |         |
+    | stepColor                               | `string`               | `greyLight`   |         |
+    | progressContainerStyles                 | `StyleProp<ViewStyle>` | `{}`          |         |
+    | progressValueProps                      | `CommonTextProps`      | `undefined`   |         |
+    | onCompleteAnimation(isFinish?: boolean) | `Function`             | `()=>{}`      |         |
 
   - **How to use**
 
@@ -134,15 +134,15 @@ src
 
   - **Props**
 
-    | Name                                    | Type        | Default value | Require |
-    | --------------------------------------- | ----------- | ------------- | ------- |
-    | step                                    | `number`    |               | ✅      |
-    | totalStep                               | `number`    |               | ✅      |
-    | strokeHeight                            | `number`    | 10            |         |
-    | totalStepColor                          | `string`    | `orange`      |         |
-    | stepColor                               | `string`    | `greyLight`   |         |
-    | progressContainerStyles                 | `ViewStyle` | `{}`          |         |
-    | onCompleteAnimation(isFinish?: boolean) | `Function`  | `()=>{}`      |         |
+    | Name                                    | Type                   | Default value | Require |
+    | --------------------------------------- | ---------------------- | ------------- | ------- |
+    | step                                    | `number`               |               | ✅      |
+    | totalStep                               | `number`               |               | ✅      |
+    | strokeHeight                            | `number`               | 10            |         |
+    | totalStepColor                          | `string`               | `orange`      |         |
+    | stepColor                               | `string`               | `greyLight`   |         |
+    | progressContainerStyles                 | `StyleProp<ViewStyle>` | `{}`          |         |
+    | onCompleteAnimation(isFinish?: boolean) | `Function`             | `()=>{}`      |         |
 
   - **How to use**
 
@@ -164,7 +164,7 @@ src
     | Name           | Type                                   | Default value | Require |
     | -------------- | -------------------------------------- | ------------- | ------- |
     | colors         | `string[]`                             |               | ✅      |
-    | containerStyle | `ViewStyle`                            | `{}`          |         |
+    | containerStyle | `StyleProp<ViewStyle>`                 | `{}`          |         |
     | orientation    | `horizontal` or `vertical` or `number` | `vertical`    |         |
     | revers         | `boolean`                              | `false`       |         |
     | transform      | `Partial<TransformedProps>`            | `{}`          |         |
@@ -237,7 +237,7 @@ src
     | buttonHeight      | `number` or `string`    | `#ccc`        |         |
     | buttonBorderSize  | `number`                | `undefined`   |         |
     | buttonBorderColor | `string` or `ReactNode` | `undefined`   |         |
-    | containerStyle    | `ViewStyle`             | `undefined`   |         |
+    | containerStyle    | `StyleProp<ViewStyle>`  | `undefined`   |         |
     | shadowHeight      | `number`                | 5             |         |
     | buttonRadius      | `number`                | 5             |         |
     | buttonColor       | `string`                | `primary`     |         |
@@ -268,28 +268,22 @@ src
     />
     ```
 
-- ModalProvider
+- Modal
 
   - **Props**
 
-    | Name              | Type                          | Default value      | Require |
-    | ----------------- | ----------------------------- | ------------------ | ------- |
-    | children          | `ReactNode`                   | `auto produce`     | ✅      |
-    | position          | `top` or `bottom` or `center` | `bottom`           |         |
-    | modalHeight       | `number`                      | 279                |         |
-    | animationType     | `fade` or `slide`             | `fade`             |         |
-    | modalComponent    | `ReactNode`                   | `undefined`        |         |
-    | backDropComponent | `ReactNode`                   | `Default backdrop` |         |
-    | labelColor        | `string`                      | `white`            |         |
-    | onShow            | `void function`               | `undefined`        |         |
-    | onDismiss         | `void function`               | `undefined`        |         |
+    | Name      | Type                          | Default value  | Require |
+    | --------- | ----------------------------- | -------------- | ------- |
+    | children  | `ReactNode`                   | `auto produce` | ✅      |
+    | position  | `top` or `bottom` or `center` | `bottom`       |         |
+    | onShow    | `void function`               | `undefined`    |         |
+    | onDismiss | `void function`               | `undefined`    |         |
 
   - **How to use**
   - Wrap the component as a container to use
 
   ```javascript
-  const ref = useRef(null)
-  const modalRef = useRef<ModalProviderFunction>(null)
+  const modalRef = useRef<ModalFunction>(null)
   const handleOpen = useCallback(() => {
   modalRef.current?.openModal()
   }, [])
@@ -303,25 +297,14 @@ src
   console.log('Modal closed')
   }, [])
   return (
-  <ModalProvider
-    ref={modalRef}
-    position="bottom"
-    animationType="fade"
-    onShow={onShow}
-    onDismiss={onDissmiss}
-    modalComponent={
-      <Block flex alignCenter justifyCenter radius={15}>
-        <Pressable
-          style={{ backgroundColor: 'red', padding: 50 }}
-          onPress={handleDismiss}
+         <Modal
+          position="bottom"
+          ref={modalRef}
+          onShow={onShow}
+          onDismiss={onDismiss}
         >
-          <Text>Press me</Text>
-        </Pressable>
-      </Block>
-    }
-  >
-   your code here
-  </ModalProvider>
+         You code here
+        </Modal>
   ```
 
 - LineChart

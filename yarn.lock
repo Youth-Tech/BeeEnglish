@@ -1709,6 +1709,11 @@
     prompts "^2.4.0"
     semver "^7.5.2"
 
+"@react-native-community/netinfo@^9.4.1":
+  version "9.4.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-9.4.1.tgz#7b880758adca65fe47ee866cf7b00416b9dcc192"
+  integrity sha512-dAbY5mfw+6Kas/GJ6QX9AZyY+K+eq9ad4Su6utoph/nxyH3whp5cMSgRNgE2VhGQVRZ/OG0qq3IaD3+wzoqJXw==
+
 "@react-native-firebase/app@^18.5.0":
   version "18.5.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-18.5.0.tgz#198a133229d1b8710f257e76d9703dcb7e4cd6e0"
@@ -6152,6 +6157,11 @@ react-native-mmkv@^2.10.1:
   version "2.10.1"
   resolved "https://registry.npmjs.org/react-native-mmkv/-/react-native-mmkv-2.10.1.tgz"
   integrity sha512-MCrYytUJ3JhSVg7LwVXCj7ExbMHe48FoQdDA1xo1q/M4c1/QyI3M9L9d2dyJUhYPnsSO0+5c2mJICm7v39XA0w==
+
+react-native-portalize@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/react-native-portalize/-/react-native-portalize-1.0.7.tgz#8b3c742a06f863654d526ea1075a8596625f8482"
+  integrity sha512-icqopPh9ZSV+I8C5LlZN9pQJ0OMeBDNqHhP80+qDx0hOGEcsDC09wgjogbEMfJE0GcMDM7PDYtyQkqa9gIqd1g==
 
 react-native-reanimated@^3.4.2:
   version "3.4.2"
