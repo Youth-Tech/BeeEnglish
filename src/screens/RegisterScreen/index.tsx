@@ -2,6 +2,7 @@ import {
   Pressable,
   DocumentSelectionState,
   KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {
@@ -18,9 +19,9 @@ import { goBack, navigate } from '@navigation'
 import { useTheme } from '@themes'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
-import {useAppDispatch, useAppSelector} from "@hooks";
-import {signIn} from "@redux/actions/auth.action";
-import {setEmailSignIn} from "@redux/reducers";
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { signIn } from '@redux/actions/auth.action'
+import { setEmailSignIn } from '@redux/reducers'
 
 export const RegisterScreen = () => {
   const { colors, normalize } = useTheme()
@@ -37,12 +38,12 @@ export const RegisterScreen = () => {
 
   const emailInputRef = React.useRef<DocumentSelectionState>()
   const passwordInputRef = React.useRef<DocumentSelectionState>()
+  const confirmPasswordInputRef = React.useRef<DocumentSelectionState>()
+  const dispatch = useAppDispatch()
+  const store = useAppSelector((state) => state.root.user)
 
-  const dispatch = useAppDispatch();
-  const store = useAppSelector(state => state.root.user);
-
-  const handleLoginGoogle = () => {}
-  const handleLoginFacebook = () => {}
+  const handleLoginGoogle = () => { }
+  const handleLoginFacebook = () => { }
   useEffect(() => {
     email.length > 0 && password.length >= 6 && fullName.length >= 3
       ? setDisabledLogin(false)
@@ -59,17 +60,18 @@ export const RegisterScreen = () => {
   const onCheckPass = (value: string, type: 'password' | 'confirmPassword') => {
     if (value.length >= 6) {
       if (type === 'password') setCheckPass(true)
-      if(type === 'confirmPassword') setCheckConfirmPass(true)
+      if (type === 'confirmPassword') setCheckConfirmPass(true)
     } else {
       if (type === 'password') setCheckPass(false)
       if (type === 'confirmPassword') setCheckConfirmPass(false)
     }
-    if(type === 'confirmPassword') {
+    if (type === 'confirmPassword') {
       if (value === password) setCheckConfirmPass(true)
       else setCheckConfirmPass(false)
     }
-    if(type === 'password') {
-      if (value === confirmPassword && !checkConfirmPass) setCheckConfirmPass(true)
+    if (type === 'password') {
+      if (value === confirmPassword && !checkConfirmPass)
+        setCheckConfirmPass(true)
       else setCheckConfirmPass(false)
     }
   }
@@ -90,10 +92,10 @@ export const RegisterScreen = () => {
           if (!checkMail) onCheckEmail(value)
           break
         case 'password':
-          if (!checkPass) onCheckPass(value, "password")
+          if (!checkPass) onCheckPass(value, 'password')
           break
         case 'confirmPassword':
-          if (!checkConfirmPass) onCheckPass(value, "confirmPassword")
+          if (!checkConfirmPass) onCheckPass(value, 'confirmPassword')
           break
         case 'name':
           if (!checkFullName) onCheckFullName(value)
@@ -109,12 +111,12 @@ export const RegisterScreen = () => {
       case 'email':
         if (email.length === 0) return `${t('email')}${t('is_required')}`
         if (!checkMail) return `${t('email')}${t('is_invalid')}`
-        break;
+        break
       case 'password':
         if (password.length === 0) return `${t('password')}${t('is_required')}`
         if (password.length < 6) return `${t('password')}${t('is_too_short')}`
         if (!checkPass) return `${t('password')}${t('is_invalid')}`
-        break;
+        break
       case 'confirmPassword':
         if (confirmPassword.length === 0)
           return `${t('confirm_password')}${t('is_required')}`
@@ -125,13 +127,13 @@ export const RegisterScreen = () => {
         if (!checkConfirmPass)
           return `${t('confirm_password')}${t('is_invalid')}`
 
-        break;
+        break
       case 'name':
         if (fullName.length === 0) return `${t('full_name')}${t('is_required')}`
         if (fullName.length < 3) return `${t('full_name')}${t('is_too_short')}`
         if (fullName.length > 30) return `${t('full_name')}${t('is_too_long')}`
         if (!checkFullName) return `${t('full_name')}${t('is_invalid')}`
-        break;
+        break
     }
     return 'hello'
   }
@@ -140,18 +142,18 @@ export const RegisterScreen = () => {
     navigate('LOGIN_SCREEN')
   }
   const onSubmit = async () => {
-    dispatch(signIn({ email, password, confirmPassword, fullName }));
-    dispatch(setEmailSignIn(email));
+    dispatch(signIn({ email, password, confirmPassword, fullName }))
+    dispatch(setEmailSignIn(email))
   }
 
-  const emailUser = store.email;
-  const isVerified = store.isVerified;
+  const emailUser = store.email
+  const isVerified = store.isVerified
   useEffect(() => {
     // console.log("Email: ", emailUser, "isVerified: ", isVerified)
-    if(emailUser && !isVerified) {
-      navigate("VERIFICATION_CODE_SCREEN" );
+    if (emailUser && !isVerified) {
+      navigate('VERIFICATION_CODE_SCREEN')
     }
-  }, [emailUser, isVerified]);
+  }, [emailUser, isVerified])
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
@@ -205,8 +207,10 @@ export const RegisterScreen = () => {
                   }}
                   value={email}
                   returnKeyType="next"
-                  onSubmitEditing={() => passwordInputRef.current?.focus()}
-                  blurOnSubmit={true}
+                  onSubmitEditing={() => {
+                    passwordInputRef.current?.focus()
+                  }}
+                  blurOnSubmit={false}
                   placeholderTextColor={
                     checkMail ? colors.placeholder : colors.red
                   }
@@ -224,9 +228,13 @@ export const RegisterScreen = () => {
                     setPassword(value)
                     checkError(value, 'password')
                   }}
+                  returnKeyType="next"
+                  onSubmitEditing={() => {
+                    confirmPasswordInputRef.current?.focus()
+                  }}
                   value={password}
                   secureTextEntry
-                  blurOnSubmit={true}
+                  blurOnSubmit={false}
                   placeholderTextColor={
                     checkPass ? colors.placeholder : colors.red
                   }
@@ -237,7 +245,7 @@ export const RegisterScreen = () => {
               </Block>
               <Block marginTop={18}>
                 <TextInput
-                  ref={passwordInputRef}
+                  ref={confirmPasswordInputRef}
                   label={t('confirm_password')}
                   placeholder="•••••••••••••"
                   onChangeText={(value) => {
@@ -246,7 +254,9 @@ export const RegisterScreen = () => {
                   }}
                   value={confirmPassword}
                   secureTextEntry
-                  blurOnSubmit={true}
+                  blurOnSubmit={false}
+                  returnKeyType='default'
+                  onSubmitEditing={() => { Keyboard.dismiss() }}
                   placeholderTextColor={
                     checkPass ? colors.placeholder : colors.red
                   }
