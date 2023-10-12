@@ -12,19 +12,21 @@ import { goBack, navigate } from '@navigation'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@themes'
 import { AuthService } from '@services/AuthService'
+import { DocumentSelectionState } from 'react-native'
 
 export const SendPasswordScreen = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
   const [email, setEmail] = React.useState('')
   const [checkMail, setCheckMail] = useState(true)
-
-  const onCheckEmail = () => {
+  const emailInputRef = React.useRef<DocumentSelectionState>()
+  const onCheckEmail = (value: string) => {
     const pattern =
       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-    if (pattern.test(email)) setCheckMail(true)
+    if (pattern.test(value)) setCheckMail(true)
     else setCheckMail(false)
   }
+
   const showError = () => {
     if (email.length === 0) return `${t('email')}${t('is_required')}`
     if (!checkMail) return `${t('email')}${t('is_invalid')}`
@@ -38,8 +40,13 @@ export const SendPasswordScreen = () => {
       console.error(error)
     }
   }
-  const onSubmit = () => {
-    console.log('Gửi email:', email)
+  const onSubmit = async () => {
+    try {
+      const response = await AuthService.sendVerifyCode({ email })
+      console.log(response)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const onDisabled = () => {
@@ -65,14 +72,19 @@ export const SendPasswordScreen = () => {
           </Text>
           <Block marginTop={25} marginBottom={25}>
             <TextInput
+              ref={emailInputRef}
               placeholder="example@gmail.com"
-              textContentType="emailAddress"
+              onChangeText={(value) => {
+                setEmail(value)
+              }}
               value={email}
-              onChangeText={setEmail}
+              returnKeyType="next"
+              onSubmitEditing={() => emailInputRef.current?.focus()}
+              blurOnSubmit={true}
+              placeholderTextColor={checkMail ? colors.placeholder : colors.red}
               error={showError()}
               showError={!checkMail}
-              onBlur={() => onCheckEmail()}
-              onSubmitEditing={onSubmit}
+              onBlur={() => onCheckEmail(email)}
             />
           </Block>
           <Block justifyCenter alignCenter marginTop={178}>
