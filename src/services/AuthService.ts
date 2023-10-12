@@ -23,10 +23,10 @@ export const AuthService = {
       deviceName,
     })
   },
-  
-sendVerifyCode({ email }: { email: string }) {
-  return APIUtils.post('auth/resend-verified-code-email', {
-    email
-  })
-}
+
+  sendVerifyCode({ email }: { email: string }) {
+    return APIUtils.post('auth/forgot-password', {
+      email
+    })
+  }
 } as const

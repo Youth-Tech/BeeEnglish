@@ -19,10 +19,10 @@ export const SendPasswordScreen = () => {
   const [email, setEmail] = React.useState('')
   const [checkMail, setCheckMail] = useState(true)
 
-  const onCheckEmail = (value: string) => {
+  const onCheckEmail = () => {
     const pattern =
       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-    if (pattern.test(value)) setCheckMail(true)
+    if (pattern.test(email)) setCheckMail(true)
     else setCheckMail(false)
   }
   const showError = () => {
@@ -30,14 +30,20 @@ export const SendPasswordScreen = () => {
     if (!checkMail) return `${t('email')}${t('is_invalid')}`
     return ''
   }
-
+  const callAPI = async () => {
+    try {
+      const response = await AuthService.sendVerifyCode({ email })
+      console.log(response)
+    } catch (error) {
+      console.error(error)
+    }
+  }
   const onSubmit = () => {
-    AuthService.sendVerifyCode({ email })
-    navigate('VERIFICATION_CODE_SCREEN')
+    console.log('Gửi email:', email)
   }
 
-  const onDisabled = (value: string) => {
-    if (value.length === 0) return true
+  const onDisabled = () => {
+    if (email.length === 0) return true
     return !checkMail
   }
   return (
@@ -57,7 +63,7 @@ export const SendPasswordScreen = () => {
           <Text size={'h4'} color={'textLabel'} marginTop={15} lineHeight={18}>
             {t('label_send_password')}
           </Text>
-          <Block marginTop={25} marginBottom={20}>
+          <Block marginTop={25} marginBottom={25}>
             <TextInput
               placeholder="example@gmail.com"
               textContentType="emailAddress"
@@ -65,13 +71,13 @@ export const SendPasswordScreen = () => {
               onChangeText={setEmail}
               error={showError()}
               showError={!checkMail}
-              onBlur={() => onCheckEmail(email)}
+              onBlur={() => onCheckEmail()}
               onSubmitEditing={onSubmit}
             />
           </Block>
           <Block justifyCenter alignCenter marginTop={178}>
             <ShadowButton
-              onPress={onSubmit}
+              onPress={() => onSubmit()}
               buttonHeight={40}
               buttonWidth={200}
               buttonRadius={10}
@@ -79,7 +85,7 @@ export const SendPasswordScreen = () => {
               shadowButtonColor={colors.orangeLighter}
               buttonBorderColor={colors.orangePrimary}
               buttonColor={colors.orangePrimary}
-              disabled={onDisabled(email)}
+              disabled={onDisabled()}
               shadowHeight={7}
             >
               <Text color="white" fontFamily="bold" size={'h3'}>
