@@ -8,5 +8,7 @@ export * from './PasswordResetScreen'
 export * from './SendPasswordScreen'
 export * from './LoginScreen'
 export * from './RegisterScreen'
-export * from './SavedWordScreen'
-export * from './DetailWordScreen'
+
+export * from './AboutTheTestScreen'
+export * from './ExamTestScreen'
+

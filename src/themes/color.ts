@@ -12,6 +12,7 @@ export const colors = {
     bluePrimary: '#4285F4',
 
     purpleLight: '#C584F8',
+    purpleLighter: '#E4C2FF',
     purpleDark: '#1D1B3E',
     purplePrimary: '#1D1B3E',
 
