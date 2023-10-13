@@ -18,7 +18,6 @@ import {
   SplashScreen,
 } from '@screens'
 
-
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
 const screenOptions = {

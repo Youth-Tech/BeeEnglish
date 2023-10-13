@@ -10,13 +10,13 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 const App = () => {
   return (
     <Provider store={store}>
-      <SafeAreaProvider>
-        <PersistGate loading={null} persistor={persistor}>
+      <PersistGate loading={null} persistor={persistor}>
+        <SafeAreaProvider>
           <Host>
             <RootApp />
           </Host>
-        </PersistGate>
-      </SafeAreaProvider>
+        </SafeAreaProvider>
+      </PersistGate>
     </Provider>
   )
 }
