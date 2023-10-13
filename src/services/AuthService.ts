@@ -45,6 +45,12 @@ export const AuthService = {
       code
     })
   },
+
+  sendVerifyCode({ email }: { email: string }) {
+    return APIUtils.post('auth/forgot-password', {
+      email
+    })
+  }
 } as const
 
 

@@ -41,12 +41,7 @@ export const SendPasswordScreen = () => {
     }
   }
   const onSubmit = async () => {
-    try {
-      const response = await AuthService.sendVerifyCode({ email })
-      console.log(response)
-    } catch (error) {
-      console.error(error)
-    }
+    callAPI()
   }
 
   const onDisabled = () => {
