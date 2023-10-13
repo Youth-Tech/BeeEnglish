@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { ViewProps, ScrollView } from 'react-native'
+import {ViewProps, ScrollView} from 'react-native'
 import { Edge, SafeAreaView } from 'react-native-safe-area-context'
 import { makeStyles, useTheme } from '@themes'
 

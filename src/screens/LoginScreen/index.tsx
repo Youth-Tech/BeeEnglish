@@ -88,9 +88,9 @@ export const LoginScreen = () => {
   }, [email, password])
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }}>
-      <Container hasScroll>
-        <DismissKeyBoardBlock>
+    <KeyboardAvoidingView style={{ flex: 1}}>
+      <Container>
+        <DismissKeyBoardBlock style={{flex: 1}}>
           <Block flex paddingHorizontal={24} paddingTop={10} space="between">
             <Block>
               <Icon state="Back" onPress={goBack} />
@@ -138,7 +138,7 @@ export const LoginScreen = () => {
               </Block>
               <ShadowButton
                 onPress={onSubmit}
-                buttonHeight={45}
+                buttonHeight={35}
                 buttonWidth={194}
                 buttonRadius={10}
                 shadowButtonColor={colors.orangeLighter}
