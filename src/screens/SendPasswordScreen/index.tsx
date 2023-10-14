@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from '@themes'
 import { AuthService } from '@services/AuthService'
 import { DocumentSelectionState } from 'react-native'
+import { debounce } from 'lodash'
 
 export const SendPasswordScreen = () => {
   const { t } = useTranslation()
@@ -32,21 +33,19 @@ export const SendPasswordScreen = () => {
     if (!checkMail) return `${t('email')}${t('is_invalid')}`
     return ''
   }
+  const checkError = debounce((value: string) => {
+    if (!checkMail) onCheckEmail(value)
+  }, 300)
+  const onDisabled = () => {
+    if (email.length <= 3) return true
+    return !checkMail
+  }
   const callAPI = async () => {
-    try {
-      const response = await AuthService.sendVerifyCode({ email })
-      console.log(response)
-    } catch (error) {
-      console.error(error)
-    }
+    await AuthService.sendVerifyCode({ email })
+    navigate('VERIFICATION_CODE_SCREEN')
   }
   const onSubmit = async () => {
     callAPI()
-  }
-
-  const onDisabled = () => {
-    if (email.length === 0) return true
-    return !checkMail
   }
   return (
     <Container>
@@ -70,19 +69,19 @@ export const SendPasswordScreen = () => {
               ref={emailInputRef}
               placeholder="example@gmail.com"
               onChangeText={(value) => {
-                setEmail(value)
+                setEmail(value), checkError(value)
               }}
               value={email}
               returnKeyType="next"
               onSubmitEditing={() => emailInputRef.current?.focus()}
-              blurOnSubmit={true}
-              placeholderTextColor={checkMail ? colors.placeholder : colors.red}
+              blurOnSubmit={false}
+              // placeholderTextColor={checkMail ? colors.placeholder : colors.red}
               error={showError()}
               showError={!checkMail}
               onBlur={() => onCheckEmail(email)}
             />
           </Block>
-          <Block justifyCenter alignCenter marginTop={178}>
+          <Block justifyCenter alignCenter marginTop={150}>
             <ShadowButton
               onPress={() => onSubmit()}
               buttonHeight={40}

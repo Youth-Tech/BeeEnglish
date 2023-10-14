@@ -8,6 +8,7 @@ export type AuthState = {
   refreshToken?: string
   providerId?: Provider
   email?: string
+  code?: string
 }
 
 const defaultAuthState: AuthState = {
@@ -15,6 +16,7 @@ const defaultAuthState: AuthState = {
   refreshToken: undefined,
   providerId: undefined,
   email: undefined,
+  code: undefined,
 }
 
 const authSlice = createSlice({
@@ -33,6 +35,12 @@ const authSlice = createSlice({
         email: action.payload,
       }
     },
+    setOtpCode: (state, action: PayloadAction<string>) => {
+      state.code = action.payload
+    },
+    clearOtpCode: (state) => {
+      state.code = ""
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(signIn.fulfilled, (_, action) => {
@@ -44,5 +52,5 @@ const authSlice = createSlice({
   },
 })
 
-export const { setAuthState, setEmailSignIn } = authSlice.actions
+export const { setAuthState, setEmailSignIn, setOtpCode, clearOtpCode } = authSlice.actions
 export const AuthReducer = authSlice.reducer

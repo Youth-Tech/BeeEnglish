@@ -15,6 +15,7 @@ import { BackArrow } from '@assets'
 import { goBack, navigate } from '@navigation'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { verifyAccount } from '@redux/actions/auth.action'
+import { setOtpCode } from '@redux/reducers'
 
 export const VerificationCodeScreen = () => {
   const [value, setValue] = React.useState<string>('')
@@ -28,18 +29,27 @@ export const VerificationCodeScreen = () => {
   }
   const dispatch = useAppDispatch()
   const isVerified = useAppSelector((state) => state.root.user.isVerified)
+  const user = useAppSelector((state) => state.root.user)
+  const code = useAppSelector((state) => state.root.auth.code)
 
   const onSubmit = (value: string) => {
     Keyboard.dismiss()
-    dispatch(verifyAccount(value))
     ToastAndroid.show('submit with value ' + value, ToastAndroid.SHORT)
+    if (code) dispatch(setOtpCode(value));
+    else dispatch(verifyAccount(value));
   }
 
   useEffect(() => {
-    if (isVerified) {
+    if (isVerified && !code) {
       navigate('BOTTOM_TAB')
     }
   }, [isVerified])
+
+  useEffect(() => {
+    if (!user.email && code) {
+      navigate('RESET_PASSWORD_SCREEN')
+    }
+  }, [code])
 
   return (
     <Container>

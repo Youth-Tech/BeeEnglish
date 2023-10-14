@@ -1,5 +1,5 @@
 import APIUtils from '@utils/AxiosInstance'
-import {SignUpResponse} from "@redux/actions/auth.action";
+import { SignUpResponse } from "@redux/actions/auth.action";
 
 export interface OAuthRes {
   code?: number
@@ -21,6 +21,11 @@ export interface SignUpParams {
   password: string
   confirmPassword: string,
   fullName: string,
+}
+export interface ResetPasswordParams {
+  code: string,
+  newPassword: string,
+  confirmPassword: string
 }
 export const AuthService = {
   oAuthLogin({ accessToken, deviceId, deviceName, provider }: OAuthParams) {
@@ -50,7 +55,20 @@ export const AuthService = {
     return APIUtils.post('auth/forgot-password', {
       email
     })
+  },
+  resendVerifyCode({ email }: { email: string }) {
+    return APIUtils.post('auth/resend-verified-code-email', {
+      email
+    })
+  },
+  resetPassword({ code, newPassword, confirmPassword }: ResetPasswordParams) {
+    return APIUtils.post('auth/reset-password', {
+      code,
+      newPassword,
+      confirmPassword
+    })
   }
+
 } as const
 
 
