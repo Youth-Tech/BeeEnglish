@@ -4,7 +4,6 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios'
 import { BASE_URL } from '@configs'
-import { MMKVStore } from '@redux/store'
 import { TokenService } from '@services'
 
 export interface RefreshTokenRes {
@@ -15,7 +14,15 @@ export interface RefreshTokenRes {
   }
 }
 
-const AxiosInstance = (contentType = 'application/json') => {
+export type AxiosInstanceType = {
+  contentType?: 'application/json' | 'multipart/form-data'
+  headers?: AxiosRequestHeaders
+}
+
+const AxiosInstance = ({
+  contentType = 'application/json',
+  headers,
+}: AxiosInstanceType) => {
   const axiosInstance = axios.create({
     baseURL: BASE_URL,
     timeout: 7000,
@@ -25,11 +32,15 @@ const AxiosInstance = (contentType = 'application/json') => {
     (config: InternalAxiosRequestConfig) => {
       const token = TokenService.getAccessToken()
 
-      config.headers = {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-        'Content-Type': contentType,
-      } as AxiosRequestHeaders
+      if (headers) {
+        config.headers = headers
+      } else {
+        config.headers = {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+          'Content-Type': contentType,
+        } as AxiosRequestHeaders
+      }
 
       return config
     },
@@ -47,6 +58,7 @@ const AxiosInstance = (contentType = 'application/json') => {
         try {
           //refresh token
           const refreshToken = TokenService.getRefreshToken()
+          console.log(refreshToken)
           const res = await axiosInstance.post<RefreshTokenRes>(
             '/auth/refresh-token',
             {
@@ -77,20 +89,24 @@ const responseBody = <ResponseType>(response: AxiosResponse<ResponseType>) =>
   response
 
 const ApiUtil = {
-  get: <ResponseType>(url: string) =>
-    AxiosInstance().get<ResponseType>(url).then(responseBody),
+  get: <ResponseType>(url: string, headers?: AxiosRequestHeaders) =>
+    AxiosInstance({ headers }).get<ResponseType>(url).then(responseBody),
 
-  post: <ResponseType>(url: string, body: {}) =>
-    AxiosInstance().post<ResponseType>(url, body).then(responseBody),
+  post: <ResponseType>(url: string, body: {}, headers?: AxiosRequestHeaders) =>
+    AxiosInstance({ headers }).post<ResponseType>(url, body).then(responseBody),
 
-  put: <ResponseType>(url: string, body: {}) =>
-    AxiosInstance().put<ResponseType>(url, body).then(responseBody),
+  put: <ResponseType>(url: string, body: {}, headers?: AxiosRequestHeaders) =>
+    AxiosInstance({ headers }).put<ResponseType>(url, body).then(responseBody),
 
-  delete: <ResponseType>(url: string) =>
-    AxiosInstance().delete<ResponseType>(url).then(responseBody),
+  delete: <ResponseType>(url: string, headers?: AxiosRequestHeaders) =>
+    AxiosInstance({ headers }).delete<ResponseType>(url).then(responseBody),
 
-  postFile: <ResponseType>(url: string, body: {}) =>
-    AxiosInstance('multipart/form-data')
+  postFile: <ResponseType>(
+    url: string,
+    body: {},
+    headers?: AxiosRequestHeaders,
+  ) =>
+    AxiosInstance({ contentType: 'multipart/form-data', headers })
       .post<ResponseType>(url, body)
       .then(responseBody),
 } as const
