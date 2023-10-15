@@ -18,8 +18,7 @@ import {
 import { debounce } from 'lodash'
 import { useTheme } from '@themes'
 import { AuthService } from '@services/AuthService'
-import { useAppDispatch, useAppSelector } from '@hooks'
-import { clearOtpCode } from '@redux/reducers'
+import { useAppSelector } from '@hooks'
 
 export const PasswordResetScreen = () => {
   const { t } = useTranslation()
@@ -30,8 +29,8 @@ export const PasswordResetScreen = () => {
   const [checkConfirmPass, setCheckConfirmPass] = useState(true)
   const [disabled, setDisabled] = React.useState(true)
 
-  const dispatch = useAppDispatch()
-  const otpCode = useAppSelector((state) => state.root.auth.code)
+  // const dispatch = useAppDispatch()
+  const forgotPasswordToken = useAppSelector((state) => state.root.auth.forgotPasswordToken)
 
   useEffect(() => {
     newPassword.length >= 6 && confirmPassword.length >= 6
@@ -100,12 +99,12 @@ export const PasswordResetScreen = () => {
   }
 
   const callAPI = async () => {
+    if (!forgotPasswordToken) return;
     await AuthService.resetPassword({
-      code: otpCode || '',
+      forgotPasswordToken,
       newPassword,
       confirmPassword,
     })
-    dispatch(clearOtpCode())
     navigate('LOGIN_SCREEN')
   }
   const onSubmit = () => {

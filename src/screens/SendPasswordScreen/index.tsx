@@ -14,6 +14,8 @@ import { useTheme } from '@themes'
 import { AuthService } from '@services/AuthService'
 import { DocumentSelectionState } from 'react-native'
 import { debounce } from 'lodash'
+import { useAppDispatch } from '@hooks'
+import { defaultUserState, setAuthState, setUserState } from '@redux/reducers'
 
 export const SendPasswordScreen = () => {
   const { t } = useTranslation()
@@ -27,6 +29,8 @@ export const SendPasswordScreen = () => {
     if (pattern.test(value)) setCheckMail(true)
     else setCheckMail(false)
   }
+  const dispatch = useAppDispatch();
+
 
   const showError = () => {
     if (email.length === 0) return `${t('email')}${t('is_required')}`
@@ -41,11 +45,13 @@ export const SendPasswordScreen = () => {
     return !checkMail
   }
   const callAPI = async () => {
-    await AuthService.sendVerifyCode({ email })
+    await AuthService.forgotPassword({ email })
     navigate('VERIFICATION_CODE_SCREEN')
   }
   const onSubmit = async () => {
-    callAPI()
+    callAPI();
+    dispatch(setUserState(defaultUserState));
+    dispatch(setAuthState({forgotPasswordToken: undefined}));
   }
   return (
     <Container>

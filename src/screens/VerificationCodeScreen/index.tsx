@@ -14,8 +14,7 @@ import { useTheme } from '@themes'
 import { BackArrow } from '@assets'
 import { goBack, navigate } from '@navigation'
 import { useAppDispatch, useAppSelector } from '@hooks'
-import { verifyAccount } from '@redux/actions/auth.action'
-import { setOtpCode } from '@redux/reducers'
+import { verifyAccount, verifyForgotPassword } from '@redux/actions/auth.action'
 
 export const VerificationCodeScreen = () => {
   const [value, setValue] = React.useState<string>('')
@@ -30,26 +29,26 @@ export const VerificationCodeScreen = () => {
   const dispatch = useAppDispatch()
   const isVerified = useAppSelector((state) => state.root.user.isVerified)
   const user = useAppSelector((state) => state.root.user)
-  const code = useAppSelector((state) => state.root.auth.code)
+  const forgotToken = useAppSelector((state) => state.root.auth.forgotPasswordToken)
 
   const onSubmit = (value: string) => {
     Keyboard.dismiss()
     ToastAndroid.show('submit with value ' + value, ToastAndroid.SHORT)
-    if (code) dispatch(setOtpCode(value));
+    if (value && !user.email) dispatch(verifyForgotPassword(value));
     else dispatch(verifyAccount(value));
   }
 
   useEffect(() => {
-    if (isVerified && !code) {
+    if (isVerified) {
       navigate('BOTTOM_TAB')
     }
   }, [isVerified])
 
   useEffect(() => {
-    if (!user.email && code) {
+    if (!user.email && forgotToken) {
       navigate('RESET_PASSWORD_SCREEN')
     }
-  }, [code])
+  }, [forgotToken])
 
   return (
     <Container>

@@ -1,6 +1,6 @@
 import { Provider } from '@configs'
 import { TokenService } from '@services'
-import { signIn } from '@redux/actions/auth.action'
+import { signIn, verifyForgotPassword } from '@redux/actions/auth.action'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export type AuthState = {
@@ -8,7 +8,7 @@ export type AuthState = {
   refreshToken?: string
   providerId?: Provider
   email?: string
-  code?: string
+  forgotPasswordToken?: string
 }
 
 const defaultAuthState: AuthState = {
@@ -16,7 +16,7 @@ const defaultAuthState: AuthState = {
   refreshToken: undefined,
   providerId: undefined,
   email: undefined,
-  code: undefined,
+  forgotPasswordToken: undefined,
 }
 
 const authSlice = createSlice({
@@ -34,13 +34,7 @@ const authSlice = createSlice({
         ...state,
         email: action.payload,
       }
-    },
-    setOtpCode: (state, action: PayloadAction<string>) => {
-      state.code = action.payload
-    },
-    clearOtpCode: (state) => {
-      state.code = ""
-    },
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(signIn.fulfilled, (_, action) => {
@@ -49,8 +43,12 @@ const authSlice = createSlice({
         action.payload.tokens.data.tokens.refreshToken,
       )
     })
+    .addCase(verifyForgotPassword.fulfilled, (state, action) => {
+      state.forgotPasswordToken = action.payload.data
+    })
   },
+
 })
 
-export const { setAuthState, setEmailSignIn, setOtpCode, clearOtpCode } = authSlice.actions
+export const { setAuthState, setEmailSignIn } = authSlice.actions
 export const AuthReducer = authSlice.reducer

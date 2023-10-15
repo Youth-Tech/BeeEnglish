@@ -42,3 +42,15 @@ export const verifyAccount = createAsyncThunk(
     return response.status
   },
 )
+
+export const verifyForgotPassword = createAsyncThunk<
+  {
+    data: string
+  },
+  string>(
+  'auth/verifyForgotPassword',
+  async (code) => {
+    const response = await AuthService.verifyForgotPassword({ code })
+    return response.data
+  }
+)
