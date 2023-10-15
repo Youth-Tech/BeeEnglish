@@ -1,5 +1,4 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 import { Block, Image, Text } from '@components'
 import { ImageRequireSource, Pressable } from 'react-native'
 
@@ -17,17 +16,22 @@ export const VocabularyItem: React.FC<VocabularyItemProps> = ({
   return (
     <Pressable onPress={onPress}>
       <Block
-        marginRight={10}
-        radius={10}
-        alignCenter
+        shadow
+        radius={15}
         paddingHorizontal={10}
-        width={200}
-        height={140}
         row
-        
+        alignCenter
+        width={200}
+        height={120}
+        marginRight={10}
       >
-        <Image source={image} width={50} height={67.29}></Image>
-        <Text size={'h4'} fontFamily="bold" marginLeft={15}>
+        <Image
+          source={image}
+          width={50}
+          height={67.29}
+          resizeMode="contain"
+        ></Image>
+        <Text size={'h4'} fontFamily="bold" marginHorizontal={10}>
           {name}
         </Text>
       </Block>

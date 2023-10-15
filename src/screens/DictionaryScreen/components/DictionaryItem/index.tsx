@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useTheme } from '@themes'
 import { Block, Text } from '@components'
 import { Pressable } from 'react-native'
@@ -22,7 +21,6 @@ export const DictionaryItem: React.FC<DictonaryItemProps> = ({
 }) => {
   const { colors } = useTheme()
   const [isBookmarked, setIsBookmarked] = useState(false)
-
   const toggleBookmark = () => {
     setIsBookmarked(!isBookmarked)
     onPressBookMark && onPressBookMark()

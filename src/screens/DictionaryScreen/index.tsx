@@ -11,11 +11,57 @@ import {
   Image,
   DismissKeyBoardBlock,
 } from '@components'
-import { DictionaryItem, VocabularyItem } from './components'
+import {
+  DictionaryItem,
+  DictonaryItemProps,
+  VocabularyItem,
+} from './components'
+import { FlatList, ListRenderItemInfo, ScrollView, View } from 'react-native'
 
 export const DictionaryScreen = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
+  const data = [
+    {
+      word: 'Chicken',
+      wordType: 'noun',
+      wordPronounce: 'Hetcuu',
+    },
+    {
+      word: 'Chicken',
+      wordType: 'noun',
+      wordPronounce: 'Hetcuu',
+    },
+    {
+      word: 'Chicken',
+      wordType: 'noun',
+      wordPronounce: 'Hetcuu',
+    },
+    {
+      word: 'Chicken',
+      wordType: 'noun',
+      wordPronounce: 'Hetcuu',
+    },
+    {
+      word: 'Chicken',
+      wordType: 'noun',
+      wordPronounce: 'Hetcuu',
+    },
+  ]
+  const renderDictionaryItem = ({
+    index,
+    item,
+  }: ListRenderItemInfo<DictonaryItemProps>) => {
+    return (
+      <View key={`item-${index}`}>
+        <DictionaryItem
+          word={item.word}
+          wordType={item.wordType}
+          wordPronounce={item.wordPronounce}
+        ></DictionaryItem>
+      </View>
+    )
+  }
 
   return (
     <Container hasScroll>
@@ -24,7 +70,7 @@ export const DictionaryScreen = () => {
           <Block row paddingHorizontal={25} alignCenter>
             <Icon state="Back" onPress={goBack}></Icon>
             <Text center flex paddingRight={25} fontFamily="bold" size={'h2'}>
-              Từ điển
+              {t('dictionary')}
             </Text>
           </Block>
           <Block marginTop={22} paddingHorizontal={25} row>
@@ -38,9 +84,13 @@ export const DictionaryScreen = () => {
                   width: '100%',
                   borderRadius: 30,
                 }}
-                placeholder="English Vocabulary"
+                placeholder={t('english_vocabulary')}
                 rightIcon={
-                  <Icon state="Microphone" stroke={colors.greyPrimary}></Icon>
+                  <Icon
+                    state="Microphone"
+                    stroke={colors.greyPrimary}
+                    onPress={() => {}}
+                  ></Icon>
                 }
               />
             </Block>
@@ -48,49 +98,37 @@ export const DictionaryScreen = () => {
           <Block row alignCenter marginTop={24} paddingLeft={25}>
             <Icon state="History"></Icon>
             <Text fontFamily="semiBold" marginLeft={5} size={'h4'}>
-              Lịch sử
+              {t('history')}
             </Text>
           </Block>
           <Block marginTop={15} paddingHorizontal={25}>
             <Block shadow radius={15} overflow="hidden">
-              <DictionaryItem
-                word={'Chicken'}
-                wordType={'noun'}
-                wordPronounce={'Hetcuu'}
-              />
-              <DictionaryItem
-                word={'Chicken'}
-                wordType={'noun'}
-                wordPronounce={'Hetcuu'}
-              />
-              <DictionaryItem
-                word={'Chicken'}
-                wordType={'noun'}
-                wordPronounce={'Hetcuu'}
-              />
-                <DictionaryItem
-                word={'Chicken'}
-                wordType={'noun'}
-                wordPronounce={'Hetcuu'}
-              />
-                <DictionaryItem
-                word={'Chicken'}
-                wordType={'noun'}
-                wordPronounce={'Hetcuu'}
+              <FlatList
+                data={data}
+                keyExtractor={(_, index) => `item-${index}`}
+                renderItem={renderDictionaryItem}
+                showsHorizontalScrollIndicator={false}
               />
             </Block>
           </Block>
           <Block row alignCenter marginTop={17} paddingLeft={25}>
             <Icon state="Dictionary"></Icon>
             <Text fontFamily="bold" marginLeft={5} size={'h3'}>
-              Các từ vựng hay
+              {t('good_vocabulary')}
             </Text>
           </Block>
-          
-          <Block paddingLeft={25} paddingTop={15} row>
-              <VocabularyItem name={'Từ vựng đã học'} image={images.BeeReading}></VocabularyItem>
-              <VocabularyItem name={'Từ vựng đã lưu'} image={images.BeePencil}></VocabularyItem>
-          </Block>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <Block paddingLeft={25} marginVertical={15} row>
+              <VocabularyItem
+                name={t('vocabulary_learned')}
+                image={images.BeeReading}
+              />
+              <VocabularyItem
+                name={t('saved_vocabulary')}
+                image={images.BeePencil}
+              />
+            </Block>
+          </ScrollView>
         </Block>
       </DismissKeyBoardBlock>
     </Container>
