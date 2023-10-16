@@ -55,7 +55,7 @@ export const LearnedWordScreen = () => {
     item,
   }: ListRenderItemInfo<LearnedWordItemProps>) => {
     return (
-      <View style={{ marginTop: 25, marginRight: 20 }} key={`item-${index}`}>
+      <View style={{ marginTop: 25, marginRight: 10 }} key={`item-${index}`}>
         <LearnedWordItem
           word={item.word}
           wordType={item.wordType}
@@ -71,14 +71,17 @@ export const LearnedWordScreen = () => {
       <StatusBar statusColor={colors.orangePrimary}></StatusBar>
       <DismissKeyBoardBlock>
         <Block flex>
+          
           <Block
             height={228}
-            flex
             backgroundColor={colors.orangePrimary}
             borderBottomLeftRadius={50}
             borderBottomRightRadius={50}
-            paddingHorizontal={25}
-          >
+            zIndex={-1}
+            absolute
+          ></Block>
+          {/* Textinput and FlatList */}
+          <Block paddingHorizontal={25} backgroundColor='transparent' >
             <Block row alignCenter>
               <Icon state="Back" onPress={goBack} stroke={colors.white}></Icon>
               <Text
@@ -110,16 +113,16 @@ export const LearnedWordScreen = () => {
                 }
               />
             </Block>
-          </Block>
-          <Block paddingHorizontal={20}>
-            <FlatList
-              scrollEnabled={false}
-              data={data}
-              keyExtractor={(_, index) => `item-${index}`}
-              renderItem={renderLearnedWordItem}
-              showsVerticalScrollIndicator={false}
-              numColumns={2}
-            />
+            <Block >
+              <FlatList
+                scrollEnabled={false}
+                data={data}
+                keyExtractor={(_, index) => `item-${index}`}
+                renderItem={renderLearnedWordItem}
+                showsVerticalScrollIndicator={false}
+                numColumns={2}
+              />
+            </Block>
           </Block>
         </Block>
       </DismissKeyBoardBlock>
