@@ -4,7 +4,6 @@ import {
   Block,
   Container,
   DismissKeyBoardBlock,
-  Image,
   StatusBar,
   Text,
   TextInput,
@@ -14,9 +13,10 @@ import { Icon } from '@assets'
 import { LearnedWordItem, LearnedWordItemProps } from './components'
 import { goBack } from '@navigation'
 import { FlatList, ListRenderItemInfo, View } from 'react-native'
+import { widthScreen } from '@utils/helpers'
 
 export const LearnedWordScreen = () => {
-  const { colors } = useTheme()
+  const { colors, normalize } = useTheme()
   const { t } = useTranslation()
   const data = [
     {
@@ -55,7 +55,10 @@ export const LearnedWordScreen = () => {
     item,
   }: ListRenderItemInfo<LearnedWordItemProps>) => {
     return (
-      <View style={{ marginTop: 25, marginRight: 10 }} key={`item-${index}`}>
+      <View
+        style={{ marginTop: normalize.v(25), marginRight: normalize.h(10) }}
+        key={`item-${index}`}
+      >
         <LearnedWordItem
           word={item.word}
           wordType={item.wordType}
@@ -71,17 +74,16 @@ export const LearnedWordScreen = () => {
       <StatusBar statusColor={colors.orangePrimary}></StatusBar>
       <DismissKeyBoardBlock>
         <Block flex>
-          
           <Block
+            width={widthScreen}
             height={228}
             backgroundColor={colors.orangePrimary}
             borderBottomLeftRadius={50}
             borderBottomRightRadius={50}
-            zIndex={-1}
             absolute
           ></Block>
           {/* Textinput and FlatList */}
-          <Block paddingHorizontal={25} backgroundColor='transparent' >
+          <Block paddingHorizontal={25} backgroundColor="transparent">
             <Block row alignCenter>
               <Icon state="Back" onPress={goBack} stroke={colors.white}></Icon>
               <Text
@@ -92,7 +94,7 @@ export const LearnedWordScreen = () => {
                 fontFamily="bold"
                 color={colors.white}
               >
-                Từ vựng đã học
+                {t('vocabulary_learned')}
               </Text>
             </Block>
             <Block marginTop={22} height={35} radius={30}>
@@ -103,7 +105,7 @@ export const LearnedWordScreen = () => {
                   width: '100%',
                   borderRadius: 30,
                 }}
-                placeholder={'English Vocabulary'}
+                placeholder={t('english_vocabulary')}
                 rightIcon={
                   <Icon
                     state="Microphone"
@@ -113,16 +115,15 @@ export const LearnedWordScreen = () => {
                 }
               />
             </Block>
-            <Block >
-              <FlatList
-                scrollEnabled={false}
-                data={data}
-                keyExtractor={(_, index) => `item-${index}`}
-                renderItem={renderLearnedWordItem}
-                showsVerticalScrollIndicator={false}
-                numColumns={2}
-              />
-            </Block>
+
+            <FlatList
+              scrollEnabled={false}
+              data={data}
+              keyExtractor={(_, index) => `item-${index}`}
+              renderItem={renderLearnedWordItem}
+              showsVerticalScrollIndicator={false}
+              numColumns={2}
+            />
           </Block>
         </Block>
       </DismissKeyBoardBlock>
