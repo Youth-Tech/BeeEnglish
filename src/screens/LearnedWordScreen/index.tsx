@@ -1,6 +1,13 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Block, Container, Image, StatusBar, Text } from '@components'
+import {
+  Block,
+  Container,
+  Image,
+  StatusBar,
+  Text,
+  TextInput,
+} from '@components'
 import { useTheme } from '@themes'
 import { Icon } from '@assets'
 import { LearnedWordItem } from './components'
@@ -8,6 +15,7 @@ import { goBack } from '@navigation'
 
 export const LearnedWordScreen = () => {
   const { colors } = useTheme()
+  const { t } = useTranslation()
 
   return (
     <Container hasScroll>
@@ -34,7 +42,25 @@ export const LearnedWordScreen = () => {
               Từ vựng đã học
             </Text>
           </Block>
-          <Block marginTop={22}></Block>
+          <Block marginTop={22} flex height={35} shadow radius={30}>
+            <TextInput
+              containerStyle={{ height: '100%', width: '100%' }}
+              placeholderTextColor={colors.greyPrimary}
+              inputContainerStyle={{
+                height: '100%',
+                width: '100%',
+                borderRadius: 30,
+              }}
+              placeholder={'English Vocabulary'}
+              rightIcon={
+                <Icon
+                  state="Microphone"
+                  stroke={colors.greyPrimary}
+                  onPress={() => {}}
+                ></Icon>
+              }
+            />
+          </Block>
         </Block>
         <LearnedWordItem></LearnedWordItem>
       </Block>
