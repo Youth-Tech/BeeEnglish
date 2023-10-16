@@ -5,9 +5,10 @@ import { useTheme } from '@themes'
 import { goBack, navigate } from '@navigation'
 import { useTranslation } from 'react-i18next'
 import { ImageBackground, Pressable } from 'react-native'
+import FastImage from 'react-native-fast-image'
 
 export const DetailLessonScreen = () => {
-  const { colors } = useTheme()
+  const { colors, normalize } = useTheme()
   const { t } = useTranslation()
   const [activeBlock, setActiveBlock] = useState(0)
 
@@ -26,24 +27,7 @@ export const DetailLessonScreen = () => {
           <Icon state="Back" onPress={goBack}></Icon>
           <Icon state="MenuHeading" onPress={() => {}}></Icon>
         </Block>
-        <ImageBackground
-          source={images.LessonTitle}
-          style={{
-            paddingHorizontal: 80,
-            paddingVertical: 17.5,
-            position: 'absolute',
-            alignSelf: 'center',
-            top: 30,
-            zIndex: 1,
-          }}
-          resizeMode="contain"
-        >
-          <Block width={100} alignCenter>
-            <Text fontFamily="bold" size={'h2'}>
-              {t('lesson')}
-            </Text>
-          </Block>
-        </ImageBackground>
+
         <Block
           shadow
           marginVertical={26}
@@ -53,6 +37,21 @@ export const DetailLessonScreen = () => {
           flex
           alignCenter
         >
+          <Block absolute alignSelf="center" top={-16} zIndex={1}>
+            <FastImage
+              source={images.LessonTitle}
+              style={{ width: normalize.h(210.5), height: normalize.h(37.84) }}
+              resizeMode={FastImage.resizeMode.contain}
+            />
+            <Text
+              fontFamily="bold"
+              size={'h2'}
+              alignSelf="center"
+              style={{ position: 'absolute', top: 10 }}
+            >
+              {t('lesson')}
+            </Text>
+          </Block>
           <Pressable onPress={() => onPressChange(1)}>
             <ImageBackground
               source={
@@ -63,9 +62,9 @@ export const DetailLessonScreen = () => {
               resizeMode="contain"
               style={{
                 alignItems: 'center',
-                paddingHorizontal: 40,
-                paddingVertical: 45,
-                marginTop: 65,
+                paddingHorizontal: normalize.h(40),
+                paddingVertical: normalize.v(40),
+                marginTop: normalize.v(65),
               }}
             >
               <Block alignCenter>
@@ -90,9 +89,9 @@ export const DetailLessonScreen = () => {
               resizeMode="contain"
               style={{
                 alignItems: 'center',
-                paddingHorizontal: 40,
-                paddingVertical: 45,
-                marginTop: 65,
+                paddingHorizontal: normalize.h(40),
+                paddingVertical: normalize.v(40),
+                marginTop: normalize.v(65),
               }}
             >
               <Block alignCenter>
