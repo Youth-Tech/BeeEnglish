@@ -47,6 +47,16 @@
     "already_know_english_before": "Already know English before",
     "lets_answer_some_questions": "Let's answer some questions!",
     "test": "Exam Test",
-    "take_the_test_to_let_us_know_your_capabilities": "Take the test to let us know your capabilities"
+    "take_the_test_to_let_us_know_your_capabilities": "Take the test to let us know your capabilities",
+    "settings":"Settings",
+    "premium_membership":"Premium Membership",
+    "upgrade_for_more_features":"Upgrade for more features",
+    "account":" Account",
+    "profile":"Profile",
+    "logout":"Logout",
+    "notifications":"Notifications",
+    "more":"More",
+    "rate_review":"Rate & Review",
+    "help":"Help"
   }
 }

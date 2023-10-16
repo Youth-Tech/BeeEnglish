@@ -47,6 +47,17 @@
     "already_know_english_before": "Đã biết tiếng Anh trước đó",
     "lets_answer_some_questions": "Trả lời một số câu hỏi nào!",
     "test": "Bài kiểm tra",
-    "take_the_test_to_let_us_know_your_capabilities": "Thực hiện bài kiểm tra để chúng tôi biết năng lực của bạn"
+    "take_the_test_to_let_us_know_your_capabilities": "Thực hiện bài kiểm tra để chúng tôi biết năng lực của bạn",
+    "settings":"Cài đặt",
+    "premium_membership":"Tư cách thành viên cao cấp",
+    "upgrade_for_more_features":"Nâng cấp để có nhiều tính năng hơn",
+    "account":" Tài khoản",
+    "profile":"Hồ sơ",
+    "logout":"Đăng xuất",
+    "notifications":"Thông báo",
+    "more":"Nhiều hơn",
+    "rate_review":"Đánh giá & Ôn tập",
+    "help":"Trợ giúp"
+    
   }
 }
