@@ -7,22 +7,22 @@ import { Icon } from '@assets'
 export const LearnedWordItem = () => {
   const { colors } = useTheme()
   return (
-    <Block backgroundColor={colors.greyLighter} width={146} height={151}>
+    <Block backgroundColor={colors.greyLighter} width={146} height={151} radius={15}>
       <Block paddingHorizontal={15} paddingTop={17}>
-        <Icon state="WaveAudio" stroke={colors.orangePrimary}></Icon>
+        <Icon state="WaveAudio" fill={colors.orangePrimary}></Icon>
         <Block row>
-          <Text fontFamily="bold" size={'h3'}>
+          <Text fontFamily="bold" size={'h3'} lineHeight={30}>
             Chicken
           </Text>
-          <Text fontFamily="regular" size={'h4'} color={colors.greyPrimary}>
+          <Text marginLeft={3} fontFamily="regular" size={'h4'} color={colors.greyPrimary} lineHeight={30}>
             /HetCuu/
           </Text>
         </Block>
-        <Text>Con gà</Text>
+        <Text fontFamily='semiBold' size={'h4'} lineHeight={30}>Con gà</Text>
       </Block>
-      <Block row>
-        <Block radius={100} width={5} height={5} backgroundColor={colors.greenLighter}></Block>
-        <Text size={'h5'} fontFamily="bold">
+      <Block row paddingLeft={7} paddingTop={9}>
+        <Block radius={100} width={5} height={5} backgroundColor={colors.greenLighter} ></Block>
+        <Text size={'h5'} fontFamily="bold" marginLeft={4} >
           Độ Khó: siêu dễ
         </Text>
       </Block>
