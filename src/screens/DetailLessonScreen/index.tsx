@@ -42,7 +42,7 @@ export const DetailLessonScreen = () => {
         >
           <Block absolute alignSelf="center" top={-11} zIndex={1}>
             <FastImage
-              source={images.LessonTitle}
+              source={images.StreakBox}
               style={{ width: normalize.h(210.5), height: normalize.h(37.84) }}
               resizeMode={FastImage.resizeMode.contain}
             />

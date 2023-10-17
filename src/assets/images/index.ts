@@ -9,7 +9,6 @@ export const images = {
   BeeGraduated: require('./BeeGraduated.png'),
   BeeDiscovery: require('./BeeDiscovery.png'),
   BGDetailLesson: require('./BGDetailLesson.png'),
-  LessonTitle: require('./LessonTitle.png'),
   MultipleChoice: require('./MultipleChoice.png'),
   OrangeLightFrame: require('./OrangeLightFrame.png'),
   OrangePrimaryFrame: require('./OrangePrimaryFrame.png'),
