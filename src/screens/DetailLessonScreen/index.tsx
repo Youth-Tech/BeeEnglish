@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import { Text, Block, Container, Image } from '@components'
-import { Icon, images } from '@assets'
 import { useTheme } from '@themes'
-import { goBack, navigate } from '@navigation'
+import { goBack } from '@navigation'
+import { Icon, images } from '@assets'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ImageBackground, Pressable } from 'react-native'
 import FastImage from 'react-native-fast-image'
+import { ImageBackground, Pressable } from 'react-native'
+import { Text, Block, Container, Image } from '@components'
 
 export const DetailLessonScreen = () => {
   const { colors, normalize } = useTheme()
@@ -22,7 +22,10 @@ export const DetailLessonScreen = () => {
   }
   return (
     <Container>
-      <ImageBackground source={images.BGDetailLesson} style={{ flex: 1 }}>
+      <ImageBackground
+        source={images.BGDetailLesson}
+        style={{ flex: 1, paddingTop: normalize.h(5.23) }}
+      >
         <Block space="between" row paddingHorizontal={25}>
           <Icon state="Back" onPress={goBack}></Icon>
           <Icon state="MenuHeading" onPress={() => {}}></Icon>
@@ -37,7 +40,7 @@ export const DetailLessonScreen = () => {
           flex
           alignCenter
         >
-          <Block absolute alignSelf="center" top={-16} zIndex={1}>
+          <Block absolute alignSelf="center" top={-11} zIndex={1}>
             <FastImage
               source={images.LessonTitle}
               style={{ width: normalize.h(210.5), height: normalize.h(37.84) }}
