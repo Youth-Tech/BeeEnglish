@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { UserData, UserService } from '@services/UserService'
 import { defaultUserState } from '@redux/reducers/user.reducer'
 import { AuthService, SignUpParams } from '@services/AuthService'
+import { RootState } from '@hooks'
 
 export interface SignUpResponse {
   data: {
@@ -47,10 +48,17 @@ export const verifyForgotPassword = createAsyncThunk<
   {
     data: string
   },
-  string>(
-  'auth/verifyForgotPassword',
-  async (code) => {
-    const response = await AuthService.verifyForgotPassword({ code })
-    return response.data
-  }
+  string
+>('auth/verifyForgotPassword', async (code) => {
+  const response = await AuthService.verifyForgotPassword({ code })
+  return response.data
+})
+export const resendVerifyCode = createAsyncThunk(
+  'auth/resendVerifyCode',
+  async (_, thunkAPI) => {
+    const email = (thunkAPI.getState() as RootState).root.auth.email;
+    if(!email) return undefined;
+    const response = await AuthService.resendVerifyCode({ email })
+    return response.data;
+  },
 )
