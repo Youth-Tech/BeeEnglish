@@ -24,6 +24,7 @@ export const VocabularyItem: React.FC<VocabularyItemProps> = ({
         width={200}
         height={120}
         marginRight={10}
+        backgroundColor={'white'}
       >
         <Image
           source={image}
@@ -31,9 +32,11 @@ export const VocabularyItem: React.FC<VocabularyItemProps> = ({
           height={67.29}
           resizeMode="contain"
         ></Image>
-        <Text size={'h4'} fontFamily="bold" marginHorizontal={10}>
-          {name}
-        </Text>
+        <Block flex marginLeft={10}>
+          <Text size={'h4'} fontFamily="bold">
+            {name}
+          </Text>
+        </Block>
       </Block>
     </Pressable>
   )

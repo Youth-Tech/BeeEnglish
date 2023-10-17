@@ -47,6 +47,11 @@ export const DictionaryScreen = () => {
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
     },
+    {
+      word: 'Chicken',
+      wordType: 'noun',
+      wordPronounce: 'Hetcuu',
+    },
   ]
   const renderDictionaryItem = ({
     index,
@@ -73,7 +78,7 @@ export const DictionaryScreen = () => {
               {t('dictionary')}
             </Text>
           </Block>
-          <Block marginTop={22} paddingHorizontal={25} row>
+          <Block marginTop={22} paddingHorizontal={25} row alignCenter>
             <Image source={images.BeeDiscovery} width={33.18} height={37.01} />
             <Block marginLeft={15} flex height={35} shadow radius={30}>
               <TextInput
@@ -97,7 +102,12 @@ export const DictionaryScreen = () => {
           </Block>
           <Block row alignCenter marginTop={24} paddingLeft={25}>
             <Icon state="History"></Icon>
-            <Text fontFamily="semiBold" marginLeft={5} size={'h4'}>
+            <Text
+              fontFamily="semiBold"
+              marginLeft={5}
+              size={'h3'}
+              lineHeight={20}
+            >
               {t('history')}
             </Text>
           </Block>
@@ -113,8 +123,8 @@ export const DictionaryScreen = () => {
           </Block>
           <Block row alignCenter marginTop={17} paddingLeft={25}>
             <Icon state="Dictionary"></Icon>
-            <Text fontFamily="bold" marginLeft={5} size={'h3'}>
-              {t('good_vocabulary')}
+            <Text fontFamily="bold" marginLeft={5} size={'h3'} lineHeight={20}>
+              {t('library_vocabulary')}
             </Text>
           </Block>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
