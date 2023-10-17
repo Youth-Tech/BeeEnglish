@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, Block, Container } from '@components'
+import { Block, Container, Text } from '@components'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { goBack } from '@navigation'
@@ -9,13 +9,23 @@ export const SettingScreen = () => {
   const { colors } = useTheme()
   const { t } = useTranslation()
   return (
-    <Container>
+    <Container hasScroll>
       <Block flex>
-        <Block paddingLeft={40} row alignCenter>
-          <Icon state="LeftArrow" onPress={goBack}></Icon>
-          <Text center flex size={'h2'} fontFamily="bold" marginRight={40}>
-            {t('settings')}
-          </Text>
+        <Block
+          row
+          alignCenter
+          justifyCenter
+          paddingVertical={12}
+          paddingHorizontal={20}
+        >
+          <Icon state="LeftArrow" onPress={goBack} />
+          <Block flex>
+            <Text center size={'h2'} fontFamily="bold">
+              {t('settings')}
+            </Text>
+          </Block>
+
+          <Block width={24} height={24}></Block>
         </Block>
         <Block marginHorizontal={25}>
           <Block
@@ -47,7 +57,7 @@ export const SettingScreen = () => {
           </Text>
           <Block row alignCenter space="between" marginTop={24}>
             <Block row alignCenter>
-              <Icon state="User"></Icon>
+              <Icon state="UserOutline" />
               <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
                 Profile
               </Text>
@@ -58,7 +68,7 @@ export const SettingScreen = () => {
             <Block row alignCenter>
               <Icon state="Password"></Icon>
               <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
-                Password
+                {t('password')}
               </Text>
             </Block>
             <Icon state="RightArrow"></Icon>

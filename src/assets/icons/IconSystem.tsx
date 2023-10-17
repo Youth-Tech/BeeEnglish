@@ -59,7 +59,6 @@ const RightArrow = ({
       strokeLinejoin="round"
       strokeWidth={2}
       d="m9 18 6-6-6-6"
-
     />
   </Svg>
 )
@@ -944,13 +943,7 @@ const DictionaryColorized = ({ ...props }: Props) => (
   </Svg>
 )
 const Video = ({ ...props }: Props) => (
-  <Svg
-    width={40}
-    height={40}
-    viewBox="0 0 40 40"
-    fill="none"
-    {...props}
-  >
+  <Svg width={40} height={40} viewBox="0 0 40 40" fill="none" {...props}>
     <G clipPath="url(#clip0_205_1742)">
       <Path
         d="M35.3672 3.625H4.63281C2.07031 3.625 0 5.70312 0 8.25781V27.3672C0 29.9219 2.07031 31.9922 4.63281 31.9922H14.625L18.2969 35.6641C19.2422 36.6094 20.7734 36.6094 21.7188 35.6641L25.3906 31.9922H35.375C37.9297 31.9922 40.0078 29.9219 40.0078 27.3672V8.25781C40 5.70312 37.9297 3.625 35.3672 3.625Z"
@@ -964,6 +957,28 @@ const Video = ({ ...props }: Props) => (
     <Defs>
       <ClipPath id="clip0_205_1742">
         <Rect width={40} height={40} fill="white" />
+      </ClipPath>
+    </Defs>
+  </Svg>
+)
+const UserOutline = ({
+  fill = initialState.fill,
+  stroke = initialState.stroke,
+  ...props
+}: Props) => (
+  <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" {...props}>
+    <G clipPath="url(#clip0_732_2959)">
+      <Path
+        d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+        stroke={stroke}
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </G>
+    <Defs>
+      <ClipPath id="clip0_732_2959">
+        <Rect width={24} height={24} fill="white" />
       </ClipPath>
     </Defs>
   </Svg>
@@ -1139,8 +1154,12 @@ const Icons = {
   },
   Video: {
     state: 'Video',
-    icon: Video
-  }
+    icon: Video,
+  },
+  UserOutline: {
+    state: 'UserOutline',
+    icon: UserOutline,
+  },
 }
 export type TIcon = keyof typeof Icons
 interface PropsIcon extends Props {
@@ -1193,5 +1212,6 @@ export {
   LearnBook,
   TaskFlag,
   DictionaryColorized,
-  Video
+  Video,
+  UserOutline,
 }
