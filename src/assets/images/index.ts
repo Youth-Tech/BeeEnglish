@@ -14,4 +14,7 @@ export const images = {
   OrangeLightFrame: require('./OrangeLightFrame.png'),
   OrangePrimaryFrame: require('./OrangePrimaryFrame.png'),
   Vocabulary: require('./Vocabulary.png'),
+  StreakBox: require('./StreakBox.png'),
+  ChestBox: require('./ChestBox.png'),
+  Light: require('./Light.png'),
 }
