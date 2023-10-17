@@ -65,7 +65,7 @@ export const SendPasswordScreen = () => {
             marginTop={20}
             lineHeight={34}
           >
-            {t('change_password')}
+            {t('forgot_password')}
           </Text>
           <Text size={'h4'} color={'textLabel'} marginTop={15} lineHeight={18}>
             {t('label_send_password')}

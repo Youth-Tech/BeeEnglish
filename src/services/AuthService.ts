@@ -68,11 +68,6 @@ export const AuthService = {
       confirmPassword
     })
   },
-  resendVerifyCode({ email }: { email: string }) {
-    return APIUtils.post('auth/resend-verified-code-email', {
-      email
-    })
-  },
 
 } as const
 

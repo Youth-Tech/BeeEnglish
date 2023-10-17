@@ -3,6 +3,7 @@ import { Text } from '@components'
 import { useTranslation } from 'react-i18next'
 import { resendVerifyCode } from '@redux/actions/auth.action'
 import { useAppDispatch } from '@hooks'
+import { TouchableOpacity } from 'react-native'
 
 const SendAgain = () => {
   const { t } = useTranslation()
@@ -21,20 +22,17 @@ const SendAgain = () => {
   }, [countdown])
   const onReceiveAgain = () => {
     dispatch(resendVerifyCode())
+    setCountdown(90)
   }
-  return countdown === 0 ? (
-    <Text
-      onPress={onReceiveAgain}
-      color="orangeDark"
-      fontFamily="bold"
-      size="h4"
-    >
-      {t('send_again')}
-    </Text>
-  ) : (
-    <Text color="orangeDark" fontFamily="bold" size="h4">
-      {t('time', { countdown })}
-    </Text>
+  return (
+      <TouchableOpacity
+        onPress={onReceiveAgain}
+        disabled={!(countdown === 0)}
+      >
+        <Text color="orangeDark" fontFamily="bold" size="h4">
+          {countdown === 0 ? t('send_again') : t('time', { countdown })}
+        </Text>
+      </TouchableOpacity>
   )
 }
 

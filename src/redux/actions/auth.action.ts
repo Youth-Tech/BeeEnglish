@@ -58,7 +58,7 @@ export const resendVerifyCode = createAsyncThunk(
   async (_, thunkAPI) => {
     const email = (thunkAPI.getState() as RootState).root.auth.email;
     if(!email) return undefined;
-    const response = await AuthService.resendVerifyCode({ email })
+    const response = await AuthService.forgotPassword({ email })
     return response.data;
   },
 )
