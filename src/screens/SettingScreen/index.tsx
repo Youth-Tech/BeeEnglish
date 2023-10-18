@@ -59,10 +59,10 @@ export const SettingScreen = () => {
             <Block row alignCenter>
               <Icon state="UserOutline" />
               <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
-                Profile
+                {t('profile')}
               </Text>
             </Block>
-            <Icon state="RightArrow"></Icon>
+            <Icon state="RightArrow" onPress={() => {}}></Icon>
           </Block>
           <Block row alignCenter space="between" marginTop={24}>
             <Block row alignCenter>
@@ -71,7 +71,7 @@ export const SettingScreen = () => {
                 {t('password')}
               </Text>
             </Block>
-            <Icon state="RightArrow"></Icon>
+            <Icon state="RightArrow" onPress={() => {}}></Icon>
           </Block>
           <Block row alignCenter space="between" marginTop={24}>
             <Block row alignCenter>
@@ -80,7 +80,7 @@ export const SettingScreen = () => {
                 {t('notifications')}
               </Text>
             </Block>
-            <Icon state="RightArrow"></Icon>
+            <Icon state="RightArrow" onPress={() => {}}></Icon>
           </Block>
           <Block row alignCenter space="between" marginTop={24}>
             <Block row alignCenter>
@@ -89,7 +89,7 @@ export const SettingScreen = () => {
                 {t('logout')}
               </Text>
             </Block>
-            <Icon state="RightArrow"></Icon>
+            <Icon state="RightArrow" onPress={() => {}}></Icon>
           </Block>
           <Text fontFamily="bold" size={'h2'} marginTop={32}>
             {t('more')}
@@ -101,7 +101,7 @@ export const SettingScreen = () => {
                 {t('rate_review')}
               </Text>
             </Block>
-            <Icon state="RightArrow"></Icon>
+            <Icon state="RightArrow" onPress={() => {}}></Icon>
           </Block>
           <Block row alignCenter space="between" marginTop={24}>
             <Block row alignCenter>
@@ -110,7 +110,10 @@ export const SettingScreen = () => {
                 {t('help')}
               </Text>
             </Block>
-            <Icon state="RightArrow"></Icon>
+            <Icon
+              state="RightArrow"
+              onPress={() => {}}
+            ></Icon>
           </Block>
         </Block>
       </Block>
