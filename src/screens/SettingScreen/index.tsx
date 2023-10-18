@@ -110,10 +110,7 @@ export const SettingScreen = () => {
                 {t('help')}
               </Text>
             </Block>
-            <Icon
-              state="RightArrow"
-              onPress={() => {}}
-            ></Icon>
+            <Icon state="RightArrow" onPress={() => {}}></Icon>
           </Block>
         </Block>
       </Block>
