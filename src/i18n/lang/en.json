@@ -52,6 +52,7 @@
     "english_vocabulary":"English Vocabulary",
     "easy":"easy",
     "normal":"normal",
-    "hard":"hard"
+    "hard":"hard",
+    "level_of_difficult":"Difficulty: "
   }
 }

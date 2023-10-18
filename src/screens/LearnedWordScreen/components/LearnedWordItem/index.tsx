@@ -75,7 +75,7 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
             backgroundColor={dotColor}
           ></Block>
           <Text size={'h5'} fontFamily="bold" marginLeft={4}>
-            Độ Khó: {difficultyText}
+            {t('level_of_difficult')}{difficultyText}
           </Text>
         </Block>
       </Block>

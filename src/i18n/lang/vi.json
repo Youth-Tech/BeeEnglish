@@ -52,6 +52,7 @@
     "english_vocabulary":"Từ vựng tiếng anh",
     "easy":"siêu dễ",
     "normal":"bình thường",
-    "hard":"khó"
+    "hard":"khó",
+    "level_of_difficult":"Độ khó: "
   }
 }
