@@ -52,6 +52,11 @@ export const DictionaryScreen = () => {
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
     },
+    {
+      word: 'Chicken',
+      wordType: 'noun',
+      wordPronounce: 'Hetcuu',
+    },
   ]
   const renderDictionaryItem = ({
     index,
@@ -74,9 +79,10 @@ export const DictionaryScreen = () => {
         <Block flex>
           <Block row paddingHorizontal={25} alignCenter>
             <Icon state="Back" onPress={goBack}></Icon>
-            <Text center flex paddingRight={25} fontFamily="bold" size={'h2'}>
+            <Text center flex  fontFamily="bold" size={'h2'}>
               {t('dictionary')}
             </Text>
+            <Block width={25} ></Block>
           </Block>
           <Block marginTop={22} paddingHorizontal={25} row alignCenter>
             <Image source={images.BeeDiscovery} width={33.18} height={37.01} />
@@ -114,6 +120,7 @@ export const DictionaryScreen = () => {
           <Block marginTop={15} paddingHorizontal={25}>
             <Block shadow radius={15} overflow="hidden">
               <FlatList
+                scrollEnabled={false}
                 data={data}
                 keyExtractor={(_, index) => `item-${index}`}
                 renderItem={renderDictionaryItem}
