@@ -62,7 +62,12 @@ export const SettingScreen = () => {
                 {t('profile')}
               </Text>
             </Block>
-            <Icon state="RightArrow" onPress={() => {}}></Icon>
+            <Icon
+              state="RightArrow"
+              onPress={() => {
+                console.log('press')
+              }}
+            ></Icon>
           </Block>
           <Block row alignCenter space="between" marginTop={24}>
             <Block row alignCenter>
@@ -71,7 +76,12 @@ export const SettingScreen = () => {
                 {t('password')}
               </Text>
             </Block>
-            <Icon state="RightArrow" onPress={() => {}}></Icon>
+            <Icon
+              state="RightArrow"
+              onPress={() => {
+                console.log('press')
+              }}
+            ></Icon>
           </Block>
           <Block row alignCenter space="between" marginTop={24}>
             <Block row alignCenter>
@@ -80,7 +90,12 @@ export const SettingScreen = () => {
                 {t('notifications')}
               </Text>
             </Block>
-            <Icon state="RightArrow" onPress={() => {}}></Icon>
+            <Icon
+              state="RightArrow"
+              onPress={() => {
+                console.log('press')
+              }}
+            ></Icon>
           </Block>
           <Block row alignCenter space="between" marginTop={24}>
             <Block row alignCenter>
@@ -89,7 +104,12 @@ export const SettingScreen = () => {
                 {t('logout')}
               </Text>
             </Block>
-            <Icon state="RightArrow" onPress={() => {}}></Icon>
+            <Icon
+              state="RightArrow"
+              onPress={() => {
+                console.log('press')
+              }}
+            ></Icon>
           </Block>
           <Text fontFamily="bold" size={'h2'} marginTop={32}>
             {t('more')}
@@ -101,7 +121,12 @@ export const SettingScreen = () => {
                 {t('rate_review')}
               </Text>
             </Block>
-            <Icon state="RightArrow" onPress={() => {}}></Icon>
+            <Icon
+              state="RightArrow"
+              onPress={() => {
+                console.log('press')
+              }}
+            ></Icon>
           </Block>
           <Block row alignCenter space="between" marginTop={24}>
             <Block row alignCenter>
@@ -110,7 +135,12 @@ export const SettingScreen = () => {
                 {t('help')}
               </Text>
             </Block>
-            <Icon state="RightArrow" onPress={() => {}}></Icon>
+            <Icon
+              state="RightArrow"
+              onPress={() => {
+                console.log('press')
+              }}
+            ></Icon>
           </Block>
         </Block>
       </Block>
