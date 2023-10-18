@@ -24,30 +24,21 @@ export const LearnedWordScreen = () => {
       word: 'Chicken',
       wordType: 'noun',
       translation: 'Con gà',
+      difficulty: 'easy',
     },
     {
       id: 2,
-      word: 'Chicken',
+      word: 'Dog',
       wordType: 'noun',
-      translation: 'Con gà',
+      translation: 'Con chó',
+      difficulty: 'normal',
     },
     {
       id: 3,
-      word: 'Chicken',
+      word: 'Difference',
       wordType: 'noun',
-      translation: 'Con gà',
-    },
-    {
-      id: 4,
-      word: 'Chicken',
-      wordType: 'noun',
-      translation: 'Con gà',
-    },
-    {
-      id: 5,
-      word: 'Chicken',
-      wordType: 'noun',
-      translation: 'Con gà',
+      translation: 'Sự khác biệt',
+      difficulty: 'hard',
     },
   ]
   const renderLearnedWordItem = ({
@@ -60,17 +51,18 @@ export const LearnedWordScreen = () => {
         key={`item-${index}`}
       >
         <LearnedWordItem
+          index={index}
           word={item.word}
           wordType={item.wordType}
           translation={item.translation}
-          index={index}
+          difficulty={item.difficulty}
         />
       </View>
     )
   }
 
   return (
-    <Container hasScroll>
+    <Container>
       <StatusBar statusColor={colors.orangePrimary}></StatusBar>
       <DismissKeyBoardBlock>
         <Block flex>
@@ -117,7 +109,7 @@ export const LearnedWordScreen = () => {
             </Block>
 
             <FlatList
-              scrollEnabled={false}
+              scrollEnabled={true}
               data={data}
               keyExtractor={(_, index) => `item-${index}`}
               renderItem={renderLearnedWordItem}

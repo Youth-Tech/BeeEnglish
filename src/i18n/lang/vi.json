@@ -49,6 +49,9 @@
     "test": "Bài kiểm tra",
     "take_the_test_to_let_us_know_your_capabilities": "Thực hiện bài kiểm tra để chúng tôi biết năng lực của bạn",
     "vocabulary_learned":"Từ vựng đã học",
-    "english_vocabulary":"Từ vựng tiếng anh"
+    "english_vocabulary":"Từ vựng tiếng anh",
+    "easy":"siêu dễ",
+    "normal":"bình thường",
+    "hard":"khó"
   }
 }

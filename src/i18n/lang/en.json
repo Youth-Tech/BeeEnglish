@@ -49,6 +49,9 @@
     "test": "Exam Test",
     "take_the_test_to_let_us_know_your_capabilities": "Take the test to let us know your capabilities",
     "vocabulary_learned":"Vocabulary learned",
-    "english_vocabulary":"English Vocabulary"
+    "english_vocabulary":"English Vocabulary",
+    "easy":"easy",
+    "normal":"normal",
+    "hard":"hard"
   }
 }
