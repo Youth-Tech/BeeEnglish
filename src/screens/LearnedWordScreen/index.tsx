@@ -10,15 +10,16 @@ import {
 } from '@components'
 import { useTheme } from '@themes'
 import { Icon } from '@assets'
-import { LearnedWordItem, LearnedWordItemProps } from './components'
+import { LearnedWordItem } from './components'
 import { goBack } from '@navigation'
 import { FlatList, ListRenderItemInfo, View } from 'react-native'
 import { widthScreen } from '@utils/helpers'
+import { dataProps } from './const'
 
 export const LearnedWordScreen = () => {
   const { colors, normalize } = useTheme()
   const { t } = useTranslation()
-  const data = [
+  const data: dataProps[] = [
     {
       id: 1,
       word: 'Chicken',
@@ -40,23 +41,35 @@ export const LearnedWordScreen = () => {
       translation: 'Sự khác biệt',
       difficulty: 'hard',
     },
+    {
+      id: 4,
+      word: 'Hello',
+      wordType: 'noun',
+      translation: 'Sự khác biệt',
+      difficulty: 'hard',
+    },
+    {
+      id: 5,
+      word: 'Hello',
+      wordType: 'noun',
+      translation: 'Sự khác biệt',
+      difficulty: 'hard',
+    },
+    {
+      id: 6,
+      word: 'Hello',
+      wordType: 'noun',
+      translation: 'Sự khác biệt',
+      difficulty: 'hard',
+    },
   ]
   const renderLearnedWordItem = ({
     index,
     item,
-  }: ListRenderItemInfo<LearnedWordItemProps>) => {
+  }: ListRenderItemInfo<dataProps>) => {
     return (
-      <View
-        style={{ marginTop: normalize.v(25), marginRight: normalize.h(10) }}
-        key={`item-${index}`}
-      >
-        <LearnedWordItem
-          index={index}
-          word={item.word}
-          wordType={item.wordType}
-          translation={item.translation}
-          difficulty={item.difficulty}
-        />
+      <View style={{ padding: normalize.m(5) }} key={`item-${index}`}>
+        <LearnedWordItem data={item} />
       </View>
     )
   }
@@ -75,7 +88,7 @@ export const LearnedWordScreen = () => {
             absolute
           ></Block>
           {/* Textinput and FlatList */}
-          <Block paddingHorizontal={25} backgroundColor="transparent">
+          <Block paddingHorizontal={20} backgroundColor="transparent">
             <Block row alignCenter>
               <Icon state="Back" onPress={goBack} stroke={colors.white}></Icon>
               <Text
@@ -111,7 +124,8 @@ export const LearnedWordScreen = () => {
             <FlatList
               scrollEnabled={true}
               data={data}
-              keyExtractor={(_, index) => `item-${index}`}
+              style={{ paddingTop: 15 }}
+              keyExtractor={(item) => item.id.toString()}
               renderItem={renderLearnedWordItem}
               showsVerticalScrollIndicator={false}
               numColumns={2}
