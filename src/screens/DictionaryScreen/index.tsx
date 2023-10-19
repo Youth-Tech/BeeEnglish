@@ -68,7 +68,7 @@ export const DictionaryScreen = () => {
           word={item.word}
           wordType={item.wordType}
           wordPronounce={item.wordPronounce}
-        ></DictionaryItem>
+        />
       </View>
     )
   }
@@ -77,7 +77,7 @@ export const DictionaryScreen = () => {
     <Container hasScroll>
       <DismissKeyBoardBlock>
         <Block flex>
-          <Block row paddingHorizontal={25} alignCenter>
+          <Block row paddingHorizontal={20} alignCenter>
             <Icon state="Back" onPress={goBack}></Icon>
             <Text center flex  fontFamily="bold" size={'h2'}>
               {t('dictionary')}
@@ -106,7 +106,7 @@ export const DictionaryScreen = () => {
               />
             </Block>
           </Block>
-          <Block row alignCenter marginTop={24} paddingLeft={25}>
+          <Block row alignCenter marginTop={24} paddingLeft={20}>
             <Icon state="History"></Icon>
             <Text
               fontFamily="semiBold"
@@ -117,7 +117,7 @@ export const DictionaryScreen = () => {
               {t('history')}
             </Text>
           </Block>
-          <Block marginTop={15} paddingHorizontal={25}>
+          <Block marginTop={15} paddingHorizontal={20}>
             <Block shadow radius={15} overflow="hidden">
               <FlatList
                 scrollEnabled={false}
@@ -128,14 +128,14 @@ export const DictionaryScreen = () => {
               />
             </Block>
           </Block>
-          <Block row alignCenter marginTop={17} paddingLeft={25}>
+          <Block row alignCenter marginTop={17} paddingLeft={20}>
             <Icon state="Dictionary"></Icon>
             <Text fontFamily="bold" marginLeft={5} size={'h3'} lineHeight={20}>
               {t('library_vocabulary')}
             </Text>
           </Block>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <Block paddingLeft={25} marginVertical={15} row>
+            <Block paddingLeft={20} marginVertical={15} row>
               <VocabularyItem
                 name={t('vocabulary_learned')}
                 image={images.BeeReading}
