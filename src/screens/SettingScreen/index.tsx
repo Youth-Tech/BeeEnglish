@@ -27,7 +27,7 @@ export const SettingScreen = () => {
 
           <Block width={24} height={24}></Block>
         </Block>
-        <Block marginHorizontal={25}>
+        <Block marginHorizontal={20}>
           <Block
             backgroundColor={colors.orangePrimary}
             radius={10}
