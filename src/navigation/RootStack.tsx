@@ -16,6 +16,7 @@ import {
   EmailRegistrationScreen,
   SplashScreen,
 } from '@screens'
+import DetailPost from "@screens/DetailPost";
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -30,7 +31,7 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="LOGIN_SCREEN"
+        initialRouteName="DETAIL_POST_SCREEN"
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -50,6 +51,7 @@ const RootStack = () => {
             component={AboutTheTestScreen}
           />
           <Stack.Screen name="EXAM_TEST_SCREEN" component={ExamTestScreen} />
+          <Stack.Screen name="DETAIL_POST_SCREEN" component={DetailPost} />
           <Stack.Screen
             name="EMAIL_REGISTRATION_SCREEN"
             component={EmailRegistrationScreen}
