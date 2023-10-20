@@ -22,38 +22,45 @@ import { dataProps } from './const'
 export const DictionaryScreen = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
-  const data:dataProps = [
+  const data:dataProps[] = [
     {
+      id:1,
       word: 'Chicken',
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
     },
     {
+      id:2,
       word: 'Chicken',
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
     },
     {
+      id:3,
       word: 'Chicken',
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
     },
     {
+      id:4,
       word: 'Chicken',
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
     },
     {
+      id:5,
       word: 'Chicken',
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
     },
     {
+      id:6,
       word: 'Chicken',
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
     },
     {
+      id:7,
       word: 'Chicken',
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
@@ -62,7 +69,7 @@ export const DictionaryScreen = () => {
   const renderDictionaryItem = ({
     index,
     item,
-  }: ListRenderItemInfo<DictonaryItemProps>) => {
+  }: ListRenderItemInfo<dataProps>) => {
     return (
       <View key={`item-${index}`}>
         <DictionaryItem
