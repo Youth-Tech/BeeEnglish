@@ -15,6 +15,7 @@ import {
   VerificationCodeScreen,
   EmailRegistrationScreen,
   SplashScreen,
+  VocabScreen,
 } from '@screens'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -30,7 +31,7 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="LOGIN_SCREEN"
+        initialRouteName="VOCAB_SCREEN"
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -58,6 +59,7 @@ const RootStack = () => {
             name="VERIFICATION_CODE_SCREEN"
             component={VerificationCodeScreen}
           />
+          <Stack.Screen name="VOCAB_SCREEN" component={VocabScreen} />
           <Stack.Screen name="TEST_SCREEN" component={TestScreen} />
         </Stack.Group>
       </Stack.Navigator>
