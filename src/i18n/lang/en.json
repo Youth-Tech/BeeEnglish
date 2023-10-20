@@ -53,6 +53,15 @@
     "easy":"easy",
     "normal":"normal",
     "hard":"hard",
-    "level_of_difficult":"Difficulty: "
+    "level_of_difficult":"Difficulty: ",
+    "lesson":"Lesson",
+    "vocabulary":"Vocabulary",
+    "multiple_choice":"Multiple choice",
+    "streak": "Streak",
+    "mission":"Mission",
+    "attendance": "Attendance",
+    "attend": "Attend",
+    "welcome_back": "Welcome back!",
+    "comeback_tomorrow": "Please come back tomorrow!"
   }
 }

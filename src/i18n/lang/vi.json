@@ -53,6 +53,16 @@
     "easy":"siêu dễ",
     "normal":"bình thường",
     "hard":"khó",
-    "level_of_difficult":"Độ khó: "
+    "level_of_difficult":"Độ khó: ",
+    "lesson":"Bài học",
+    "vocabulary":"Từ vựng",
+    "multiple_choice":"Trắc nghiệm",
+    "streak": "Chuỗi điểm danh",
+    "mission": "Nhiệm vụ",
+    "attendance": "Điểm danh",
+    "attend": "Điểm danh",
+    "welcome_back": "Chào mừng bạn trở lại!",
+    "comeback_tomorrow": "Hãy quay lại vào ngày mai!"
+
   }
 }
