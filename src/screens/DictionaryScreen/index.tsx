@@ -17,11 +17,12 @@ import {
   VocabularyItem,
 } from './components'
 import { FlatList, ListRenderItemInfo, ScrollView, View } from 'react-native'
+import { dataProps } from './const'
 
 export const DictionaryScreen = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
-  const data = [
+  const data:dataProps = [
     {
       word: 'Chicken',
       wordType: 'noun',
@@ -65,9 +66,7 @@ export const DictionaryScreen = () => {
     return (
       <View key={`item-${index}`}>
         <DictionaryItem
-          word={item.word}
-          wordType={item.wordType}
-          wordPronounce={item.wordPronounce}
+          data={item}
         />
       </View>
     )
@@ -122,7 +121,7 @@ export const DictionaryScreen = () => {
               <FlatList
                 scrollEnabled={false}
                 data={data}
-                keyExtractor={(_, index) => `item-${index}`}
+                keyExtractor={(item)=>item.id.toString()}
                 renderItem={renderDictionaryItem}
                 showsHorizontalScrollIndicator={false}
               />

@@ -3,20 +3,17 @@ import { useTheme } from '@themes'
 import { Block, Text } from '@components'
 import { Pressable } from 'react-native'
 import { Icon } from '@assets'
+import { dataProps } from '@screens/DictionaryScreen/const'
 
 export interface DictonaryItemProps {
-  word: string
-  wordType: string
-  wordPronounce: string
+  data :dataProps
   onPressBookMark?: () => void
   onPress?: () => void
 }
 
 export const DictionaryItem: React.FC<DictonaryItemProps> = ({
-  word,
+  data,
   onPressBookMark,
-  wordType,
-  wordPronounce,
   onPress,
 }) => {
   const { colors } = useTheme()
@@ -31,7 +28,7 @@ export const DictionaryItem: React.FC<DictonaryItemProps> = ({
         <Block backgroundColor={colors.white} height={60} paddingLeft={35}>
           <Block row alignCenter>
             <Text size={'h4'} fontFamily="semiBold" lineHeight={40}>
-              {word}
+              {data.word}
             </Text>
             <Text
               size={'h5'}
@@ -40,7 +37,7 @@ export const DictionaryItem: React.FC<DictonaryItemProps> = ({
               lineHeight={40}
               color={colors.greyDark}
             >
-              ({wordType})
+              ({data.wordType})
             </Text>
             <Pressable
               onPress={toggleBookmark}
@@ -65,7 +62,7 @@ export const DictionaryItem: React.FC<DictonaryItemProps> = ({
             </Pressable>
           </Block>
           <Text size={'h5'} fontFamily="regular" color={colors.greyDark}>
-            /{wordPronounce}/
+            /{data.wordPronounce}/
           </Text>
         </Block>
         <Block
