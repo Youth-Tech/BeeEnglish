@@ -16,7 +16,9 @@ import {
   EmailRegistrationScreen,
   SplashScreen,
   SettingScreen,
+  DetailLessonScreen,
 } from '@screens'
+import StreakScreen from '@screens/StreakScreen'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -32,6 +34,7 @@ const RootStack = () => {
       <Stack.Navigator
         screenOptions={screenOptions}
         initialRouteName="SETTING_SCREEN"
+
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -59,8 +62,10 @@ const RootStack = () => {
             name="VERIFICATION_CODE_SCREEN"
             component={VerificationCodeScreen}
           />
+          <Stack.Screen name="STREAK_SCREEN" component={StreakScreen} />
           <Stack.Screen name="TEST_SCREEN" component={TestScreen} />
           <Stack.Screen name="SETTING_SCREEN" component={SettingScreen} />
+          <Stack.Screen name="DETAIL_LESSON_SCREEN" component={DetailLessonScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
