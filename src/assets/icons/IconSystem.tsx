@@ -1,5 +1,13 @@
 import * as React from 'react'
-import Svg, { SvgProps, Path, ClipPath, Defs, G, Rect } from 'react-native-svg'
+import Svg, {
+  SvgProps,
+  Path,
+  ClipPath,
+  Defs,
+  G,
+  Rect,
+  Circle,
+} from 'react-native-svg'
 import { colors, ColorsMode } from '@themes'
 
 export interface Props extends SvgProps {
@@ -59,7 +67,6 @@ const RightArrow = ({
       strokeLinejoin="round"
       strokeWidth={2}
       d="m9 18 6-6-6-6"
-
     />
   </Svg>
 )
@@ -372,6 +379,7 @@ const Cancel = ({
     <Path
       fill={fill}
       fillRule="evenodd"
+      strokeWidth={props.size || props.width || 23}
       d="M5.24 5.47a.697.697 0 0 1 1.016 0l5.24 5.47 5.24-5.47a.697.697 0 0 1 1.017 0c.28.293.28.767 0 1.06L12.513 12l5.24 5.47c.28.293.28.767 0 1.06a.697.697 0 0 1-1.016 0l-5.24-5.47-5.241 5.47a.697.697 0 0 1-1.016 0 .773.773 0 0 1 0-1.06L10.48 12 5.24 6.53a.773.773 0 0 1 0-1.06Z"
       clipRule="evenodd"
     />
@@ -944,13 +952,7 @@ const DictionaryColorized = ({ ...props }: Props) => (
   </Svg>
 )
 const Video = ({ ...props }: Props) => (
-  <Svg
-    width={40}
-    height={40}
-    viewBox="0 0 40 40"
-    fill="none"
-    {...props}
-  >
+  <Svg width={40} height={40} viewBox="0 0 40 40" fill="none" {...props}>
     <G clipPath="url(#clip0_205_1742)">
       <Path
         d="M35.3672 3.625H4.63281C2.07031 3.625 0 5.70312 0 8.25781V27.3672C0 29.9219 2.07031 31.9922 4.63281 31.9922H14.625L18.2969 35.6641C19.2422 36.6094 20.7734 36.6094 21.7188 35.6641L25.3906 31.9922H35.375C37.9297 31.9922 40.0078 29.9219 40.0078 27.3672V8.25781C40 5.70312 37.9297 3.625 35.3672 3.625Z"
@@ -968,6 +970,19 @@ const Video = ({ ...props }: Props) => (
     </Defs>
   </Svg>
 )
+
+const CheckIcon = (props: Props) => (
+  <Svg width={51} height={50} fill="none" {...props}>
+    <Circle cx={25} cy={25} r={25} fill="#fff" />
+    <Path
+      stroke="#22B07D"
+      strokeLinecap="round"
+      strokeWidth={8}
+      d="M32.726 18.75 19.942 31.429M14.87 27.262l5.072 4.167"
+    />
+  </Svg>
+)
+
 const Icons = {
   LeftArrow: {
     state: 'LeftArrow',
@@ -1139,8 +1154,13 @@ const Icons = {
   },
   Video: {
     state: 'Video',
-    icon: Video
-  }
+    icon: Video,
+  },
+
+  Check: {
+    state: 'Check',
+    icon: CheckIcon,
+  },
 }
 export type TIcon = keyof typeof Icons
 interface PropsIcon extends Props {
@@ -1193,5 +1213,6 @@ export {
   LearnBook,
   TaskFlag,
   DictionaryColorized,
-  Video
+  Video,
+  CheckIcon,
 }
