@@ -58,6 +58,7 @@ const AxiosInstance = ({
         try {
           //refresh token
           const refreshToken = TokenService.getRefreshToken()
+          console.log(refreshToken)
           const res = await axiosInstance.post<RefreshTokenRes>(
             '/auth/refresh-token',
             {

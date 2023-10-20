@@ -1,6 +1,6 @@
-import React from 'react'
-import { Keyboard, ToastAndroid } from 'react-native'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Keyboard, ToastAndroid } from 'react-native'
 
 import {
   Text,
@@ -12,25 +12,34 @@ import {
 } from '@components'
 import { useTheme } from '@themes'
 import { BackArrow } from '@assets'
-import { goBack } from '@navigation'
+import { goBack, navigate } from '@navigation'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { verifyAccount } from '@redux/actions/auth.action'
 
 export const VerificationCodeScreen = () => {
   const [value, setValue] = React.useState<string>('')
   const verifyCodeInputRef = React.createRef<VerifyCodeInputRefFunction>()
-
   const { t } = useTranslation()
-
   const { normalize } = useTheme()
+  const email = useAppSelector((state) => state.root.auth.email)
 
   const onReceiveAgain = () => {
     console.log('onReceiveAgain')
   }
+  const dispatch = useAppDispatch()
+  const isVerified = useAppSelector((state) => state.root.user.isVerified)
 
   const onSubmit = (value: string) => {
     Keyboard.dismiss()
-    console.log('submit with value', value)
+    dispatch(verifyAccount(value))
     ToastAndroid.show('submit with value ' + value, ToastAndroid.SHORT)
   }
+
+  useEffect(() => {
+    if (isVerified) {
+      navigate('BOTTOM_TAB')
+    }
+  }, [isVerified])
 
   return (
     <Container>
@@ -43,7 +52,7 @@ export const VerificationCodeScreen = () => {
           </Text>
 
           <Text size={'h4'} color={'textLabel'} marginTop={15} lineHeight={18}>
-            {t('sub_label_code_verify', { val: 'vutran789jjjj@gmail.com' })}
+            {t('sub_label_code_verify', { val: email })}
           </Text>
 
           <VerifyCodeInput
