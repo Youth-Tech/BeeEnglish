@@ -87,7 +87,7 @@ export const ShadowButton: React.FC<ButtonShadowProps> = (props) => {
       )
       rest?.onPressOut && rest?.onPressOut(e)
     },
-    [shadowHeight,onPress],
+    [shadowHeight, onPress],
   )
 
   const renderBorderButton = React.useMemo(() => {

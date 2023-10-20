@@ -10,4 +10,12 @@ export const images = {
   BeeDiscovery: require('./BeeDiscovery.png'),
   BeeReading: require('./BeeReading.png'),
   BeePencil: require('./BeePencil.png'),
+  BGDetailLesson: require('./BGDetailLesson.png'),
+  MultipleChoice: require('./MultipleChoice.png'),
+  OrangeLightFrame: require('./OrangeLightFrame.png'),
+  OrangePrimaryFrame: require('./OrangePrimaryFrame.png'),
+  Vocabulary: require('./Vocabulary.png'),
+  StreakBox: require('./StreakBox.png'),
+  ChestBox: require('./ChestBox.png'),
+  Light: require('./Light.png'),
 }
