@@ -8,6 +8,8 @@ export const images = {
   TaskFlag: require('./TaskFlag.png'),
   BeeGraduated: require('./BeeGraduated.png'),
   BeeDiscovery: require('./BeeDiscovery.png'),
+  BeeReading: require('./BeeReading.png'),
+  BeePencil: require('./BeePencil.png'),
   BGDetailLesson: require('./BGDetailLesson.png'),
   MultipleChoice: require('./MultipleChoice.png'),
   OrangeLightFrame: require('./OrangeLightFrame.png'),
