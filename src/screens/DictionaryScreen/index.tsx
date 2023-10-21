@@ -22,45 +22,45 @@ import { dataProps } from './const'
 export const DictionaryScreen = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
-  const data:dataProps[] = [
+  const data: dataProps[] = [
     {
-      id:1,
+      id: 1,
       word: 'Chicken',
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
     },
     {
-      id:2,
+      id: 2,
       word: 'Chicken',
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
     },
     {
-      id:3,
+      id: 3,
       word: 'Chicken',
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
     },
     {
-      id:4,
+      id: 4,
       word: 'Chicken',
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
     },
     {
-      id:5,
+      id: 5,
       word: 'Chicken',
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
     },
     {
-      id:6,
+      id: 6,
       word: 'Chicken',
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
     },
     {
-      id:7,
+      id: 7,
       word: 'Chicken',
       wordType: 'noun',
       wordPronounce: 'Hetcuu',
@@ -72,9 +72,7 @@ export const DictionaryScreen = () => {
   }: ListRenderItemInfo<dataProps>) => {
     return (
       <View key={`item-${index}`}>
-        <DictionaryItem
-          data={item}
-        />
+        <DictionaryItem data={item} />
       </View>
     )
   }
@@ -83,12 +81,12 @@ export const DictionaryScreen = () => {
     <Container hasScroll>
       <DismissKeyBoardBlock>
         <Block flex>
-          <Block row paddingHorizontal={20} alignCenter>
+          <Block row paddingHorizontal={20} alignCenter marginTop={10}>
             <Icon state="Back" onPress={goBack}></Icon>
-            <Text center flex  fontFamily="bold" size={'h2'}>
+            <Text center flex fontFamily="bold" size={'h2'}>
               {t('dictionary')}
             </Text>
-            <Block width={25} ></Block>
+            <Block width={25}></Block>
           </Block>
           <Block marginTop={22} paddingHorizontal={25} row alignCenter>
             <Image source={images.BeeDiscovery} width={33.18} height={37.01} />
@@ -128,7 +126,7 @@ export const DictionaryScreen = () => {
               <FlatList
                 scrollEnabled={false}
                 data={data}
-                keyExtractor={(item)=>item.id.toString()}
+                keyExtractor={(item) => item.id.toString()}
                 renderItem={renderDictionaryItem}
                 showsHorizontalScrollIndicator={false}
               />
