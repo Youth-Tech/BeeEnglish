@@ -22,7 +22,6 @@ export const LearnWordItem: React.FC<Props> = ({
   return (
     <Pressable onPress={onPress}>
       <Block
-        shadow
         backgroundColor={colors.greyLighter}
         width={145}
         radius={15}

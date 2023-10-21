@@ -64,26 +64,26 @@ export const SavedWordScreen = () => {
     {
       id: 1,
       word: 'Chicken',
-      wordType: 'noun',
-      translation: 'ˈtʃɪk.ɪn',
+      wordType: 'ˈtʃɪk.ɪn',
+      translation: 'Con gà',
     },
     {
       id: 2,
       word: 'Chicken',
-      wordType: 'noun',
-      translation: 'ˈtʃɪk.ɪn',
+      wordType: 'ˈtʃɪk.ɪn',
+      translation: 'Con gà',
     },
     {
       id: 3,
       word: 'Chicken',
-      wordType: 'noun',
-      translation: 'ˈtʃɪk.ɪn',
+      wordType: 'ˈtʃɪk.ɪn',
+      translation: 'Con gà',
     },
     {
       id: 4,
       word: 'Chicken',
-      wordType: 'noun',
-      translation: 'ˈtʃɪk.ɪn',
+      wordType: 'ˈtʃɪk.ɪn',
+      translation: 'Con gà',
     },
   ]
   const renderLearnItem = ({
@@ -127,13 +127,13 @@ export const SavedWordScreen = () => {
                 {t('saved_vocabulary')}
               </Text>
             </Block>
-            <Block marginTop={22} height={35} radius={30}>
+            <Block marginTop={22} height={35} radius={30} shadow shadowColor='white'>
               <TextInput
                 containerStyle={{ width: '100%' }}
                 placeholderTextColor={colors.greyPrimary}
                 inputContainerStyle={{
                   width: '100%',
-                  borderRadius: 30,
+                  borderRadius: 30
                 }}
                 placeholder={t('english_vocabulary')}
                 rightIcon={

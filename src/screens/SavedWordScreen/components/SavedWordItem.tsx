@@ -22,6 +22,7 @@ export const SavedWordItem: React.FC<SavedWordItemProps> = ({
         backgroundColor={colors.white}
         height={60}
         paddingLeft={35}
+        paddingRight={11}
         space="between"
         alignCenter
       >

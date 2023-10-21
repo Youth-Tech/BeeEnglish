@@ -39,7 +39,7 @@ export const DetailWordScreen = () => {
         >
           <Block column alignCenter justifyCenter>
             <Text
-              size={'h3'}
+              size={'h2'}
               color="black"
               fontFamily="bold"
               marginTop={15}
@@ -48,7 +48,7 @@ export const DetailWordScreen = () => {
               Chicken
             </Text>
             <Text
-              size={'h4'}
+              size={'h3'}
               fontFamily="regular"
               marginTop={15}
               lineHeight={18}
@@ -120,7 +120,7 @@ export const DetailWordScreen = () => {
           <Content />
           <Block row alignCenter justifyCenter marginBottom={70}>
             <Text color="black" size={'h3'} fontFamily="bold" margin={5}>
-              {t('dictionary')}
+              {t('video')}
             </Text>
             <TouchableOpacity>
               <Image source={images.Arrow_Right} width={12} height={12} />
