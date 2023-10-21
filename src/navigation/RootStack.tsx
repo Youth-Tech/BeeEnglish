@@ -16,6 +16,7 @@ import {
   EmailRegistrationScreen,
   DictionaryScreen,
   SplashScreen,
+  SettingScreen,
   DetailLessonScreen,
 } from '@screens'
 import StreakScreen from '@screens/StreakScreen'
@@ -33,7 +34,8 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="DICTIONARY_SCREEN"
+        initialRouteName="SETTING_SCREEN"
+
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -64,6 +66,7 @@ const RootStack = () => {
           />
           <Stack.Screen name="STREAK_SCREEN" component={StreakScreen} />
           <Stack.Screen name="TEST_SCREEN" component={TestScreen} />
+          <Stack.Screen name="SETTING_SCREEN" component={SettingScreen} />
           <Stack.Screen name="DETAIL_LESSON_SCREEN" component={DetailLessonScreen} />
         </Stack.Group>
       </Stack.Navigator>
