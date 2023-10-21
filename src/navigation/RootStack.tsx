@@ -14,6 +14,7 @@ import {
   PasswordResetScreen,
   VerificationCodeScreen,
   EmailRegistrationScreen,
+  DictionaryScreen,
   SplashScreen,
   DetailLessonScreen,
 } from '@screens'
@@ -32,7 +33,7 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="DETAIL_LESSON_SCREEN"
+        initialRouteName="DICTIONARY_SCREEN"
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -47,6 +48,7 @@ const RootStack = () => {
           <Stack.Screen name="LOGIN_SCREEN" component={LoginScreen} />
           <Stack.Screen name="REGISTER_SCREEN" component={RegisterScreen} />
           <Stack.Screen name="SPLASH_SCREEN" component={SplashScreen} />
+          <Stack.Screen name="DICTIONARY_SCREEN" component={DictionaryScreen} />
           <Stack.Screen
             name="ABOUT_THE_TEST_SCREEN"
             component={AboutTheTestScreen}
