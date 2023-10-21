@@ -12,13 +12,13 @@ export default Placeholder
 
 const useStyle = makeStyles<Offset>()(({ colors }) => ({
   placeholderStyle: (offset) => ({
-    height: offset.height.value + 3 - 10, //shadow block height
-    width: offset.width.value,
+    borderRadius: 15,
     position: 'absolute',
+    width: offset.width.value,
     top: offset.originalY.value,
     left: offset.originalX.value,
-    backgroundColor: colors.greyLight,
     transform: [{ translateY: -3 }], //shadow block height
-    borderRadius: 15,
+    backgroundColor: colors.greyLight,
+    height: offset.height.value + 3 - 10, //shadow block height
   }),
 }))

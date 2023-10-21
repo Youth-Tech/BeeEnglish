@@ -1,20 +1,17 @@
-import React from 'react'
-import { Block, ShadowBlock, Text } from '@components/bases'
-import { Pressable } from 'react-native'
 import Animated, {
   runOnUI,
   useAnimatedStyle,
   useDerivedValue,
   withSpring,
 } from 'react-native-reanimated'
+import React from 'react'
+import { Pressable } from 'react-native'
+
 import { Offset } from '..'
-import {
-  CONTAINER_WIDTH,
-  WORD_HEIGHT,
-  MARGIN_TOP,
-} from '@components/common/WordList'
-import { wordAnimationConfig } from '@assets'
 import Placeholder from './Placeholder'
+import { wordAnimationConfig } from '@assets'
+import { Block, ShadowBlock, Text } from '@components/bases'
+import { CONTAINER_WIDTH, WORD_HEIGHT } from '@components/common/WordList'
 
 export interface WordProps {
   id: string
@@ -25,6 +22,7 @@ export interface WordProps {
 }
 
 const BlockAnimated = Animated.createAnimatedComponent(Block)
+
 const byOrder = (a: Offset, b: Offset) => {
   'worklet'
   return a.order.value > b.order.value ? 1 : -1
@@ -132,13 +130,13 @@ export const Word: React.FC<WordProps> = ({
     <>
       <Placeholder {...offset} />
       <Pressable onPress={handleWordTranslation}>
-        <BlockAnimated style={[blockStyle]} absolute>
+        <BlockAnimated style={blockStyle} absolute>
           <ShadowBlock
             radius={15}
-            height={WORD_HEIGHT - 10}
             alignCenter
             justifyCenter
             shadowHeight={3}
+            height={WORD_HEIGHT - 10}
           >
             <Text
               color="purpleDark"

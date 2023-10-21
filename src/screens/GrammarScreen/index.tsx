@@ -1,29 +1,25 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Portal } from 'react-native-portalize'
+import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
+
 import {
-  Block,
-  Container,
-  Image,
-  MARGIN_TOP,
-  Progress,
-  ShadowButton,
   Text,
+  Block,
+  Image,
+  Progress,
   WordList,
+  Container,
+  MARGIN_TOP,
+  ShadowButton,
   WordListRefFunc,
 } from '@components'
-import { Icon, images } from '@assets'
 import { useTheme } from '@themes'
 import { goBack } from '@navigation'
-import { useTranslation } from 'react-i18next'
+import { Icon, images } from '@assets'
 import { widthScreen } from '@utils/helpers'
-import { Portal } from 'react-native-portalize'
-import Animated, {
-  Easing,
-  SlideInDown,
-  SlideInUp,
-  SlideOutDown,
-} from 'react-native-reanimated'
 
-const Question = [
+const QUESTION = [
   {
     id: '12',
     question: 'Tôi làm việc ở đây 1',
@@ -54,6 +50,26 @@ const Question = [
     question: 'Tôi làm việc ở đây 6',
     answer: 'I go to school by bike6',
   },
+  {
+    id: '21',
+    question: 'Tôi làm việc ở đây 7',
+    answer: 'I go to school by bike7',
+  },
+  {
+    id: '18',
+    question: 'Tôi làm việc ở đây 8',
+    answer: 'I go to school by bike8',
+  },
+  {
+    id: '19',
+    question: 'Tôi làm việc ở đây 9',
+    answer: 'I go to school by bike9',
+  },
+  {
+    id: '20',
+    question: 'Tôi làm việc ở đây 10',
+    answer: 'I go to school by bike10',
+  },
 ]
 
 const BlockAnimated = Animated.createAnimatedComponent(Block)
@@ -69,7 +85,7 @@ export const GrammarScreen: React.FC = () => {
   const [showModal, setShowModal] = React.useState(false)
   const [currentQuestion, setCurrentQuestion] = React.useState({
     index: 0,
-    data: Question[0],
+    data: QUESTION[0],
   })
 
   const onClosePress = () => {
@@ -99,7 +115,7 @@ export const GrammarScreen: React.FC = () => {
   const nextQuestion = () => {
     //next question
     const nextQuestion =
-      currentQuestion.index + 1 >= Question.length
+      currentQuestion.index + 1 >= QUESTION.length
         ? -1
         : currentQuestion.index + 1
     if (nextQuestion == -1) {
@@ -107,8 +123,9 @@ export const GrammarScreen: React.FC = () => {
     } else {
       setCurrentQuestion({
         index: nextQuestion,
-        data: Question[nextQuestion],
+        data: QUESTION[nextQuestion],
       })
+      setStep((prev) => prev + 10)
     }
   }
 

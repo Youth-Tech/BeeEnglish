@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
+
 import { Block } from '@components/bases'
 import { WORD_HEIGHT } from '@components/common/WordList'
 
@@ -14,13 +15,13 @@ export const Lines: React.FC<LineProps> = ({ lines }) => {
       {arr.map((_, index) => {
         return (
           <Block
+            height={1}
             key={index}
+            width={'100%'}
+            backgroundColor="greyLight"
             style={{
               top: (WORD_HEIGHT + 3) * index - 3,
             }}
-            width={'100%'}
-            backgroundColor="greyLight"
-            height={1}
           />
         )
       })}

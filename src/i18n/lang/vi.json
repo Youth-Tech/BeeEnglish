@@ -49,6 +49,8 @@
     "test": "Bài kiểm tra",
     "take_the_test_to_let_us_know_your_capabilities": "Thực hiện bài kiểm tra để chúng tôi biết năng lực của bạn",
 
-    "check": "Kiểm tra"
+    "check": "Kiểm tra",
+    "correct": "Đúng rồi nè!",
+    "incorrect": "Sai rồi cậu ơi!"
   }
 }

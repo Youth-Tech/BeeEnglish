@@ -1,20 +1,24 @@
-import React from 'react'
-import { Block, ShadowBlock, Text } from '@components/bases'
-import { Lines, Word, WordProps } from './components'
-import { View, StyleSheet } from 'react-native'
-import {
-  SharedValue,
+import Animated, {
   runOnJS,
   runOnUI,
+  SharedValue,
+  FadeOutLeft,
+  FadeInRight,
   useSharedValue,
 } from 'react-native-reanimated'
-import { shuffle, widthScreen } from '@utils/helpers'
+import React from 'react'
+import { View, StyleSheet } from 'react-native'
+
 import { normalize } from '@themes'
+import { shuffle, widthScreen } from '@utils/helpers'
+import { Lines, Word, WordProps } from './components'
+import { Block, ShadowBlock, Text } from '@components/bases'
 
 export type SharedValues<T extends Record<string, string | number | boolean>> =
   {
     [K in keyof T]: SharedValue<T[K]>
   }
+const AnimatedBlock = Animated.createAnimatedComponent(Block)
 
 export type Offset = SharedValues<{
   order: number
@@ -60,18 +64,18 @@ export const WordList = React.forwardRef<WordListRefFunc, WordListProps>(
     const [data, setData] = React.useState<WordProps[]>(
       sentenceToList(sentence),
     )
-    const [ready, setReady] = React.useState(false)
     const [lines, setLines] = React.useState(0)
+    const [ready, setReady] = React.useState(false)
 
     //pre calculate data dimension
     let offsets: Offset[] = data.map((item) => {
       return {
         value: item,
+        x: useSharedValue(0),
+        y: useSharedValue(0),
         order: useSharedValue(0),
         width: useSharedValue(0),
         height: useSharedValue(0),
-        x: useSharedValue(0),
-        y: useSharedValue(0),
         originalX: useSharedValue(0),
         originalY: useSharedValue(0),
       }
@@ -107,10 +111,10 @@ export const WordList = React.forwardRef<WordListRefFunc, WordListProps>(
                   const offset = offsets[index]
 
                   offset.order.value = -1
-                  offset.height.value = height
-                  offset.width.value = width
                   offset.originalX.value = x
                   offset.originalY.value = y
+                  offset.width.value = width
+                  offset.height.value = height
 
                   runOnUI(() => {
                     'worklet'
@@ -132,15 +136,15 @@ export const WordList = React.forwardRef<WordListRefFunc, WordListProps>(
               >
                 <ShadowBlock
                   radius={15}
-                  height={WORD_HEIGHT}
                   alignCenter
                   justifyCenter
+                  height={WORD_HEIGHT}
                 >
                   <Text
+                    fontFamily="bold"
                     style={{
                       paddingHorizontal: 15,
                     }}
-                    fontFamily="bold"
                   >
                     {word.word}
                   </Text>
@@ -153,7 +157,10 @@ export const WordList = React.forwardRef<WordListRefFunc, WordListProps>(
     }
 
     return (
-      <Block>
+      <AnimatedBlock
+        exiting={FadeOutLeft.duration(500)}
+        entering={FadeInRight.duration(500)}
+      >
         <Block>
           <Lines lines={lines} />
         </Block>
@@ -177,10 +184,11 @@ export const WordList = React.forwardRef<WordListRefFunc, WordListProps>(
             )
           })}
         </Block>
-      </Block>
+      </AnimatedBlock>
     )
   },
 )
+
 const styles = StyleSheet.create({
   wordStyle: {
     marginBottom: 10,
