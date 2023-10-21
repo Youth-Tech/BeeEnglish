@@ -3,7 +3,7 @@ import React from 'react'
 
 const Content = () => {
   return (
-    <Block paddingLeft={20} paddingRight={40} flex>
+    <Block paddingHorizontal={20} flex>
       <Block marginTop={20}>
         <Text marginTop={10} color="red" fontFamily="bold" size={'h4'}>
           Danh từ (noun)
@@ -15,15 +15,16 @@ const Content = () => {
           <Text color="blue" fontFamily="bold" size={'h4'}>
             Ví dụ:
           </Text>
-          <Text fontFamily="bold" size={'h4'}>
+          <Text fontFamily="bold" size={'h4'} flex>
             There are three chickens in the garden and they are eating.
           </Text>
         </Block>
+
         <Block marginTop={10} row>
           <Text color="blue" fontFamily="bold" size={'h4'}>
             Nghĩa:
           </Text>
-          <Text fontFamily="bold" size={'h4'}>
+          <Text fontFamily="bold" size={'h4'} flex>
             Trong vườn có ba con gà và chúng đang ăn.
           </Text>
         </Block>
@@ -38,7 +39,7 @@ const Content = () => {
         <Text color="blue" fontFamily="bold" size={'h4'}>
           Ví dụ:
         </Text>
-        <Text fontFamily="bold" size={'h4'}>
+        <Text fontFamily="bold" size={'h4'} flex>
           When it comes to heights, I'm chicken. I'm scared.
         </Text>
       </Block>
@@ -46,7 +47,7 @@ const Content = () => {
         <Text color="blue" fontFamily="bold" size={'h4'}>
           Nghĩa:
         </Text>
-        <Text fontFamily="bold" size={'h4'}>
+        <Text fontFamily="bold" size={'h4'} flex>
           Khi nhắc về độ cao, tôi rất nhát gan, tôi rất sợ.
         </Text>
       </Block>

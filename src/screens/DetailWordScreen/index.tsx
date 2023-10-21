@@ -20,20 +20,15 @@ export const DetailWordScreen = () => {
         }}
         resizeMode="contain"
       />
-      <Block flex>
-        <Block
-          row
-          alignCenter
-          space="between"
-          marginHorizontal={24}
-          paddingTop={10}
-        >
+      <Block flex marginTop={10}>
+        <Block row alignCenter space="between" marginHorizontal={24}>
           <Icon state="Back" />
           <Text color="black" size={'h3'} fontFamily="bold" center>
             {t('dictionary')}
           </Text>
           <Block width={24} />
         </Block>
+
         <Block
           margin={20}
           radius={10}
@@ -63,60 +58,74 @@ export const DetailWordScreen = () => {
           </Block>
 
           <Block marginTop={15} row space="evenly">
-            <TouchableOpacity>
-              <Block
-                width={50}
-                height={50}
-                alignCenter
-                justifyCenter
-                radius={10}
-                backgroundColor='white'
-                shadowColor="black"
-                shadow
-              >
-                <Icon state="Player" />
-              </Block>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Block
-                width={50}
-                height={50}
-                alignCenter
-                justifyCenter
-                radius={10}
-                backgroundColor='white'
-                shadowColor="black"
-                shadow
-              >
-                <Icon state="Player" />
-              </Block>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Block
-                width={50}
-                height={50}
-                alignCenter
-                justifyCenter
-                radius={10}
-                backgroundColor='white'
-                shadowColor="black"
-                shadow
-              >
-                <Icon state="Player" />
-              </Block>
-            </TouchableOpacity>
+            <Block
+              width={50}
+              height={50}
+              alignCenter
+              justifyCenter
+              radius={10}
+              backgroundColor="white"
+              shadowColor="black"
+              shadow
+            >
+              <TouchableOpacity>
+                <Image
+                  source={images.DW_Volume}
+                  resizeMode="contain"
+                  width={30}
+                  height={30}
+                />
+              </TouchableOpacity>
+            </Block>
+            <Block
+              width={50}
+              height={50}
+              alignCenter
+              justifyCenter
+              radius={10}
+              backgroundColor="white"
+              shadowColor="black"
+              shadow
+            >
+              <TouchableOpacity>
+                <Image
+                  source={images.DW_Star}
+                  resizeMode="contain"
+                  width={30}
+                  height={30}
+                />
+              </TouchableOpacity>
+            </Block>
+            <Block
+              width={50}
+              height={50}
+              alignCenter
+              justifyCenter
+              radius={10}
+              backgroundColor="white"
+              shadowColor="black"
+              shadow
+            >
+              <TouchableOpacity>
+                <Image
+                  source={images.DW_Copy}
+                  resizeMode="contain"
+                  width={30}
+                  height={30}
+                />
+              </TouchableOpacity>
+            </Block>
           </Block>
 
-          <Content/>
-
-          <TouchableOpacity>
-            <Block row alignCenter justifyCenter  marginBottom={70}>
-              <Text color="black" size={'h3'} fontFamily="bold" center margin={5}>
-                {t('dictionary')}
-              </Text>
-              <Icon state="Player"/>
-            </Block>
-          </TouchableOpacity>
+          <Content />
+          <Block row alignCenter justifyCenter marginBottom={70}>
+            <Text color="black" size={'h3'} fontFamily="bold" margin={5}>
+              {t('dictionary')}
+            </Text>
+            <TouchableOpacity>
+              <Image source={images.Arrow_Right} width={12} height={12} />
+            </TouchableOpacity>
+          </Block>
         </Block>
       </Block>
     </Container>

@@ -17,4 +17,8 @@ export const images = {
   StreakBox: require('./StreakBox.png'),
   ChestBox: require('./ChestBox.png'),
   Light: require('./Light.png'),
+  DW_Volume: require('./DW_Volum.png'),
+  DW_Star: require('./DW_Star.png'),
+  DW_Copy: require('./DW_Copy.png'),
+  Arrow_Right: require('./Arrow_right.png'),
 }

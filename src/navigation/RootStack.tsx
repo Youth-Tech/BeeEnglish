@@ -16,6 +16,7 @@ import {
   EmailRegistrationScreen,
   SplashScreen,
   DetailWordScreen,
+  SavedWordScreen,
 } from '@screens'
 import StreakScreen from '@screens/StreakScreen'
 
@@ -64,9 +65,9 @@ const RootStack = () => {
             name="DETAIL_WORD_SCREEN"
             component={DetailWordScreen}
           />
+          <Stack.Screen name="SAVED_WORD_SCREEN" component={SavedWordScreen} />
           <Stack.Screen name="STREAK_SCREEN" component={StreakScreen} />
           <Stack.Screen name="TEST_SCREEN" component={TestScreen} />
-          <Stack.Screen name="DETAIL_LESSON_SCREEN" component={DetailLessonScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
