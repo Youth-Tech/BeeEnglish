@@ -1,13 +1,22 @@
 import React from 'react'
 import { Block, Container, Text } from '@components'
 import { Icon } from '@assets'
-import { useTheme } from '@themes'
+import { makeStyles, normalize, useTheme } from '@themes'
 import { goBack } from '@navigation'
 import { useTranslation } from 'react-i18next'
+import { Pressable } from 'react-native'
 
 export const SettingScreen = () => {
   const { colors } = useTheme()
   const { t } = useTranslation()
+  const styles = useStyle()
+  const onPressPremiumUser = () => {}
+  const onPressProfile = () => {}
+  const onPressPassword = () => {}
+  const onPressNotification = () => {}
+  const onPressLogout = () => {}
+  const onPressRate = () => {}
+  const onPressHelp = () => {}
   return (
     <Container hasScroll>
       <Block flex>
@@ -33,7 +42,11 @@ export const SettingScreen = () => {
             radius={10}
             marginTop={24}
           >
-            <Block paddingVertical={18} paddingHorizontal={20}>
+            <Pressable
+              style={styles.premimumUserSection}
+              android_ripple={{ color: colors.orangeLighter }}
+              onPress={onPressPremiumUser}
+            >
               <Block row>
                 <Text color={colors.white} fontFamily="bold" size={'h2'}>
                   {t('premium_membership')}
@@ -50,12 +63,12 @@ export const SettingScreen = () => {
               >
                 {t('upgrade_for_more_features')}
               </Text>
-            </Block>
+            </Pressable>
           </Block>
           <Text fontFamily="bold" size={'h2'} marginTop={32}>
             {t('account')}
           </Text>
-          <Block row alignCenter space="between" marginTop={24}>
+          <Pressable style={styles.options} onPress={onPressProfile}>
             <Block row alignCenter>
               <Icon state="UserOutline" />
               <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
@@ -68,8 +81,8 @@ export const SettingScreen = () => {
                 console.log('press')
               }}
             ></Icon>
-          </Block>
-          <Block row alignCenter space="between" marginTop={24}>
+          </Pressable>
+          <Pressable style={styles.options} onPress={onPressPassword}>
             <Block row alignCenter>
               <Icon state="Password"></Icon>
               <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
@@ -82,8 +95,8 @@ export const SettingScreen = () => {
                 console.log('press')
               }}
             ></Icon>
-          </Block>
-          <Block row alignCenter space="between" marginTop={24}>
+          </Pressable>
+          <Pressable style={styles.options} onPress={onPressNotification}>
             <Block row alignCenter>
               <Icon state="Notification"></Icon>
               <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
@@ -96,8 +109,8 @@ export const SettingScreen = () => {
                 console.log('press')
               }}
             ></Icon>
-          </Block>
-          <Block row alignCenter space="between" marginTop={24}>
+          </Pressable>
+          <Pressable style={styles.options} onPress={onPressLogout}>
             <Block row alignCenter>
               <Icon state="Logout"></Icon>
               <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
@@ -110,11 +123,11 @@ export const SettingScreen = () => {
                 console.log('press')
               }}
             ></Icon>
-          </Block>
+          </Pressable>
           <Text fontFamily="bold" size={'h2'} marginTop={32}>
             {t('more')}
           </Text>
-          <Block row alignCenter space="between" marginTop={24}>
+          <Pressable style={styles.options} onPress={onPressRate}>
             <Block row alignCenter>
               <Icon state="StartOutLine"></Icon>
               <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
@@ -127,8 +140,8 @@ export const SettingScreen = () => {
                 console.log('press')
               }}
             ></Icon>
-          </Block>
-          <Block row alignCenter space="between" marginTop={24}>
+          </Pressable>
+          <Pressable style={styles.options} onPress={onPressHelp}>
             <Block row alignCenter>
               <Icon state="About"></Icon>
               <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
@@ -141,9 +154,22 @@ export const SettingScreen = () => {
                 console.log('press')
               }}
             ></Icon>
-          </Block>
+          </Pressable>
         </Block>
       </Block>
     </Container>
   )
 }
+
+const useStyle = makeStyles()(({}) => ({
+  premimumUserSection: {
+    paddingVertical: normalize.v(18),
+    paddingHorizontal: normalize.h(20),
+  },
+  options: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: normalize.v(24),
+  },
+}))
