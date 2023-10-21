@@ -60,7 +60,7 @@ export const Word: React.FC<WordProps> = ({
           translateY: withSpring(translate.value.y, wordAnimationConfig),
         },
       ],
-      marginTop: offset.order.value === -1 ? 0 : 6,
+      marginTop: offset.order.value !== -1 && lines! >= 2 ? 6 : 0,
     }
   })
 

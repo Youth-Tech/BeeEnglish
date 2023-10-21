@@ -77,6 +77,11 @@ export const WordList = React.forwardRef<WordListRefFunc, WordListProps>(
       }
     })
 
+    React.useEffect(() => {
+      setData(sentenceToList(sentence))
+      setReady(false)
+    }, [sentence])
+
     React.useImperativeHandle(ref, () => ({
       check(value) {
         const currentValue = offsets
