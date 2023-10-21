@@ -5,7 +5,6 @@ import Animated, {
   runOnUI,
   useAnimatedStyle,
   useDerivedValue,
-  useSharedValue,
   withSpring,
 } from 'react-native-reanimated'
 import { Offset } from '..'
@@ -15,6 +14,7 @@ import {
   MARGIN_TOP,
 } from '@components/common/WordList'
 import { wordAnimationConfig } from '@assets'
+import Placeholder from './Placeholder'
 
 export interface WordProps {
   id: string
@@ -49,11 +49,9 @@ export const Word: React.FC<WordProps> = ({
           y: offset.y.value,
         }
   })
-  const isAnimating = useSharedValue(0)
 
   const blockStyle = useAnimatedStyle(() => {
     return {
-      position: 'absolute',
       transform: [
         {
           translateX: withSpring(translate.value.x, wordAnimationConfig),
@@ -62,7 +60,7 @@ export const Word: React.FC<WordProps> = ({
           translateY: withSpring(translate.value.y, wordAnimationConfig),
         },
       ],
-      zIndex: isAnimating.value * 1000,
+      marginTop: offset.order.value === -1 ? 0 : 6,
     }
   })
 
@@ -76,15 +74,18 @@ export const Word: React.FC<WordProps> = ({
         const listInBank =
           offsets?.filter((item) => item.order.value !== -1).sort(byOrder) || []
 
-        let lineNumber = 1
+        let lineNumber = lines!
         let lineBreak = 0
 
         listInBank?.forEach((offset, index) => {
           const total = listInBank
             .slice(lineBreak, index)
-            .reduce((acc, o) => acc + o.width.value, 0)
+            .reduce(
+              (acc, o) => acc + o.width.value + 10 /**<--marginRight */,
+              0,
+            )
           if (total + offset.width.value > CONTAINER_WIDTH) {
-            lineNumber += 1
+            lineNumber -= 1
             lineBreak = index
 
             offset.x.value = 0
@@ -92,12 +93,7 @@ export const Word: React.FC<WordProps> = ({
             offset.x.value = offset.order.value != 0 ? total : 0
           }
         })
-
-        offset.y.value = -(
-          (WORD_HEIGHT + 5) * (lines! + 0.7 - lineNumber) +
-          lineNumber * -5 +
-          MARGIN_TOP * 2
-        )
+        offset.y.value = -((WORD_HEIGHT + 3) * lineNumber + WORD_HEIGHT - 3)
       } else {
         offset.order.value = -1
 
@@ -107,15 +103,18 @@ export const Word: React.FC<WordProps> = ({
 
         listInBank.map((offset, index) => (offset.order.value = index))
 
-        let lineNumber = 1
+        let lineNumber = lines!
         let lineBreak = 0
 
         listInBank?.forEach((offset, index) => {
           const total = listInBank
             .slice(lineBreak, index)
-            .reduce((acc, o) => acc + o.width.value, 0)
+            .reduce(
+              (acc, o) => acc + o.width.value + 10 /**<--marginRight */,
+              0,
+            )
           if (total + offset.width.value > CONTAINER_WIDTH) {
-            lineNumber += 1
+            lineNumber -= 1
             lineBreak = index
 
             offset.x.value = 0
@@ -123,25 +122,36 @@ export const Word: React.FC<WordProps> = ({
             offset.x.value = offset.order.value != 0 ? total : 0
           }
 
-          offset.y.value = -(
-            (WORD_HEIGHT + 5) * (lines! + 0.7 - lineNumber) +
-            lineNumber * -5 +
-            MARGIN_TOP * 2
-          )
+          offset.y.value = -((WORD_HEIGHT + 3) * lineNumber + WORD_HEIGHT - 3)
         })
       }
     })()
   }
 
   return (
-    <Pressable onPress={handleWordTranslation}>
-      <BlockAnimated style={blockStyle}>
-        <ShadowBlock radius={15} alignCenter justifyCenter shadowHeight={3}>
-          <Text paddingHorizontal={15} color="purpleDark" fontFamily="bold">
-            {word}
-          </Text>
-        </ShadowBlock>
-      </BlockAnimated>
-    </Pressable>
+    <>
+      <Placeholder {...offset} />
+      <Pressable onPress={handleWordTranslation}>
+        <BlockAnimated style={[blockStyle]} absolute>
+          <ShadowBlock
+            radius={15}
+            height={WORD_HEIGHT - 10}
+            alignCenter
+            justifyCenter
+            shadowHeight={3}
+          >
+            <Text
+              color="purpleDark"
+              fontFamily="bold"
+              style={{
+                paddingHorizontal: 15,
+              }}
+            >
+              {word}
+            </Text>
+          </ShadowBlock>
+        </BlockAnimated>
+      </Pressable>
+    </>
   )
 }

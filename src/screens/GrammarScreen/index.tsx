@@ -168,7 +168,10 @@ export const GrammarScreen: React.FC = () => {
         </Block>
 
         <Block flex marginTop={-MARGIN_TOP * 2.5} justifyCenter>
-          <WordList ref={wordListRef} sentence={currentQuestion.data.answer} />
+          <WordList
+            ref={wordListRef}
+            sentence={'Xin chao cac cau toi la tran'}
+          />
         </Block>
 
         <ShadowButton

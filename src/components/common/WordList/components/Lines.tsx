@@ -8,14 +8,15 @@ export interface LineProps {
 }
 
 export const Lines: React.FC<LineProps> = ({ lines }) => {
+  const arr = new Array(lines).fill(0)
   return (
     <Block style={[StyleSheet.absoluteFill, { top: WORD_HEIGHT }]}>
-      {new Array(lines).fill(0).map((_, index) => {
+      {arr.map((_, index) => {
         return (
           <Block
             key={index}
             style={{
-              top: (WORD_HEIGHT + 10) * index,
+              top: (WORD_HEIGHT + 3) * index - 3,
             }}
             width={'100%'}
             backgroundColor="greyLight"

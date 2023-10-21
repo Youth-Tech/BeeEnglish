@@ -1,15 +1,15 @@
 import React from 'react'
 import { Block, ShadowBlock, Text } from '@components/bases'
 import { Lines, Word, WordProps } from './components'
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import {
   SharedValue,
   runOnJS,
   runOnUI,
   useSharedValue,
 } from 'react-native-reanimated'
-import { normalize } from '@themes'
 import { shuffle, widthScreen } from '@utils/helpers'
+import { normalize } from '@themes'
 
 export type SharedValues<T extends Record<string, string | number | boolean>> =
   {
@@ -28,7 +28,7 @@ export type Offset = SharedValues<{
   value: WordProps
 }
 
-export const WORD_HEIGHT = normalize.v(50)
+export const WORD_HEIGHT = 50
 export const MARGIN_TOP = 40
 export const CONTAINER_WIDTH = widthScreen - normalize.h(10) * 2
 
@@ -113,28 +113,30 @@ export const WordList = React.forwardRef<WordListRefFunc, WordListProps>(
                       offsets.filter((o) => o.order.value !== -1).length === 0
                     ) {
                       const amountOfWidth = offsets.reduce((acc, o) => {
-                        return acc + o.width.value
+                        return acc + o.width.value + 10
                       }, 0)
 
                       runOnJS(setLines)(
                         Math.ceil(amountOfWidth / CONTAINER_WIDTH),
                       )
-                      console.log('ready')
-
                       runOnJS(setReady)(true)
                     }
                   })()
                 }}
+                style={styles.wordStyle}
               >
                 <ShadowBlock
                   radius={15}
+                  height={WORD_HEIGHT}
                   alignCenter
                   justifyCenter
-                  marginRight={10}
-                  marginBottom={20}
-                  {...word}
                 >
-                  <Text paddingHorizontal={15} fontFamily="bold">
+                  <Text
+                    style={{
+                      paddingHorizontal: 15,
+                    }}
+                    fontFamily="bold"
+                  >
                     {word.word}
                   </Text>
                 </ShadowBlock>
@@ -150,7 +152,14 @@ export const WordList = React.forwardRef<WordListRefFunc, WordListProps>(
         <Block>
           <Lines lines={lines} />
         </Block>
-        <Block row wrap flex marginTop={WORD_HEIGHT * (lines + 0.7)}>
+        <Block
+          row
+          wrap
+          flex
+          style={{
+            marginTop: WORD_HEIGHT * (lines + 1),
+          }}
+        >
           {data.map((item, index) => {
             return (
               <Word
@@ -162,32 +171,14 @@ export const WordList = React.forwardRef<WordListRefFunc, WordListProps>(
               />
             )
           })}
-
-          {/* render placeholder */}
-          {data.map((word, index) => {
-            return (
-              <ShadowBlock
-                key={index}
-                zIndex={-1}
-                radius={15}
-                marginRight={10}
-                marginBottom={20}
-                backgroundColor="greyLighter"
-                shadowColor="#E5E5E5"
-                shadowHeight={3}
-              >
-                <Text
-                  paddingHorizontal={15}
-                  fontFamily="bold"
-                  color="transparent"
-                >
-                  {word.word}
-                </Text>
-              </ShadowBlock>
-            )
-          })}
         </Block>
       </Block>
     )
   },
 )
+const styles = StyleSheet.create({
+  wordStyle: {
+    marginBottom: 10,
+    marginRight: 10,
+  },
+})
