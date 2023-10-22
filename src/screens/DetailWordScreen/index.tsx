@@ -4,6 +4,10 @@ import { Block, Container, Image, Text } from '@components'
 import { useTranslation } from 'react-i18next'
 import { Icon, images } from '@assets'
 import Content from './components/Content'
+import VolumeIcon from '@assets/icons/Volume'
+import StarIcon from '@assets/icons/Star'
+import CopyIcon from '@assets/icons/Copy'
+import RightArrowIcon from '@assets/icons/RightArrow'
 
 export const DetailWordScreen = () => {
   const { t } = useTranslation()
@@ -31,10 +35,13 @@ export const DetailWordScreen = () => {
 
         <Block
           margin={20}
-          radius={10}
+          radius={15}
           backgroundColor="white"
-          shadowColor="black"
           shadow
+          style={{
+            shadowColor:"#D6D6D6",
+            elevation: 15,
+          }}
           height={height * 0.72 - 38}
         >
           <Block column alignCenter justifyCenter>
@@ -69,12 +76,7 @@ export const DetailWordScreen = () => {
               shadow
             >
               <TouchableOpacity>
-                <Image
-                  source={images.DW_Volume}
-                  resizeMode="contain"
-                  width={30}
-                  height={30}
-                />
+                <VolumeIcon />
               </TouchableOpacity>
             </Block>
             <Block
@@ -88,12 +90,7 @@ export const DetailWordScreen = () => {
               shadow
             >
               <TouchableOpacity>
-                <Image
-                  source={images.DW_Star}
-                  resizeMode="contain"
-                  width={30}
-                  height={30}
-                />
+                <StarIcon />
               </TouchableOpacity>
             </Block>
             <Block
@@ -107,12 +104,7 @@ export const DetailWordScreen = () => {
               shadow
             >
               <TouchableOpacity>
-                <Image
-                  source={images.DW_Copy}
-                  resizeMode="contain"
-                  width={30}
-                  height={30}
-                />
+                <CopyIcon />
               </TouchableOpacity>
             </Block>
           </Block>
@@ -123,7 +115,7 @@ export const DetailWordScreen = () => {
               {t('video')}
             </Text>
             <TouchableOpacity>
-              <Image source={images.Arrow_Right} width={12} height={12} />
+              <RightArrowIcon />
             </TouchableOpacity>
           </Block>
         </Block>
