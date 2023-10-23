@@ -18,6 +18,7 @@ import {
   SplashScreen,
   SettingScreen,
   DetailLessonScreen,
+  LessonMap,
 } from '@screens'
 import StreakScreen from '@screens/StreakScreen'
 
@@ -34,7 +35,7 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="LOGIN_SCREEN"
+        initialRouteName="LESSON_MAP_SCREEN"
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -66,7 +67,11 @@ const RootStack = () => {
           <Stack.Screen name="STREAK_SCREEN" component={StreakScreen} />
           <Stack.Screen name="TEST_SCREEN" component={TestScreen} />
           <Stack.Screen name="SETTING_SCREEN" component={SettingScreen} />
-          <Stack.Screen name="DETAIL_LESSON_SCREEN" component={DetailLessonScreen} />
+          <Stack.Screen
+            name="DETAIL_LESSON_SCREEN"
+            component={DetailLessonScreen}
+          />
+          <Stack.Screen name="LESSON_MAP_SCREEN" component={LessonMap} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

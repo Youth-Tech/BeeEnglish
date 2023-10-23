@@ -173,7 +173,7 @@ export interface CommonTextProps extends DefaultStyleProps, RNTextProps {
    * ```
    *
    */
-  fontFamily?: 'bold' | 'semiBold' | 'regular' | 'light'
+  fontFamily?: 'bold' | 'semiBold' | 'regular' | 'light' | 'cutie'
 
   /**
    *

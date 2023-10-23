@@ -1,5 +1,14 @@
 import * as React from 'react'
-import Svg, { SvgProps, Path, ClipPath, Defs, G, Rect } from 'react-native-svg'
+import Svg, {
+  SvgProps,
+  Path,
+  ClipPath,
+  Defs,
+  G,
+  Rect,
+  LinearGradient,
+  Stop,
+} from 'react-native-svg'
 import { colors, ColorsMode } from '@themes'
 
 export interface Props extends SvgProps {
@@ -1182,6 +1191,67 @@ const UserOutline = ({
     </Defs>
   </Svg>
 )
+
+const QuestionIcon = (props: Props) => (
+  <Svg width={20} height={20} fill="none" {...props}>
+    <Path
+      fill="url(#a)"
+      fillRule="evenodd"
+      d="M8.148 2.5h.925c2.622 0 4.82 1.838 5.404 4.31.102.432.153.873.153 1.315 0 3.107-2.488 5.625-5.556 5.625H3.518a1.863 1.863 0 0 1-1.851-1.875V9.062c0-3.624 2.901-6.562 6.481-6.562Zm-.856 4.167a1.042 1.042 0 1 1 1.041 1.041.625.625 0 0 0 0 1.25 2.292 2.292 0 1 0-2.291-2.291.625.625 0 1 0 1.25 0Zm1.875 4.166a.833.833 0 1 1-1.667 0 .833.833 0 0 1 1.667 0Zm1.759 6.667a5.533 5.533 0 0 1-4.62-2.5h2.768c3.774 0 6.806-3.092 6.806-6.875 0-.157-.006-.313-.016-.467a6.58 6.58 0 0 1 2.47 5.154v2.813c0 1.036-.83 1.875-1.852 1.875h-5.556Z"
+      clipRule="evenodd"
+    />
+    <Defs>
+      <LinearGradient
+        id="a"
+        x1={10}
+        x2={10}
+        y1={2.5}
+        y2={17.5}
+        gradientUnits="userSpaceOnUse"
+      >
+        <Stop stopColor="#FD6700" />
+        <Stop offset={1} stopColor="#FFCE00" />
+      </LinearGradient>
+    </Defs>
+  </Svg>
+)
+
+const LighterIcon = (props: Props) => (
+  <Svg width={20} height={20} fill="none" {...props}>
+    <G fill="#F4B80A" stroke="#F4B80A" strokeWidth={0.4} clipPath="url(#a)">
+      <Path d="M13.855 5.695a5.385 5.385 0 0 0-3.784-1.61 5.383 5.383 0 0 0-3.86 1.553 5.377 5.377 0 0 0-1.63 3.824A5.433 5.433 0 0 0 7.297 14.2a.958.958 0 0 1 .472.831v2.122c0 1.23 1 2.232 2.231 2.232 1.23 0 2.231-1.001 2.231-2.232v-2.129c0-.34.184-.657.48-.829a5.439 5.439 0 0 0 2.708-4.692 5.386 5.386 0 0 0-1.564-3.808Zm-2.261 11.458c0 .879-.715 1.594-1.594 1.594a1.596 1.596 0 0 1-1.594-1.594v-.319h3.188v.32Zm.798-3.51a1.601 1.601 0 0 0-.798 1.381v1.173H8.406V15.03c0-.572-.303-1.102-.79-1.383a4.794 4.794 0 0 1-2.397-4.181 4.744 4.744 0 0 1 1.438-3.374 4.746 4.746 0 0 1 3.405-1.37c2.602.033 4.72 2.177 4.72 4.78a4.8 4.8 0 0 1-2.39 4.14Z" />
+      <Path d="M12.313 6.474a.319.319 0 0 0-.425.475 3.511 3.511 0 0 1 1.169 2.613c0 .996-.426 1.948-1.169 2.613a.32.32 0 0 0 .425.475 4.15 4.15 0 0 0 1.381-3.088 4.15 4.15 0 0 0-1.38-3.088ZM10 3.396a.319.319 0 0 0 .319-.319V.935a.319.319 0 0 0-.638 0v2.142a.319.319 0 0 0 .319.319Zm4.544 1.882a.317.317 0 0 0 .225-.093l1.515-1.515a.319.319 0 0 0-.45-.45l-1.516 1.514a.32.32 0 0 0 .226.544Zm4.024 3.906h-2.142a.319.319 0 1 0 0 .638h2.142a.319.319 0 0 0 0-.638Zm-14.675.319a.319.319 0 0 0-.319-.319H1.432a.319.319 0 1 0 0 .638h2.142a.319.319 0 0 0 .319-.319ZM5.23 5.184a.318.318 0 0 0 .544-.225.319.319 0 0 0-.093-.225L4.167 3.219a.319.319 0 0 0-.45.45L5.23 5.185Zm9.538 8.637a.319.319 0 0 0-.45.451l1.514 1.515a.318.318 0 0 0 .52-.104.319.319 0 0 0-.07-.347l-1.514-1.515Zm-9.538 0-1.515 1.515a.319.319 0 0 0 .45.45l1.516-1.514a.319.319 0 1 0-.451-.45Z" />
+    </G>
+    <Defs>
+      <ClipPath id="a">
+        <Path fill="#fff" d="M0 0h20v20H0z" />
+      </ClipPath>
+    </Defs>
+  </Svg>
+)
+
+const CheckSmallIcon = (props: Props) => (
+  <Svg
+    width={props.size || props.width || 17}
+    height={props.size || props.height || 17}
+    fill="none"
+    {...props}
+  >
+    <Path
+      fill="#FFC107"
+      stroke="#fff"
+      strokeWidth={2}
+      d="M8.917 15.983a7.052 7.052 0 1 0 0-14.103 7.052 7.052 0 0 0 0 14.103Z"
+    />
+    <Path
+      fill="#fff"
+      fillRule="evenodd"
+      d="M12.136 6.765c.213.204.22.542.016.755l-3.758 3.918a.534.534 0 0 1-.78-.01L5.671 9.29a.534.534 0 0 1 .791-.718l1.556 1.713 3.362-3.504a.534.534 0 0 1 .755-.016Z"
+      clipRule="evenodd"
+    />
+  </Svg>
+)
+
 const Icons = {
   LeftArrow: {
     state: 'LeftArrow',
@@ -1383,6 +1453,18 @@ const Icons = {
     state: 'UserOutline',
     icon: UserOutline,
   },
+  Question: {
+    state: 'Question',
+    icon: QuestionIcon,
+  },
+  Lighter: {
+    state: 'Lighter',
+    icon: LighterIcon,
+  },
+  CheckSmall: {
+    state: 'CheckSmall',
+    icon: CheckSmallIcon,
+  },
 }
 export type TIcon = keyof typeof Icons
 interface PropsIcon extends Props {
@@ -1443,4 +1525,7 @@ export {
   Money,
   Boxing,
   UserOutline,
+  QuestionIcon,
+  LighterIcon,
+  CheckSmallIcon,
 }
