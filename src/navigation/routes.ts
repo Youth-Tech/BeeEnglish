@@ -14,6 +14,8 @@ export const AUTH_ROUTE = {
   RESET_PASSWORD_SCREEN: 'RESET_PASSWORD_SCREEN',
   LOGIN_SCREEN: 'LOGIN_SCREEN',
   REGISTER_SCREEN: 'REGISTER_SCREEN',
+  SAVED_WORD_SCREEN: 'SAVED_WORD_SCREEN',
+  DETAIL_WORD_SCREEN: 'DETAIL_WORD_SCREEN',
   SETTING_SCREEN: 'SETTING_SCREEN',
   DICTIONARY_SCREEN: 'DICTIONARY_SCREEN',
   DETAIL_LESSON_SCREEN: 'DETAIL_LESSON_SCREEN',
@@ -49,16 +51,19 @@ export type RootStackParamList = {
   [PUBLIC_ROUTE.EXAM_TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.ABOUT_THE_TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.TEST_SCREEN]: undefined
+  [AUTH_ROUTE.SAVED_WORD_SCREEN]: undefined
+  [AUTH_ROUTE.DETAIL_WORD_SCREEN]: undefined
+  [AUTH_ROUTE.DETAIL_LESSON_SCREEN]: undefined
 }
 
 export type RouteKeys = keyof typeof AUTH_ROUTE | keyof typeof PUBLIC_ROUTE
 
 export type StackPropsVerificationCodeScreen = NativeStackScreenProps<
   RootStackParamList,
-  'SEND_PASSWORD_SCREEN'
+  'SAVED_WORD_SCREEN'
 >
 
 export type StackPropsPhoneRegistrationScreen = NativeStackScreenProps<
   RootStackParamList,
-  'RESET_PASSWORD_SCREEN'
+  'DETAIL_WORD_SCREEN'
 >

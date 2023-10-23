@@ -59,11 +59,8 @@
     "rate_review": "Đánh giá & Ôn tập",
     "help": "Trợ giúp",
 
-    "english_vocabulary": "Từ vựng tiếng anh",
     "history": "Lịch sử",
-    "library_vocabulary": "Kho từ vựng",
     "vocabulary_learned": "Từ vựng đã học",
-    "saved_vocabulary": "Từ vựng đã lưu",
     "lesson": "Bài học",
     "vocabulary": "Từ vựng",
     "multiple_choice": "Trắc nghiệm",
@@ -72,6 +69,10 @@
     "attendance": "Điểm danh",
     "attend": "Điểm danh",
     "welcome_back": "Chào mừng bạn trở lại!",
+    "library_vocabulary": "Kho từ vựng",
+    "english_vocabulary": "Từ vựng tiếng Anh",
+    "saved_vocabulary": "Từ vựng đã lưu",
+    "video": "Video thực tế",
     "comeback_tomorrow": "Hãy quay lại vào ngày mai!"
   }
 }

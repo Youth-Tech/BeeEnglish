@@ -71,6 +71,10 @@
     "attendance": "Attendance",
     "attend": "Attend",
     "welcome_back": "Welcome back!",
-    "comeback_tomorrow": "Please come back tomorrow!"
+    "comeback_tomorrow": "Please come back tomorrow!",
+    "library_vocabulary":"Library Vocabulary",
+    "english_vocabulary":"English Vocabulary",
+    "saved_vocabulary":"Saved vocabulary",
+    "video": "Video"
   }
 }
