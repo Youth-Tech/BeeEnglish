@@ -1,6 +1,7 @@
-import * as React from "react";
-import Svg, { G, Path, Defs, ClipPath, Rect, SvgProps } from "react-native-svg";
-const StarIcon = (props: SvgProps) => (
+import * as React from 'react'
+import Svg, { G, Path, Defs, ClipPath, Rect, SvgProps } from 'react-native-svg'
+
+export const StarIcon = (props: SvgProps) => (
   <Svg width={24} height={22} viewBox="0 0 24 22" fill="none" {...props}>
     <G clipPath="url(#clip0_899_4258)">
       <Path
@@ -14,5 +15,4 @@ const StarIcon = (props: SvgProps) => (
       </ClipPath>
     </Defs>
   </Svg>
-);
-export default StarIcon;
+)

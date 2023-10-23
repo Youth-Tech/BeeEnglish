@@ -1,10 +1,10 @@
-export interface dataSavedWordProps {
+export interface DataSavedWordProps {
   id: number
   word: string
   wordType: string
   wordPronounce: string
 }
-export interface dataLearnProps {
+export interface DataLearnProps {
   id: number
   word: string
   wordType: string

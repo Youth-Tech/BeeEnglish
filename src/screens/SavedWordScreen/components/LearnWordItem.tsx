@@ -1,21 +1,22 @@
 import React from 'react'
-import { Block, Text } from '@components'
+import { Pressable } from 'react-native'
+
 import { useTheme } from '@themes'
 import { SoundProgress } from '@assets'
-import { Pressable } from 'react-native'
-import { dataLearnProps } from '../const'
+import { DataLearnProps } from '../const'
+import { Block, Text } from '@components'
 
 export interface Props {
   index?: number
-  data: dataLearnProps
+  data: DataLearnProps
   onPressAudio?: () => void
   onPress?: () => void
 }
 
 export const LearnWordItem: React.FC<Props> = ({
   data,
-  onPressAudio,
   onPress,
+  onPressAudio,
 }) => {
   const { colors } = useTheme()
 

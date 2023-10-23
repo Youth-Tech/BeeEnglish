@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Svg, { G, Path, Defs, ClipPath, Rect, SvgProps } from 'react-native-svg'
-const VolumeIcon = (props: SvgProps) => (
+export const VolumeIcon = (props: SvgProps) => (
   <Svg width={24} height={24} fill="none" {...props}>
     <G clipPath="url(#clip0_899_4239)">
       <Path
@@ -15,4 +15,3 @@ const VolumeIcon = (props: SvgProps) => (
     </Defs>
   </Svg>
 )
-export default VolumeIcon

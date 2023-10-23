@@ -1,6 +1,6 @@
-import * as React from "react";
-import Svg, { Path, SvgProps } from "react-native-svg";
-const CopyIcon = (props: SvgProps) => (
+import * as React from 'react'
+import Svg, { Path, SvgProps } from 'react-native-svg'
+export const CopyIcon = (props: SvgProps) => (
   <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" {...props}>
     <Path
       d="M21.375 22.5H6.375C6.07663 22.5 5.79048 22.3815 5.5795 22.1705C5.36853 21.9595 5.25 21.6734 5.25 21.375V6C5.25 5.80109 5.32902 5.61032 5.46967 5.46967C5.61032 5.32902 5.80109 5.25 6 5.25H21.375C21.6734 5.25 21.9595 5.36853 22.1705 5.5795C22.3815 5.79048 22.5 6.07663 22.5 6.375V21.375C22.5 21.6734 22.3815 21.9595 22.1705 22.1705C21.9595 22.3815 21.6734 22.5 21.375 22.5Z"
@@ -11,5 +11,4 @@ const CopyIcon = (props: SvgProps) => (
       fill="#92929D"
     />
   </Svg>
-);
-export default CopyIcon;
+)

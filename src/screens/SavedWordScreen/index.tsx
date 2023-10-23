@@ -1,100 +1,108 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { FlatList, ListRenderItemInfo, StyleSheet } from 'react-native'
+
 import {
+  Text,
+  Block,
+  TextInput,
   Container,
   DismissKeyBoardBlock,
-  Block,
-  Text,
-  TextInput,
 } from '@components'
-import { goBack } from '@navigation'
-import { useTranslation } from 'react-i18next'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
-import { FlatList, ListRenderItemInfo, View } from 'react-native'
-import { dataSavedWordProps, dataLearnProps } from './const'
+import { goBack } from '@navigation'
 import { LearnWordItem } from './components/LearnWordItem'
 import { SavedWordItem } from './components/SavedWordItem'
+import { DataSavedWordProps, DataLearnProps } from './const'
+
+const learnData: DataLearnProps[] = [
+  {
+    id: 1,
+    word: 'Chicken',
+    wordType: 'ˈtʃɪk.ɪn',
+    translation: 'Con gà',
+  },
+  {
+    id: 2,
+    word: 'Chicken',
+    wordType: 'ˈtʃɪk.ɪn',
+    translation: 'Con gà',
+  },
+  {
+    id: 3,
+    word: 'Chicken',
+    wordType: 'ˈtʃɪk.ɪn',
+    translation: 'Con gà',
+  },
+  {
+    id: 4,
+    word: 'Chicken',
+    wordType: 'ˈtʃɪk.ɪn',
+    translation: 'Con gà',
+  },
+]
+
+const savedWordData: DataSavedWordProps[] = [
+  {
+    id: 1,
+    word: 'Chicken',
+    wordType: 'noun',
+    wordPronounce: 'ˈtʃɪk.ɪn',
+  },
+  {
+    id: 2,
+    word: 'Chicken',
+    wordType: 'noun',
+    wordPronounce: 'ˈtʃɪk.ɪn',
+  },
+  {
+    id: 3,
+    word: 'Chicken',
+    wordType: 'noun',
+    wordPronounce: 'ˈtʃɪk.ɪn',
+  },
+  {
+    id: 4,
+    word: 'Chicken',
+    wordType: 'noun',
+    wordPronounce: 'ˈtʃɪk.ɪn',
+  },
+  {
+    id: 5,
+    word: 'Chicken',
+    wordType: 'noun',
+    wordPronounce: 'ˈtʃɪk.ɪn',
+  },
+]
 
 export const SavedWordScreen = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
-  const savedWordData: dataSavedWordProps[] = [
-    {
-      id: 1,
-      word: 'Chicken',
-      wordType: 'noun',
-      wordPronounce: 'ˈtʃɪk.ɪn',
-    },
-    {
-      id: 2,
-      word: 'Chicken',
-      wordType: 'noun',
-      wordPronounce: 'ˈtʃɪk.ɪn',
-    },
-    {
-      id: 3,
-      word: 'Chicken',
-      wordType: 'noun',
-      wordPronounce: 'ˈtʃɪk.ɪn',
-    },
-    {
-      id: 4,
-      word: 'Chicken',
-      wordType: 'noun',
-      wordPronounce: 'ˈtʃɪk.ɪn',
-    },
-    {
-      id: 5,
-      word: 'Chicken',
-      wordType: 'noun',
-      wordPronounce: 'ˈtʃɪk.ɪn',
-    },
-  ]
+  const [textSearch, setTextSearch] = React.useState('')
+
+  const onDeleteWordPress = (word: DataSavedWordProps) => {
+    console.log('onDeleteWordPress', word.id)
+  }
+
   const renderSavedWordItem = ({
     index,
     item,
-  }: ListRenderItemInfo<dataSavedWordProps>) => {
+  }: ListRenderItemInfo<DataSavedWordProps>) => {
     return (
-      <View key={`item-${index}`}>
-        <SavedWordItem data={item} />
-      </View>
+      <SavedWordItem
+        data={item}
+        key={index}
+        onDeletePress={() => onDeleteWordPress(item)}
+      />
     )
   }
-  const learnData: dataLearnProps[] = [
-    {
-      id: 1,
-      word: 'Chicken',
-      wordType: 'ˈtʃɪk.ɪn',
-      translation: 'Con gà',
-    },
-    {
-      id: 2,
-      word: 'Chicken',
-      wordType: 'ˈtʃɪk.ɪn',
-      translation: 'Con gà',
-    },
-    {
-      id: 3,
-      word: 'Chicken',
-      wordType: 'ˈtʃɪk.ɪn',
-      translation: 'Con gà',
-    },
-    {
-      id: 4,
-      word: 'Chicken',
-      wordType: 'ˈtʃɪk.ɪn',
-      translation: 'Con gà',
-    },
-  ]
+
   const renderLearnItem = ({
     index,
     item,
-  }: ListRenderItemInfo<dataLearnProps>) => {
-    return (
-      <View key={`item-${index}`}>
-        <LearnWordItem data={item} />
-      </View>
-    )
+  }: ListRenderItemInfo<DataLearnProps>) => {
+    return <LearnWordItem data={item} key={index} />
   }
   return (
     <Container statusColor={colors.orangePrimary}>
@@ -108,7 +116,7 @@ export const SavedWordScreen = () => {
             borderBottomRightRadius={50}
             backgroundColor={colors.orangePrimary}
             absolute
-          ></Block>
+          />
           <Block
             paddingHorizontal={20}
             marginTop={10}
@@ -127,21 +135,25 @@ export const SavedWordScreen = () => {
                 {t('saved_vocabulary')}
               </Text>
             </Block>
-            <Block marginTop={22} height={35} radius={30} shadow shadowColor='white'>
+            <Block
+              marginTop={22}
+              height={35}
+              radius={30}
+              shadow
+              shadowColor="white"
+            >
               <TextInput
-                containerStyle={{ width: '100%' }}
-                placeholderTextColor={colors.greyPrimary}
-                inputContainerStyle={{
-                  width: '100%',
-                  borderRadius: 30
-                }}
+                inputContainerStyle={styles.inputStyle}
                 placeholder={t('english_vocabulary')}
+                placeholderTextColor={colors.greyPrimary}
+                value={textSearch}
+                onChangeText={setTextSearch}
                 rightIcon={
                   <Icon
                     state="Microphone"
                     stroke={colors.greyPrimary}
                     onPress={() => {}}
-                  ></Icon>
+                  />
                 }
               />
             </Block>
@@ -157,17 +169,12 @@ export const SavedWordScreen = () => {
               </Block>
             </Block>
             <Block row alignCenter marginTop={17}>
-              <Icon state="Dictionary"></Icon>
-              <Text
-                fontFamily="bold"
-                marginLeft={5}
-                size={'h3'}
-                lineHeight={20}
-              >
+              <Icon state="Dictionary" />
+              <Text fontFamily="bold" marginLeft={5} size={'h3'}>
                 {t('library_vocabulary')}
               </Text>
             </Block>
-            <Block marginVertical={15} row>
+            <Block marginVertical={15}>
               <FlatList
                 horizontal={true}
                 data={learnData}
@@ -182,3 +189,11 @@ export const SavedWordScreen = () => {
     </Container>
   )
 }
+
+const styles = StyleSheet.create({
+  inputStyle: {
+    width: '100%',
+    borderRadius: 30,
+    borderColor: 'transparent',
+  },
+})

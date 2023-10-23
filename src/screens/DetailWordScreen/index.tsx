@@ -1,32 +1,52 @@
 import React from 'react'
-import { TouchableOpacity, Dimensions } from 'react-native'
-import { Block, Container, Image, Text } from '@components'
 import { useTranslation } from 'react-i18next'
-import { Icon, images } from '@assets'
+import { Pressable, TouchableOpacity } from 'react-native'
+
+import {
+  Icon,
+  images,
+  StarIcon,
+  CopyIcon,
+  VolumeIcon,
+  RightArrowIcon,
+} from '@assets'
+import { useTheme } from '@themes'
+import { goBack } from '@navigation'
 import Content from './components/Content'
-import VolumeIcon from '@assets/icons/Volume'
-import StarIcon from '@assets/icons/Star'
-import CopyIcon from '@assets/icons/Copy'
-import RightArrowIcon from '@assets/icons/RightArrow'
+import { heightScreen } from '@utils/helpers'
+import { Block, Container, Image, Text } from '@components'
 
 export const DetailWordScreen = () => {
   const { t } = useTranslation()
-  const height = Dimensions.get('screen').height
+  const { colors } = useTheme()
+
+  const onCopyPress = () => {
+    console.log('onCopyPress')
+  }
+
+  const onBookmarkPress = () => {
+    console.log('onBookmarkPress')
+  }
+
+  const onPronunciationPress = () => {
+    console.log('onPronunciationPress')
+  }
+
   return (
     <Container>
       <Image
-        source={images.BG_Detail}
         width={'100%'}
-        height={height}
+        resizeMode="contain"
+        height={heightScreen}
+        source={images.BG_Detail}
         style={{
           position: 'absolute',
           zIndex: -1,
         }}
-        resizeMode="contain"
       />
       <Block flex marginTop={10}>
         <Block row alignCenter space="between" marginHorizontal={24}>
-          <Icon state="Back" />
+          <Icon state="Back" onPress={goBack} />
           <Text color="black" size={'h3'} fontFamily="bold" center>
             {t('dictionary')}
           </Text>
@@ -34,84 +54,81 @@ export const DetailWordScreen = () => {
         </Block>
 
         <Block
+          flex
+          shadow
           margin={20}
           radius={15}
+          elevation={3}
+          marginBottom={40}
           backgroundColor="white"
-          shadow
-          style={{
-            shadowColor:"#D6D6D6",
-            elevation: 15,
-          }}
-          height={height * 0.72 - 38}
         >
           <Block column alignCenter justifyCenter>
             <Text
               size={'h2'}
               color="black"
-              fontFamily="bold"
               marginTop={15}
               lineHeight={18}
+              fontFamily="bold"
             >
               Chicken
             </Text>
             <Text
               size={'h3'}
-              fontFamily="regular"
               marginTop={15}
               lineHeight={18}
+              fontFamily="regular"
             >
               /'tʃIk.In/
             </Text>
           </Block>
 
           <Block marginTop={15} row space="evenly">
-            <Block
-              width={50}
-              height={50}
-              alignCenter
-              justifyCenter
-              radius={10}
-              backgroundColor="white"
-              shadowColor="black"
-              shadow
-            >
-              <TouchableOpacity>
+            <Pressable onPress={onPronunciationPress}>
+              <Block
+                shadow
+                width={50}
+                height={50}
+                alignCenter
+                radius={10}
+                justifyCenter
+                backgroundColor="white"
+              >
                 <VolumeIcon />
-              </TouchableOpacity>
-            </Block>
-            <Block
-              width={50}
-              height={50}
-              alignCenter
-              justifyCenter
-              radius={10}
-              backgroundColor="white"
-              shadowColor="black"
-              shadow
-            >
-              <TouchableOpacity>
+              </Block>
+            </Pressable>
+
+            <Pressable onPress={onBookmarkPress}>
+              <Block
+                shadow
+                width={50}
+                height={50}
+                alignCenter
+                radius={10}
+                justifyCenter
+                backgroundColor="white"
+              >
                 <StarIcon />
-              </TouchableOpacity>
-            </Block>
-            <Block
-              width={50}
-              height={50}
-              alignCenter
-              justifyCenter
-              radius={10}
-              backgroundColor="white"
-              shadowColor="black"
-              shadow
-            >
-              <TouchableOpacity>
+              </Block>
+            </Pressable>
+            <Pressable onPress={onCopyPress}>
+              <Block
+                shadow
+                width={50}
+                height={50}
+                alignCenter
+                radius={10}
+                justifyCenter
+                backgroundColor="white"
+              >
                 <CopyIcon />
-              </TouchableOpacity>
-            </Block>
+              </Block>
+            </Pressable>
           </Block>
 
           <Content />
+
           <Block row alignCenter justifyCenter marginBottom={70}>
-            <Text color="black" size={'h3'} fontFamily="bold" margin={5}>
+            <Text color="black" size={12} fontFamily="bold" margin={5}>
               {t('video')}
             </Text>
             <TouchableOpacity>

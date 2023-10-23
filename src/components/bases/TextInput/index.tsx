@@ -48,6 +48,7 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
     numberOfLines = 1,
     maxLength,
     value = '',
+    defaultValue,
     ...rest
   } = props
 
@@ -104,7 +105,6 @@ export const TextInput = forwardRef<any, InputProps>((props, ref) => {
       height: handleFontSize(size) * 1.6 * numberOfLines,
     },
     style,
-
   ])
 
   const [secureEye, setSecureEye] = useState(true)

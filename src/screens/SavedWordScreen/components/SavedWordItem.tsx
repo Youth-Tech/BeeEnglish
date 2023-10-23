@@ -1,41 +1,42 @@
 import React from 'react'
-import { useTheme } from '@themes'
+import { Pressable, StyleSheet } from 'react-native'
+
+import { normalize, useTheme } from '@themes'
+import { DataSavedWordProps } from '../const'
 import { Block, ShadowButton, Text } from '@components'
-import { Pressable } from 'react-native'
-import { dataSavedWordProps } from '../const'
 
 export interface SavedWordItemProps {
-  data: dataSavedWordProps
-  onPressBookMark?: () => void
+  data: DataSavedWordProps
   onPress?: () => void
+  onDeletePress?: () => void
 }
 
 export const SavedWordItem: React.FC<SavedWordItemProps> = ({
   data,
   onPress,
+  onDeletePress,
 }) => {
   const { colors } = useTheme()
   return (
     <Pressable onPress={onPress}>
       <Block
         row
-        backgroundColor={colors.white}
-        height={60}
-        paddingLeft={35}
-        paddingRight={11}
-        space="between"
         alignCenter
+        space="between"
+        paddingLeft={30}
+        paddingRight={10}
+        paddingVertical={12}
+        backgroundColor={colors.white}
       >
-        <Block>
+        <Block style={styles.wordContainer}>
           <Block row alignCenter>
-            <Text size={'h4'} fontFamily="semiBold" lineHeight={40}>
+            <Text size={'h4'} fontFamily="semiBold">
               {data.word}
             </Text>
             <Text
               size={'h5'}
               fontFamily="regular"
               marginLeft={4}
-              lineHeight={40}
               color={colors.greyDark}
             >
               ({data.wordType})
@@ -50,11 +51,12 @@ export const SavedWordItem: React.FC<SavedWordItemProps> = ({
           buttonWidth={30}
           buttonHeight={26}
           buttonRadius={10}
-          buttonBorderSize={1}
           buttonColor="red"
+          buttonBorderSize={0.5}
           shadowButtonColor={colors.redThick}
+          onPress={onDeletePress}
         >
-          <Text fontFamily="bold" size={'h2'} color="white">
+          <Text fontFamily="bold" size={'h3'} color="white">
             X
           </Text>
         </ShadowButton>
@@ -63,3 +65,9 @@ export const SavedWordItem: React.FC<SavedWordItemProps> = ({
     </Pressable>
   )
 }
+
+const styles = StyleSheet.create({
+  wordContainer: {
+    gap: normalize.v(6),
+  },
+})
