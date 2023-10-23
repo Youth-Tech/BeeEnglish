@@ -6,86 +6,132 @@ import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import {
   Text,
   Block,
-  Image,
   Progress,
-  WordList,
   Container,
-  MARGIN_TOP,
   ShadowButton,
   WordListRefFunc,
+  GrammarOptions,
+  WordChoice,
+  QuestionRefFunction,
 } from '@components'
+import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { goBack } from '@navigation'
-import { Icon, images } from '@assets'
-import { widthScreen } from '@utils/helpers'
 
-const QUESTION = [
+export interface Question {
+  id: string
+  question: string
+  answer: string | Answer[]
+  type: QuestionType
+}
+
+export enum QuestionType {
+  OPTION = 'OPTION',
+  WORD_CHOICE = 'WORD_CHOICE',
+}
+
+export interface Answer {
+  option: string
+  isValid: boolean
+}
+
+const QUESTION: Question[] = [
   {
-    id: '12',
+    id: '1',
     question: 'Tôi làm việc ở đây 1',
     answer: 'I go to school by bike1',
+    type: QuestionType.WORD_CHOICE,
   },
   {
-    id: '13',
+    id: '4',
+    question: 'I drink coffee_______.',
+    answer: [
+      {
+        isValid: false,
+        option: 'three times for a days',
+      },
+      {
+        isValid: false,
+        option: 'three time for a day',
+      },
+      {
+        isValid: true,
+        option: 'three times for a day',
+      },
+      {
+        isValid: false,
+        option: 'three time for a days',
+      },
+    ],
+    type: QuestionType.OPTION,
+  },
+  {
+    id: '4',
+    question: 'I drink soda_______.',
+    answer: [
+      {
+        isValid: false,
+        option: 'three times for a days',
+      },
+      {
+        isValid: false,
+        option: 'three time for a day',
+      },
+      {
+        isValid: true,
+        option: 'three times for a day',
+      },
+      {
+        isValid: false,
+        option: 'three time for a days',
+      },
+    ],
+    type: QuestionType.OPTION,
+  },
+  {
+    id: '2',
     question: 'Tôi làm việc ở đây 2',
     answer: 'I go to school by bike2',
+    type: QuestionType.WORD_CHOICE,
   },
   {
-    id: '14',
+    id: '3',
     question: 'Tôi làm việc ở đây 3',
     answer: 'I go to school by bike3',
-  },
-  {
-    id: '15',
-    question: 'Tôi làm việc ở đây 4',
-    answer: 'I go to school by bike4',
-  },
-  {
-    id: '16',
-    question: 'Tôi làm việc ở đây 5',
-    answer: 'I go to school by bike5',
-  },
-  {
-    id: '17',
-    question: 'Tôi làm việc ở đây 6',
-    answer: 'I go to school by bike6',
-  },
-  {
-    id: '21',
-    question: 'Tôi làm việc ở đây 7',
-    answer: 'I go to school by bike7',
-  },
-  {
-    id: '18',
-    question: 'Tôi làm việc ở đây 8',
-    answer: 'I go to school by bike8',
-  },
-  {
-    id: '19',
-    question: 'Tôi làm việc ở đây 9',
-    answer: 'I go to school by bike9',
-  },
-  {
-    id: '20',
-    question: 'Tôi làm việc ở đây 10',
-    answer: 'I go to school by bike10',
+    type: QuestionType.WORD_CHOICE,
   },
 ]
+
+export interface ResultType {
+  questionId: string
+  result: 'correct' | 'incorrect'
+}
+
+export interface ModalStatus {
+  show: boolean
+  status: 'correct' | 'incorrect' | 'no_status'
+}
 
 const BlockAnimated = Animated.createAnimatedComponent(Block)
 
 export const GrammarScreen: React.FC = () => {
-  const wordListRef = React.useRef<WordListRefFunc>(null)
+  const wordChoiceRef = React.useRef<WordListRefFunc>(null)
+  const optionRef = React.useRef<QuestionRefFunction>(null)
 
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
-  const [step, setStep] = React.useState(10)
-  const [result, setResult] =
-    React.useState<{ question: string; result: boolean }[]>()
-  const [showModal, setShowModal] = React.useState(false)
+
+  const [step, setStep] = React.useState(0)
+  const [questions] = React.useState(QUESTION)
+  const [result, setResult] = React.useState<ResultType[]>()
+
+  const [modalStatus, setModalStatus] = React.useState<ModalStatus>({
+    show: false,
+    status: 'no_status',
+  })
   const [currentQuestion, setCurrentQuestion] = React.useState({
     index: 0,
-    data: QUESTION[0],
+    data: questions[0],
   })
 
   const onClosePress = () => {
@@ -93,19 +139,53 @@ export const GrammarScreen: React.FC = () => {
   }
 
   const onCheckPress = () => {
-    setShowModal(true)
-    const _result =
-      result?.map((item) => ({
-        question: item.question,
-        result: item.result,
-      })) || []
+    checkResult()
 
-    _result?.push({
-      question: currentQuestion.data.id,
-      result: !!wordListRef.current?.check(currentQuestion.data.answer),
+    setModalStatus((prev) => ({
+      ...prev,
+      show: true,
+    }))
+  }
+
+  const onContinuePress = () => {
+    setModalStatus((prev) => ({
+      ...prev,
+      show: false,
+    }))
+    nextQuestion()
+  }
+
+  React.useEffect(() => {
+    console.log(result)
+  }, [result])
+
+  const checkResult = () => {
+    let result: boolean = !!null
+    if (currentQuestion.data.type === QuestionType.OPTION) {
+      result = !!optionRef.current?.check()
+    } else {
+      result = !!wordChoiceRef.current?.check(
+        currentQuestion.data.answer as string,
+      )
+    }
+    setModalStatus((prev) => ({
+      ...prev,
+      status: result ? 'correct' : 'incorrect',
+    }))
+
+    setStep((_) => ((currentQuestion.index + 1) * 100) / questions.length)
+
+    setResult((prev) => {
+      const prevState = prev || []
+
+      return [
+        ...prevState,
+        {
+          questionId: currentQuestion.data.id,
+          result: result ? 'correct' : 'incorrect',
+        },
+      ]
     })
-
-    setResult(_result)
   }
 
   React.useEffect(() => {
@@ -115,17 +195,25 @@ export const GrammarScreen: React.FC = () => {
   const nextQuestion = () => {
     //next question
     const nextQuestion =
-      currentQuestion.index + 1 >= QUESTION.length
+      currentQuestion.index + 1 >= questions.length
         ? -1
         : currentQuestion.index + 1
+
     if (nextQuestion == -1) {
       console.log('complete quiz')
+      setStep(100)
+
+      //TODO: go to complete screen
     } else {
-      setCurrentQuestion({
-        index: nextQuestion,
-        data: QUESTION[nextQuestion],
+      if (questions[nextQuestion].type === QuestionType.OPTION) {
+        optionRef.current?.triggerChangeLayout()
+      }
+      setCurrentQuestion((_) => {
+        return {
+          index: nextQuestion,
+          data: questions[nextQuestion],
+        }
       })
-      setStep((prev) => prev + 10)
     }
   }
 
@@ -146,47 +234,13 @@ export const GrammarScreen: React.FC = () => {
           />
         </Block>
 
-        <Text size={'h1'} fontFamily="bold" marginTop={40}>
-          Viết lại câu bằng tiếng Anh
-        </Text>
+        {currentQuestion.data.type === QuestionType.WORD_CHOICE ? (
+          <WordChoice wordListRef={wordChoiceRef} data={currentQuestion.data} />
+        ) : (
+          <GrammarOptions ref={optionRef} data={currentQuestion.data} />
+        )}
 
-        <Block row justifyStart alignCenter marginTop={20}>
-          <Image
-            source={images.BeeTeacher}
-            width={60}
-            height={60}
-            resizeMode="contain"
-          />
-          <Block
-            borderWidth={1}
-            borderColor={colors.greyLight}
-            radius={10}
-            alignCenter
-            justifyCenter
-            marginLeft={16}
-            // flex
-            style={{
-              maxWidth:
-                widthScreen -
-                normalize.h(15) -
-                normalize.h(60) -
-                normalize.h(20),
-            }}
-          >
-            <Text
-              paddingHorizontal={20}
-              paddingVertical={14}
-              size={'h4'}
-              fontFamily="semiBold"
-            >
-              {currentQuestion.data.question}
-            </Text>
-          </Block>
-        </Block>
-
-        <Block flex marginTop={-MARGIN_TOP * 2.5} justifyCenter>
-          <WordList ref={wordListRef} sentence={currentQuestion.data.answer} />
-        </Block>
+        <Block flex />
 
         <ShadowButton
           buttonHeight={40}
@@ -203,7 +257,7 @@ export const GrammarScreen: React.FC = () => {
             {t('check')}
           </Text>
         </ShadowButton>
-        {showModal && (
+        {modalStatus.show && (
           <Portal>
             <BlockAnimated
               row
@@ -217,7 +271,9 @@ export const GrammarScreen: React.FC = () => {
               right={0}
               alignCenter
               space={'between'}
-              backgroundColor={'#D7FFB8'}
+              backgroundColor={
+                modalStatus.status === 'correct' ? '#D7FFB8' : '#FFDFE0'
+              }
             >
               <Block
                 row
@@ -227,21 +283,36 @@ export const GrammarScreen: React.FC = () => {
                   gap: normalize.h(10),
                 }}
               >
-                <Icon state="Check" />
-                <Text size={'h4'} fontFamily="bold" color={colors.greenLighter}>
-                  Đúng rồi nè!
+                <Icon
+                  state={
+                    modalStatus.status === 'correct' ? 'Check' : 'IncorrectIcon'
+                  }
+                />
+                <Text
+                  size={'h4'}
+                  fontFamily="bold"
+                  color={
+                    modalStatus.status === 'correct'
+                      ? colors.greenLighter
+                      : colors.redButton
+                  }
+                >
+                  {modalStatus.status === 'correct'
+                    ? t('correct')
+                    : t('incorrect')}
                 </Text>
               </Block>
               <ShadowButton
                 buttonHeight={30}
                 buttonWidth={100}
                 buttonRadius={10}
-                shadowButtonColor="#58A700"
-                buttonColor="#58CC02"
-                onPress={() => {
-                  setShowModal(false)
-                  nextQuestion()
-                }}
+                shadowButtonColor={
+                  modalStatus.status === 'correct' ? '#58A700' : colors.redThick
+                }
+                buttonColor={
+                  modalStatus.status === 'correct' ? '#58CC02' : colors.red
+                }
+                onPress={onContinuePress}
               >
                 <Text size="h3" fontFamily="bold" color="white">
                   {t('continue_button')}

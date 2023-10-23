@@ -9,4 +9,5 @@ export const images = {
   BeeGraduated: require('./BeeGraduated.png'),
   BeeDiscovery: require('./BeeDiscovery.png'),
   BeeTeacher: require('./BeeTeacher.png'),
+  BeeWithPencil: require('./BeeWithPencil.png'),
 }

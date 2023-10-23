@@ -18,7 +18,7 @@ const useStyle = makeStyles<Offset>()(({ colors }) => ({
     top: offset.originalY.value,
     left: offset.originalX.value,
     transform: [{ translateY: -3 }], //shadow block height
-    backgroundColor: colors.greyLight,
-    height: offset.height.value + 3 - 10, //shadow block height
+    backgroundColor: '#E5E5E5',
+    height: offset.height.value + 3 - 12, //shadow block height
   }),
 }))
