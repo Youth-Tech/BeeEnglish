@@ -26,7 +26,7 @@ export const DetailLessonScreen = () => {
         source={images.BGDetailLesson}
         style={{ flex: 1, paddingTop: normalize.h(5.23) }}
       >
-        <Block space="between" row paddingHorizontal={25}>
+        <Block space="between" row paddingHorizontal={20}>
           <Icon state="Back" onPress={goBack}></Icon>
           <Icon state="MenuHeading" onPress={() => {}}></Icon>
         </Block>
@@ -34,7 +34,7 @@ export const DetailLessonScreen = () => {
         <Block
           shadow
           marginVertical={26}
-          marginHorizontal={25}
+          marginHorizontal={20}
           radius={10}
           backgroundColor={colors.white}
           flex
