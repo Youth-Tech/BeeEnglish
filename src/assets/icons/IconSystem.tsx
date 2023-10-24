@@ -1252,6 +1252,16 @@ const CheckSmallIcon = (props: Props) => (
   </Svg>
 )
 
+const IconLockSmall = (props: Props) => (
+  <Svg width={20} height={20} fill="none" {...props}>
+    <Path
+      fill="#E4E700"
+      fillRule="evenodd"
+      d="M10 1.333c-2.761 0-5 2.409-5 5.38V8h-.254c-.736 0-1.373.594-1.4 1.33-.1 2.812.21 8.67 6.654 8.67 6.43 0 6.753-5.864 6.654-8.67-.026-.735-.662-1.33-1.398-1.33H15V6.712c0-2.97-2.239-5.378-5-5.378ZM13.571 8V6.712c0-2.122-1.599-3.842-3.571-3.842-1.973 0-3.571 1.72-3.571 3.842V8h7.142Zm-3.214 4.939c.408-.148.7-.544.7-1.01 0-.592-.471-1.072-1.053-1.072-.58 0-1.052.48-1.052 1.072 0 .467.293.864.703 1.01v1.139a.35.35 0 1 0 .702 0v-1.14Z"
+      clipRule="evenodd"
+    />
+  </Svg>
+)
 const Icons = {
   LeftArrow: {
     state: 'LeftArrow',
@@ -1465,6 +1475,10 @@ const Icons = {
     state: 'CheckSmall',
     icon: CheckSmallIcon,
   },
+  IconLockSmall: {
+    state: 'IconLockSmall',
+    icon: IconLockSmall,
+  },
 }
 export type TIcon = keyof typeof Icons
 interface PropsIcon extends Props {
@@ -1528,4 +1542,5 @@ export {
   QuestionIcon,
   LighterIcon,
   CheckSmallIcon,
+  IconLockSmall,
 }

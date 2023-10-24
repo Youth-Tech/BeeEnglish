@@ -7,19 +7,14 @@ import {
   SectionListRenderItem,
 } from 'react-native'
 
-import {
-  Text,
-  Block,
-  Container,
-  ItemLessonProps,
-  ItemLesson,
-} from '@components'
-import { normalize, useTheme } from '@themes'
-
 import { Icon } from '@assets'
+import { normalize, useTheme } from '@themes'
+import { Text, Block, Container } from '@components'
+import { ItemLesson, ItemLessonProps } from './components'
 
 export const MOCK_DATA: ItemLessonProps[] = [
   {
+    id: 'id1',
     lessonTitle: 'Hello!',
     lessonDescription: 'Learn greetings for meeting people',
     thumbnail:
@@ -27,6 +22,7 @@ export const MOCK_DATA: ItemLessonProps[] = [
     status: 'complete',
   },
   {
+    id: 'id2',
     lessonTitle: 'Introducing yourself',
     lessonDescription: 'Say your name',
     thumbnail:
@@ -34,6 +30,7 @@ export const MOCK_DATA: ItemLessonProps[] = [
     status: 'current',
   },
   {
+    id: 'id3',
     lessonTitle: 'Saying how you are',
     lessonDescription: 'Talk about how you feel',
     thumbnail:
@@ -41,6 +38,7 @@ export const MOCK_DATA: ItemLessonProps[] = [
     status: 'lock',
   },
   {
+    id: 'id4',
     lessonTitle: 'Developing fluency',
     lessonDescription: 'Introduce yourself',
     thumbnail:
@@ -48,6 +46,7 @@ export const MOCK_DATA: ItemLessonProps[] = [
     status: 'lock',
   },
   {
+    id: 'id5',
     lessonTitle: 'Check point Introduce',
     lessonDescription: 'Test your skills to access the next chapter',
     thumbnail:
@@ -92,16 +91,32 @@ export type SectionData = (typeof MOCK_DATA_LESSON)[number]
 
 export const LessonMap = () => {
   const { colors } = useTheme()
+
+  const onStartExaminationPress = (id: string) => {
+    console.log('onStartExamination', id)
+  }
+
+  const onStartLessonPress = (id: string, isRestart?: boolean) => {
+    console.log('onStartLesson', id, 'with isRestart', !!isRestart)
+  }
+
+  const onUnlockPress = (id: string) => {
+    console.log('onUnlockPress', id)
+  }
+
   const renderMapItem: SectionListRenderItem<ItemLessonProps, SectionData> = ({
+    item,
     index,
     section,
-    item,
   }) => {
     return (
       <ItemLesson
         {...item}
         key={index}
+        onUnlockPress={onUnlockPress}
+        onStartLessonPress={onStartLessonPress}
         isEndItem={index === section.data.length - 1}
+        onStartExaminationPress={onStartExaminationPress}
       />
     )
   }
@@ -172,16 +187,16 @@ export const LessonMap = () => {
 
   return (
     <Container>
-      <Block flex paddingHorizontal={15} marginTop={10}>
+      <Block style={styles.listContainer}>
         <SectionList
           removeClippedSubviews
-          sections={MOCK_DATA_LESSON}
           renderItem={renderMapItem}
-          renderSectionHeader={renderSectionHeader}
+          sections={MOCK_DATA_LESSON}
           stickySectionHeadersEnabled={true}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => item.lessonTitle + index}
+          renderSectionHeader={renderSectionHeader}
           SectionSeparatorComponent={() => <Block height={10} />}
+          keyExtractor={(item, index) => item.lessonTitle + index}
         />
       </Block>
     </Container>
@@ -189,6 +204,11 @@ export const LessonMap = () => {
 }
 
 const styles = StyleSheet.create({
+  listContainer: {
+    flex: 1,
+    paddingHorizontal: normalize.h(15),
+    marginTop: normalize.v(10),
+  },
   mapList: {
     paddingBottom: normalize.v(30),
     marginTop: normalize.v(20),

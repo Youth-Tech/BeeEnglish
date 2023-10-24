@@ -71,6 +71,20 @@
     "attendance": "Attendance",
     "attend": "Attend",
     "welcome_back": "Welcome back!",
-    "comeback_tomorrow": "Please come back tomorrow!"
+    "comeback_tomorrow": "Please come back tomorrow!",
+
+    "old_lesson": "Old lesson",
+    "new_lesson": "New lesson",
+    "lock_lesson": "Locking lesson",
+    "practice": "Practice",
+    "continue_learn": "Continue",
+    "learn_again": "Learn again",
+    "lets_start": "Let's start",
+    "start_practice": "Let's start",
+    "unlock": "Unlock",
+    "lock_title": "To unlock this lesson, please ensure that you have completed all the lessons listed above!",
+    "lock_description": "Upgrade your account to premium to unlock this lesson!",
+    "practice_title": "Exam of the chapter",
+    "practice_description": "Achieve 80% of the point to unlock all lessons listed above, and unlock the next chapter"
   }
 }
