@@ -7,17 +7,20 @@ import { Host } from 'react-native-portalize'
 import { persistor, store } from '@redux/store'
 import { PersistGate } from 'redux-persist/lib/integration/react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 const App = () => {
   return (
     <Provider store={store}>
-      <SafeAreaProvider>
-        <PersistGate loading={null} persistor={persistor}>
-          <Host>
-            <RootApp />
-          </Host>
-        </PersistGate>
-      </SafeAreaProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaProvider>
+          <PersistGate loading={null} persistor={persistor}>
+            <Host>
+              <RootApp />
+            </Host>
+          </PersistGate>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
     </Provider>
   )
 }

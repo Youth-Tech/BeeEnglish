@@ -1,3 +1,5 @@
+import {comment} from "@components/common/CommentComponent";
+
 export const post: string =
   'Le Monde met with rabbi Delphine Derailleur in her Paris synagogue after she celebrated two bar mitzvahs in a seemingly joyful atmosphere. "I didn\'t want to steal such an important moment in these teenagers\' lives. A bar mitzvah is a celebratory occasion, not a day for the dead," said Horvilleur, a leading figure in liberal Judaism in France. However, in the audience, tearful faces hinted at the dramatic context, a few days after Hamas\' deadly attack in Israel. In the face of tragedy, the rabbi called for us not to succumb "to an absolute dehumanization of the other side."'
 export const posts: PostResponse[] = [
@@ -53,4 +55,98 @@ export const posts: PostResponse[] = [
         type: "Beginner",
         topic: "Beginner",
     }
+]
+export const newsData = [
+    {
+        id: 1,
+        title: `Bữa sáng cùng gia đình`,
+        image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
+        progress: 50,
+    },
+    {
+        id: 2,
+        title: `Bữa sáng cùng gia đình`,
+        image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
+        progress: 50,
+    },
+    {
+        id: 3,
+        title: `Bữa sáng cùng gia đình`,
+        image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
+        progress: 50,
+    },
+    {
+        id: 4,
+        title: `Bữa sáng cùng gia đình`,
+        image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
+        progress: 50,
+    },
+    {
+        id: 5,
+        title: `Bữa sáng cùng gia đình`,
+        image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
+        progress: 50,
+    },
+]
+export const DataComment: comment[] = [
+    {
+        id: 1,
+        text: 'Comment 1',
+        comments: [
+            {
+                id: 22,
+                text: 'Reply 1',
+                comments: [
+                    {
+                        id: 21,
+                        text: 'Reply 1',
+                        comments: []
+                    },
+                    {
+                        id: 10,
+                        text: 'Reply 100',
+                        comments: []
+                    },
+                ]
+            },
+            {
+                id: 21,
+                text: 'Reply 1',
+                comments: []
+            },
+        ]
+    },
+    {
+        id: 2,
+        text: 'Comment 2',
+        comments: [
+            {
+                id: 21,
+                text: 'Reply 1',
+                comments: []
+            },
+            {
+                id: 22,
+                text: 'Reply 2',
+                comments: []
+            }
+        ]
+    },
+    {
+        id: 4,
+        text: 'Comment 3',
+        comments: [
+            {
+                id: 241,
+                text: 'Reply 1',
+                comments: []
+            },
+            {
+                id: 222,
+                text: 'Reply 2',
+                comments: []
+            }
+        ]
+    }
+
 ]

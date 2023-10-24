@@ -16,7 +16,7 @@ import {
   EmailRegistrationScreen,
   SplashScreen,
 } from '@screens'
-import DetailPost from "@screens/DetailPost";
+import DetailPost from "screens/DetailPostScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 

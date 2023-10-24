@@ -1,9 +1,9 @@
 import React from 'react'
 import { Block } from '@components'
 import { useTheme } from '@themes'
-import { useStyles } from '@screens/DetailPost/styles'
-import ItemWord from '@screens/DetailPost/components/ItemWord'
-import TranslateVi from "@screens/DetailPost/components/TranslateVi";
+import { useStyles } from '@screens/DetailPostScreen/styles'
+import ItemWord from '@screens/DetailPostScreen/components/ItemWord'
+import TranslateVi from "@screens/DetailPostScreen/components/TranslateVi";
 
 interface ParagraphProps {
     data: PostResponse,
@@ -14,15 +14,14 @@ const ContentPost: React.FC<ParagraphProps> = ({ data}) => {
   const pattern = /\S+(['".,!?;:]?)(?=\s|$)/g;
   const words = data.english.match(pattern);
   return (
-    <Block paddingHorizontal={20}>
+    <Block>
       <Block style={styles.boxContent}>
         {words!.map((word, index) => (
           <ItemWord
             key={index}
             value={word}
             onPress={() => {
-              word = word.replace(/['".,!?;:]/g, '')
-              console.log(word)
+              word = word.replace(/['".,!?;:]/g, '');
             }}
           />
         ))}

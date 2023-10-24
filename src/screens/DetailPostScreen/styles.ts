@@ -1,5 +1,6 @@
 import {fontFamily, makeStyles, normalize} from '@themes'
 import {handleFontSize} from "@components/utils";
+import {getStatusBarHeight} from "@components/bases/StatusBar/status_bar_height";
 
 export const useStyles = makeStyles()(({colors}) => ({
     container: {
@@ -26,7 +27,7 @@ export const useStyles = makeStyles()(({colors}) => ({
         marginBottom: normalize.m(20),
     },
     boxImagePost: {
-        marginHorizontal: normalize.m(20),
+        // marginHorizontal: normalize.m(20),
     },
     image: {
         height: normalize.m(200),
@@ -49,5 +50,30 @@ export const useStyles = makeStyles()(({colors}) => ({
         color: colors.greyPrimary,
         paddingLeft: normalize.m(30),
         lineHeight: normalize.m(25)
+    },
+    boxComment: {
+        flex: 1,
+        backgroundColor: colors.white,
+        marginTop: getStatusBarHeight(),
+
+    },
+    headerComment: {
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        borderBottomWidth: 0.5,
+        borderBottomColor: colors.greenLighter,
+        paddingVertical: normalize.m(10),
+        paddingHorizontal: normalize.m(20),
+    },
+    buttonCancel: {
+        position: "absolute",
+        left: normalize.m(10),
+    },
+    inputBoxSend: {
+        flexDirection: 'row',
+        marginHorizontal: normalize.m(20),
+        marginVertical: normalize.m(10),
+        alignItems: 'center',
     }
 }))

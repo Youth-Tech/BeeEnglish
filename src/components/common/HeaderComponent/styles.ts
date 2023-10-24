@@ -3,6 +3,7 @@ import {
   normalize,
 } from '@themes'
 import {handleFontSize} from "@components/utils";
+import {getStatusBarHeight} from "@components/bases/StatusBar/status_bar_height";
 
 export const useStyles = makeStyles()(({colors}) => ({
   boxHeader: {
@@ -10,6 +11,7 @@ export const useStyles = makeStyles()(({colors}) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginTop: getStatusBarHeight()
   },
   iconBack: {
     width: normalize.m(50),

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Text, TouchableOpacity } from 'react-native'
 import { Translate } from '@assets/icons/Translate'
-import { useStyles } from '@screens/DetailPost/styles'
+import { useStyles } from '@screens/DetailPostScreen/styles'
 import { Block } from '@components'
 import { useTheme } from '@themes'
 
