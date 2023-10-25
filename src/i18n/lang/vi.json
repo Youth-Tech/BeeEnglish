@@ -28,7 +28,7 @@
     "email": "Email",
     "is_required": " là bắt buộc",
     "is_invalid": " sai định dạng",
-    "is_too_short": " phải có ít nhất 6 kí tự",
+    "is_too_short": " phải có ít nhất 8 kí tự",
     "is_too_long": " phải ít hơn 30 kí tự",
     "is_full_name": " phải có ít nhất 3 kí tự",
     "is_not_same": " không trùng mật khẩu",
