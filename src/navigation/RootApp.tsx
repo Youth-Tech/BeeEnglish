@@ -52,6 +52,7 @@ export const RootApp = () => {
 
   return (
     <>
+      {/* <StatusBar /> */}
       {isLoading && (
         <Block
           absolute
