@@ -19,4 +19,5 @@ export const images = {
   StreakBox: require('./StreakBox.png'),
   ChestBox: require('./ChestBox.png'),
   Light: require('./Light.png'),
+  ProfileBackground: require('./BackgroundProfile.png'),
 }
