@@ -61,8 +61,8 @@ export const Modal = React.forwardRef<ModalFunction, ModalProps>(
                 position === 'top'
                   ? 'flex-start'
                   : position === 'bottom'
-                    ? 'flex-end'
-                    : 'center'
+                  ? 'flex-end'
+                  : 'center'
               }
               style={position === 'top' ? { marginTop: STATUS_BAR_HEIGHT } : {}}
             >

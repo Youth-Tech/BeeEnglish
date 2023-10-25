@@ -28,7 +28,7 @@
     "email": "Email",
     "is_required": " is required",
     "is_invalid": " is invalidate",
-    "is_too_short": " must be at least 6 characters",
+    "is_too_short": " must be at least 8 characters",
     "is_too_long": " must be at most 30 characters",
     "is_full_name": " must be at least 3 characters",
     "is_not_same": " does not match",
@@ -48,6 +48,14 @@
     "lets_answer_some_questions": "Let's answer some questions!",
     "test": "Exam Test",
     "take_the_test_to_let_us_know_your_capabilities": "Take the test to let us know your capabilities",
+
+    "check": "Check",
+    "correct": "Correct!",
+    "incorrect": "Incorrect!",
+    "detail_post_header": "Practice reading comprehension skills",
+    "like": "Like",
+    "comment": "Comment",
+    "bookmark": "Bookmark",
     "settings": "Settings",
     "premium_membership": "Premium Membership",
     "upgrade_for_more_features": "Upgrade for more features",
@@ -85,6 +93,7 @@
     "lock_title": "To unlock this lesson, please ensure that you have completed all the lessons listed above!",
     "lock_description": "Upgrade your account to premium to unlock this lesson!",
     "practice_title": "Exam of the chapter",
-    "practice_description": "Achieve 80% of the point to unlock all lessons listed above, and unlock the next chapter"
+    "practice_description": "Achieve 80% of the point to unlock all lessons listed above, and unlock the next chapter",
+    "video": "Video"
   }
 }
