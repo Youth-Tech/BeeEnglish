@@ -23,7 +23,7 @@ import {
   DetailLessonScreen,
   LessonMap,
 } from '@screens'
-import DetailPost from "screens/DetailPostScreen";
+import DetailPost from 'screens/DetailPostScreen'
 import StreakScreen from '@screens/StreakScreen'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -39,7 +39,7 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="LESSON_MAP_SCREEN"
+        initialRouteName="LOGIN_SCREEN"
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
