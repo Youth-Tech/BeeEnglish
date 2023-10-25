@@ -76,6 +76,8 @@
     "attend": "Attend",
     "welcome_back": "Welcome back!",
     "comeback_tomorrow": "Please come back tomorrow!",
-    "video": "Video"
+    "video": "Video",
+    "joined_on": "Joined on",
+    "process": "Process"
   }
 }

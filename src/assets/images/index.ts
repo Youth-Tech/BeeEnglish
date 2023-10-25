@@ -20,4 +20,5 @@ export const images = {
   ChestBox: require('./ChestBox.png'),
   Light: require('./Light.png'),
   ProfileBackground: require('./BackgroundProfile.png'),
+  AccountBee: require('./AccountProfileBee.jpeg'),
 }
