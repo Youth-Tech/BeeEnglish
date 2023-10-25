@@ -1,25 +1,30 @@
-import React, { useRef } from 'react'
-import { useStyles } from './styles'
-import { Block, Container, Image, LineChart, Text } from '@components'
 import { images } from '@assets'
-import HeaderAccount from './components/HeaderAccount'
+import { useStyles } from './styles'
+import React, { useRef } from 'react'
 import UserCard from './components/UserCard'
-import {normalize} from '@themes'
+import { normalize, useTheme } from '@themes'
+import HeaderAccount from './components/HeaderAccount'
+import { Block, Container, Image, LineChart, Text } from '@components'
 import {
+  View,
   Animated,
+  ScrollView,
   Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  ScrollView,
-  View,
 } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 export const ProfileUserScreen: React.FC = () => {
+  const { colors } = useTheme()
   const styles = useStyles()
   const { t } = useTranslation()
   const scrollY = useRef(new Animated.Value(0)).current
 
+  const color = scrollY.interpolate({
+    inputRange: [80, 150],
+    outputRange: [colors.white, colors.black],
+  })
   const opacity = scrollY.interpolate({
     inputRange: [0, 80],
     outputRange: [1, 0],
@@ -32,7 +37,7 @@ export const ProfileUserScreen: React.FC = () => {
     { id: 0, label: 'Mon', x: 0, y: 3 },
     { id: 1, label: 'Tue', x: 1, y: 1 },
     { id: 2, label: 'Wed', x: 2, y: 2 },
-    { id: 3, label: 'Thu', x: 3, y: 3 },
+    { id: 3, label: 'Thu', x: 3, y: 4 },
     { id: 4, label: 'Fri', x: 4, y: 3 },
     { id: 5, label: 'Sat', x: 5, y: 2 },
     { id: 6, label: 'Sun', x: 6, y: 2 },
@@ -53,7 +58,7 @@ export const ProfileUserScreen: React.FC = () => {
       <Animated.View style={[styles.boxBackground, { opacity }]}>
         <Image
           source={images.ProfileBackground}
-          style={[styles.backgroundContainer,]}
+          style={[styles.backgroundContainer]}
         />
       </Animated.View>
       <View style={styles.container}>
@@ -62,7 +67,11 @@ export const ProfileUserScreen: React.FC = () => {
           onScroll={handleOnScroll}
           stickyHeaderIndices={[0]}
         >
-          <HeaderAccount opacity={opacityHeader} />
+          <HeaderAccount
+            opacity={opacityHeader}
+            unOpacity={opacity}
+            color={color}
+          />
           <UserCard />
           <Block paddingHorizontal={20}>
             <Text size={'h2'} fontFamily={'bold'} marginTop={20}>

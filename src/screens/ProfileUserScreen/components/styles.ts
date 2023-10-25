@@ -10,6 +10,7 @@ export const useStyles = makeStyles()(({ colors }) => ({
     paddingTop: getStatusBarHeight() + normalize.v(10),
     paddingHorizontal: normalize.m(20),
     paddingBottom: normalize.v(10),
+    elevation: 15
   },
   accountBee: {
     width: 30,
@@ -36,7 +37,13 @@ export const useStyles = makeStyles()(({ colors }) => ({
     width: "100%",
     height: "100%",
     backgroundColor: colors.white,
-    zIndex: -10
+    zIndex: -10,
+    elevation: 10,
+    alignItems: 'flex-end',
+    justifyContent: "center",
+    paddingTop: getStatusBarHeight() + normalize.v(10),
+    paddingHorizontal: normalize.m(20),
+    paddingBottom: normalize.v(10),
   },
   // styles for boxUserCard
   boxUserCard: {

@@ -1,40 +1,55 @@
 import React from 'react'
 import { useStyles } from './styles'
-import { Block, Image, Text } from '@components'
+import { Block, Image } from '@components'
 import { Icon, images } from '@assets'
 import { TouchableOpacity, Animated } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import { useTheme } from '@themes'
+import {useTranslation} from "react-i18next";
 
 interface Props {
   opacity: Animated.AnimatedInterpolation<number>
+  unOpacity: Animated.AnimatedInterpolation<number>
+  color: Animated.AnimatedInterpolation<string>
 }
 
-const HeaderAccount: React.FC<Props> = ({ opacity }) => {
+const HeaderAccount: React.FC<Props> = ({
+  opacity,
+    unOpacity,
+  color,
+}) => {
   const styles = useStyles()
-  const { t } = useTranslation()
   const { colors } = useTheme()
+  const {t} = useTranslation()
   return (
     <Block>
       <Block style={styles.boxHeaderContainer}>
         <TouchableOpacity activeOpacity={0.5} style={styles.headerLeft}>
           <Image source={images.AccountBee} style={styles.accountBee} />
-          <Text style={styles.titleAccount} size={'h2'} color={colors.white}>
-            {t('account')}
-          </Text>
+          <Animated.Text style={[styles.titleAccount, { color }]}>
+            {t("account")}
+          </Animated.Text>
         </TouchableOpacity>
-        <Block style={[styles.headerLeft, styles.headerRight]}>
+        <Animated.View style={[styles.headerLeft, styles.headerRight, {opacity: unOpacity}]}>
           <TouchableOpacity>
             <Icon state={'SendPaper'} stroke={colors.white} />
           </TouchableOpacity>
           <TouchableOpacity>
             <Icon state={'Setting'} stroke={colors.white} />
           </TouchableOpacity>
-        </Block>
+        </Animated.View>
       </Block>
       <Animated.View
         style={[{ opacity }, styles.backgroundHeader]}
-      ></Animated.View>
+      >
+        <Block style={[styles.headerLeft, styles.headerRight]}>
+          <TouchableOpacity>
+            <Icon state={'SendPaper'} stroke={colors.black} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon state={'Setting'} stroke={colors.black} />
+          </TouchableOpacity>
+        </Block>
+      </Animated.View>
     </Block>
   )
 }
