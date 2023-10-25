@@ -46,7 +46,8 @@
     "react-native-webview": "^13.6.2",
     "react-redux": "^8.1.2",
     "redux-persist": "^6.0.0",
-    "rive-react-native": "^6.0.4"
+    "rive-react-native": "^6.0.4",
+    "rn-tooltip": "^3.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

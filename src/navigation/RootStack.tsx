@@ -21,6 +21,7 @@ import {
   SavedWordScreen,
   SettingScreen,
   DetailLessonScreen,
+  LessonMap,
 } from '@screens'
 import DetailPost from "screens/DetailPostScreen";
 import StreakScreen from '@screens/StreakScreen'
@@ -38,7 +39,7 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="GRAMMAR_SCREEN"
+        initialRouteName="LESSON_MAP_SCREEN"
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -81,6 +82,7 @@ const RootStack = () => {
             name="DETAIL_LESSON_SCREEN"
             component={DetailLessonScreen}
           />
+          <Stack.Screen name="LESSON_MAP_SCREEN" component={LessonMap} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
