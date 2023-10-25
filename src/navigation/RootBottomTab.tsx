@@ -10,6 +10,7 @@ const screenOptions = {
   cardOverlayEnabled: true,
   headerShown: false,
 }
+
 export function RootBottomTab() {
   return (
     <Tab.Navigator

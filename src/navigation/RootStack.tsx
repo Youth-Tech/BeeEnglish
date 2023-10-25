@@ -21,6 +21,7 @@ import {
   SettingScreen,
   DetailLessonScreen,
 } from '@screens'
+import DetailPost from "screens/DetailPostScreen";
 import StreakScreen from '@screens/StreakScreen'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -57,6 +58,7 @@ const RootStack = () => {
             component={AboutTheTestScreen}
           />
           <Stack.Screen name="EXAM_TEST_SCREEN" component={ExamTestScreen} />
+          <Stack.Screen name="DETAIL_POST_SCREEN" component={DetailPost} />
           <Stack.Screen
             name="EMAIL_REGISTRATION_SCREEN"
             component={EmailRegistrationScreen}
