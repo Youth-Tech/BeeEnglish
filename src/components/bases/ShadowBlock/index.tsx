@@ -12,8 +12,16 @@ import { Text } from '../Text'
 
 export const ShadowBlock: React.FC<ShadowBlockProps> = (props) => {
   const {
+    top,
+    left,
     flex,
+    style,
+    right,
     margin,
+    bottom,
+    zIndex,
+    absolute,
+    children,
     marginTop,
     marginLeft,
     radius = 8,
@@ -30,7 +38,7 @@ export const ShadowBlock: React.FC<ShadowBlockProps> = (props) => {
     backgroundColor = 'white',
     shadowPosition = 'bottom',
     shadowLabelContainerStyle,
-    shadowBackgroundColor = '#ccc',
+    shadowColor = '#ccc',
 
     containerPaddingTop,
     containerPaddingRight,
@@ -43,10 +51,30 @@ export const ShadowBlock: React.FC<ShadowBlockProps> = (props) => {
   } = props
   const { colors } = useTheme()
 
+  const containerStyle = [
+    {
+      backgroundColor: handleColor(colors, backgroundColor),
+    },
+    style,
+    {
+      transform: [
+        {
+          translateY: shadowHeight * (shadowPosition === 'bottom' ? -1 : 1),
+        },
+      ],
+    },
+  ]
+
   return (
     <Block
+      top={top}
+      left={left}
+      right={right}
+      bottom={bottom}
+      zIndex={zIndex}
       height={height}
       margin={margin}
+      absolute={absolute}
       marginTop={marginTop}
       flex={flex ? flex : 0}
       marginLeft={marginLeft}
@@ -75,7 +103,7 @@ export const ShadowBlock: React.FC<ShadowBlockProps> = (props) => {
         isPaddingIos={false}
         paddingHorizontal={0}
         borderColor="transparent"
-        backgroundColor={handleColor(colors, shadowBackgroundColor)}
+        backgroundColor={handleColor(colors, shadowColor)}
       >
         {shadowPosition === 'top' && (
           <Block
@@ -89,26 +117,18 @@ export const ShadowBlock: React.FC<ShadowBlockProps> = (props) => {
           </Block>
         )}
         <Block
-          flex
-          alignCenter
-          justifyCenter
+          flex 
+          {...rest}
           radius={radius}
           borderLeftWidth={borderWidth}
           borderRightWidth={borderWidth}
           borderBottomWidth={borderWidth}
-          borderColor={handleColor(colors, shadowBackgroundColor)}
+          borderColor={handleColor(colors, shadowColor)}
           borderTopWidth={shadowPosition === 'top' ? 0 : borderWidth}
-          style={{
-            backgroundColor: handleColor(colors, backgroundColor),
-            transform: [
-              {
-                translateY:
-                  shadowHeight * (shadowPosition === 'bottom' ? -1 : 1),
-              },
-            ],
-          }}
-          {...rest}
-        />
+          style={containerStyle}
+        >
+          {children}
+        </Block>
       </Block>
     </Block>
   )

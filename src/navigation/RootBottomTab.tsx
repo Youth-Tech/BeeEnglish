@@ -10,10 +10,10 @@ const screenOptions = {
   cardOverlayEnabled: true,
   headerShown: false,
 }
+
 export function RootBottomTab() {
   return (
     <Tab.Navigator
-      initialRouteName="LEARNING_SCREEN"
       screenOptions={screenOptions}
       tabBar={(props) => <CustomBottomNavigation {...props} />}
     >

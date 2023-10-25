@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { useTheme } from '@themes'
+import { normalize, useTheme } from '@themes'
 import { Block, Text, Image } from '@components'
 import { Icon } from '@assets'
-import { ImageRequireSource, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 
-interface NewsProgressProps {
+export interface NewsProgressProps {
+  index?: number
   title: string
   image: string
   progress: number
@@ -13,6 +14,7 @@ interface NewsProgressProps {
 }
 
 export const NewsProgress: React.FC<NewsProgressProps> = ({
+  index,
   title,
   image,
   progress,
@@ -28,7 +30,7 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
     onPressBookMark && onPressBookMark()
   }
   return (
-    <Pressable onPress={onPress}>
+    <Pressable onPress={onPress} style={[{ marginVertical: normalize.v(5) }]}>
       <Block
         shadow
         width={142}
@@ -38,32 +40,31 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
         overflow="hidden"
         backgroundColor={colors.white}
       >
-        <Block padding={3} flex backgroundColor={colors.white}>
+        <Block padding={3} flex>
           <Image
             radius={10}
             width="100%"
             height={110}
             source={{
-              uri: 'https://static.wikia.nocookie.net/nisekoi/images/c/c6/Chitoge-nisekoi.png/revision/latest?cb=20150603043239',
+              uri: image,
             }}
           />
-          <Pressable onPress={toggleBookmark}>
+          <Pressable
+            onPress={toggleBookmark}
+            style={{ position: 'absolute', right: 10 }}
+          >
             <Block
               width={26}
               height={30}
               backgroundColor={colors.white}
               alignCenter
               justifyCenter
-              absolute
-              right={10}
               borderBottomLeftRadius={10}
               borderBottomRightRadius={10}
-              bottom={75}
             >
               <Icon
                 state="Bookmark"
                 stroke={colors.orangeDark}
-                strokeWidth={1.5}
                 fill={isBookmarked ? colors.orangeDark : 'transparent'}
               />
             </Block>
@@ -71,7 +72,7 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
           <Text
             paddingLeft={3}
             fontFamily="regular"
-            size={'h5'}
+            size={'h4'}
             color={colors.black}
             numberOfLines={3}
             lineHeight={18}

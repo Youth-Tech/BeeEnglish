@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { Block, Container, Image } from '@components'
 import { images } from '../../assets/images/index'
@@ -19,4 +18,3 @@ export const SplashScreen = () => {
     </Container>
   )
 }
-

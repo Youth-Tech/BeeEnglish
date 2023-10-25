@@ -12,6 +12,7 @@ export const colors = {
     bluePrimary: '#4285F4',
 
     purpleLight: '#C584F8',
+    purpleLighter: '#E4C2FF',
     purpleDark: '#1D1B3E',
     purplePrimary: '#1D1B3E',
 
@@ -78,7 +79,7 @@ export const colors = {
     greyLighter: '#F1F1F5',
 
     yellowPrimary: '#FCFF00',
-    yellowDark: '#FFCC08',
+    yellowDark: '#E4E700',
 
     greenDark: '#002800',
     greenPrimary: '#0A381C',
@@ -96,4 +97,4 @@ export const colors = {
 }
 
 export type ThemeColor = typeof colors
-export type ColorsMode = keyof typeof colors.dark
+export type ColorsMode = typeof colors.dark

@@ -1,100 +1,263 @@
 import {
+  Keyboard,
   Pressable,
   DocumentSelectionState,
   KeyboardAvoidingView,
 } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
+  Text,
   Block,
+  TextInput,
   Container,
-  DismissKeyBoardBlock,
   ShadowButton,
   SocialLoginButton,
-  Text,
-  TextInput,
+  DismissKeyBoardBlock,
 } from '@components'
 import { Icon } from '@assets'
-import { goBack, navigate } from '@navigation'
 import { useTheme } from '@themes'
+import { goBack, navigate } from '@navigation'
 import { useTranslation } from 'react-i18next'
-export const RegisterScreen = () => {
-  const { colors, normalize } = useTheme()
-  const { t } = useTranslation()
-  const [name, setName] = React.useState('')
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
+import { setEmailSignIn } from '@redux/reducers'
+import { signIn } from '@redux/actions/auth.action'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { useValidateInput } from '@utils/validateInput'
 
+export const RegisterScreen = () => {
+  const dispatch = useAppDispatch()
+  const validate = useValidateInput()
+  const { t } = useTranslation()
+  const { colors, normalize } = useTheme()
+  const [email, setEmail] = React.useState('')
+  const [fullName, setFullName] = React.useState('')
+  const [password, setPassword] = React.useState('')
+  const [checkMail, setCheckMail] = useState(true)
+  const [checkPass, setCheckPass] = useState(true)
+  const [checkFullName, setCheckFullName] = useState(true)
+  const [disabledLogin, setDisabledLogin] = React.useState(true)
+  const [confirmPassword, setConfirmPassword] = React.useState('')
+  const [checkConfirmPass, setCheckConfirmPass] = useState(true)
   const emailInputRef = React.useRef<DocumentSelectionState>()
   const passwordInputRef = React.useRef<DocumentSelectionState>()
+  const confirmPasswordInputRef = React.useRef<DocumentSelectionState>()
+  const store = useAppSelector((state) => state.root.user)
+  const handleLoginGoogle = () => {}
+  const handleLoginFacebook = () => {}
+  useEffect(() => {
+    email.length > 0 && password.length >= 6 && fullName.length >= 3
+      ? setDisabledLogin(false)
+      : setDisabledLogin(true)
+  }, [email, password, fullName])
 
-  const onSubmit = () => {
-    console.log('handleSubmit')
+  const onCheckEmail = (value: string) => {
+    setCheckMail(validate.validateEmail(value))
+    return
   }
+
+  const onCheckPass = (value: string, type: 'password' | 'confirmPassword') => {
+    if (type === 'password') {
+      setCheckPass(validate.validatePassword(value))
+    } else {
+      setCheckConfirmPass(validate.validateConfirmPassword(value, password))
+    }
+  }
+  const onCheckFullName = (value: string) => {
+    setCheckFullName(validate.validateFullName(value))
+    return
+  }
+
+  const showError = (
+    type: 'email' | 'password' | 'name' | 'confirmPassword',
+  ) => {
+    switch (type) {
+      case 'email':
+        if (email.length === 0) return `${t('email')}${t('is_required')}`
+        if (!checkMail) return `${t('email')}${t('is_invalid')}`
+        break
+      case 'password':
+        if (password.length === 0) return `${t('password')}${t('is_required')}`
+        if (password.length < 8) return `${t('password')}${t('is_too_short')}`
+        if (!checkPass) return `${t('password')}${t('is_invalid')}`
+        break
+      case 'confirmPassword':
+        if (confirmPassword.length === 0)
+          return `${t('confirm_password')}${t('is_required')}`
+        if (confirmPassword.length < 8)
+          return `${t('confirm_password')}${t('is_too_short')}`
+        if (password !== confirmPassword)
+          return `${t('confirm_password')}${t('is_not_same')}`
+        if (!checkConfirmPass)
+          return `${t('confirm_password')}${t('is_invalid')}`
+
+        break
+      case 'name':
+        if (fullName.length === 0) return `${t('full_name')}${t('is_required')}`
+        if (fullName.length < 3) return `${t('full_name')}${t('is_too_short')}`
+        if (fullName.length > 30) return `${t('full_name')}${t('is_too_long')}`
+        if (!checkFullName) return `${t('full_name')}${t('is_invalid')}`
+        break
+    }
+    return 'hello'
+  }
+
   const goLogin = () => {
     navigate('LOGIN_SCREEN')
   }
-  const handleLoginGoogle = () => { }
-  const handleLoginFacebook = () => { }
+  const onSubmit = async () => {
+    dispatch(signIn({ email, password, confirmPassword, fullName }))
+    dispatch(setEmailSignIn(email))
+  }
+
+  const emailUser = store.email
+  const isVerified = store.isVerified
+  useEffect(() => {
+    // console.log("Email: ", emailUser, "isVerified: ", isVerified)
+    if (emailUser && !isVerified) {
+      navigate('VERIFICATION_CODE_SCREEN')
+    }
+  }, [emailUser, isVerified])
+
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
-      <Container hasScroll>
+      <Container>
         <DismissKeyBoardBlock>
-          <Block flex paddingHorizontal={24} paddingTop={10} space="between">
+          <Block
+            flex
+            paddingHorizontal={24}
+            space="between"
+            paddingTop={10}
+            paddingVertical={0}
+          >
             <Block>
               <Icon state="Back" onPress={goBack} />
               <Text
                 color={colors.black}
                 size={'heading'}
                 fontFamily="bold"
-                marginTop={20}
+                marginTop={15}
               >
                 {t('sign_up')}
               </Text>
-              <Block marginTop={25}>
+              <Block marginTop={30}>
                 <TextInput
-                  label={t('fullname')}
-                  placeholder={t('fullname_placeholder')}
-                  onChangeText={setName}
-                  value={name}
+                  label={t('full_name')}
+                  placeholder={t('full_name_placeholder')}
+                  onChangeText={(value) => {
+                    setFullName(value)
+                    useValidateInput().checkError(checkFullName, ()=>{
+                      onCheckFullName(value)
+                    })
+                  }}
+                  value={fullName}
                   returnKeyType="next"
                   onSubmitEditing={() => emailInputRef.current?.focus()}
                   blurOnSubmit={false}
+                  placeholderTextColor={
+                    checkFullName ? colors.placeholder : colors.red
+                  }
+                  error={showError('name')}
+                  showError={!checkFullName}
+                  onBlur={() => onCheckFullName(fullName)}
                 />
               </Block>
-              <Block marginTop={25}>
+              <Block marginTop={18}>
                 <TextInput
                   ref={emailInputRef}
                   label={'E-mail'}
                   placeholder="example@gmail.com"
-                  onChangeText={setEmail}
+                  onChangeText={(value) => {
+                    setEmail(value)
+                    useValidateInput().checkError(checkMail, () => {
+                      onCheckEmail(value)
+                    })
+                  }}
                   value={email}
                   returnKeyType="next"
-                  onSubmitEditing={() => passwordInputRef.current?.focus()}
+                  onSubmitEditing={() => {
+                    passwordInputRef.current?.focus()
+                  }}
                   blurOnSubmit={false}
+                  placeholderTextColor={
+                    checkMail ? colors.placeholder : colors.red
+                  }
+                  error={showError('email')}
+                  showError={!checkMail}
+                  onBlur={() => onCheckEmail(email)}
                 />
               </Block>
-              <Block marginTop={25}>
+              <Block marginTop={18}>
                 <TextInput
                   ref={passwordInputRef}
                   label={t('password')}
                   placeholder="•••••••••••••"
-                  onChangeText={setPassword}
+                  onChangeText={(value) => {
+                    setPassword(value)
+                    useValidateInput().checkError(checkPass, () => {
+                      onCheckPass(value, 'password')
+                    })
+                    if(value.length > 8 && confirmPassword.length > 8) {
+                      onCheckPass(confirmPassword, "confirmPassword")
+                      useValidateInput().checkError(checkConfirmPass, () => {
+                        onCheckPass(value, 'confirmPassword')
+                      })
+                      showError("confirmPassword")
+                      console.log("xin chao")
+                    }
+                  }}
+                  returnKeyType="next"
+                  onSubmitEditing={() => {
+                    confirmPasswordInputRef.current?.focus()
+                  }}
                   value={password}
                   secureTextEntry
+                  blurOnSubmit={false}
+                  placeholderTextColor={
+                    checkPass ? colors.placeholder : colors.red
+                  }
+                  error={showError('password')}
+                  showError={!checkPass}
+                  onBlur={() => onCheckPass(password, 'password')}
+                />
+              </Block>
+              <Block marginTop={18}>
+                <TextInput
+                  ref={confirmPasswordInputRef}
+                  label={t('confirm_password')}
+                  placeholder="•••••••••••••"
+                  onChangeText={(value) => {
+                    setConfirmPassword(value)
+                    useValidateInput().checkError(checkConfirmPass, () => {
+                      onCheckPass(value, 'confirmPassword')
+                    })
+                  }}
+                  value={confirmPassword}
+                  secureTextEntry
+                  blurOnSubmit={false}
+                  returnKeyType="default"
+                  onSubmitEditing={() => {
+                    Keyboard.dismiss()
+                  }}
+                  placeholderTextColor={
+                    checkConfirmPass ? colors.placeholder : colors.red
+                  }
+                  error={showError('confirmPassword')}
+                  showError={!checkConfirmPass}
+                  onBlur={() => onCheckPass(confirmPassword, 'confirmPassword')}
                 />
               </Block>
 
               <ShadowButton
                 onPress={onSubmit}
-                buttonHeight={45}
+                buttonHeight={35}
                 buttonWidth={194}
                 buttonRadius={10}
                 shadowButtonColor={colors.orangeLighter}
                 buttonColor={colors.orangePrimary}
                 shadowHeight={7}
+                disabled={disabledLogin}
                 containerStyle={{
                   alignSelf: 'center',
-                  marginTop: normalize.v(57.4),
+                  marginTop: normalize.v(40),
                 }}
               >
                 <Text color="white" fontFamily="bold" size={'h3'}>

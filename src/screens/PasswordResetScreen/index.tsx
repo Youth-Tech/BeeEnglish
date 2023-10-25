@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   TextInput,
   Text,
@@ -10,18 +10,57 @@ import {
 import { BackArrow } from '@assets'
 import { goBack } from '@navigation'
 import { useTranslation } from 'react-i18next'
-import { DocumentSelectionState, KeyboardAvoidingView, ScrollView } from 'react-native'
-
+import {
+  DocumentSelectionState,
+  Keyboard,
+  KeyboardAvoidingView,
+} from 'react-native'
+import { useValidateInput } from '@utils/validateInput'
+import { useTheme } from '@themes'
 
 export const PasswordResetScreen = () => {
+  const { colors } = useTheme()
   const { t } = useTranslation()
   const [password, setPassword] = React.useState('')
-  const [confirm, setConfirm] = React.useState('')
+  const [confirmPassword, setConfirmPassword] = React.useState('')
+  const [checkPass, setCheckPass] = useState(true)
+  const [checkConfirmPass, setCheckConfirmPass] = useState(true)
   const passwordRef = React.useRef<DocumentSelectionState>()
   const confirmRef = React.useRef<DocumentSelectionState>()
 
   const handlePasswordSubmit = () => {
     confirmRef.current?.focus()
+  }
+  const validate = useValidateInput()
+
+  const onCheckPass = (value: string, type: 'password' | 'confirmPassword') => {
+    if (type === 'password') {
+      setCheckPass(validate.validatePassword(value))
+    } else {
+      setCheckConfirmPass(validate.validateConfirmPassword(value, password))
+    }
+  }
+
+  const showError = (type: 'password' | 'confirmPassword') => {
+    switch (type) {
+      case 'password':
+        if (password.length === 0) return `${t('password')}${t('is_required')}`
+        if (password.length < 8) return `${t('password')}${t('is_too_short')}`
+        if (!checkPass) return `${t('password')}${t('is_invalid')}`
+        break
+      case 'confirmPassword':
+        if (confirmPassword.length === 0)
+          return `${t('confirm_password')}${t('is_required')}`
+        if (confirmPassword.length < 8)
+          return `${t('confirm_password')}${t('is_too_short')}`
+        if (password !== confirmPassword)
+          return `${t('confirm_password')}${t('is_not_same')}`
+        if (!checkConfirmPass)
+          return `${t('confirm_password')}${t('is_invalid')}`
+
+        break
+    }
+    return 'hello'
   }
 
   return (
@@ -50,26 +89,59 @@ export const PasswordResetScreen = () => {
               </Text>
               <Block marginTop={25} marginBottom={25}>
                 <TextInput
+                  ref={passwordRef}
                   label={t('password')}
                   placeholder="•••••••••••••"
-                  textContentType="password"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry
-                  ref={passwordRef}
+                  onChangeText={(value) => {
+                    setPassword(value)
+                    useValidateInput().checkError(checkPass, () => {
+                      onCheckPass(value, 'password')
+                    })
+                    if (value.length > 8 && confirmPassword.length > 8) {
+                      onCheckPass(confirmPassword, 'confirmPassword')
+                      useValidateInput().checkError(checkConfirmPass, () => {
+                        onCheckPass(value, 'confirmPassword')
+                      })
+                      showError('confirmPassword')
+                    }
+                  }}
                   returnKeyType="next"
+                  value={password}
+                  secureTextEntry
+                  blurOnSubmit={false}
+                  placeholderTextColor={
+                    checkPass ? colors.placeholder : colors.red
+                  }
+                  error={showError('password')}
+                  showError={!checkPass}
+                  onBlur={() => onCheckPass(password, 'password')}
                   onSubmitEditing={handlePasswordSubmit}
                 />
               </Block>
               <Block marginBottom={25}>
                 <TextInput
+                  ref={confirmRef}
                   label={t('confirm_password')}
                   placeholder="•••••••••••••"
-                  textContentType="password"
-                  value={confirm}
-                  onChangeText={setConfirm}
+                  onChangeText={(value) => {
+                    setConfirmPassword(value)
+                    useValidateInput().checkError(checkConfirmPass, () => {
+                      onCheckPass(value, 'confirmPassword')
+                    })
+                  }}
+                  value={confirmPassword}
                   secureTextEntry
-                  ref={confirmRef}
+                  blurOnSubmit={false}
+                  returnKeyType="default"
+                  onSubmitEditing={() => {
+                    Keyboard.dismiss()
+                  }}
+                  placeholderTextColor={
+                    checkConfirmPass ? colors.placeholder : colors.red
+                  }
+                  error={showError('confirmPassword')}
+                  showError={!checkConfirmPass}
+                  onBlur={() => onCheckPass(confirmPassword, 'confirmPassword')}
                 />
               </Block>
             </Block>
@@ -86,7 +158,7 @@ export const PasswordResetScreen = () => {
                 shadowHeight={10}
                 buttonRadius={8}
                 shadowButtonColor={'orangeLighter'}
-                onPress={() => { }}
+                onPress={() => {}}
               >
                 <Text fontFamily="bold" size={'h3'} color="white">
                   {t('change_password')}
