@@ -71,7 +71,11 @@ export const Text = ({
     paddingVertical && { paddingVertical: normalize.v(paddingVertical) },
     marginHorizontal && { marginHorizontal: normalize.h(marginHorizontal) },
     marginVertical && { marginVertical: normalize.v(marginVertical) },
-    { lineHeight: lineHeight ? normalize.m(lineHeight) : handleFontSize(size) },
+    {
+      lineHeight: lineHeight
+        ? normalize.m(lineHeight)
+        : handleFontSize(size) * 1.2,
+    },
     { fontSize: handleFontSize(size) },
     { fontFamily: fontFamilyApp[fontFamily] },
     fontWeight && { fontWeight: fontWeight },

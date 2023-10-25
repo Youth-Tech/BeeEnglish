@@ -1,6 +1,15 @@
 import * as React from 'react'
-import Svg, { ClipPath, Defs, G, Path, Rect, SvgProps } from 'react-native-svg'
-import { colors } from '@themes'
+import Svg, {
+  SvgProps,
+  Path,
+  ClipPath,
+  Defs,
+  G,
+  Rect,
+  Circle,
+  Ellipse,
+} from 'react-native-svg'
+import { colors, ColorsMode } from '@themes'
 
 export interface Props extends SvgProps {
   fill?: string
@@ -393,6 +402,7 @@ const Cancel = ({
     <Path
       fill={fill}
       fillRule="evenodd"
+      strokeWidth={props.size || props.width || 23}
       d="M5.24 5.47a.697.697 0 0 1 1.016 0l5.24 5.47 5.24-5.47a.697.697 0 0 1 1.017 0c.28.293.28.767 0 1.06L12.513 12l5.24 5.47c.28.293.28.767 0 1.06a.697.697 0 0 1-1.016 0l-5.24-5.47-5.241 5.47a.697.697 0 0 1-1.016 0 .773.773 0 0 1 0-1.06L10.48 12 5.24 6.53a.773.773 0 0 1 0-1.06Z"
       clipRule="evenodd"
     />
@@ -990,6 +1000,30 @@ const Video = ({ ...props }: Props) => (
   </Svg>
 )
 
+const CheckIcon = (props: Props) => (
+  <Svg width={51} height={50} fill="none" {...props}>
+    <Circle cx={25} cy={25} r={25} fill="#fff" />
+    <Path
+      stroke="#22B07D"
+      strokeLinecap="round"
+      strokeWidth={8}
+      d="M32.726 18.75 19.942 31.429M14.87 27.262l5.072 4.167"
+    />
+  </Svg>
+)
+
+const IncorrectIcon = (props: Props) => (
+  <Svg width={51} height={50} fill="none" {...props}>
+    <Ellipse cx={24.793} cy={25} fill="#fff" rx={24.793} ry={25} />
+    <Path
+      stroke="#FF4B4D"
+      strokeLinecap="round"
+      strokeWidth={8}
+      d="m32.164 19-14 14M18.164 19l14 14"
+    />
+  </Svg>
+)
+
 const BookmarkEmotion = ({
   fill = initialState.fill,
   stroke = initialState.stroke,
@@ -1415,6 +1449,14 @@ const Icons = {
     state: 'Video',
     icon: Video,
   },
+  Check: {
+    state: 'Check',
+    icon: CheckIcon,
+  },
+  IncorrectIcon: {
+    state: 'IncorrectIcon',
+    icon: IncorrectIcon,
+  },
   BookmarkEmotion: {
     state: 'BookmarkEmotion',
     icon: BookmarkEmotion,
@@ -1422,36 +1464,37 @@ const Icons = {
   BookmarkEmotionOutline: {
     state: 'BookmarkEmotionOutline',
     icon: BookmarkEmotionOutline,
-    Present: {
-      state: 'Present',
-      icon: Present,
-    },
-    Honey: {
-      state: 'Honey',
-      icon: Honey,
-    },
-    GoButton: {
-      state: 'GoButton',
-      icon: GoButton,
-    },
-    StreakFlame: {
-      state: 'StreakFlame',
-      icon: StreakFlame,
-    },
-    Money: {
-      state: 'Money',
-      icon: Money,
-    },
-    Boxing: {
-      state: 'Boxing',
-      icon: Boxing,
-    },
-    UserOutline: {
-      state: 'UserOutline',
-      icon: UserOutline,
-    },
+  },
+  Present: {
+    state: 'Present',
+    icon: Present,
+  },
+  Honey: {
+    state: 'Honey',
+    icon: Honey,
+  },
+  GoButton: {
+    state: 'GoButton',
+    icon: GoButton,
+  },
+  StreakFlame: {
+    state: 'StreakFlame',
+    icon: StreakFlame,
+  },
+  Money: {
+    state: 'Money',
+    icon: Money,
+  },
+  Boxing: {
+    state: 'Boxing',
+    icon: Boxing,
+  },
+  UserOutline: {
+    state: 'UserOutline',
+    icon: UserOutline,
   },
 }
+
 export type TIcon = keyof typeof Icons
 
 interface PropsIcon extends Props {
@@ -1505,6 +1548,8 @@ export {
   TaskFlag,
   DictionaryColorized,
   Video,
+  CheckIcon,
+  IncorrectIcon,
   Present,
   Honey,
   GoButton,
