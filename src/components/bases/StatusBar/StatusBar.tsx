@@ -1,9 +1,14 @@
 import React, { FC } from 'react'
+import { View, StatusBar as RNStatusBar, ViewProps } from 'react-native'
 
 import { useAppSelector } from '@hooks'
 import { makeStyles, useTheme } from '@themes'
+<<<<<<< HEAD
 import { View, StatusBar as RNStatusBar, ViewProps } from 'react-native'
 import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
+=======
+import { getStatusBarHeight } from './status_bar_height'
+>>>>>>> dev
 
 export type StatusBarProps = {
   statusColor?: string

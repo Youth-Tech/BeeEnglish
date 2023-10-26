@@ -1,12 +1,12 @@
 import React, { FC } from 'react'
 
-import { ViewProps, ScrollView } from 'react-native'
+import { ScrollView, ViewProps } from 'react-native'
 import { Edge, SafeAreaView } from 'react-native-safe-area-context'
 import { makeStyles, useTheme } from '@themes'
 
 import { StatusBar } from '../StatusBar'
 import { Block } from '../Block'
-import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
+
 export type ContainerProps = {
   statusColor?: string
   edges?: Edge[]
