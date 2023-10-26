@@ -41,6 +41,5 @@ const useStyles = makeStyles<ContainerProps>()(({}) => ({
   root: ({ backgroundColor }) => ({
     flex: 1,
     backgroundColor: backgroundColor,
-    marginTop: getStatusBarHeight(),
   }),
 }))

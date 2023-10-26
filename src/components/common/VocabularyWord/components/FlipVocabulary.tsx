@@ -1,7 +1,12 @@
 import React from 'react'
-import { Block, Image, Text } from '@components'
+import { Block, Image, Text } from '@components/bases'
 import { baseStyles, useTheme } from '@themes'
-import { Icon, SoundProgress, withSpringConfig } from '@assets'
+import {
+  Icon,
+  SoundProgress,
+  SoundProgressFcRef,
+  withSpringConfig,
+} from '@assets'
 import { Pressable } from 'react-native'
 import Animated, {
   Extrapolation,
@@ -11,11 +16,26 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated'
+import { FlipVocabularyProps } from '@components/common/VocabularyWord/components/type'
+import { useTranslation } from 'react-i18next'
 
-interface FlipVocabularyProps {}
 const AnimatedBlock = Animated.createAnimatedComponent(Block)
 const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
+  const {
+    english,
+    vietnamese,
+    pronunciation,
+    exampleEnglish,
+    exampleVietnamese,
+    attachment,
+    onPressSoundProgress,
+    onPressBookmark,
+    onPressMoreExample,
+  } = props
   const { colors, normalize } = useTheme()
+  const { t } = useTranslation()
+  const [isBookmarked, setIsBookmarked] = React.useState(false)
+  const soundProgressRef = React.useRef<SoundProgressFcRef>(null)
   const rotateY = useSharedValue(0)
   const rotateYValue = useDerivedValue(() => {
     return withSpring(rotateY.value === 0 ? 0 : 180, withSpringConfig)
@@ -62,6 +82,15 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
       zIndex: rotateYContent,
     }
   })
+
+  const handleBookmark = () => {
+    console.log('pressed bookmark')
+    setIsBookmarked(!isBookmarked)
+    onPressBookmark?.()
+  }
+  const handleSoundProgress = () => {
+    soundProgressRef.current?.start()
+  }
   return (
     <Pressable onPress={handleClickVocab}>
       <AnimatedBlock
@@ -84,12 +113,19 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
             style={rotateContentStyleFront}
           >
             <Icon state={'QuestionMark'} />
-            <Icon state={'Bookmark'} size={24} strokeWidth={1} />
+            <Icon
+              state={'Bookmark'}
+              size={24}
+              strokeWidth={0.5}
+              fill={isBookmarked ? colors.orangePrimary : 'none'}
+              stroke={isBookmarked ? colors.orangePrimary : colors.black}
+              onPress={handleBookmark}
+            />
           </AnimatedBlock>
           <Block alignCenter>
             <Image
               source={{
-                uri: 'https://t3.ftcdn.net/jpg/01/63/57/24/360_F_163572450_kNmeqPDO9EO2X2J97LCEqncKpEDImw3N.jpg',
+                uri: attachment?.image,
               }}
               width={199}
               height={199}
@@ -98,14 +134,19 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
             <AnimatedBlock style={rotateContentStyleFront} alignCenter>
               <Block marginTop={14} row alignCenter>
                 <Text size={'heading'} fontFamily={'bold'} color={colors.black}>
-                  Chicken
+                  {english}
                 </Text>
                 <Pressable
-                  onPress={() => {
-                    console.log('alo')
+                  style={{
+                    marginBottom: normalize.v(3),
+                    marginStart: normalize.h(5),
                   }}
+                  onPress={onPressSoundProgress}
                 >
-                  <SoundProgress fill={colors.orangeDark} />
+                  <SoundProgress
+                    fill={colors.orangeDark}
+                    ref={soundProgressRef}
+                  />
                 </Pressable>
               </Block>
               <Text
@@ -114,7 +155,7 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
                 color={colors.greyPrimary}
                 marginTop={5}
               >
-                /ˈtʃɪk.ɪn/
+                /{pronunciation}/
               </Text>
               <Text
                 size={'h2'}
@@ -122,7 +163,7 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
                 paddingHorizontal={27}
                 marginTop={20}
               >
-                "The chicken in the backyard laid a fresh egg this morning."
+                {exampleEnglish}
               </Text>
             </AnimatedBlock>
           </Block>
@@ -142,7 +183,14 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
             style={[rotateContentStyleBack]}
           >
             <Icon state={'QuestionMark'} />
-            <Icon state={'Bookmark'} size={24} strokeWidth={1} />
+            <Icon
+              state={'Bookmark'}
+              size={24}
+              strokeWidth={0.5}
+              fill={isBookmarked ? colors.orangePrimary : 'none'}
+              stroke={isBookmarked ? colors.orangePrimary : colors.black}
+              onPress={handleBookmark}
+            />
           </AnimatedBlock>
           <Block alignCenter flex>
             <Block width={199} height={199} />
@@ -160,18 +208,19 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
                     fontFamily={'bold'}
                     color={colors.black}
                   >
-                    Con gà
+                    {vietnamese}
                   </Text>
                   <Pressable
                     style={{
-                      marginBottom: normalize.v(5),
+                      marginBottom: normalize.v(3),
                       marginStart: normalize.h(5),
                     }}
-                    onPress={() => {
-                      console.log('alo')
-                    }}
+                    onPress={handleSoundProgress}
                   >
-                    <SoundProgress fill={colors.orangeDark} />
+                    <SoundProgress
+                      fill={colors.orangeDark}
+                      ref={soundProgressRef}
+                    />
                   </Pressable>
                 </Block>
 
@@ -181,17 +230,17 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
                   paddingHorizontal={27}
                   marginTop={20}
                 >
-                  "Con gà ở sân sau đã đẻ trứng vào buổi sáng"
+                  {exampleVietnamese}
                 </Text>
               </Block>
-              <Text
-                size={'h4'}
-                color={colors.bluePrimary}
-                marginBottom={18}
+              <Pressable
+                onPress={onPressMoreExample}
                 style={{ alignSelf: 'flex-start' }}
               >
-                Xem thêm ví dụ
-              </Text>
+                <Text size={'h4'} color={colors.bluePrimary} marginBottom={18}>
+                  {t('more_example')}
+                </Text>
+              </Pressable>
             </AnimatedBlock>
           </Block>
         </AnimatedBlock>

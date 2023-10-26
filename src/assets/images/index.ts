@@ -22,4 +22,5 @@ export const images = {
   ChestBox: require('./ChestBox.png'),
   Light: require('./Light.png'),
   BeeWithHoney: require('./BeeWithHoney.png'),
+  BeeSad: require('./BeeSad.png'),
 }

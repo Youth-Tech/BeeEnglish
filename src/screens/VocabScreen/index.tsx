@@ -1,87 +1,138 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import {
-  Block,
-  Container,
-  Modal,
-  Progress,
-  ShadowButton,
   Text,
+  Block,
+  Progress,
+  Container,
+  Difficulty,
+  ShadowButton,
+  VocabularyWord,
+  LeaveProcessModal,
 } from '@components'
+
 import { Icon } from '@assets'
-import { colors, useTheme } from '@themes'
-import FlipVocabulary from '@screens/VocabScreen/components/FlipVocabulary'
-import { Pressable, StyleSheet, TouchableOpacity } from 'react-native'
+import { useTheme } from '@themes'
+import { useTranslation } from 'react-i18next'
+import { VocabularyFunc } from '@components/common/VocabularyWord/type'
+import { FlipVocabularyProps } from '@components/common/VocabularyWord/components/type'
 import { ModalFunction } from '@components/bases/Modal/type'
 
 interface VocabScreenProps {}
+
+const vocabularyData: FlipVocabularyProps[] = [
+  {
+    id: '1',
+    english: 'Cat',
+    vietnamese: 'Con mèo',
+    pronunciation: '/kat/',
+    exampleEnglish: 'A cat lying on the ground',
+    exampleVietnamese: 'Con mèo đang nằm trên sàn',
+    attachment: {
+      image:
+        'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
+    },
+    difficulty: Difficulty.easy,
+  },
+  {
+    id: '2',
+    english: 'Cat2',
+    vietnamese: 'Con mèo2',
+    pronunciation: '/kat/',
+    exampleEnglish: 'A cat lying on the ground',
+    exampleVietnamese: 'Con mèo đang nằm trên sàn',
+    attachment: {
+      image:
+        'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
+    },
+    difficulty: Difficulty.easy,
+  },
+  {
+    id: '3',
+    english: 'Cat3',
+    vietnamese: 'Con mèo3',
+    pronunciation: '/kat/',
+    exampleEnglish: 'A cat lying on the ground',
+    exampleVietnamese: 'Con mèo đang nằm trên sàn',
+    attachment: {
+      image:
+        'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
+    },
+    difficulty: Difficulty.easy,
+  },
+  {
+    id: '4',
+    english: 'Cat4',
+    vietnamese: 'Con mèo4',
+    pronunciation: '/kat/',
+    exampleEnglish: 'A cat lying on the ground',
+    exampleVietnamese: 'Con mèo đang nằm trên sàn',
+    attachment: {
+      image:
+        'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
+    },
+    difficulty: Difficulty.easy,
+  },
+]
 export const VocabScreen: React.FC<VocabScreenProps> = (props) => {
+  const { t } = useTranslation()
   const { colors, normalize } = useTheme()
-  const questionModalRef = React.useRef<ModalFunction>(null)
-  const selectModalRef = React.useRef<ModalFunction>(null)
-  const handleOpenQuestionModal = React.useCallback(() => {
-    questionModalRef.current?.openModal()
-  }, [])
-  const handleSelectDifficulty = () => {
-    selectModalRef.current?.openModal()
+  const [data, setData] = React.useState({})
+  const [step, setStep] = React.useState(0)
+  const vocabRef = React.useRef<VocabularyFunc>(null)
+  const [currentPos, setCurrentPos] = React.useState(0)
+  const [nextText, setNextText] = React.useState(t('continue_button'))
+  const oneStep = 100 / vocabularyData.length
+  const leaveModal = useRef<ModalFunction>(null)
+  const onClosePress = () => {
+    console.log('hey')
+    leaveModal.current?.openModal()
   }
+  const handleNextVocab = () => {
+    if (currentPos + 1 > vocabularyData.length - 1) {
+      return
+    }
+    setCurrentPos((prev) => prev + 1)
+    vocabRef.current?.onRightTriggerAnimation()
+  }
+  const handleBackVocab = () => {
+    if (currentPos - 1 < 0) {
+      return
+    }
+    setCurrentPos((prev) => prev - 1)
+    vocabRef.current?.onLeftTriggerAnimation()
+  }
+  React.useEffect(() => {
+    setData(vocabularyData[1])
+  }, [])
+  React.useEffect(() => {
+    if (currentPos === vocabularyData.length - 1) {
+      setNextText(t('finish'))
+    } else {
+      setNextText(t('continue_button'))
+    }
+    setData(vocabularyData[currentPos])
+    setStep((currentPos + 1) * oneStep)
+  }, [currentPos])
+  // @ts-ignore
   return (
     <Container>
-      <Block flex>
-        <Block paddingTop={15} alignCenter>
-          <Block
-            row
-            justifyCenter
-            alignCenter
-            space={'between'}
-            paddingHorizontal={14}
-          >
-            <Icon state={'Delete'} />
-            <Progress
-              totalSteps={100}
-              step={50}
-              progressContainerStyles={{
-                width: normalize.h(290),
-              }}
-            />
-          </Block>
-          <Block marginTop={15}>
-            <FlipVocabulary />
-          </Block>
-        </Block>
-        <Block
-          row
-          space={'between'}
-          marginTop={20}
-          paddingLeft={20}
-          paddingRight={23}
-          alignCenter
-          justifyCenter
-        >
-          <Text size={'h3'} fontFamily={'bold'}>
-            Cấp độ từ
-          </Text>
-          <Icon
-            state={'QuestionCircle'}
-            style={{ marginBottom: normalize.v(3) }}
-            onPress={handleOpenQuestionModal}
+      <Block paddingHorizontal={15} paddingTop={10}>
+        <Block row alignCenter space="between">
+          <Icon state="Cancel" onPress={onClosePress} />
+          <Progress
+            step={step}
+            totalSteps={100}
+            strokeHeight={16}
+            stepColor={colors.orangePrimary}
+            progressContainerStyles={{
+              flex: 1,
+              marginStart: 5,
+            }}
           />
         </Block>
-        <Pressable onPress={handleSelectDifficulty}>
-          <Block
-            shadow
-            radius={5}
-            alignCenter
-            marginTop={14}
-            paddingVertical={10}
-            marginHorizontal={20}
-            backgroundColor={colors.white}
-          >
-            <Text size={'h3'} fontFamily={'bold'}>
-              Khó
-            </Text>
-          </Block>
-        </Pressable>
       </Block>
+      <VocabularyWord ref={vocabRef} data={data} setData={setData} />
+      <Block flex />
       <Block
         row
         marginBottom={30}
@@ -98,9 +149,10 @@ export const VocabScreen: React.FC<VocabScreenProps> = (props) => {
           buttonColor={colors.white}
           buttonBorderColor={colors.greyLight}
           shadowButtonColor={colors.greyLight}
+          onPress={handleBackVocab}
         >
           <Text size={'h2'} fontFamily={'semiBold'}>
-            Trước
+            {t('previous')}
           </Text>
         </ShadowButton>
         <ShadowButton
@@ -111,148 +163,22 @@ export const VocabScreen: React.FC<VocabScreenProps> = (props) => {
           buttonColor={colors.orangeLight}
           buttonBorderColor={colors.orangePrimary}
           shadowButtonColor={colors.orangePrimary}
+          onPress={handleNextVocab}
         >
           <Text size={'h2'} fontFamily={'semiBold'}>
-            Sau
+            {nextText}
           </Text>
         </ShadowButton>
       </Block>
-      <Modal ref={questionModalRef} position={'center'} animationType={'fade'}>
-        <Block
-          height={252}
-          radius={8}
-          marginHorizontal={20}
-          backgroundColor={colors.orangeSecondary}
-        >
-          <Text
-            size={'h1'}
-            fontFamily={'bold'}
-            color={colors.white}
-            paddingTop={15}
-            paddingBottom={11}
-            alignSelf={'center'}
-          >
-            Cấp độ từ
-          </Text>
-          <Block
-            flex
-            radius={8}
-            margin={5}
-            paddingTop={29}
-            paddingHorizontal={7}
-            backgroundColor={'white'}
-          >
-            <Text size={'h3'} fontFamily={'bold'}>
-              Bạn hãy chọn cấp độ từ phù hợp với trình độ của bạn.
-            </Text>
-            <Block row marginTop={15}>
-              <Text size={'h3'} fontFamily={'bold'}>
-                Khó:
-              </Text>
-              <Text marginLeft={3} size={'h3'} fontFamily={'regular'}>
-                ôn lại sau 1 phút
-              </Text>
-            </Block>
-            <Block row marginTop={8}>
-              <Text size={'h3'} fontFamily={'bold'}>
-                Bình thường:
-              </Text>
-              <Text marginLeft={3} size={'h3'} fontFamily={'regular'}>
-                ôn lại sau 1 phút
-              </Text>
-            </Block>
-            <Block row marginTop={8}>
-              <Text size={'h3'} fontFamily={'bold'}>
-                Đơn giản:
-              </Text>
-              <Text marginLeft={3} size={'h3'} fontFamily={'regular'}>
-                ôn lại sau 1 phút
-              </Text>
-            </Block>
-            <Block row marginTop={8}>
-              <Text size={'h3'} fontFamily={'bold'}>
-                Dễ:
-              </Text>
-              <Text marginLeft={3} size={'h3'} fontFamily={'regular'}>
-                ôn lại sau 1 phút
-              </Text>
-            </Block>
-          </Block>
-        </Block>
-      </Modal>
-      <Modal ref={selectModalRef} position={'bottom'}>
-        <Block paddingHorizontal={20}>
-          <Block radius={10} overflow={'hidden'}>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text
-                size={'h2'}
-                fontFamily={'semiBold'}
-                color={colors.bluePrimary}
-                paddingVertical={15}
-              >
-                Dễ
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text
-                size={'h2'}
-                fontFamily={'semiBold'}
-                color={colors.bluePrimary}
-                paddingVertical={15}
-              >
-                Đơn giản
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text
-                size={'h2'}
-                fontFamily={'semiBold'}
-                color={colors.bluePrimary}
-                paddingVertical={15}
-              >
-                Bình thường
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.optionButton]}>
-              <Text
-                size={'h2'}
-                fontFamily={'semiBold'}
-                color={colors.bluePrimary}
-                paddingVertical={15}
-              >
-                Khó
-              </Text>
-            </TouchableOpacity>
-          </Block>
-          <TouchableOpacity
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: 'rgba(255,255,255,0.9)',
-              borderRadius: normalize.m(8),
-              marginBottom: normalize.v(30),
-              marginTop: normalize.v(15),
-            }}
-          >
-            <Text
-              size={'h2'}
-              fontFamily={'semiBold'}
-              color={colors.bluePrimary}
-              paddingVertical={15}
-            >
-              Cancel
-            </Text>
-          </TouchableOpacity>
-        </Block>
-      </Modal>
+      <LeaveProcessModal
+        ref={leaveModal}
+        onPressApprove={() => {
+          //TODO: navigate to the screen
+        }}
+        onPressCancel={() => {
+          leaveModal.current?.dismissModal()
+        }}
+      />
     </Container>
   )
 }
-
-const styles = StyleSheet.create({
-  optionButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.9)',
-  },
-})
