@@ -1,95 +1,74 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  Block,
-  Container,
-  DismissKeyBoardBlock,
-  StatusBar,
-  Text,
-  TextInput,
-} from '@components'
+import { Block, Container, TextInput } from '@components'
 import { useTheme } from '@themes'
 import { Icon } from '@assets'
 import { LearnedWordItem } from './components'
-import { goBack } from '@navigation'
-import { FlatList, ListRenderItemInfo, View } from 'react-native'
-import { widthScreen } from '@utils/helpers'
 import { data, dataProps } from './const'
+import HeaderApp from '@components/common/HeaderComponent'
+import { MasonryFlashList, MasonryListRenderItem } from '@shopify/flash-list'
 
 export const LearnedWordScreen = () => {
-  const { colors, normalize } = useTheme()
+  const { colors } = useTheme()
   const { t } = useTranslation()
 
-  const renderLearnedWordItem = ({
-    index,
-    item,
-  }: ListRenderItemInfo<dataProps>) => {
+  const renderLearnedWordItem: MasonryListRenderItem<dataProps> = (info) => {
+    const { item, index } = info
     return (
-      <View style={{ padding: normalize.m(5) }} key={`item-${index}`}>
+      <Block key={`item-${index}`} paddingBottom={10}>
         <LearnedWordItem data={item} />
-      </View>
+      </Block>
     )
   }
-
   return (
-    <Container>
-      <StatusBar statusColor={colors.orangePrimary}></StatusBar>
-      <DismissKeyBoardBlock>
-        <Block flex>
-          <Block
-            width={widthScreen}
-            height={208}
-            backgroundColor={colors.orangePrimary}
-            borderBottomLeftRadius={50}
-            borderBottomRightRadius={50}
-            absolute
-          ></Block>
-          {/* Textinput and FlatList */}
-          <Block paddingHorizontal={20} backgroundColor="transparent">
-            <Block row alignCenter>
-              <Icon state="Back" onPress={goBack} stroke={colors.white}></Icon>
-              <Text
-                center
-                marginRight={25}
-                flex
-                size={'h2'}
-                fontFamily="bold"
-                color={colors.white}
-              >
-                {t('vocabulary_learned')}
-              </Text>
-            </Block>
-            <Block marginTop={22} height={35} radius={30}>
-              <TextInput
-                containerStyle={{ width: '100%' }}
-                placeholderTextColor={colors.greyPrimary}
-                inputContainerStyle={{
-                  width: '100%',
-                  borderRadius: 30,
-                }}
-                placeholder={t('english_vocabulary')}
-                rightIcon={
-                  <Icon
-                    state="Microphone"
-                    stroke={colors.greyPrimary}
-                    onPress={() => {}}
-                  ></Icon>
-                }
-              />
-            </Block>
-
-            <FlatList
-              scrollEnabled={true}
-              data={data}
-              style={{ paddingTop: 15 }}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={renderLearnedWordItem}
-              showsVerticalScrollIndicator={false}
-              numColumns={2}
-            />
-          </Block>
+    <Container statusColor={colors.orangePrimary}>
+      <Block
+        width={'100%'}
+        height={200}
+        backgroundColor={colors.orangePrimary}
+        borderBottomLeftRadius={50}
+        borderBottomRightRadius={50}
+        style={{ flexGrow: 1 }}
+        absolute
+      />
+      {/* Textinput and FlatList */}
+      <HeaderApp
+        title={t('vocabulary_learned')}
+        style={{ backgroundColor: colors.transparent }}
+        color="white"
+      />
+      <Block paddingHorizontal={20} backgroundColor="transparent" flex>
+        <Block marginVertical={15} height={35} radius={30}>
+          <TextInput
+            containerStyle={{ width: '100%' }}
+            placeholderTextColor={colors.greyPrimary}
+            inputContainerStyle={{
+              width: '100%',
+              borderRadius: 30,
+            }}
+            placeholder={t('english_vocabulary')}
+            rightIcon={
+              <Icon
+                state="Microphone"
+                stroke={colors.greyPrimary}
+                onPress={() => {}}
+              ></Icon>
+            }
+          />
         </Block>
-      </DismissKeyBoardBlock>
+        <Block radius={15} flex overflow="scroll">
+          <MasonryFlashList
+            scrollEnabled={true}
+            data={data}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderLearnedWordItem}
+            showsVerticalScrollIndicator={false}
+            numColumns={2}
+            centerContent
+            estimatedItemSize={200}
+          />
+        </Block>
+      </Block>
     </Container>
   )
 }

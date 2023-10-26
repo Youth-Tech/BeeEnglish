@@ -69,7 +69,7 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
             {data.translation}
           </Text>
         </Block>
-        <Block row paddingLeft={7} paddingTop={9} alignCenter >
+        <Block row paddingLeft={7} paddingTop={9} alignCenter>
           <Block
             radius={100}
             width={5}
@@ -80,7 +80,6 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
             {t('level_of_difficult')}
             {difficultyText}
           </Text>
-      
         </Block>
         <Block height={20}></Block>
       </Block>

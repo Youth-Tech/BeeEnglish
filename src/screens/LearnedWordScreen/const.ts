@@ -48,4 +48,11 @@ export const data: dataProps[] = [
     translation: 'Sự khác biệt',
     difficulty: 'hard',
   },
+  {
+    id: 7,
+    word: 'Hello',
+    wordType: 'noun',
+    translation: 'Sự khác biệt',
+    difficulty: 'hard',
+  },
 ]
