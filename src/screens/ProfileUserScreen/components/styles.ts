@@ -1,6 +1,6 @@
 import { makeStyles, normalize, fontFamily as fontFamilyApp } from '@themes'
 import { handleFontSize } from '@components/utils'
-import {getStatusBarHeight} from "@components/bases/StatusBar/status_bar_height";
+import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
 
 export const useStyles = makeStyles()(({ colors }) => ({
   boxHeaderContainer: {
@@ -10,7 +10,7 @@ export const useStyles = makeStyles()(({ colors }) => ({
     paddingTop: getStatusBarHeight() + normalize.v(10),
     paddingHorizontal: normalize.m(20),
     paddingBottom: normalize.v(10),
-    elevation: 15
+    elevation: 15,
   },
   accountBee: {
     width: 30,
@@ -34,13 +34,13 @@ export const useStyles = makeStyles()(({ colors }) => ({
     position: 'absolute',
     top: 0,
     flex: 1,
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
     backgroundColor: colors.white,
     zIndex: -10,
     elevation: 10,
     alignItems: 'flex-end',
-    justifyContent: "center",
+    justifyContent: 'center',
     paddingTop: getStatusBarHeight() + normalize.v(10),
     paddingHorizontal: normalize.m(20),
     paddingBottom: normalize.v(10),
@@ -68,5 +68,20 @@ export const useStyles = makeStyles()(({ colors }) => ({
     borderRadius: normalize.m(8),
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  // item statistical
+  boxItemStatistical: {
+    borderColor: colors.orangePrimary,
+    borderWidth: 1.5,
+    paddingVertical: normalize.m(10),
+    paddingHorizontal: normalize.m(5),
+    borderRadius: normalize.m(10),
+    flex: 1,
+  },
+  // item badges
+  boxContentBadges: {
+    paddingVertical: normalize.m(10),
+    justifyContent: 'space-between',
+    flexShrink: 1,
   },
 }))

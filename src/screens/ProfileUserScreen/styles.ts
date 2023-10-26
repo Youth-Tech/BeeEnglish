@@ -1,4 +1,4 @@
-import { makeStyles, normalize,} from '@themes'
+import { makeStyles, normalize } from '@themes'
 
 export const useStyles = makeStyles()(({ colors }) => ({
   container: {
@@ -10,12 +10,11 @@ export const useStyles = makeStyles()(({ colors }) => ({
     flex: 1,
   },
   backgroundContainer: {
-    width: '100%',
-    aspectRatio: 1,
-    top: normalize.m(-55),
-    resizeMode: 'contain',
+    height: 310,
+    top: normalize.m(-35),
+    resizeMode: 'stretch',
   },
   title: {
-    backgroundColor: colors.red
-  }
+    backgroundColor: colors.red,
+  },
 }))

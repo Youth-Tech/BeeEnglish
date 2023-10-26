@@ -4,7 +4,8 @@ import { Block, Image } from '@components'
 import { Icon, images } from '@assets'
 import { TouchableOpacity, Animated } from 'react-native'
 import { useTheme } from '@themes'
-import {useTranslation} from "react-i18next";
+import { useTranslation } from 'react-i18next'
+import { navigate } from '@navigation'
 
 interface Props {
   opacity: Animated.AnimatedInterpolation<number>
@@ -12,40 +13,45 @@ interface Props {
   color: Animated.AnimatedInterpolation<string>
 }
 
-const HeaderAccount: React.FC<Props> = ({
-  opacity,
-    unOpacity,
-  color,
-}) => {
+const HeaderAccount: React.FC<Props> = ({ opacity, unOpacity, color }) => {
   const styles = useStyles()
   const { colors } = useTheme()
-  const {t} = useTranslation()
+  const { t } = useTranslation()
+
+  const handleOnPressSetting = () => {
+    navigate('SETTING_SCREEN')
+  }
+
   return (
     <Block>
       <Block style={styles.boxHeaderContainer}>
         <TouchableOpacity activeOpacity={0.5} style={styles.headerLeft}>
           <Image source={images.AccountBee} style={styles.accountBee} />
           <Animated.Text style={[styles.titleAccount, { color }]}>
-            {t("account")}
+            {t('account')}
           </Animated.Text>
         </TouchableOpacity>
-        <Animated.View style={[styles.headerLeft, styles.headerRight, {opacity: unOpacity}]}>
+        <Animated.View
+          style={[
+            styles.headerLeft,
+            styles.headerRight,
+            { opacity: unOpacity },
+          ]}
+        >
           <TouchableOpacity>
             <Icon state={'SendPaper'} stroke={colors.white} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleOnPressSetting}>
             <Icon state={'Setting'} stroke={colors.white} />
           </TouchableOpacity>
         </Animated.View>
       </Block>
-      <Animated.View
-        style={[{ opacity }, styles.backgroundHeader]}
-      >
+      <Animated.View style={[{ opacity }, styles.backgroundHeader]}>
         <Block style={[styles.headerLeft, styles.headerRight]}>
           <TouchableOpacity>
             <Icon state={'SendPaper'} stroke={colors.black} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleOnPressSetting}>
             <Icon state={'Setting'} stroke={colors.black} />
           </TouchableOpacity>
         </Block>

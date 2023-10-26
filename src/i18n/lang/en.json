@@ -78,6 +78,11 @@
     "comeback_tomorrow": "Please come back tomorrow!",
     "video": "Video",
     "joined_on": "Joined on",
-    "process": "Process"
+    "process": "Process",
+    "statistical": "Statistical",
+    "badges": "Badges",
+    "attendance_series": "Attendance Series",
+    "level": "Level",
+    "total_point": "Total Point"
   }
 }
