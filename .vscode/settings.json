@@ -6,6 +6,7 @@
     "MMKV",
     "notifee",
     "persistor",
+    "portalize",
     "Pressable",
     "Reauth",
     "reduxjs",

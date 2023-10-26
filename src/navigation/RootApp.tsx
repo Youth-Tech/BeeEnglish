@@ -1,7 +1,8 @@
 import React from 'react'
 import { ActivityIndicator } from 'react-native'
 import notifee, { EventType } from '@notifee/react-native'
-import { useNetInfo } from '@react-native-community/netinfo'
+import { addEventListener } from '@react-native-community/netinfo'
+import * as Types from '@react-native-community/netinfo/src/internal/types'
 
 import {
   getFCMToken,
@@ -16,7 +17,17 @@ import { Block, Text } from '@components'
 import { getIsLoading } from '@redux/selectors'
 
 export const RootApp = () => {
-  const netInfo = useNetInfo()
+  const [netInfo, setNetInfo] = React.useState<Types.NetInfoState>({
+    type: Types.NetInfoStateType.unknown,
+    isConnected: true,
+    isInternetReachable: null,
+    details: null,
+  })
+
+  React.useEffect((): (() => void) => {
+    return addEventListener(setNetInfo)
+  }, [])
+
   const { colors } = useTheme()
   const isLoading = useAppSelector(getIsLoading)
 
@@ -26,8 +37,8 @@ export const RootApp = () => {
       let fcmToken = await getFCMToken()
       console.log(fcmToken)
 
+      await createChannelId()
       notificationListener()
-      createChannelId()
     } else {
       console.log('User denied!')
     }
@@ -52,6 +63,7 @@ export const RootApp = () => {
 
   return (
     <>
+      {/* <StatusBar /> */}
       {isLoading && (
         <Block
           absolute

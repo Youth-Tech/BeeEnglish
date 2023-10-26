@@ -37,7 +37,7 @@ export interface InputProps extends TextInputProps {
    *
    * Default is **"regular"**
    */
-  fontFamily?: 'bold' | 'semiBold' | 'regular' | 'light'
+  fontFamily?: 'bold' | 'semiBold' | 'regular' | 'light' | 'cutie'
 
   /**
    * Size of text

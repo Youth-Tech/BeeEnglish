@@ -5,6 +5,7 @@ import { ThemeReducer } from './theme.reducer'
 import { AppStateReducer } from './appState.reducer'
 import { ConfigReducer } from './config.reducer'
 import {UserReducer} from "@redux/reducers/user.reducer";
+import {DetailPostReducer} from "@redux/reducers/detailPost.reducer";
 
 export const rootReducer = combineReducers({
   auth: AuthReducer,
@@ -12,6 +13,7 @@ export const rootReducer = combineReducers({
   themeApp: ThemeReducer,
   appState: AppStateReducer,
   config: ConfigReducer,
+  detailPost: DetailPostReducer,
 
   // ...other reducers here
   //   user: UserReducer,
@@ -22,3 +24,4 @@ export * from './user.reducer'
 export * from './config.reducer'
 export * from './appState.reducer'
 export * from './theme.reducer'
+export * from './detailPost.reducer'

@@ -75,4 +75,5 @@ export const fontFamily = {
   semiBold: 'Quicksand-SemiBold',
   regular: 'Quicksand-Regular',
   light: 'Quicksand-Light',
+  cutie: 'Cutie_Pie',
 }

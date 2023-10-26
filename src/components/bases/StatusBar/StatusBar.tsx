@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
+import { View, StatusBar as RNStatusBar, ViewProps } from 'react-native'
 
 import { useAppSelector } from '@hooks'
 import { makeStyles, useTheme } from '@themes'
-import { View, StatusBar as RNStatusBar, ViewProps } from 'react-native'
 import { getStatusBarHeight } from './status_bar_height'
 
 export type StatusBarProps = {
@@ -30,7 +30,7 @@ export const StatusBar: FC<StatusBarProps> = (props) => {
         translucent
         animated
         barStyle={themeStore === 'dark' ? 'light-content' : 'dark-content'}
-        backgroundColor={statusColor || theme.colors.white}
+        backgroundColor={statusColor || 'transparent'}
       />
     </View>
   )
