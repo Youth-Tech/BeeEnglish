@@ -1,6 +1,6 @@
 import { UserData } from '@services/UserService'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { signIn, verifyAccount } from '@redux/actions/auth.action'
+import { login, signIn, verifyAccount } from '@redux/actions/auth.action'
 
 export const defaultUserState: UserData = {
   _id: '',
@@ -48,6 +48,12 @@ const userSlice = createSlice({
         return {
           ...state,
           isVerified: action.payload === 200,
+        }
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        return {
+          ...state,
+          ...action.payload.data.user,
         }
       })
   },

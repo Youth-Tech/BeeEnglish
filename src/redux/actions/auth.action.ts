@@ -1,10 +1,20 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { UserData, UserService } from '@services/UserService'
 import { defaultUserState } from '@redux/reducers/user.reducer'
-import { AuthService, SignUpParams } from '@services/AuthService'
+import { AuthService, LoginParams, SignUpParams } from '@services/AuthService'
 
 export interface SignUpResponse {
   data: {
+    tokens: {
+      accessToken: string
+      refreshToken: string
+    }
+  }
+}
+
+export interface LoginResponse {
+  data: {
+    user: UserData
     tokens: {
       accessToken: string
       refreshToken: string
@@ -40,5 +50,13 @@ export const verifyAccount = createAsyncThunk(
   async (code: string) => {
     const response = await AuthService.verifyAccount({ code })
     return response.status
+  },
+)
+
+export const login = createAsyncThunk<LoginResponse, LoginParams>(
+  'auth/login',
+  async (params) => {
+    const response = await AuthService.login(params)
+    return response.data
   },
 )
