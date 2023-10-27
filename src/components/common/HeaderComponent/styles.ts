@@ -11,7 +11,6 @@ export const useStyles = makeStyles()(({ colors }) => ({
   iconBack: {
     width: normalize.m(50),
     height: normalize.m(50),
-    backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
   },

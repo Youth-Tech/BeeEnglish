@@ -1,23 +1,26 @@
 import React from 'react'
-import { useTheme } from '@themes'
-import { useStyles } from '@components/common/HeaderComponent/styles'
+import { ColorsMode, useTheme } from '@themes'
+import { useStyles } from './styles'
 import { Block } from '@components'
 import { Icon, TIcon } from '@assets'
-import {TouchableOpacity, Text} from 'react-native'
+import { TouchableOpacity, Text, StyleProp, ViewStyle } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { navigateAndReset } from '@navigation'
 
 interface HeaderAppProps {
   onPressLeftIcon?: () => void
   onPressRightIcon?: () => void
-  title: string
+  title?: string
   rightIcon?: TIcon
+  style?: StyleProp<ViewStyle>
+  color?: keyof ColorsMode
 }
 
 const HeaderApp: React.FC<HeaderAppProps> = ({
   rightIcon,
   onPressRightIcon,
   onPressLeftIcon,
+  color = 'black',
   ...rest
 }) => {
   const { colors } = useTheme()
@@ -31,13 +34,23 @@ const HeaderApp: React.FC<HeaderAppProps> = ({
     }
   }
   return (
-    <Block style={styles.boxHeader}>
+    <Block style={[styles.boxHeader, rest.style]}>
       <TouchableOpacity onPress={onPressGoBack} style={styles.iconBack}>
-        <Icon state={'Back'} />
+        <Icon state={'Back'} stroke={colors[color]} />
       </TouchableOpacity>
-      <Text style={styles.titleHeader} ellipsizeMode={"tail"} numberOfLines={1}>{rest.title}</Text>
+      {rest.title && (
+        <Text
+          style={[styles.titleHeader, { color: colors[color] }]}
+          ellipsizeMode={'tail'}
+          numberOfLines={1}
+        >
+          {rest.title}
+        </Text>
+      )}
       <TouchableOpacity onPress={onPressGoBack} style={styles.iconBack}>
-        {rightIcon && <Icon state={rightIcon} />}
+        {rightIcon && (
+          <Icon state={rightIcon} fill={colors[color]} stroke={colors[color]} />
+        )}
       </TouchableOpacity>
     </Block>
   )
