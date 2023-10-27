@@ -1,9 +1,11 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { BackHandler } from 'react-native'
-import BottomSheet, {BottomSheetBackdrop, BottomSheetProps} from '@gorhom/bottom-sheet'
-import {
-  BottomSheetDefaultBackdropProps
-} from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetProps,
+} from '@gorhom/bottom-sheet'
+import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types'
+import { Portal } from 'react-native-portalize'
 
 interface CustomBottomSheetProps extends BottomSheetProps {
   visible: boolean
@@ -49,7 +51,7 @@ const BottomSheetApp = (props: CustomBottomSheetProps) => {
   }, [props.visible])
 
   return (
-    <>
+    <Portal>
       {props.visible ? (
         <BottomSheet
           ref={bottomSheetRef}
@@ -67,7 +69,7 @@ const BottomSheetApp = (props: CustomBottomSheetProps) => {
       ) : (
         <></>
       )}
-    </>
+    </Portal>
   )
 }
 

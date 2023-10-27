@@ -79,7 +79,7 @@ export const colors = {
     greyLighter: '#F1F1F5',
 
     yellowPrimary: '#FCFF00',
-    yellowDark: '#FFCC08',
+    yellowDark: '#E4E700',
 
     greenDark: '#002800',
     greenPrimary: '#0A381C',
