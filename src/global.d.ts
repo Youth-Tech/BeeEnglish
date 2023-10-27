@@ -13,18 +13,29 @@ interface PostResponse {
 }
 
 interface User {
-  id: number,
-  username: string,
-  fullName: string,
-  email: string,
-  avatar: string,
-  role: number,
-  score: number,
+  id: number
+  username: string
+  fullName: string
+  email: string
+  avatar: string
+  role: number
+  score: number
   streak: number
-  badges: [],
-  postBookmarks: [],
-  courseCompleted: [],
-  level: string,
-  wordBookmarks: [],
-  provider: string,
+  badges: []
+  postBookmarks: []
+  courseCompleted: []
+  level: string
+  wordBookmarks: []
+  provider: string
+}
+
+interface Badges {
+  id: string
+  name: string
+  desc: string
+  attachment: {
+    id: string
+    type: string
+    src: string
+  }
 }

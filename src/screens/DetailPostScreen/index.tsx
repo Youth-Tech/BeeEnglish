@@ -3,21 +3,21 @@ import { normalize } from '@themes'
 import { useStyles } from './styles'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch, useAppSelector } from '@hooks'
-import { newsData, posts } from '@screens/DetailPostScreen/const'
-import { changeBottomSheetState, changeShowComment } from '@redux/reducers'
+import { NewsItem } from '@screens/HomeScreen/components'
 import HeaderApp from '@components/common/HeaderComponent'
 import { Block, Container, Image, Text } from '@components'
 import { FlatList, ScrollView, Dimensions } from 'react-native'
+import { newsData, posts } from '@screens/DetailPostScreen/const'
 import BottomSheetApp from '@components/common/BottomSheetComponent'
 import ContentPost from '@screens/DetailPostScreen/components/ContentPost'
 import EmotionPost from '@screens/DetailPostScreen/components/EmotionPost'
+import { changeBottomSheetState, changeShowComment } from '@redux/reducers'
 import BottomSheetWord from '@screens/DetailPostScreen/components/BottomSheetWord'
-import { NewsItem } from '@screens/HomeScreen/components'
 import BottomSheetComment from '@screens/DetailPostScreen/components/BottomSheetComment'
 
 const DetailPost: React.FC = () => {
-  const { t } = useTranslation()
   const styles = useStyles()
+  const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const data = useAppSelector((state) => state.root.detailPost)
   const onCloseBottomSheet = () => {
@@ -83,8 +83,9 @@ const DetailPost: React.FC = () => {
         visible={data.isShowComment}
         onClose={onCloseComment}
         enablePanDownToClose={false}
-        backgroundStyle={{ borderRadius: normalize.m(10), elevation: 10 }}>
-          <BottomSheetComment />
+        backgroundStyle={{ borderRadius: normalize.m(10), elevation: 10 }}
+      >
+        <BottomSheetComment />
       </BottomSheetApp>
     </Container>
   )
