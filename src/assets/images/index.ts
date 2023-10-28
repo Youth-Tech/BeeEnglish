@@ -24,4 +24,5 @@ export const images = {
   ProfileBackground: require('./BackgroundProfile.png'),
   AccountBee: require('./AccountProfileBee.jpeg'),
   BeeWithHoney: require('./BeeWithHoney.png'),
+  QuestionBubble: require('./QuestionBubble.png'),
 }

@@ -13,6 +13,8 @@ import {
   GrammarOptions,
   WordChoice,
   QuestionRefFunction,
+  VocabularyChoiceFunc,
+  VocabularyChoice,
 } from '@components'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
@@ -28,6 +30,7 @@ export interface Question {
 export enum QuestionType {
   OPTION = 'OPTION',
   WORD_CHOICE = 'WORD_CHOICE',
+  VOCAB_CHOICE = 'VOCAB_CHOICE',
 }
 
 export interface Answer {
@@ -100,6 +103,76 @@ const QUESTION: Question[] = [
     answer: 'I go to school by bike3',
     type: QuestionType.WORD_CHOICE,
   },
+  {
+    id: '5',
+    question: 'Dog',
+    answer: [
+      {
+        option: 'https://cdn-icons-png.flaticon.com/512/2002/2002611.png',
+        isValid: false,
+      },
+      {
+        option: 'https://cdn-icons-png.flaticon.com/512/1993/1993713.png',
+        isValid: false,
+      },
+      {
+        option: 'https://cdn-icons-png.flaticon.com/512/1998/1998627.png',
+        isValid: true,
+      },
+      {
+        option: 'https://cdn-icons-png.flaticon.com/512/437/437562.png',
+        isValid: false,
+      },
+    ],
+    type: QuestionType.VOCAB_CHOICE,
+  },
+
+  {
+    id: '6',
+    question: 'Cat',
+    answer: [
+      {
+        option: 'https://cdn-icons-png.flaticon.com/512/2002/2002611.png',
+        isValid: false,
+      },
+      {
+        option: 'https://cdn-icons-png.flaticon.com/512/1993/1993713.png',
+        isValid: false,
+      },
+      {
+        option: 'https://cdn-icons-png.flaticon.com/512/1998/1998627.png',
+        isValid: false,
+      },
+      {
+        option: 'https://cdn-icons-png.flaticon.com/512/437/437562.png',
+        isValid: true,
+      },
+    ],
+    type: QuestionType.VOCAB_CHOICE,
+  },
+  {
+    id: '7',
+    question: 'Chicken',
+    answer: [
+      {
+        option: 'https://cdn-icons-png.flaticon.com/512/2002/2002611.png',
+        isValid: true,
+      },
+      {
+        option: 'https://cdn-icons-png.flaticon.com/512/1993/1993713.png',
+        isValid: false,
+      },
+      {
+        option: 'https://cdn-icons-png.flaticon.com/512/1998/1998627.png',
+        isValid: false,
+      },
+      {
+        option: 'https://cdn-icons-png.flaticon.com/512/437/437562.png',
+        isValid: false,
+      },
+    ],
+    type: QuestionType.VOCAB_CHOICE,
+  },
 ]
 
 export interface ResultType {
@@ -117,7 +190,7 @@ const BlockAnimated = Animated.createAnimatedComponent(Block)
 export const GrammarScreen: React.FC = () => {
   const wordChoiceRef = React.useRef<WordListRefFunc>(null)
   const optionRef = React.useRef<QuestionRefFunction>(null)
-
+  const vocabChoiceRef = React.useRef<VocabularyChoiceFunc>(null)
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
 
@@ -163,6 +236,8 @@ export const GrammarScreen: React.FC = () => {
     let result: boolean = !!null
     if (currentQuestion.data.type === QuestionType.OPTION) {
       result = !!optionRef.current?.check()
+    } else if (currentQuestion.data.type === QuestionType.VOCAB_CHOICE) {
+      result = !!vocabChoiceRef.current?.check()
     } else {
       result = !!wordChoiceRef.current?.check(
         currentQuestion.data.answer as string,
@@ -207,6 +282,8 @@ export const GrammarScreen: React.FC = () => {
     } else {
       if (questions[nextQuestion].type === QuestionType.OPTION) {
         optionRef.current?.triggerChangeLayout()
+      } else if (questions[nextQuestion].type === QuestionType.VOCAB_CHOICE) {
+        vocabChoiceRef.current?.onTriggerAnimation()
       }
       setCurrentQuestion((_) => {
         return {
@@ -216,7 +293,20 @@ export const GrammarScreen: React.FC = () => {
       })
     }
   }
-
+  const renderQuestion = (type: QuestionType) => {
+    switch (type) {
+      case 'WORD_CHOICE':
+        return (
+          <WordChoice wordListRef={wordChoiceRef} data={currentQuestion.data} />
+        )
+      case 'OPTION':
+        return <GrammarOptions ref={optionRef} data={currentQuestion.data} />
+      case 'VOCAB_CHOICE':
+        return (
+          <VocabularyChoice ref={vocabChoiceRef} data={currentQuestion.data} />
+        )
+    }
+  }
   return (
     <Container>
       <Block flex paddingHorizontal={15} paddingTop={10}>
@@ -234,11 +324,7 @@ export const GrammarScreen: React.FC = () => {
           />
         </Block>
 
-        {currentQuestion.data.type === QuestionType.WORD_CHOICE ? (
-          <WordChoice wordListRef={wordChoiceRef} data={currentQuestion.data} />
-        ) : (
-          <GrammarOptions ref={optionRef} data={currentQuestion.data} />
-        )}
+        {renderQuestion(currentQuestion.data.type)}
 
         <Block flex />
 

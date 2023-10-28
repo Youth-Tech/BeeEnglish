@@ -1,13 +1,11 @@
 import React from 'react'
-import { Block, Container } from '@components'
+import { Block, Container, VocabularyChoice } from '@components'
 import { WordList } from '@components'
 
 export const TestScreen = () => {
   return (
     <Container>
-      <Block flex padding={10}>
-        <WordList sentence="Hello các cậu mình là Vũ nè hoom nay" />
-      </Block>
+      <Block flex paddingHorizontal={20}></Block>
     </Container>
   )
 }
