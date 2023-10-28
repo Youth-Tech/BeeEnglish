@@ -1,6 +1,6 @@
 import React from 'react'
-import { Block, Container, VocabularyChoice } from '@components'
-import { WordList } from '@components'
+
+import { Block, Container } from '@components'
 
 export const TestScreen = () => {
   return (

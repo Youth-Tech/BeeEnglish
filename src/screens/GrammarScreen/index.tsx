@@ -15,6 +15,8 @@ import {
   QuestionRefFunction,
   VocabularyChoiceFunc,
   VocabularyChoice,
+  VocabularyOptionsFunc,
+  VocabularyOptions,
 } from '@components'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
@@ -23,6 +25,7 @@ import { goBack } from '@navigation'
 export interface Question {
   id: string
   question: string
+  wordImage?: string
   answer: string | Answer[]
   type: QuestionType
 }
@@ -31,6 +34,7 @@ export enum QuestionType {
   OPTION = 'OPTION',
   WORD_CHOICE = 'WORD_CHOICE',
   VOCAB_CHOICE = 'VOCAB_CHOICE',
+  VOCAB_OPTION = 'VOCAB_OPTION',
 }
 
 export interface Answer {
@@ -173,6 +177,40 @@ const QUESTION: Question[] = [
     ],
     type: QuestionType.VOCAB_CHOICE,
   },
+  {
+    id: '8',
+    question: 'Chicken',
+    wordImage:
+      'https://static-00.iconduck.com/assets.00/chicken-icon-2048x2012-tfn7yvk0.png',
+    answer: [
+      {
+        option: 'Con mèo',
+        isValid: false,
+      },
+      {
+        option: 'Con gà',
+        isValid: true,
+      },
+    ],
+    type: QuestionType.VOCAB_OPTION,
+  },
+  {
+    id: '9',
+    question: 'Cat',
+    wordImage:
+      'https://static.vecteezy.com/system/resources/previews/013/078/569/original/illustration-of-cute-colored-cat-cartoon-cat-image-in-format-suitable-for-children-s-book-design-elements-introduction-of-cats-to-children-books-or-posters-about-animal-free-png.png',
+    answer: [
+      {
+        option: 'Con mèo',
+        isValid: true,
+      },
+      {
+        option: 'Con gà',
+        isValid: false,
+      },
+    ],
+    type: QuestionType.VOCAB_OPTION,
+  },
 ]
 
 export interface ResultType {
@@ -191,6 +229,7 @@ export const GrammarScreen: React.FC = () => {
   const wordChoiceRef = React.useRef<WordListRefFunc>(null)
   const optionRef = React.useRef<QuestionRefFunction>(null)
   const vocabChoiceRef = React.useRef<VocabularyChoiceFunc>(null)
+  const vocabOptionRef = React.useRef<VocabularyOptionsFunc>(null)
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
 
@@ -238,6 +277,8 @@ export const GrammarScreen: React.FC = () => {
       result = !!optionRef.current?.check()
     } else if (currentQuestion.data.type === QuestionType.VOCAB_CHOICE) {
       result = !!vocabChoiceRef.current?.check()
+    } else if (currentQuestion.data.type === QuestionType.VOCAB_OPTION) {
+      result = !!vocabOptionRef.current?.check()
     } else {
       result = !!wordChoiceRef.current?.check(
         currentQuestion.data.answer as string,
@@ -284,6 +325,8 @@ export const GrammarScreen: React.FC = () => {
         optionRef.current?.triggerChangeLayout()
       } else if (questions[nextQuestion].type === QuestionType.VOCAB_CHOICE) {
         vocabChoiceRef.current?.onTriggerAnimation()
+      } else if (questions[nextQuestion].type === QuestionType.VOCAB_OPTION) {
+        vocabOptionRef.current?.onTriggerAnimation()
       }
       setCurrentQuestion((_) => {
         return {
@@ -304,6 +347,10 @@ export const GrammarScreen: React.FC = () => {
       case 'VOCAB_CHOICE':
         return (
           <VocabularyChoice ref={vocabChoiceRef} data={currentQuestion.data} />
+        )
+      case 'VOCAB_OPTION':
+        return (
+          <VocabularyOptions ref={vocabOptionRef} data={currentQuestion.data} />
         )
     }
   }

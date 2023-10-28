@@ -33,22 +33,23 @@ export const VocabularyChoice = React.forwardRef<
 
   const soundProgressRef = useRef<SoundProgressFcRef>(null)
   const [visible, setVisible] = React.useState(true)
-  const [userAnswer, setUserAnswer] = React.useState<number>()
-  const tempData = data?.answer as Answer[]
+  const [userAnswer, setUserAnswer] = React.useState<number | null>(null)
+  const tempData = data.answer as Answer[]
   const handlePressSound = () => {
     soundProgressRef.current?.start()
   }
 
   React.useImperativeHandle(ref, () => ({
     check() {
-      const result = userAnswer
-        ? (data.answer as Answer[])[userAnswer].isValid
-        : false
-      setUserAnswer(undefined)
+      const result =
+        userAnswer === null
+          ? false
+          : (data.answer as Answer[])[userAnswer].isValid
       return result
     },
     onTriggerAnimation() {
       setVisible(false)
+      setUserAnswer(null)
       setVisible(true)
     },
   }))
