@@ -1,23 +1,23 @@
 import React from 'react'
-import { Block, Image, Text } from '@components/bases'
 import { baseStyles, useTheme } from '@themes'
+import { useTranslation } from 'react-i18next'
+import { Block, Image, Text } from '@components/bases'
+import { FlipVocabularyProps } from '@components/common/VocabularyWord/components/type'
 import {
   Icon,
   SoundProgress,
-  SoundProgressFcRef,
   withSpringConfig,
+  SoundProgressFcRef,
 } from '@assets'
 import { Pressable } from 'react-native'
 import Animated, {
-  Extrapolation,
-  interpolate,
-  useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
   withSpring,
+  interpolate,
+  Extrapolation,
+  useSharedValue,
+  useDerivedValue,
+  useAnimatedStyle,
 } from 'react-native-reanimated'
-import { FlipVocabularyProps } from '@components/common/VocabularyWord/components/type'
-import { useTranslation } from 'react-i18next'
 
 const AnimatedBlock = Animated.createAnimatedComponent(Block)
 const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
@@ -34,11 +34,10 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
     onPressBookmark,
     onPressMoreExample,
   } = props
-  const { colors, normalize } = useTheme()
   const { t } = useTranslation()
-  // const [isBookmarked, setIsBookMarked] = React.useState()
-  const soundProgressRef = React.useRef<SoundProgressFcRef>(null)
   const rotateY = useSharedValue(0)
+  const { colors, normalize } = useTheme()
+  const soundProgressRef = React.useRef<SoundProgressFcRef>(null)
   const rotateYValue = useDerivedValue(() => {
     return withSpring(rotateY.value === 0 ? 0 : 180, withSpringConfig)
   })
@@ -86,16 +85,11 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
   })
 
   const handleBookmark = () => {
-    console.log('pressed bookmark')
-    // setIsBookmarked(!isBookmarked)
     onPressBookmark?.()
   }
   const handleSoundProgress = () => {
     soundProgressRef.current?.start()
   }
-  React.useEffect(() => {
-    console.log(id)
-  })
   return (
     <Pressable onPress={handleClickVocab} key={id}>
       <AnimatedBlock
