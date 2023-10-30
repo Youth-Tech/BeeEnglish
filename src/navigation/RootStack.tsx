@@ -17,6 +17,7 @@ import {
   DictionaryScreen,
   SplashScreen,
   VocabScreen,
+  LearnedWordScreen,
   GrammarScreen,
   DetailWordScreen,
   SavedWordScreen,
@@ -78,12 +79,16 @@ const RootStack = () => {
           <Stack.Screen name="SAVED_WORD_SCREEN" component={SavedWordScreen} />
           <Stack.Screen name="STREAK_SCREEN" component={StreakScreen} />
           <Stack.Screen name="TEST_SCREEN" component={TestScreen} />
-          <Stack.Screen name="GRAMMAR_SCREEN" component={GrammarScreen} />
-          <Stack.Screen name="SETTING_SCREEN" component={SettingScreen} />
+          <Stack.Screen
+            name="LEARNED_WORD_SCREEN"
+            component={LearnedWordScreen}
+          />
           <Stack.Screen
             name="DETAIL_LESSON_SCREEN"
             component={DetailLessonScreen}
           />
+          <Stack.Screen name="GRAMMAR_SCREEN" component={GrammarScreen} />
+          <Stack.Screen name="SETTING_SCREEN" component={SettingScreen} />
           <Stack.Screen name="LESSON_MAP_SCREEN" component={LessonMap} />
         </Stack.Group>
       </Stack.Navigator>
