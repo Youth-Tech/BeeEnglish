@@ -36,7 +36,7 @@ export const StatusBar: FC<StatusBarProps> = (props) => {
   )
 }
 
-const useStyles = makeStyles<StatusBarProps>()(({}) => ({
+const useStyles = makeStyles<StatusBarProps>()(({ }) => ({
   root: {
     height: getStatusBarHeight(),
   },

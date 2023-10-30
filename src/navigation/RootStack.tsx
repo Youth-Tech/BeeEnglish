@@ -16,6 +16,7 @@ import {
   EmailRegistrationScreen,
   DictionaryScreen,
   SplashScreen,
+  VocabScreen,
   LearnedWordScreen,
   GrammarScreen,
   DetailWordScreen,
@@ -40,7 +41,7 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="DETAIL_POST_SCREEN"
+        initialRouteName="VOCAB_SCREEN"
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -70,6 +71,7 @@ const RootStack = () => {
             name="VERIFICATION_CODE_SCREEN"
             component={VerificationCodeScreen}
           />
+          <Stack.Screen name="VOCAB_SCREEN" component={VocabScreen} />
           <Stack.Screen
             name="DETAIL_WORD_SCREEN"
             component={DetailWordScreen}
