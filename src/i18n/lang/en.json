@@ -105,6 +105,24 @@
     "practice_title": "Exam of the chapter",
     "practice_description": "Achieve 80% of the point to unlock all lessons listed above, and unlock the next chapter",
     "choose_correct_image": "Choose the image matches the word",
-    "choose_translation": "Choose the translation"
+    "choose_translation": "Choose the translation",
+    "video": "Video",
+    "more_example": "See more examples",
+    "word_difficulty": "Word difficulty",
+    "choose_word_difficulty":"Choose a word whose difficulty level is appropriate for you",
+    "hard": "Hard",
+    "normal": "Normal",
+    "simple": "Simple",
+    "easy": "Easy",
+    "review_after_minutes": "Review the word after {{val}} minutes",
+    "review_after_day": "Review the word after {{val}} day",
+    "review_after_week": "Review the word after {{val}} week",
+    "review_after_month": "Review the word after {{val}} month",
+    "previous": "Previous",
+    "finish": "Finish",
+    "do_you_want_to_leave": "Are you willing to leave?",
+    "continue_lesson": "You will know more about the language!",
+    "yes": "Yes",
+    "no": "No"
   }
 }

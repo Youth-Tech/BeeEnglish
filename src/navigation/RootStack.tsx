@@ -16,6 +16,7 @@ import {
   EmailRegistrationScreen,
   DictionaryScreen,
   SplashScreen,
+  VocabScreen,
   LearnedWordScreen,
   GrammarScreen,
   DetailWordScreen,
@@ -70,6 +71,7 @@ const RootStack = () => {
             name="VERIFICATION_CODE_SCREEN"
             component={VerificationCodeScreen}
           />
+          <Stack.Screen name="VOCAB_SCREEN" component={VocabScreen} />
           <Stack.Screen
             name="DETAIL_WORD_SCREEN"
             component={DetailWordScreen}
