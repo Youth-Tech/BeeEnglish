@@ -22,19 +22,21 @@ import { useTranslation } from 'react-i18next'
 const AnimatedBlock = Animated.createAnimatedComponent(Block)
 const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
   const {
+    id,
     english,
     vietnamese,
     pronunciation,
     exampleEnglish,
     exampleVietnamese,
     attachment,
+    isBookmarked,
     onPressSoundProgress,
     onPressBookmark,
     onPressMoreExample,
   } = props
   const { colors, normalize } = useTheme()
   const { t } = useTranslation()
-  const [isBookmarked, setIsBookmarked] = React.useState(false)
+  // const [isBookmarked, setIsBookMarked] = React.useState()
   const soundProgressRef = React.useRef<SoundProgressFcRef>(null)
   const rotateY = useSharedValue(0)
   const rotateYValue = useDerivedValue(() => {
@@ -85,14 +87,17 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
 
   const handleBookmark = () => {
     console.log('pressed bookmark')
-    setIsBookmarked(!isBookmarked)
+    // setIsBookmarked(!isBookmarked)
     onPressBookmark?.()
   }
   const handleSoundProgress = () => {
     soundProgressRef.current?.start()
   }
+  React.useEffect(() => {
+    console.log(id)
+  })
   return (
-    <Pressable onPress={handleClickVocab}>
+    <Pressable onPress={handleClickVocab} key={id}>
       <AnimatedBlock
         width={320}
         height={423}

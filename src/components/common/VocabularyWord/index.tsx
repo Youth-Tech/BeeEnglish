@@ -7,13 +7,14 @@ import { Pressable, StyleSheet } from 'react-native'
 import { ModalFunction } from '../../bases/Modal/type'
 import FlipVocabulary from './components/FlipVocabulary'
 import { Block, Image, Modal, Text } from '@components/bases'
-import { VocabularyFunc, VocabularyWordProps, WordDifficulties } from './type'
+import { VocabularyFunc, VocabularyWordProps } from './type'
 import Animated, {
   interpolate,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated'
+
 export enum Difficulty {
   'easy' = 0,
   'simple' = 1,
@@ -26,13 +27,7 @@ export const VocabularyWord = React.forwardRef<
   VocabularyFunc,
   VocabularyWordProps
 >((props, ref) => {
-  const {
-    data,
-    setData,
-    onPressBookmark,
-    onPressSoundProgress,
-    onPressMoreExample,
-  } = props
+  const { data, setData, onPressSoundProgress, onPressMoreExample } = props
   const { colors, normalize } = useTheme()
   const difficulties = {
     [Difficulty.easy]: {
@@ -96,18 +91,26 @@ export const VocabularyWord = React.forwardRef<
       opacity: opacity,
     }
   })
+  const onPressBookmark = () => {
+    const tempData = data
+    tempData.isBookmarked = !tempData.isBookmarked
+    setData(tempData)
+    forceUpdate()
+  }
   return (
     <Block flex>
       <AnimatedBlock style={[rTranslate]}>
         <Block paddingTop={15} alignCenter>
           <Block marginTop={15}>
             <FlipVocabulary
+              id={data.id}
               english={data.english}
               vietnamese={data.vietnamese}
               pronunciation={data.pronunciation}
               exampleEnglish={data.exampleEnglish}
               exampleVietnamese={data.exampleVietnamese}
               attachment={data.attachment}
+              isBookmarked={data.isBookmarked}
               onPressBookmark={onPressBookmark}
               onPressMoreExample={onPressMoreExample}
               onPressSoundProgress={onPressSoundProgress}

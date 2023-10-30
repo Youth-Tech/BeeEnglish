@@ -6,6 +6,7 @@ export interface WordAttachment {
 }
 
 export interface FlipVocabularyProps {
+  id: string
   english: string
   vietnamese: string
   pronunciation: string
@@ -13,6 +14,8 @@ export interface FlipVocabularyProps {
   exampleVietnamese: string
   attachment?: WordAttachment
   difficulty?: Difficulty
+  setData?: React.Dispatch<React.SetStateAction<FlipVocabularyProps>>
+  isBookmarked?: boolean
   onPressSoundProgress?: () => void
   onPressBookmark?: () => void
   onPressMoreExample?: () => void

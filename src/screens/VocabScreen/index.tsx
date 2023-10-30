@@ -1,13 +1,13 @@
 import React, { useRef } from 'react'
 import {
-  Text,
   Block,
-  Progress,
   Container,
   Difficulty,
-  ShadowButton,
-  VocabularyWord,
   LeaveProcessModal,
+  Progress,
+  ShadowButton,
+  Text,
+  VocabularyWord,
 } from '@components'
 
 import { Icon } from '@assets'
@@ -32,6 +32,7 @@ const vocabularyData: FlipVocabularyProps[] = [
         'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
     },
     difficulty: Difficulty.easy,
+    isBookmarked: false,
   },
   {
     id: '2',
@@ -45,6 +46,7 @@ const vocabularyData: FlipVocabularyProps[] = [
         'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
     },
     difficulty: Difficulty.easy,
+    isBookmarked: false,
   },
   {
     id: '3',
@@ -58,6 +60,7 @@ const vocabularyData: FlipVocabularyProps[] = [
         'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
     },
     difficulty: Difficulty.easy,
+    isBookmarked: false,
   },
   {
     id: '4',
@@ -71,17 +74,18 @@ const vocabularyData: FlipVocabularyProps[] = [
         'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
     },
     difficulty: Difficulty.easy,
+    isBookmarked: false,
   },
 ]
 export const VocabScreen: React.FC<VocabScreenProps> = (props) => {
   const { t } = useTranslation()
-  const { colors, normalize } = useTheme()
+  const { colors } = useTheme()
   const [data, setData] = React.useState({})
   const [step, setStep] = React.useState(0)
   const vocabRef = React.useRef<VocabularyFunc>(null)
   const [currentPos, setCurrentPos] = React.useState(0)
   const [nextText, setNextText] = React.useState(t('continue_button'))
-  const oneStep = 100 / vocabularyData.length
+  const oneStep = 100 / (vocabularyData.length - 1)
   const leaveModal = useRef<ModalFunction>(null)
   const onClosePress = () => {
     console.log('hey')
@@ -111,7 +115,8 @@ export const VocabScreen: React.FC<VocabScreenProps> = (props) => {
       setNextText(t('continue_button'))
     }
     setData(vocabularyData[currentPos])
-    setStep((currentPos + 1) * oneStep)
+
+    setStep(currentPos * oneStep)
   }, [currentPos])
   // @ts-ignore
   return (
