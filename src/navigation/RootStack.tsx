@@ -40,7 +40,7 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="DETAIL_POST_SCREEN"
+        initialRouteName="LOGIN_SCREEN"
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>

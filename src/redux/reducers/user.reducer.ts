@@ -28,7 +28,6 @@ const userSlice = createSlice({
   initialState: defaultUserState,
   reducers: {
     setUserState(state: UserData, action: PayloadAction<UserData>) {
-      console.log('Hello from reducer')
       return {
         ...state,
         ...action.payload,
@@ -51,11 +50,18 @@ const userSlice = createSlice({
         }
       })
       .addCase(login.fulfilled, (state, action) => {
-        return {
+        return{
           ...state,
-          ...action.payload.data.user,
+          ...action.payload.data.user
         }
       })
+        .addCase(login.rejected, (state,) => {
+          return {
+            ...state,
+            isVerified: false,
+            email: 'example@gmail.com',
+          }
+        })
   },
 })
 

@@ -31,7 +31,7 @@ import {
 } from '@redux/reducers'
 import { signingWithFacebook, signingWithGoogle } from '@utils/authUtils'
 import { useValidateInput } from '@utils/validateInput'
-import { login } from '@redux/actions/auth.action'
+import { login, resendVerifyEmail } from '@redux/actions/auth.action'
 
 export const LoginScreen = () => {
   const { t } = useTranslation()
@@ -59,6 +59,10 @@ export const LoginScreen = () => {
   useEffect(() => {
     if (dataUser.email && dataUser.isVerified) {
       replace('BOTTOM_TAB')
+    }
+    if (email && dataUser.isVerified == false) {
+      dispatch(resendVerifyEmail(email))
+      navigate('VERIFICATION_CODE_SCREEN')
     }
   }, [dataUser])
 
@@ -128,8 +132,6 @@ export const LoginScreen = () => {
   }
 
   const handleEndEditing = () => {
-    console.log('ddax')
-
     Keyboard.dismiss()
   }
 

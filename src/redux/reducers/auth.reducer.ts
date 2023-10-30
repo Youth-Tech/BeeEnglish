@@ -1,6 +1,6 @@
 import { Provider } from '@configs'
 import { TokenService } from '@services'
-import { login, signIn } from '@redux/actions/auth.action'
+import { login, resendVerifyEmail, signIn } from '@redux/actions/auth.action'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export type AuthState = {
@@ -42,9 +42,10 @@ const authSlice = createSlice({
       )
     })
     builder.addCase(login.fulfilled, (_, action) => {
-      TokenService.setAccessToken(action.payload.data.tokens.accessToken)
-      TokenService.setRefreshToken(action.payload.data.tokens.refreshToken)
+      action.payload && TokenService.setAccessToken(action.payload.data.tokens.accessToken)
+      action.payload && TokenService.setRefreshToken(action.payload.data.tokens.refreshToken)
     })
+    builder.addCase(resendVerifyEmail.fulfilled, () => {})
   },
 })
 

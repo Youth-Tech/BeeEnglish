@@ -51,9 +51,15 @@ export const AuthService = {
     })
   },
   login({ email, password }: LoginParams) {
-    return APIUtils.post<LoginResponse>('/auth/login', {
+    return APIUtils.post<LoginResponse>('auth/login', {
       email,
       password,
+    })
+  },
+
+  resendVerifyEmail({ email }: { email: string }) {
+    return APIUtils.post('auth/resend-verified-code-email', {
+      email,
     })
   },
 } as const

@@ -13,13 +13,13 @@ export interface SignUpResponse {
 }
 
 export interface LoginResponse {
-  data: {
+    data: {
     user: UserData
     tokens: {
-      accessToken: string
-      refreshToken: string
+        accessToken: string
+        refreshToken: string
     }
-  }
+}
 }
 
 export const signIn = createAsyncThunk<
@@ -57,6 +57,14 @@ export const login = createAsyncThunk<LoginResponse, LoginParams>(
   'auth/login',
   async (params) => {
     const response = await AuthService.login(params)
+    return response.data
+  },
+)
+
+export const resendVerifyEmail = createAsyncThunk<any, string>(
+  'auth/resend-verified-code-email',
+  async (email) => {
+    const response = await AuthService.resendVerifyEmail({ email })
     return response.data
   },
 )
