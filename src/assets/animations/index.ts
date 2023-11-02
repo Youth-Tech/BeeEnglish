@@ -1,4 +1,5 @@
 import { SpringConfig } from 'react-native-reanimated/lib/typescript/reanimated2/animation/springUtils'
+
 export const withSpringConfig: SpringConfig = {
   mass: 1,
   damping: 10,
@@ -17,4 +18,4 @@ export const wordAnimationConfig: SpringConfig = {
   restSpeedThreshold: 8.03,
 }
 
-export const riveAnimation = {}
+export * from './lottieAnimation'
