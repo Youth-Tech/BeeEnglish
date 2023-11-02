@@ -1,49 +1,48 @@
 import {
+  Keyboard,
   Pressable,
   DocumentSelectionState,
   KeyboardAvoidingView,
-  Keyboard,
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {
+  Text,
   Block,
+  TextInput,
   Container,
-  DismissKeyBoardBlock,
   ShadowButton,
   SocialLoginButton,
-  Text,
-  TextInput,
+  DismissKeyBoardBlock,
 } from '@components'
 import { Icon } from '@assets'
-import { goBack, navigate } from '@navigation'
 import { useTheme } from '@themes'
+import { goBack, navigate } from '@navigation'
 import { useTranslation } from 'react-i18next'
-import { debounce } from 'lodash'
+import {setAuthState, setEmailSignIn} from '@redux/reducers'
+import { signUp } from '@redux/actions/auth.action'
 import { useAppDispatch, useAppSelector } from '@hooks'
-import { signIn } from '@redux/actions/auth.action'
-import { setEmailSignIn } from '@redux/reducers'
+import { useValidateInput } from '@utils/validateInput'
 
 export const RegisterScreen = () => {
-  const { colors, normalize } = useTheme()
+  const dispatch = useAppDispatch()
+  const validate = useValidateInput()
   const { t } = useTranslation()
-  const [fullName, setFullName] = React.useState('')
+  const { colors, normalize } = useTheme()
   const [email, setEmail] = React.useState('')
+  const [fullName, setFullName] = React.useState('')
   const [password, setPassword] = React.useState('')
-  const [confirmPassword, setConfirmPassword] = React.useState('')
-  const [disabledLogin, setDisabledLogin] = React.useState(true)
   const [checkMail, setCheckMail] = useState(true)
   const [checkPass, setCheckPass] = useState(true)
   const [checkFullName, setCheckFullName] = useState(true)
+  const [disabledLogin, setDisabledLogin] = React.useState(true)
+  const [confirmPassword, setConfirmPassword] = React.useState('')
   const [checkConfirmPass, setCheckConfirmPass] = useState(true)
-
   const emailInputRef = React.useRef<DocumentSelectionState>()
   const passwordInputRef = React.useRef<DocumentSelectionState>()
   const confirmPasswordInputRef = React.useRef<DocumentSelectionState>()
-  const dispatch = useAppDispatch()
-  const store = useAppSelector((state) => state.root.user)
-
-  const handleLoginGoogle = () => { }
-  const handleLoginFacebook = () => { }
+  const isSignedIn = useAppSelector((state) => state.root.auth.isSignedIn)
+  const handleLoginGoogle = () => {}
+  const handleLoginFacebook = () => {}
   useEffect(() => {
     email.length > 0 && password.length >= 6 && fullName.length >= 3
       ? setDisabledLogin(false)
@@ -51,59 +50,22 @@ export const RegisterScreen = () => {
   }, [email, password, fullName])
 
   const onCheckEmail = (value: string) => {
-    const pattern =
-      /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-    if (pattern.test(value)) setCheckMail(true)
-    else setCheckMail(false)
+    setCheckMail(validate.validateEmail(value))
+    return
   }
 
   const onCheckPass = (value: string, type: 'password' | 'confirmPassword') => {
-    if (value.length >= 6) {
-      if (type === 'password') setCheckPass(true)
-      if (type === 'confirmPassword') setCheckConfirmPass(true)
-    } else {
-      if (type === 'password') setCheckPass(false)
-      if (type === 'confirmPassword') setCheckConfirmPass(false)
-    }
-    if (type === 'confirmPassword') {
-      if (value === password) setCheckConfirmPass(true)
-      else setCheckConfirmPass(false)
-    }
     if (type === 'password') {
-      if (value === confirmPassword && !checkConfirmPass)
-        setCheckConfirmPass(true)
-      else setCheckConfirmPass(false)
+      setCheckPass(validate.validatePassword(value))
+    } else {
+      setCheckConfirmPass(validate.validateConfirmPassword(value, password))
     }
   }
   const onCheckFullName = (value: string) => {
-    const pattern = /^[a-zA-Z]{2,}(?: [a-zA-Z]+){0,2}/
-    console.log(value.length >= 3 && pattern.test(value))
-    if (value.length >= 3 && pattern.test(value)) setCheckFullName(true)
-    else setCheckFullName(false)
+    setCheckFullName(validate.validateFullName(value))
+    return
   }
 
-  const checkError = debounce(
-    (
-      value: string,
-      type: 'email' | 'password' | 'name' | 'confirmPassword',
-    ) => {
-      switch (type) {
-        case 'email':
-          if (!checkMail) onCheckEmail(value)
-          break
-        case 'password':
-          if (!checkPass) onCheckPass(value, 'password')
-          break
-        case 'confirmPassword':
-          if (!checkConfirmPass) onCheckPass(value, 'confirmPassword')
-          break
-        case 'name':
-          if (!checkFullName) onCheckFullName(value)
-          break
-      }
-    },
-    300,
-  )
   const showError = (
     type: 'email' | 'password' | 'name' | 'confirmPassword',
   ) => {
@@ -114,13 +76,13 @@ export const RegisterScreen = () => {
         break
       case 'password':
         if (password.length === 0) return `${t('password')}${t('is_required')}`
-        if (password.length < 6) return `${t('password')}${t('is_too_short')}`
+        if (password.length < 8) return `${t('password')}${t('is_too_short')}`
         if (!checkPass) return `${t('password')}${t('is_invalid')}`
         break
       case 'confirmPassword':
         if (confirmPassword.length === 0)
           return `${t('confirm_password')}${t('is_required')}`
-        if (confirmPassword.length < 6)
+        if (confirmPassword.length < 8)
           return `${t('confirm_password')}${t('is_too_short')}`
         if (password !== confirmPassword)
           return `${t('confirm_password')}${t('is_not_same')}`
@@ -142,18 +104,17 @@ export const RegisterScreen = () => {
     navigate('LOGIN_SCREEN')
   }
   const onSubmit = async () => {
-    dispatch(signIn({ email, password, confirmPassword, fullName }))
+    dispatch(setAuthState({isSignedIn: false}))
+    dispatch(signUp({ email, password, confirmPassword, fullName }))
     dispatch(setEmailSignIn(email))
   }
 
-  const emailUser = store.email
-  const isVerified = store.isVerified
   useEffect(() => {
     // console.log("Email: ", emailUser, "isVerified: ", isVerified)
-    if (emailUser && !isVerified) {
+    if (isSignedIn) {
       navigate('VERIFICATION_CODE_SCREEN')
     }
-  }, [emailUser, isVerified])
+  }, [isSignedIn])
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
@@ -182,7 +143,9 @@ export const RegisterScreen = () => {
                   placeholder={t('full_name_placeholder')}
                   onChangeText={(value) => {
                     setFullName(value)
-                    checkError(value, 'name')
+                    useValidateInput().checkError(checkFullName, ()=>{
+                      onCheckFullName(value)
+                    })
                   }}
                   value={fullName}
                   returnKeyType="next"
@@ -203,7 +166,9 @@ export const RegisterScreen = () => {
                   placeholder="example@gmail.com"
                   onChangeText={(value) => {
                     setEmail(value)
-                    checkError(value, 'email')
+                    useValidateInput().checkError(checkMail, () => {
+                      onCheckEmail(value)
+                    })
                   }}
                   value={email}
                   returnKeyType="next"
@@ -226,7 +191,17 @@ export const RegisterScreen = () => {
                   placeholder="•••••••••••••"
                   onChangeText={(value) => {
                     setPassword(value)
-                    checkError(value, 'password')
+                    useValidateInput().checkError(checkPass, () => {
+                      onCheckPass(value, 'password')
+                    })
+                    if(value.length > 8 && confirmPassword.length > 8) {
+                      onCheckPass(confirmPassword, "confirmPassword")
+                      useValidateInput().checkError(checkConfirmPass, () => {
+                        onCheckPass(value, 'confirmPassword')
+                      })
+                      showError("confirmPassword")
+                      console.log("xin chao")
+                    }
                   }}
                   returnKeyType="next"
                   onSubmitEditing={() => {
@@ -250,15 +225,19 @@ export const RegisterScreen = () => {
                   placeholder="•••••••••••••"
                   onChangeText={(value) => {
                     setConfirmPassword(value)
-                    checkError(value, 'confirmPassword')
+                    useValidateInput().checkError(checkConfirmPass, () => {
+                      onCheckPass(value, 'confirmPassword')
+                    })
                   }}
                   value={confirmPassword}
                   secureTextEntry
                   blurOnSubmit={false}
-                  returnKeyType='default'
-                  onSubmitEditing={() => { Keyboard.dismiss() }}
+                  returnKeyType="default"
+                  onSubmitEditing={() => {
+                    Keyboard.dismiss()
+                  }}
                   placeholderTextColor={
-                    checkPass ? colors.placeholder : colors.red
+                    checkConfirmPass ? colors.placeholder : colors.red
                   }
                   error={showError('confirmPassword')}
                   showError={!checkConfirmPass}

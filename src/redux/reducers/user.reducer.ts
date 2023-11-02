@@ -1,6 +1,6 @@
 import { UserData } from '@services/UserService'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { signIn, verifyAccount } from '@redux/actions/auth.action'
+import { login, signUp, verifyAccount } from '@redux/actions/auth.action'
 
 export const defaultUserState: UserData = {
   _id: '',
@@ -28,7 +28,6 @@ const userSlice = createSlice({
   initialState: defaultUserState,
   reducers: {
     setUserState(state: UserData, action: PayloadAction<UserData>) {
-      console.log('Hello from reducer')
       return {
         ...state,
         ...action.payload,
@@ -37,7 +36,7 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(signIn.fulfilled, (state, action) => {
+      .addCase(signUp.fulfilled, (state, action) => {
         console.log('Hello')
         return {
           ...state,
@@ -48,6 +47,12 @@ const userSlice = createSlice({
         return {
           ...state,
           isVerified: action.payload === 200,
+        }
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        return {
+          ...state,
+          ...action.payload.data.user,
         }
       })
   },

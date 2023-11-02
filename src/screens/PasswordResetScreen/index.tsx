@@ -15,94 +15,63 @@ import {
   Keyboard,
   KeyboardAvoidingView,
 } from 'react-native'
-import { debounce } from 'lodash'
+import { useValidateInput } from '@utils/validateInput'
 import { useTheme } from '@themes'
-import { AuthService } from '@services/AuthService'
 import { useAppSelector } from '@hooks'
+import { AuthService } from '@services/AuthService'
 
 export const PasswordResetScreen = () => {
-  const { t } = useTranslation()
   const { colors } = useTheme()
-  const [newPassword, setNewPassword] = React.useState('')
+  const { t } = useTranslation()
+  const [password, setPassword] = React.useState('')
   const [confirmPassword, setConfirmPassword] = React.useState('')
   const [checkPass, setCheckPass] = useState(true)
   const [checkConfirmPass, setCheckConfirmPass] = useState(true)
-  const [disabled, setDisabled] = React.useState(true)
-
-  // const dispatch = useAppDispatch()
-  const forgotPasswordToken = useAppSelector((state) => state.root.auth.forgotPasswordToken)
-
-  useEffect(() => {
-    newPassword.length >= 6 && confirmPassword.length >= 6
-      ? setDisabled(false)
-      : setDisabled(true)
-  }, [newPassword, confirmPassword])
   const passwordRef = React.useRef<DocumentSelectionState>()
   const confirmRef = React.useRef<DocumentSelectionState>()
-
+  const forgotPasswordToken = useAppSelector(
+    (state) => state.root.auth.forgotPasswordToken,
+  )
   const handlePasswordSubmit = () => {
     confirmRef.current?.focus()
   }
-  // check pass
+  const validate = useValidateInput()
+
   const onCheckPass = (value: string, type: 'password' | 'confirmPassword') => {
-    if (value.length >= 6) {
-      if (type === 'password') setCheckPass(true)
-      if (type === 'confirmPassword') setCheckConfirmPass(true)
-    } else {
-      if (type === 'password') setCheckPass(false)
-      if (type === 'confirmPassword') setCheckConfirmPass(false)
-    }
-    if (type === 'confirmPassword') {
-      if (value === newPassword) setCheckConfirmPass(true)
-      else setCheckConfirmPass(false)
-    }
     if (type === 'password') {
-      if (value === confirmPassword && !checkConfirmPass)
-        setCheckConfirmPass(true)
-      else setCheckConfirmPass(false)
+      setCheckPass(validate.validatePassword(value))
+    } else {
+      setCheckConfirmPass(validate.validateConfirmPassword(value, password))
     }
   }
-  const checkError = debounce(
-    (value: string, type: 'password' | 'confirmPassword') => {
-      switch (type) {
-        case 'password':
-          if (!checkPass) onCheckPass(value, 'password')
-          break
-        case 'confirmPassword':
-          if (!checkConfirmPass) onCheckPass(value, 'confirmPassword')
-          break
-      }
-    },
-    300,
-  )
+
   const showError = (type: 'password' | 'confirmPassword') => {
     switch (type) {
       case 'password':
-        if (newPassword.length === 0)
-          return `${t('password')}${t('is_required')}`
-        if (newPassword.length < 6)
-          return `${t('password')}${t('is_too_short')}`
+        if (password.length === 0) return `${t('password')}${t('is_required')}`
+        if (password.length < 8) return `${t('password')}${t('is_too_short')}`
         if (!checkPass) return `${t('password')}${t('is_invalid')}`
         break
       case 'confirmPassword':
         if (confirmPassword.length === 0)
           return `${t('confirm_password')}${t('is_required')}`
-        if (confirmPassword.length < 6)
+        if (confirmPassword.length < 8)
           return `${t('confirm_password')}${t('is_too_short')}`
-        if (newPassword !== confirmPassword)
+        if (password !== confirmPassword)
           return `${t('confirm_password')}${t('is_not_same')}`
         if (!checkConfirmPass)
           return `${t('confirm_password')}${t('is_invalid')}`
+
         break
     }
-    return ''
+    return 'hello'
   }
 
   const callAPI = async () => {
-    if (!forgotPasswordToken) return;
+    if (!forgotPasswordToken) return
     await AuthService.resetPassword({
       forgotPasswordToken,
-      newPassword,
+      password,
       confirmPassword,
     })
     navigate('LOGIN_SCREEN')
@@ -136,46 +105,55 @@ export const PasswordResetScreen = () => {
               </Text>
               <Block marginTop={25} marginBottom={25}>
                 <TextInput
+                  ref={passwordRef}
                   label={t('password')}
                   placeholder="•••••••••••••"
-                  textContentType="password"
-                  value={newPassword}
                   onChangeText={(value) => {
-                    setNewPassword(value)
-                    checkError(value, 'password')
+                    setPassword(value)
+                    useValidateInput().checkError(checkPass, () => {
+                      onCheckPass(value, 'password')
+                    })
+                    if (value.length > 8 && confirmPassword.length > 8) {
+                      onCheckPass(confirmPassword, 'confirmPassword')
+                      useValidateInput().checkError(checkConfirmPass, () => {
+                        onCheckPass(value, 'confirmPassword')
+                      })
+                      showError('confirmPassword')
+                    }
                   }}
-                  secureTextEntry
-                  ref={passwordRef}
                   returnKeyType="next"
-                  onSubmitEditing={handlePasswordSubmit}
+                  value={password}
+                  secureTextEntry
                   blurOnSubmit={false}
                   placeholderTextColor={
                     checkPass ? colors.placeholder : colors.red
                   }
                   error={showError('password')}
                   showError={!checkPass}
-                  onBlur={() => onCheckPass(newPassword, 'password')}
+                  onBlur={() => onCheckPass(password, 'password')}
+                  onSubmitEditing={handlePasswordSubmit}
                 />
               </Block>
               <Block marginBottom={25}>
                 <TextInput
+                  ref={confirmRef}
                   label={t('confirm_password')}
                   placeholder="•••••••••••••"
-                  textContentType="password"
-                  value={confirmPassword}
                   onChangeText={(value) => {
                     setConfirmPassword(value)
-                    checkError(value, 'confirmPassword')
+                    useValidateInput().checkError(checkConfirmPass, () => {
+                      onCheckPass(value, 'confirmPassword')
+                    })
                   }}
+                  value={confirmPassword}
                   secureTextEntry
-                  ref={confirmRef}
                   blurOnSubmit={false}
                   returnKeyType="default"
                   onSubmitEditing={() => {
                     Keyboard.dismiss()
                   }}
                   placeholderTextColor={
-                    checkPass ? colors.placeholder : colors.red
+                    checkConfirmPass ? colors.placeholder : colors.red
                   }
                   error={showError('confirmPassword')}
                   showError={!checkConfirmPass}
@@ -194,16 +172,12 @@ export const PasswordResetScreen = () => {
               <ShadowButton
                 buttonHeight={40}
                 buttonWidth={200}
-                buttonRadius={10}
                 buttonBorderSize={2}
-                shadowButtonColor={colors.orangeLighter}
-                buttonBorderColor={colors.orangePrimary}
-                buttonColor={colors.orangePrimary}
-                shadowHeight={7}
-                onPress={() => {
-                  onSubmit()
-                }}
-                disabled={disabled}
+                buttonBorderColor={'orangePrimary'}
+                shadowHeight={10}
+                buttonRadius={8}
+                shadowButtonColor={'orangeLighter'}
+                onPress={onSubmit}
               >
                 <Text fontFamily="bold" size={'h3'} color="white">
                   {t('change_password')}

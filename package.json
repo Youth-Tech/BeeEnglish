@@ -15,6 +15,7 @@
     "build_apk": "cd android && ./gradlew assembleRelease"
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^4.5.1",
     "@notifee/react-native": "^7.8.0",
     "@react-native-community/netinfo": "^9.4.1",
     "@react-native-firebase/app": "^18.5.0",
@@ -24,6 +25,7 @@
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
     "@reduxjs/toolkit": "^1.9.5",
+    "@shopify/flash-list": "^1.6.2",
     "axios": "^1.5.1",
     "i18next": "^23.5.1",
     "react": "18.2.0",
@@ -37,13 +39,16 @@
     "react-native-mmkv": "^2.10.1",
     "react-native-portalize": "^1.0.7",
     "react-native-reanimated": "^3.4.2",
+    "react-native-render-html": "^6.3.4",
     "react-native-safe-area-context": "^4.7.1",
     "react-native-screens": "^3.24.0",
     "react-native-size-matters": "^0.4.0",
     "react-native-svg": "^13.11.0",
+    "react-native-webview": "^13.6.2",
     "react-redux": "^8.1.2",
     "redux-persist": "^6.0.0",
-    "rive-react-native": "^6.0.4"
+    "rive-react-native": "^6.0.4",
+    "rn-tooltip": "^3.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

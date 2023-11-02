@@ -1,6 +1,6 @@
 import { Provider } from '@configs'
 import { TokenService } from '@services'
-import { signIn, verifyForgotPassword } from '@redux/actions/auth.action'
+import { login, resendVerifyEmail, signUp,verifyForgotPassword } from '@redux/actions/auth.action'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export type AuthState = {
@@ -9,6 +9,8 @@ export type AuthState = {
   providerId?: Provider
   email?: string
   forgotPasswordToken?: string
+  isResendVerifyEmail?: boolean
+  isSignedIn?: boolean
 }
 
 const defaultAuthState: AuthState = {
@@ -17,6 +19,8 @@ const defaultAuthState: AuthState = {
   providerId: undefined,
   email: undefined,
   forgotPasswordToken: undefined,
+  isResendVerifyEmail: false,
+  isSignedIn: false,
 }
 
 const authSlice = createSlice({
@@ -37,7 +41,7 @@ const authSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(signIn.fulfilled, (_, action) => {
+    builder.addCase(signUp.fulfilled, (_, action) => {
       TokenService.setAccessToken(action.payload.tokens.data.tokens.accessToken)
       TokenService.setRefreshToken(
         action.payload.tokens.data.tokens.refreshToken,
@@ -46,6 +50,23 @@ const authSlice = createSlice({
     .addCase(verifyForgotPassword.fulfilled, (state, action) => {
       state.forgotPasswordToken = action.payload.data
     })
+    builder
+      .addCase(signUp.fulfilled, (state) => {
+        state.isSignedIn = true
+      })
+      .addCase(login.fulfilled, (_, action) => {
+        action.payload &&
+          TokenService.setAccessToken(action.payload.data.tokens.accessToken)
+        action.payload &&
+          TokenService.setRefreshToken(action.payload.data.tokens.refreshToken)
+      })
+      .addCase(login.rejected, (state, action) => {
+        console.log(action.payload)
+        if (action.payload?.code == 403) {
+          state.isResendVerifyEmail = true
+        }
+      })
+    .addCase(resendVerifyEmail.fulfilled, () => {})
   },
 
 })

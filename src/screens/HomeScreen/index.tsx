@@ -195,7 +195,7 @@ export const HomeScreen = () => {
                 height={45}
                 radius={22.5}
                 source={{
-                  uri: 'https://i.pinimg.com/736x/9b/88/51/9b88513699abae664fc34b23c3d0a6d3.jpg',
+                  uri: 'https://i.pinimgVo.com/736x/9b/88/51/9b88513699abae664fc34b23c3d0a6d3.jpg',
                 }}
                 resizeMode="cover"
               />

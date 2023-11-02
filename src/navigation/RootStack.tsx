@@ -16,9 +16,16 @@ import {
   EmailRegistrationScreen,
   DictionaryScreen,
   SplashScreen,
+  VocabScreen,
+  LearnedWordScreen,
+  GrammarScreen,
+  DetailWordScreen,
+  SavedWordScreen,
   SettingScreen,
   DetailLessonScreen,
+  LessonMap,
 } from '@screens'
+import DetailPost from 'screens/DetailPostScreen'
 import StreakScreen from '@screens/StreakScreen'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -55,6 +62,7 @@ const RootStack = () => {
             component={AboutTheTestScreen}
           />
           <Stack.Screen name="EXAM_TEST_SCREEN" component={ExamTestScreen} />
+          <Stack.Screen name="DETAIL_POST_SCREEN" component={DetailPost} />
           <Stack.Screen
             name="EMAIL_REGISTRATION_SCREEN"
             component={EmailRegistrationScreen}
@@ -63,10 +71,25 @@ const RootStack = () => {
             name="VERIFICATION_CODE_SCREEN"
             component={VerificationCodeScreen}
           />
+          <Stack.Screen name="VOCAB_SCREEN" component={VocabScreen} />
+          <Stack.Screen
+            name="DETAIL_WORD_SCREEN"
+            component={DetailWordScreen}
+          />
+          <Stack.Screen name="SAVED_WORD_SCREEN" component={SavedWordScreen} />
           <Stack.Screen name="STREAK_SCREEN" component={StreakScreen} />
           <Stack.Screen name="TEST_SCREEN" component={TestScreen} />
+          <Stack.Screen
+            name="LEARNED_WORD_SCREEN"
+            component={LearnedWordScreen}
+          />
+          <Stack.Screen
+            name="DETAIL_LESSON_SCREEN"
+            component={DetailLessonScreen}
+          />
+          <Stack.Screen name="GRAMMAR_SCREEN" component={GrammarScreen} />
           <Stack.Screen name="SETTING_SCREEN" component={SettingScreen} />
-          <Stack.Screen name="DETAIL_LESSON_SCREEN" component={DetailLessonScreen} />
+          <Stack.Screen name="LESSON_MAP_SCREEN" component={LessonMap} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

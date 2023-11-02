@@ -9,15 +9,19 @@ export interface ModalProps {
    */
   position: 'top' | 'center' | 'bottom'
   /**
-   * 
+   *
    * @returns void - Callback function when the modal is shown
    */
   onShow?: () => void
   /**
-   * 
+   *
    * @returns void - Callback function when the modal is closed
    */
   onDismiss?: () => void
+  /**
+   * type of the modal animation
+   */
+  animationType?: 'slide' | 'fade'
 }
 
 export interface ModalFunction {
