@@ -1,6 +1,6 @@
 import { Provider } from '@configs'
 import { TokenService } from '@services'
-import { login, resendVerifyEmail, signIn } from '@redux/actions/auth.action'
+import { login, resendVerifyEmail, signUp } from '@redux/actions/auth.action'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export type AuthState = {
@@ -8,6 +8,8 @@ export type AuthState = {
   refreshToken?: string
   providerId?: Provider
   email?: string
+  isResendVerifyEmail?: boolean
+  isSignedIn?: boolean
 }
 
 const defaultAuthState: AuthState = {
@@ -15,6 +17,8 @@ const defaultAuthState: AuthState = {
   refreshToken: undefined,
   providerId: undefined,
   email: undefined,
+  isResendVerifyEmail: false,
+  isSignedIn: false,
 }
 
 const authSlice = createSlice({
@@ -35,17 +39,23 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(signIn.fulfilled, (_, action) => {
-      TokenService.setAccessToken(action.payload.tokens.data.tokens.accessToken)
-      TokenService.setRefreshToken(
-        action.payload.tokens.data.tokens.refreshToken,
-      )
-    })
-    builder.addCase(login.fulfilled, (_, action) => {
-      action.payload && TokenService.setAccessToken(action.payload.data.tokens.accessToken)
-      action.payload && TokenService.setRefreshToken(action.payload.data.tokens.refreshToken)
-    })
-    builder.addCase(resendVerifyEmail.fulfilled, () => {})
+    builder
+      .addCase(signUp.fulfilled, (state) => {
+        state.isSignedIn = true
+      })
+      .addCase(login.fulfilled, (_, action) => {
+        action.payload &&
+          TokenService.setAccessToken(action.payload.data.tokens.accessToken)
+        action.payload &&
+          TokenService.setRefreshToken(action.payload.data.tokens.refreshToken)
+      })
+      .addCase(login.rejected, (state, action) => {
+        console.log(action.payload)
+        if (action.payload?.code == 403) {
+          state.isResendVerifyEmail = true
+        }
+      })
+    .addCase(resendVerifyEmail.fulfilled, () => {})
   },
 })
 

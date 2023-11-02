@@ -42,6 +42,7 @@ export const LoginScreen = () => {
   const [checkPass, setCheckPass] = useState(true)
   const [password, setPassword] = React.useState('')
   const dataUser = useAppSelector((state) => state.root.user)
+  const isResend = useAppSelector((state) => state.root.auth.isResendVerifyEmail);
 
   const [disabledLogin, setDisabledLogin] = React.useState(true)
 
@@ -49,6 +50,7 @@ export const LoginScreen = () => {
 
   const onSubmit = () => {
     dispatch(setUserState(defaultUserState))
+    dispatch(setAuthState({isResendVerifyEmail: false}))
     if (email && password) dispatch(login({ email, password }))
   }
   const goRegister = () => {
@@ -60,11 +62,11 @@ export const LoginScreen = () => {
     if (dataUser.email && dataUser.isVerified) {
       replace('BOTTOM_TAB')
     }
-    if (email && dataUser.isVerified == false) {
+    if (isResend && email) {
       dispatch(resendVerifyEmail(email))
       navigate('VERIFICATION_CODE_SCREEN')
     }
-  }, [dataUser])
+  }, [dataUser, isResend])
 
   const handleLoginOAuth = async (providerId: number) => {
     dispatch(setLoadingStatusAction(true))
@@ -195,7 +197,7 @@ export const LoginScreen = () => {
                   error={showError('password')}
                   showError={!checkPass}
                   onBlur={() => onCheckPass(password)}
-                  // onEndEditing={handleEndEditing}
+                  onEndEditing={handleEndEditing}
                   onSubmitEditing={handleEndEditing}
                 />
               </Block>
