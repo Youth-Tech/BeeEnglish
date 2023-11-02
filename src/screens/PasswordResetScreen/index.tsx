@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   Block,
   Container,
@@ -71,7 +71,7 @@ export const PasswordResetScreen = () => {
     if (!forgotPasswordToken) return
     await AuthService.resetPassword({
       forgotPasswordToken,
-      password,
+      newPassword: password,
       confirmPassword,
     })
     navigate('LOGIN_SCREEN')

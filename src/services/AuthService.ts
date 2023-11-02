@@ -23,8 +23,8 @@ export interface SignUpParams {
   fullName: string
 }
 export interface ResetPasswordParams {
-  forgotPasswordToken: string,
-  password: string,
+  forgotPasswordToken: string
+  newPassword: string
   confirmPassword: string
 }
 
@@ -71,20 +71,23 @@ export const AuthService = {
 
   forgotPassword({ email }: { email: string }) {
     return APIUtils.post('auth/forgot-password', {
-      email
+      email,
     })
   },
   verifyForgotPassword({ code }: { code: string }) {
-    return APIUtils.post<{ data: string}>('auth/verify-forgot-password', {
-      code
+    return APIUtils.post<{ data: string }>('auth/verify-forgot-password', {
+      code,
     })
   },
-  resetPassword({ forgotPasswordToken, password, confirmPassword }: ResetPasswordParams) {
+  resetPassword({
+    forgotPasswordToken,
+    newPassword,
+    confirmPassword,
+  }: ResetPasswordParams) {
     return APIUtils.post('auth/reset-password', {
       forgotPasswordToken,
-      password,
-      confirmPassword
+      newPassword,
+      confirmPassword,
     })
   },
-
 } as const
