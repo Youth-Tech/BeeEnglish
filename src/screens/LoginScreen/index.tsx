@@ -42,21 +42,37 @@ export const LoginScreen = () => {
   const [checkPass, setCheckPass] = useState(true)
   const [password, setPassword] = React.useState('')
   const dataUser = useAppSelector((state) => state.root.user)
-  const isResend = useAppSelector((state) => state.root.auth.isResendVerifyEmail);
+  const isResend = useAppSelector(
+    (state) => state.root.auth.isResendVerifyEmail,
+  )
 
   const [disabledLogin, setDisabledLogin] = React.useState(true)
-
+  const emailInputRef = React.useRef<DocumentSelectionState>()
   const passwordInputRef = React.useRef<DocumentSelectionState>()
+  const isErrorBeforeSubmit = () => {
+    if (!validate.validateEmail(email)) {
+      emailInputRef.current?.focus()
+      return true
+    }
+    if (!validate.validatePassword(password)) {
+      passwordInputRef.current?.focus()
+      return true
+    }
 
+    return false
+  }
   const onSubmit = () => {
+    if (isErrorBeforeSubmit()) return
     dispatch(setUserState(defaultUserState))
-    dispatch(setAuthState({isResendVerifyEmail: false}))
+    dispatch(setAuthState({ isResendVerifyEmail: false }))
     if (email && password) dispatch(login({ email, password }))
   }
   const goRegister = () => {
     navigate('REGISTER_SCREEN')
   }
-  const forgotPassword = () => {}
+  const forgotPassword = () => {
+    navigate('SEND_PASSWORD_SCREEN')
+  }
 
   useEffect(() => {
     if (dataUser.email && dataUser.isVerified) {
@@ -154,6 +170,7 @@ export const LoginScreen = () => {
               </Text>
               <Block marginTop={25}>
                 <TextInput
+                  ref={emailInputRef}
                   label={'E-mail'}
                   placeholder="example@gmail.com"
                   onChangeText={(value) => {
