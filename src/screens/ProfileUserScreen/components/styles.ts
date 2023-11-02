@@ -1,13 +1,12 @@
 import { makeStyles, normalize, fontFamily as fontFamilyApp } from '@themes'
 import { handleFontSize } from '@components/utils'
-import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
 
 export const useStyles = makeStyles()(({ colors }) => ({
   boxHeaderContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: getStatusBarHeight() + normalize.v(10),
+    paddingTop: normalize.v(10),
     paddingHorizontal: normalize.m(20),
     paddingBottom: normalize.v(10),
     elevation: 15,
@@ -41,7 +40,7 @@ export const useStyles = makeStyles()(({ colors }) => ({
     elevation: 10,
     alignItems: 'flex-end',
     justifyContent: 'center',
-    paddingTop: getStatusBarHeight() + normalize.v(10),
+    paddingTop: normalize.v(10),
     paddingHorizontal: normalize.m(20),
     paddingBottom: normalize.v(10),
   },

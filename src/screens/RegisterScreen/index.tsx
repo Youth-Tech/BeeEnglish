@@ -18,8 +18,8 @@ import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { goBack, navigate } from '@navigation'
 import { useTranslation } from 'react-i18next'
-import { setEmailSignIn } from '@redux/reducers'
-import { signIn } from '@redux/actions/auth.action'
+import {setAuthState, setEmailSignIn} from '@redux/reducers'
+import { signUp } from '@redux/actions/auth.action'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { useValidateInput } from '@utils/validateInput'
 
@@ -40,7 +40,7 @@ export const RegisterScreen = () => {
   const emailInputRef = React.useRef<DocumentSelectionState>()
   const passwordInputRef = React.useRef<DocumentSelectionState>()
   const confirmPasswordInputRef = React.useRef<DocumentSelectionState>()
-  const store = useAppSelector((state) => state.root.user)
+  const isSignedIn = useAppSelector((state) => state.root.auth.isSignedIn)
   const handleLoginGoogle = () => {}
   const handleLoginFacebook = () => {}
   useEffect(() => {
@@ -104,18 +104,17 @@ export const RegisterScreen = () => {
     navigate('LOGIN_SCREEN')
   }
   const onSubmit = async () => {
-    dispatch(signIn({ email, password, confirmPassword, fullName }))
+    dispatch(setAuthState({isSignedIn: false}))
+    dispatch(signUp({ email, password, confirmPassword, fullName }))
     dispatch(setEmailSignIn(email))
   }
 
-  const emailUser = store.email
-  const isVerified = store.isVerified
   useEffect(() => {
     // console.log("Email: ", emailUser, "isVerified: ", isVerified)
-    if (emailUser && !isVerified) {
+    if (isSignedIn) {
       navigate('VERIFICATION_CODE_SCREEN')
     }
-  }, [emailUser, isVerified])
+  }, [isSignedIn])
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>

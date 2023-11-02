@@ -1,5 +1,5 @@
 import APIUtils from '@utils/AxiosInstance'
-import {SignUpResponse} from "@redux/actions/auth.action";
+import { LoginResponse, SignUpResponse } from '@redux/actions/auth.action'
 
 export interface OAuthRes {
   code?: number
@@ -19,9 +19,15 @@ export interface OAuthParams {
 export interface SignUpParams {
   email: string
   password: string
-  confirmPassword: string,
-  fullName: string,
+  confirmPassword: string
+  fullName: string
 }
+
+export interface LoginParams {
+  email: string
+  password: string
+}
+
 export const AuthService = {
   oAuthLogin({ accessToken, deviceId, deviceName, provider }: OAuthParams) {
     return APIUtils.post<OAuthRes>('auth/oauth/login', {
@@ -36,14 +42,24 @@ export const AuthService = {
       email,
       fullName,
       password,
-      confirmPassword
-    },)
+      confirmPassword,
+    })
   },
   verifyAccount({ code }: { code: string }) {
     return APIUtils.post('auth/verify-user', {
-      code
+      code,
+    })
+  },
+  login({ email, password }: LoginParams) {
+    return APIUtils.post<LoginResponse>('auth/login', {
+      email,
+      password,
+    })
+  },
+
+  resendVerifyEmail({ email }: { email: string }) {
+    return APIUtils.post('auth/resend-verified-code-email', {
+      email,
     })
   },
 } as const
-
-

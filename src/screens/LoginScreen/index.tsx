@@ -2,8 +2,9 @@ import {
   Pressable,
   KeyboardAvoidingView,
   DocumentSelectionState,
+  Keyboard,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -16,36 +17,56 @@ import {
 } from '@components'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
-import { useAppDispatch } from '@hooks'
+import { useAppDispatch, useAppSelector } from '@hooks'
 import { TokenService } from '@services'
 import { SocialLoginButton } from '@components'
 import { AuthService } from '@services/AuthService'
 import { DeviceInfoConfig, Provider } from '@configs'
 import { goBack, navigate, replace } from '@navigation'
-import { setAuthState, setLoadingStatusAction } from '@redux/reducers'
+import {
+  defaultUserState,
+  setAuthState,
+  setLoadingStatusAction,
+  setUserState,
+} from '@redux/reducers'
 import { signingWithFacebook, signingWithGoogle } from '@utils/authUtils'
 import { useValidateInput } from '@utils/validateInput'
+import { login, resendVerifyEmail } from '@redux/actions/auth.action'
 
 export const LoginScreen = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { colors, normalize } = useTheme()
+  const [email, setEmail] = React.useState('')
   const [checkMail, setCheckMail] = useState(true)
   const [checkPass, setCheckPass] = useState(true)
-  const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
+  const dataUser = useAppSelector((state) => state.root.user)
+  const isResend = useAppSelector((state) => state.root.auth.isResendVerifyEmail);
 
   const [disabledLogin, setDisabledLogin] = React.useState(true)
 
   const passwordInputRef = React.useRef<DocumentSelectionState>()
 
   const onSubmit = () => {
-    navigate('EMAIL_REGISTRATION_SCREEN')
+    dispatch(setUserState(defaultUserState))
+    dispatch(setAuthState({isResendVerifyEmail: false}))
+    if (email && password) dispatch(login({ email, password }))
   }
   const goRegister = () => {
     navigate('REGISTER_SCREEN')
   }
   const forgotPassword = () => {}
+
+  useEffect(() => {
+    if (dataUser.email && dataUser.isVerified) {
+      replace('BOTTOM_TAB')
+    }
+    if (isResend && email) {
+      dispatch(resendVerifyEmail(email))
+      navigate('VERIFICATION_CODE_SCREEN')
+    }
+  }, [dataUser, isResend])
 
   const handleLoginOAuth = async (providerId: number) => {
     dispatch(setLoadingStatusAction(true))
@@ -112,6 +133,10 @@ export const LoginScreen = () => {
     return 'hello'
   }
 
+  const handleEndEditing = () => {
+    Keyboard.dismiss()
+  }
+
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
       <Container>
@@ -172,6 +197,8 @@ export const LoginScreen = () => {
                   error={showError('password')}
                   showError={!checkPass}
                   onBlur={() => onCheckPass(password)}
+                  onEndEditing={handleEndEditing}
+                  onSubmitEditing={handleEndEditing}
                 />
               </Block>
               <Block alignCenter marginTop={125.4}>
