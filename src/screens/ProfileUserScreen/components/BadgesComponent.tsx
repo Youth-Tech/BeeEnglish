@@ -3,13 +3,13 @@ import React from 'react'
 import { useStyles } from './styles'
 import { useTheme } from '@themes'
 
-const BadgesComponent: React.FC<Badges> = ({ attachment, desc, name }) => {
+const BadgesComponent: React.FC<Badges> = ({ attachments, desc, name }) => {
   const styles = useStyles()
   const { colors } = useTheme()
   return (
     <Block row style={styles.boxItemStatistical}>
       <Image
-        source={{ uri: `${attachment.src}` }}
+        source={{ uri: `${attachments.src}` }}
         width={80}
         resizeMode="contain"
         style={{

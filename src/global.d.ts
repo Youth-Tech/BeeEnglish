@@ -8,7 +8,7 @@ interface PostResponse {
   level: string
   note: string
   creator: string
-  attachment: string
+  attachments: string
   flag: boolean
 }
 
@@ -33,7 +33,7 @@ interface Badges {
   id: string
   name: string
   desc: string
-  attachment: {
+  attachments: {
     id: string
     type: string
     src: string

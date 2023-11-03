@@ -28,7 +28,7 @@ const vocabularyData: FlipVocabularyProps[] = [
     pronunciation: '/kat/',
     exampleEnglish: 'A cat lying on the ground',
     exampleVietnamese: 'Con mèo đang nằm trên sàn',
-    attachment: {
+    attachments: {
       image:
         'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
     },
@@ -42,7 +42,7 @@ const vocabularyData: FlipVocabularyProps[] = [
     pronunciation: '/kat/',
     exampleEnglish: 'A cat lying on the ground',
     exampleVietnamese: 'Con mèo đang nằm trên sàn',
-    attachment: {
+    attachments: {
       image:
         'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
     },
@@ -56,7 +56,7 @@ const vocabularyData: FlipVocabularyProps[] = [
     pronunciation: '/kat/',
     exampleEnglish: 'A cat lying on the ground',
     exampleVietnamese: 'Con mèo đang nằm trên sàn',
-    attachment: {
+    attachments: {
       image:
         'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
     },
@@ -70,7 +70,7 @@ const vocabularyData: FlipVocabularyProps[] = [
     pronunciation: '/kat/',
     exampleEnglish: 'A cat lying on the ground',
     exampleVietnamese: 'Con mèo đang nằm trên sàn',
-    attachment: {
+    attachments: {
       image:
         'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
     },

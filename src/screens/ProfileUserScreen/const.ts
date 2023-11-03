@@ -36,7 +36,7 @@ export const ListStatistical: ItemStatisticalProps[] = [
 export const ListBadges: Badges[] = [
   {
     id: '1',
-    attachment: {
+    attachments: {
       id: '1',
       src: 'https://tuananhfpt.id.vn/huyhieu_1.png',
       type: 'image',
@@ -46,7 +46,7 @@ export const ListBadges: Badges[] = [
   },
   {
     id: '2',
-    attachment: {
+    attachments: {
       id: '1',
       src: 'https://tuananhfpt.id.vn/huyhieu_2.png',
       type: 'image',
@@ -56,7 +56,7 @@ export const ListBadges: Badges[] = [
   },
   {
     id: '3',
-    attachment: {
+    attachments: {
       id: '1',
       src: 'https://tuananhfpt.id.vn/huyhieu_3.png',
       type: 'image',
@@ -66,7 +66,7 @@ export const ListBadges: Badges[] = [
   },
   {
     id: '4',
-    attachment: {
+    attachments: {
       id: '1',
       src: 'https://tuananhfpt.id.vn/huyhieu_4.png',
       type: 'image',
@@ -76,7 +76,7 @@ export const ListBadges: Badges[] = [
   },
   {
     id: '5',
-    attachment: {
+    attachments: {
       id: '1',
       src: 'https://tuananhfpt.id.vn/huyhieu_5.png',
       type: 'image',

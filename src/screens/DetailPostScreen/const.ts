@@ -11,7 +11,7 @@ export const posts: PostResponse[] = [
     creator: 'admin',
     level: 'Beginner',
     title: 'Luyện kỹ năng đọc hiểu',
-    attachment:
+    attachments:
       'https://www.usatoday.com/gcdn/authoring/authoring-images/2023/09/06/USAT/70779211007-xxx-motions-ba-040-4181316.JPG',
     flag: false,
     note: 'Luyện kỹ năng đọc hiểu',
@@ -26,7 +26,7 @@ export const posts: PostResponse[] = [
     creator: 'admin',
     level: 'Beginner',
     title: 'Luyện kỹ năng đọc hiểu',
-    attachment:
+    attachments:
       'https://www.usatoday.com/gcdn/authoring/authoring-images/2023/09/06/USAT/70779211007-xxx-motions-ba-040-4181316.JPG',
     flag: false,
     note: 'Luyện kỹ năng đọc hiểu',
@@ -41,7 +41,7 @@ export const posts: PostResponse[] = [
     creator: 'admin',
     level: 'Beginner',
     title: 'Luyện kỹ năng đọc hiểu',
-    attachment:
+    attachments:
       'https://www.usatoday.com/gcdn/authoring/authoring-images/2023/09/06/USAT/70779211007-xxx-motions-ba-040-4181316.JPG',
     flag: false,
     note: 'Luyện kỹ năng đọc hiểu',
@@ -56,7 +56,7 @@ export const posts: PostResponse[] = [
     creator: 'admin',
     level: 'Beginner',
     title: 'Luyện kỹ năng đọc hiểu',
-    attachment:
+    attachments:
       'https://www.usatoday.com/gcdn/authoring/authoring-images/2023/09/06/USAT/70779211007-xxx-motions-ba-040-4181316.JPG',
     flag: false,
     note: 'Luyện kỹ năng đọc hiểu',

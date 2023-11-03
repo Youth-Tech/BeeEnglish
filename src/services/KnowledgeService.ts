@@ -7,7 +7,7 @@ export interface Lesson {
   description: string
   order: number
   chapter: string
-  attachment: Attachment | null
+  attachments: Attachment | null
 }
 
 export interface Chapter {
@@ -15,7 +15,7 @@ export interface Chapter {
   name: string
   course: string
   order: number
-  attachment: Attachment | null
+  attachments: Attachment | null
   lessons: Lesson[]
 }
 
@@ -31,7 +31,7 @@ export interface Quiz {
   answer: any[]
   correctAnswer?: string
   type: QuizType
-  attachment?: Attachment
+  attachments?: Attachment
   flag?: boolean
 }
 
