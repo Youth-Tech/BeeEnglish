@@ -1,22 +1,22 @@
-import { DefaultResponse } from '@services'
 import ApiUtil from '@utils/AxiosInstance'
+import { DefaultResponse } from '@services'
 
 export interface Lesson {
   _id: string
   name: string
-  description: string
   order: number
   chapter: string
+  description: string
   attachment: Attachment | null
 }
 
 export interface Chapter {
   _id: string
   name: string
-  course: string
   order: number
-  attachment: Attachment | null
+  course: string
   lessons: Lesson[]
+  attachment: Attachment | null
 }
 
 export interface GetChapterAndLessonRes extends DefaultResponse {
@@ -27,12 +27,12 @@ export interface GetChapterAndLessonRes extends DefaultResponse {
 
 export interface Quiz {
   _id: any
-  question: string
   answer: any[]
-  correctAnswer?: string
   type: QuizType
-  attachment?: Attachment
   flag?: boolean
+  question: string
+  correctAnswer?: string
+  attachment?: Attachment
 }
 
 export interface GetQuizByLessonIdRes extends DefaultResponse {

@@ -1,11 +1,12 @@
 import React from 'react'
-import { Block, Container, ShadowButton, Text } from '@components'
 import LottieView from 'lottie-react-native'
-import { animation } from '@assets'
-import { makeStyles, useTheme } from '@themes'
 import { useTranslation } from 'react-i18next'
-import { useBackHandler } from '@hooks'
+
 import { pop } from '@navigation'
+import { animation } from '@assets'
+import { useBackHandler } from '@hooks'
+import { makeStyles, useTheme } from '@themes'
+import { Block, Container, ShadowButton, Text } from '@components'
 
 export const CongratulationScreen = () => {
   const styles = useStyle()
@@ -95,8 +96,8 @@ export const CongratulationScreen = () => {
 
 const useStyle = makeStyles()(({ normalize }) => ({
   animationStyle: {
-    width: normalize.h(250),
     aspectRatio: 1,
     alignSelf: 'center',
+    width: normalize.h(250),
   },
 }))

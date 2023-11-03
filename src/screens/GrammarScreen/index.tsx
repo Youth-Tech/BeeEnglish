@@ -1,33 +1,34 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
+import LottieView from 'lottie-react-native'
 import { useTranslation } from 'react-i18next'
 import { Portal } from 'react-native-portalize'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { SlideInDown, SlideOutDown } from 'react-native-reanimated'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import {
   Text,
   Block,
   Progress,
   Container,
-  ShadowButton,
-  GrammarOptions,
   WordChoice,
+  ShadowButton,
+  BlockAnimated,
+  GrammarOptions,
+  VocabularyChoice,
+  LeaveProcessModal,
+  VocabularyOptions,
   QuestionRefFunction,
   VocabularyChoiceFunc,
-  VocabularyChoice,
   VocabularyOptionsFunc,
-  VocabularyOptions,
-  BlockAnimated,
-  LeaveProcessModal,
 } from '@components'
+import { useBackHandler } from '@hooks'
 import { Icon, animation } from '@assets'
-import { normalize, useTheme } from '@themes'
-import { RootStackParamList, goBack, navigateAndReset } from '@navigation'
-import { KnowledgeService, Quiz } from '@services'
 import { QuestionType } from './constants'
-import LottieView from 'lottie-react-native'
+import { normalize, useTheme } from '@themes'
+import { KnowledgeService, Quiz } from '@services'
 import { ModalFunction } from '@components/bases/Modal/type'
+import { RootStackParamList, navigateAndReset } from '@navigation'
 
 export type GrammarScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -53,18 +54,18 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 }) => {
   const { lessonId } = route.params
 
+  const leaveModalRef = React.useRef<ModalFunction>(null)
   const wordChoiceRef = React.useRef<WordListRefFunc>(null)
   const optionRef = React.useRef<QuestionRefFunction>(null)
   const vocabChoiceRef = React.useRef<VocabularyChoiceFunc>(null)
   const vocabOptionRef = React.useRef<VocabularyOptionsFunc>(null)
-  const leaveModalRef = React.useRef<ModalFunction>(null)
+
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
 
   const [step, setStep] = React.useState(0)
-  const [questions, setQuestions] = React.useState<Question[]>([])
   const [result, setResult] = React.useState<ResultType[]>()
-
+  const [questions, setQuestions] = React.useState<Question[]>([])
   const [modalStatus, setModalStatus] = React.useState<ModalStatus>({
     show: false,
     status: 'no_status',
@@ -76,7 +77,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
     },
   )
 
-  const callAPi = async () => {
+  const getQuizByLessonId = async () => {
     try {
       const res = await KnowledgeService.getQuizByLessonId(lessonId)
       const parseRes = parseQuizDataToQuestion(res.data.data.quizzes)
@@ -85,19 +86,26 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
         data: parseRes[0],
       })
       setQuestions(parseRes)
-      console.log(parseRes)
+      // console.log(parseRes)
     } catch (error) {
       console.log(error)
     }
   }
 
   React.useEffect(() => {
-    callAPi()
+    getQuizByLessonId()
   }, [])
 
   React.useEffect(() => {
     console.log(result)
   }, [result])
+
+  useBackHandler({
+    enabled: true,
+    callback() {
+      onClosePress()
+    },
+  })
 
   const onClosePress = () => {
     leaveModalRef.current?.openModal()
@@ -215,6 +223,8 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
           <VocabularyChoice ref={vocabChoiceRef} data={currentQuestion.data} />
         )
     }
+
+    return <></>
   }
 
   if (questions.length <= 0 && currentQuestion.data === null) {
@@ -253,12 +263,12 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
         <Block flex />
 
         <ShadowButton
-          buttonHeight={40}
-          buttonColor="#58CC02"
-          shadowButtonColor="#58A700"
-          buttonRadius={10}
           shadowHeight={6}
+          buttonHeight={40}
+          buttonRadius={10}
+          buttonColor="#58CC02"
           onPress={onCheckPress}
+          shadowButtonColor="#58A700"
           containerStyle={{
             marginBottom: normalize.v(20),
           }}
@@ -271,16 +281,16 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
           <Portal>
             <BlockAnimated
               row
-              height={100}
-              paddingHorizontal={20}
-              entering={SlideInDown}
-              exiting={SlideOutDown}
-              bottom={0}
               absolute
               left={0}
               right={0}
+              bottom={0}
               alignCenter
+              height={100}
               space={'between'}
+              paddingHorizontal={20}
+              entering={SlideInDown}
+              exiting={SlideOutDown}
               backgroundColor={
                 modalStatus.status === 'correct' ? '#D7FFB8' : '#FFDFE0'
               }

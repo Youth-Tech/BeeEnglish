@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Pressable,
   StyleSheet,
@@ -6,16 +5,17 @@ import {
   SectionListData,
   SectionListRenderItem,
 } from 'react-native'
+import React from 'react'
+import LottieView from 'lottie-react-native'
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 
+import { navigate } from '@navigation'
 import { Icon, animation } from '@assets'
+import { MOCK_DATA_LESSON } from './mock'
 import { normalize, useTheme } from '@themes'
-import { Text, Block, Container, BlockAnimated } from '@components'
 import { ItemLesson, ItemLessonProps } from './components'
 import { Chapter, KnowledgeService, Lesson } from '@services'
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
-import LottieView from 'lottie-react-native'
-import { MOCK_DATA_LESSON } from './mock'
-import { navigate } from '@navigation'
+import { Text, Block, Container, BlockAnimated } from '@components'
 
 export type SectionData = (typeof MOCK_DATA_LESSON)[number]
 
@@ -75,7 +75,7 @@ export const LessonMap = () => {
     try {
       const res = await KnowledgeService.getChapterAndLesson()
       setData(parseDataToSectionData(res.data.data.chapters))
-      console.log(res.data.data.chapters)
+      // console.log(res.data.data.chapters)
     } catch (error) {
       console.log(error)
     }
