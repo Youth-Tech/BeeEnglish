@@ -48,9 +48,6 @@
     "lets_answer_some_questions": "Trả lời một số câu hỏi nào!",
     "test": "Bài kiểm tra",
     "take_the_test_to_let_us_know_your_capabilities": "Thực hiện bài kiểm tra để chúng tôi biết năng lực của bạn",
-    "easy": "siêu dễ",
-    "normal": "bình thường",
-    "hard": "khó",
     "level_of_difficult": "Độ khó: ",
     "check": "Kiểm tra",
     "correct": "Đúng rồi nè!",
@@ -98,7 +95,7 @@
     "video": "Video thực tế",
     "more_example": "Xem thêm ví dụ",
     "word_difficulty": "Cấp độ từ",
-    "choose_word_difficulty":"Bạn hãy chọn cấp độ từ phù hợp với trình độ của bạn.",
+    "choose_word_difficulty": "Bạn hãy chọn cấp độ từ phù hợp với trình độ của bạn.",
     "hard": "Khó",
     "normal": "Bình thường",
     "simple": "Đơn giản",
@@ -122,7 +119,8 @@
     "level": "Trình độ",
     "total_point": "Tổng điểm",
     "choose_correct_image": "Chọn hình phù hợp với từ",
-    "choose_translation": "Chọn bản dịch"
-
+    "choose_translation": "Chọn bản dịch",
+    "congratulation": "Tuyệt vời!!!",
+    "reward": "Phần thưởng"
   }
 }

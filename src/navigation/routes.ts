@@ -24,6 +24,8 @@ export const AUTH_ROUTE = {
   DICTIONARY_SCREEN: 'DICTIONARY_SCREEN',
   DETAIL_LESSON_SCREEN: 'DETAIL_LESSON_SCREEN',
   LESSON_MAP_SCREEN: 'LESSON_MAP_SCREEN',
+
+  CONGRATULATION_SCREEN: 'CONGRATULATION_SCREEN',
 } as const
 
 export const PUBLIC_ROUTE = {
@@ -47,9 +49,9 @@ export type RootStackParamList = {
   [AUTH_ROUTE.RESET_PASSWORD_SCREEN]: undefined
   [AUTH_ROUTE.LOGIN_SCREEN]: undefined
   [AUTH_ROUTE.REGISTER_SCREEN]: undefined
-  [AUTH_ROUTE.VOCAB_SCREEN]: undefined
+  [AUTH_ROUTE.VOCAB_SCREEN]: { lessonId: string }
   [AUTH_ROUTE.SETTING_SCREEN]: undefined
-  [AUTH_ROUTE.DETAIL_LESSON_SCREEN]: undefined
+  [AUTH_ROUTE.DETAIL_LESSON_SCREEN]: { lessonId: string }
   [AUTH_ROUTE.DICTIONARY_SCREEN]: undefined
   [AUTH_ROUTE.LESSON_MAP_SCREEN]: undefined
 
@@ -62,10 +64,10 @@ export type RootStackParamList = {
   [PUBLIC_ROUTE.ABOUT_THE_TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.TEST_SCREEN]: undefined
   [AUTH_ROUTE.LEARNED_WORD_SCREEN]: undefined
-  [AUTH_ROUTE.GRAMMAR_SCREEN]: undefined
+  [AUTH_ROUTE.GRAMMAR_SCREEN]: { lessonId: string }
   [AUTH_ROUTE.SAVED_WORD_SCREEN]: undefined
   [AUTH_ROUTE.DETAIL_WORD_SCREEN]: undefined
-  [AUTH_ROUTE.DETAIL_LESSON_SCREEN]: undefined
+  [AUTH_ROUTE.CONGRATULATION_SCREEN]: undefined
 }
 
 export type RouteKeys = keyof typeof AUTH_ROUTE | keyof typeof PUBLIC_ROUTE

@@ -1,23 +1,35 @@
 import { useTheme } from '@themes'
-import { goBack } from '@navigation'
+import { RootStackParamList, goBack } from '@navigation'
 import { Icon, images } from '@assets'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import FastImage from 'react-native-fast-image'
 import { ImageBackground, Pressable } from 'react-native'
 import { Text, Block, Container, Image } from '@components'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
-export const DetailLessonScreen = () => {
-  const { colors, normalize } = useTheme()
+export type DetailLessonScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'DETAIL_LESSON_SCREEN'
+>
+
+export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
+  navigation,
+  route,
+}) => {
+  const { lessonId } = route.params
+  console.log(lessonId)
+
   const { t } = useTranslation()
+  const { colors, normalize } = useTheme()
   const [activeBlock, setActiveBlock] = useState(0)
 
   const onPressChange = (blockNumber: number) => {
     setActiveBlock(blockNumber)
     if (blockNumber === 1) {
-      console.log('Chúng tôi chưa cập nhật màn hình này hehe')
+      navigation.navigate('VOCAB_SCREEN', { lessonId })
     } else if (blockNumber === 2) {
-      console.log('Chúng tôi chưa cập nhật màn hình này hehe haha')
+      navigation.navigate('GRAMMAR_SCREEN', { lessonId })
     }
   }
   return (

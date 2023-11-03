@@ -3,12 +3,10 @@ import { Pressable, StyleSheet } from 'react-native'
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
 
 import { images } from '@assets'
-import { Answer, Question } from '@screens'
 import { normalize, useTheme } from '@themes'
 import { Block, Image, Text } from '@components/bases'
 
 const AnimatedBlock = Animated.createAnimatedComponent(Block)
-const tempArr = new Array(4).fill(5)
 
 export interface QuestionRefFunction {
   check: () => boolean
@@ -63,9 +61,8 @@ export const GrammarOptions = React.forwardRef<
             resizeMode="contain"
             style={styles.imageStyle}
           />
-
           <Block style={styles.blockOptions}>
-            {tempArr.map((_, index) => {
+            {(data.answer as Answer[]).map((item, index) => {
               return (
                 <Pressable
                   key={index}
@@ -93,7 +90,7 @@ export const GrammarOptions = React.forwardRef<
                       size={'h3'}
                       fontFamily="semiBold"
                     >
-                      {(data.answer as Answer[])[index].option}
+                      {item.option as string}
                     </Text>
                   </Block>
                 </Pressable>

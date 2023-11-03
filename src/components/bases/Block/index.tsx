@@ -12,6 +12,7 @@ import styles from './styles'
 import { BlockProps } from './types'
 import { normalize, useTheme } from 'themes'
 import { handleColor, isNumber } from '@components/utils'
+import Animated from 'react-native-reanimated'
 
 export const Block = React.forwardRef<any, BlockProps>((props, ref) => {
   const {
@@ -156,3 +157,5 @@ export const Block = React.forwardRef<any, BlockProps>((props, ref) => {
     </View>
   )
 })
+
+export const BlockAnimated = Animated.createAnimatedComponent(Block)

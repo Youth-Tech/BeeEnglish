@@ -1,30 +1,27 @@
 import React from 'react'
-import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
+import { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
 
 import { images } from '@assets'
 import { useTheme } from '@themes'
-import { Question } from '@screens'
+import { WordList } from '../WordList'
 import { widthScreen } from '@utils/helpers'
-import { Block, Image, Text } from '@components/bases'
-import { WordList, WordListRefFunc } from '../WordList'
+import { Block, BlockAnimated, Image, Text } from '@components/bases'
 
 export interface WordChoiceProps {
-  wordListRef: React.Ref<WordListRefFunc> | undefined
+  wordListRef?: React.Ref<WordListRefFunc> | undefined
   data: Question
 }
 
-const AnimatedBlock = Animated.createAnimatedComponent(Block)
-
 export const WordChoice: React.FC<WordChoiceProps> = ({
-  wordListRef,
   data,
+  wordListRef,
 }) => {
   const { colors, normalize } = useTheme()
   return (
-    <AnimatedBlock
+    <BlockAnimated
+      flex
       exiting={FadeOutLeft.duration(500)}
       entering={FadeInRight.duration(500)}
-      flex
     >
       <Text size={'h1'} fontFamily="bold" marginTop={40}>
         Viết lại câu bằng tiếng Anh
@@ -62,8 +59,8 @@ export const WordChoice: React.FC<WordChoiceProps> = ({
       </Block>
 
       <Block flex justifyCenter marginTop={10}>
-        <WordList ref={wordListRef} sentence={data.answer as string} />
+        <WordList ref={wordListRef} answers={data.answer as string[]} />
       </Block>
-    </AnimatedBlock>
+    </BlockAnimated>
   )
 }

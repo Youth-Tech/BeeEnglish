@@ -1,7 +1,9 @@
 import React from 'react'
+import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Portal } from 'react-native-portalize'
-import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 
 import {
   Text,
@@ -9,7 +11,6 @@ import {
   Progress,
   Container,
   ShadowButton,
-  WordListRefFunc,
   GrammarOptions,
   WordChoice,
   QuestionRefFunction,
@@ -17,234 +18,84 @@ import {
   VocabularyChoice,
   VocabularyOptionsFunc,
   VocabularyOptions,
+  BlockAnimated,
 } from '@components'
-import { Icon } from '@assets'
-import { useTheme } from '@themes'
-import { goBack } from '@navigation'
+import { Icon, animation } from '@assets'
+import { normalize, useTheme } from '@themes'
+import { RootStackParamList, goBack } from '@navigation'
+import { KnowledgeService, Quiz } from '@services'
+import { QuestionType } from './constants'
+import LottieView from 'lottie-react-native'
 
-export interface Question {
-  id: string
-  question: string
-  wordImage?: string
-  answer: string | Answer[]
-  type: QuestionType
+export type GrammarScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'GRAMMAR_SCREEN'
+>
+
+const parseQuizDataToQuestion = (quizzes: Quiz[]): Question[] => {
+  return quizzes.map((item) => {
+    return {
+      question: item.question,
+      answer: item.answer,
+      id: item._id,
+      correctAnswer: item.correctAnswer,
+      wordImage: item.attachment?.src,
+      type: QuestionType[item.type],
+    }
+  })
 }
 
-export enum QuestionType {
-  OPTION = 'OPTION',
-  WORD_CHOICE = 'WORD_CHOICE',
-  VOCAB_CHOICE = 'VOCAB_CHOICE',
-  VOCAB_OPTION = 'VOCAB_OPTION',
-}
+export const GrammarScreen: React.FC<GrammarScreenProps> = ({
+  route,
+  navigation,
+}) => {
+  const { lessonId } = route.params
 
-export interface Answer {
-  option: string
-  isValid: boolean
-}
-
-const QUESTION: Question[] = [
-  {
-    id: '1',
-    question: 'Tôi làm việc ở đây 1',
-    answer: 'I go to school by bike1',
-    type: QuestionType.WORD_CHOICE,
-  },
-  {
-    id: '4',
-    question: 'I drink coffee_______.',
-    answer: [
-      {
-        isValid: false,
-        option: 'three times for a days',
-      },
-      {
-        isValid: false,
-        option: 'three time for a day',
-      },
-      {
-        isValid: true,
-        option: 'three times for a day',
-      },
-      {
-        isValid: false,
-        option: 'three time for a days',
-      },
-    ],
-    type: QuestionType.OPTION,
-  },
-  {
-    id: '4',
-    question: 'I drink soda_______.',
-    answer: [
-      {
-        isValid: false,
-        option: 'three times for a days',
-      },
-      {
-        isValid: false,
-        option: 'three time for a day',
-      },
-      {
-        isValid: true,
-        option: 'three times for a day',
-      },
-      {
-        isValid: false,
-        option: 'three time for a days',
-      },
-    ],
-    type: QuestionType.OPTION,
-  },
-  {
-    id: '2',
-    question: 'Tôi làm việc ở đây 2',
-    answer: 'I go to school by bike2',
-    type: QuestionType.WORD_CHOICE,
-  },
-  {
-    id: '3',
-    question: 'Tôi làm việc ở đây 3',
-    answer: 'I go to school by bike3',
-    type: QuestionType.WORD_CHOICE,
-  },
-  {
-    id: '5',
-    question: 'Dog',
-    answer: [
-      {
-        option: 'https://cdn-icons-png.flaticon.com/512/2002/2002611.png',
-        isValid: false,
-      },
-      {
-        option: 'https://cdn-icons-png.flaticon.com/512/1993/1993713.png',
-        isValid: false,
-      },
-      {
-        option: 'https://cdn-icons-png.flaticon.com/512/1998/1998627.png',
-        isValid: true,
-      },
-      {
-        option: 'https://cdn-icons-png.flaticon.com/512/437/437562.png',
-        isValid: false,
-      },
-    ],
-    type: QuestionType.VOCAB_CHOICE,
-  },
-
-  {
-    id: '6',
-    question: 'Cat',
-    answer: [
-      {
-        option: 'https://cdn-icons-png.flaticon.com/512/2002/2002611.png',
-        isValid: false,
-      },
-      {
-        option: 'https://cdn-icons-png.flaticon.com/512/1993/1993713.png',
-        isValid: false,
-      },
-      {
-        option: 'https://cdn-icons-png.flaticon.com/512/1998/1998627.png',
-        isValid: false,
-      },
-      {
-        option: 'https://cdn-icons-png.flaticon.com/512/437/437562.png',
-        isValid: true,
-      },
-    ],
-    type: QuestionType.VOCAB_CHOICE,
-  },
-  {
-    id: '7',
-    question: 'Chicken',
-    answer: [
-      {
-        option: 'https://cdn-icons-png.flaticon.com/512/2002/2002611.png',
-        isValid: true,
-      },
-      {
-        option: 'https://cdn-icons-png.flaticon.com/512/1993/1993713.png',
-        isValid: false,
-      },
-      {
-        option: 'https://cdn-icons-png.flaticon.com/512/1998/1998627.png',
-        isValid: false,
-      },
-      {
-        option: 'https://cdn-icons-png.flaticon.com/512/437/437562.png',
-        isValid: false,
-      },
-    ],
-    type: QuestionType.VOCAB_CHOICE,
-  },
-  {
-    id: '8',
-    question: 'Chicken',
-    wordImage:
-      'https://static-00.iconduck.com/assets.00/chicken-icon-2048x2012-tfn7yvk0.png',
-    answer: [
-      {
-        option: 'Con mèo',
-        isValid: false,
-      },
-      {
-        option: 'Con gà',
-        isValid: true,
-      },
-    ],
-    type: QuestionType.VOCAB_OPTION,
-  },
-  {
-    id: '9',
-    question: 'Cat',
-    wordImage:
-      'https://static.vecteezy.com/system/resources/previews/013/078/569/original/illustration-of-cute-colored-cat-cartoon-cat-image-in-format-suitable-for-children-s-book-design-elements-introduction-of-cats-to-children-books-or-posters-about-animal-free-png.png',
-    answer: [
-      {
-        option: 'Con mèo',
-        isValid: true,
-      },
-      {
-        option: 'Con gà',
-        isValid: false,
-      },
-    ],
-    type: QuestionType.VOCAB_OPTION,
-  },
-]
-
-export interface ResultType {
-  questionId: string
-  result: 'correct' | 'incorrect'
-}
-
-export interface ModalStatus {
-  show: boolean
-  status: 'correct' | 'incorrect' | 'no_status'
-}
-
-const BlockAnimated = Animated.createAnimatedComponent(Block)
-
-export const GrammarScreen: React.FC = () => {
   const wordChoiceRef = React.useRef<WordListRefFunc>(null)
   const optionRef = React.useRef<QuestionRefFunction>(null)
   const vocabChoiceRef = React.useRef<VocabularyChoiceFunc>(null)
   const vocabOptionRef = React.useRef<VocabularyOptionsFunc>(null)
+
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
 
   const [step, setStep] = React.useState(0)
-  const [questions] = React.useState(QUESTION)
+  const [questions, setQuestions] = React.useState<Question[]>([])
   const [result, setResult] = React.useState<ResultType[]>()
 
   const [modalStatus, setModalStatus] = React.useState<ModalStatus>({
     show: false,
     status: 'no_status',
   })
-  const [currentQuestion, setCurrentQuestion] = React.useState({
-    index: 0,
-    data: questions[0],
-  })
+  const [currentQuestion, setCurrentQuestion] = React.useState<CurrentQuestion>(
+    {
+      index: 0,
+      data: null,
+    },
+  )
+
+  const callAPi = async () => {
+    try {
+      const res = await KnowledgeService.getQuizByLessonId(lessonId)
+      const parseRes = parseQuizDataToQuestion(res.data.data.quizzes)
+      setCurrentQuestion({
+        index: 0,
+        data: parseRes[0],
+      })
+      setQuestions(parseRes)
+      console.log(parseRes)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  React.useEffect(() => {
+    callAPi()
+  }, [])
+
+  React.useEffect(() => {
+    console.log(result)
+  }, [result])
 
   const onClosePress = () => {
     goBack()
@@ -267,23 +118,25 @@ export const GrammarScreen: React.FC = () => {
     nextQuestion()
   }
 
-  React.useEffect(() => {
-    console.log(result)
-  }, [result])
-
   const checkResult = () => {
+    if (currentQuestion.data === null) return
+
     let result: boolean = !!null
-    if (currentQuestion.data.type === QuestionType.OPTION) {
-      result = !!optionRef.current?.check()
-    } else if (currentQuestion.data.type === QuestionType.VOCAB_CHOICE) {
+
+    if (currentQuestion.data.type === QuestionType.multipleWord) {
+      if (currentQuestion.data.wordImage) {
+        result = !!vocabOptionRef.current?.check()
+      } else {
+        result = !!optionRef.current?.check()
+      }
+    } else if (currentQuestion.data.type === QuestionType.multipleImage) {
       result = !!vocabChoiceRef.current?.check()
-    } else if (currentQuestion.data.type === QuestionType.VOCAB_OPTION) {
-      result = !!vocabOptionRef.current?.check()
     } else {
       result = !!wordChoiceRef.current?.check(
-        currentQuestion.data.answer as string,
+        currentQuestion.data.correctAnswer!,
       )
     }
+
     setModalStatus((prev) => ({
       ...prev,
       status: result ? 'correct' : 'incorrect',
@@ -293,20 +146,15 @@ export const GrammarScreen: React.FC = () => {
 
     setResult((prev) => {
       const prevState = prev || []
-
       return [
         ...prevState,
         {
-          questionId: currentQuestion.data.id,
+          questionId: currentQuestion.data!.id,
           result: result ? 'correct' : 'incorrect',
         },
       ]
     })
   }
-
-  React.useEffect(() => {
-    console.log(result)
-  }, [result])
 
   const nextQuestion = () => {
     //next question
@@ -318,16 +166,21 @@ export const GrammarScreen: React.FC = () => {
     if (nextQuestion == -1) {
       console.log('complete quiz')
       setStep(100)
-
-      //TODO: go to complete screen
+      navigation.navigate('CONGRATULATION_SCREEN')
     } else {
-      if (questions[nextQuestion].type === QuestionType.OPTION) {
+      if (questions[nextQuestion].type === QuestionType.multipleWord) {
         optionRef.current?.triggerChangeLayout()
-      } else if (questions[nextQuestion].type === QuestionType.VOCAB_CHOICE) {
+      } else if (questions[nextQuestion].type === QuestionType.multipleImage) {
         vocabChoiceRef.current?.onTriggerAnimation()
-      } else if (questions[nextQuestion].type === QuestionType.VOCAB_OPTION) {
+      } else if (
+        questions[nextQuestion].type === QuestionType.multipleImage &&
+        questions[nextQuestion].wordImage
+      ) {
         vocabOptionRef.current?.onTriggerAnimation()
+      } else if (questions[nextQuestion].type === QuestionType.cloze) {
+        wordChoiceRef.current?.onTriggerAnimation()
       }
+
       setCurrentQuestion((_) => {
         return {
           index: nextQuestion,
@@ -336,24 +189,46 @@ export const GrammarScreen: React.FC = () => {
       })
     }
   }
-  const renderQuestion = (type: QuestionType) => {
-    switch (type) {
-      case 'WORD_CHOICE':
+
+  const renderQuestion = (question: Question) => {
+    if (currentQuestion.data === null) return <></>
+
+    switch (question.type) {
+      case QuestionType.cloze:
         return (
           <WordChoice wordListRef={wordChoiceRef} data={currentQuestion.data} />
         )
-      case 'OPTION':
+      case QuestionType.multipleWord:
+        if (question.attachment?.src) {
+          return (
+            <VocabularyOptions
+              ref={vocabOptionRef}
+              data={currentQuestion.data}
+            />
+          )
+        }
         return <GrammarOptions ref={optionRef} data={currentQuestion.data} />
-      case 'VOCAB_CHOICE':
+      case QuestionType.multipleImage:
         return (
           <VocabularyChoice ref={vocabChoiceRef} data={currentQuestion.data} />
         )
-      case 'VOCAB_OPTION':
-        return (
-          <VocabularyOptions ref={vocabOptionRef} data={currentQuestion.data} />
-        )
     }
   }
+
+  if (questions.length <= 0 && currentQuestion.data === null) {
+    return (
+      <Container>
+        <Block flex alignCenter justifyCenter>
+          <LottieView
+            autoPlay
+            source={animation.beeFlying}
+            style={styles.loadingAnimation}
+          />
+        </Block>
+      </Container>
+    )
+  }
+
   return (
     <Container>
       <Block flex paddingHorizontal={15} paddingTop={10}>
@@ -371,7 +246,7 @@ export const GrammarScreen: React.FC = () => {
           />
         </Block>
 
-        {renderQuestion(currentQuestion.data.type)}
+        {renderQuestion(currentQuestion.data!)}
 
         <Block flex />
 
@@ -458,3 +333,10 @@ export const GrammarScreen: React.FC = () => {
     </Container>
   )
 }
+
+const styles = StyleSheet.create({
+  loadingAnimation: {
+    height: normalize.v(500),
+    aspectRatio: 1,
+  },
+})

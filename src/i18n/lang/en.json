@@ -48,9 +48,6 @@
     "lets_answer_some_questions": "Let's answer some questions!",
     "test": "Exam Test",
     "take_the_test_to_let_us_know_your_capabilities": "Take the test to let us know your capabilities",
-    "easy": "easy",
-    "normal": "normal",
-    "hard": "hard",
     "level_of_difficult": "Difficulty: ",
     "check": "Check",
     "correct": "Correct!",
@@ -83,7 +80,6 @@
     "attend": "Attend",
     "welcome_back": "Welcome back!",
     "comeback_tomorrow": "Please come back tomorrow!",
-    "video": "Video",
     "joined_on": "Joined on",
     "process": "Process",
     "statistical": "Statistical",
@@ -109,7 +105,7 @@
     "video": "Video",
     "more_example": "See more examples",
     "word_difficulty": "Word difficulty",
-    "choose_word_difficulty":"Choose a word whose difficulty level is appropriate for you",
+    "choose_word_difficulty": "Choose a word whose difficulty level is appropriate for you",
     "hard": "Hard",
     "normal": "Normal",
     "simple": "Simple",
@@ -123,6 +119,8 @@
     "do_you_want_to_leave": "Are you willing to leave?",
     "continue_lesson": "You will know more about the language!",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "congratulation": "Congratulation!!!",
+    "reward": "Reward"
   }
 }

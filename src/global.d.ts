@@ -39,3 +39,20 @@ interface Badges {
     src: string
   }
 }
+
+interface Attachment {
+  id?: any
+  src?: string
+  type?: EAttachment
+}
+
+// Media Enum
+enum EAttachment {
+  Image = 'image',
+  Video = 'video',
+  Audio = 'audio',
+  Subtitle = 'subtitle',
+}
+
+// Quiz Enum
+type QuizType = 'multipleWord' | 'multipleImage' | 'cloze' | 'matching'

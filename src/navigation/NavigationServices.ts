@@ -11,10 +11,16 @@ export const navigationRef =
 
 export function navigate(name: RouteKeys, params?: any, key?: string) {
   if (key) {
-    navigationRef.current?.navigate({ key, name, params })
+    navigationRef.current?.dispatch(
+      CommonActions.navigate({
+        key,
+        name,
+        params,
+      }),
+    )
     return
   }
-  navigationRef.current?.navigate(name, params)
+  navigationRef.current?.dispatch(CommonActions.navigate(name, params))
 }
 
 export function goBack() {

@@ -16,6 +16,7 @@ export interface ItemLessonProps {
   isEndItem?: boolean
   lessonDescription: string
   type?: 'normal' | 'checkpoint'
+  chapterStatus: 'lock' | 'unlock'
   status: 'complete' | 'lock' | 'current'
   onUnlockPress?: (lessonId: string) => void
   onStartExaminationPress?: (lessonId: string) => void
@@ -163,6 +164,7 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
   thumbnail,
   isEndItem,
   lessonTitle,
+  chapterStatus,
   onUnlockPress,
   type = 'normal',
   lessonDescription,
@@ -218,17 +220,18 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
                 }}
               />
 
-              {status === 'lock' && type === 'normal' && (
-                <Block
-                  alignCenter
-                  radius={68}
-                  justifyCenter
-                  style={StyleSheet.absoluteFill}
-                  backgroundColor="rgba(255, 250, 250, 0.56)"
-                >
-                  <Icon state="Lock" fill="white" />
-                </Block>
-              )}
+              {status === 'lock' &&
+                (type === 'normal' || chapterStatus === 'lock') && (
+                  <Block
+                    alignCenter
+                    radius={68}
+                    justifyCenter
+                    style={StyleSheet.absoluteFill}
+                    backgroundColor="rgba(255, 250, 250, 0.56)"
+                  >
+                    <Icon state="Lock" fill="white" />
+                  </Block>
+                )}
 
               {status === 'complete' && !isEndItem && (
                 <Block absolute bottom={-8} alignSelf="center">

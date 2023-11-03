@@ -7,102 +7,83 @@ import {
   SectionListRenderItem,
 } from 'react-native'
 
-import { Icon } from '@assets'
+import { Icon, animation } from '@assets'
 import { normalize, useTheme } from '@themes'
-import { Text, Block, Container } from '@components'
+import { Text, Block, Container, BlockAnimated } from '@components'
 import { ItemLesson, ItemLessonProps } from './components'
-
-export const MOCK_DATA: ItemLessonProps[] = [
-  {
-    id: 'id1',
-    lessonTitle: 'Hello!',
-    lessonDescription: 'Learn greetings for meeting people',
-    thumbnail:
-      'https://kenh14cdn.com/thumb_w/660/2019/12/26/garlicheaven79728792465586074371474299227813850164136n-1577341862556288584887.jpg',
-    status: 'complete',
-  },
-  {
-    id: 'id2',
-    lessonTitle: 'Introducing yourself',
-    lessonDescription: 'Say your name',
-    thumbnail:
-      'https://kenh14cdn.com/thumb_w/660/2019/12/26/garlicheaven79728792465586074371474299227813850164136n-1577341862556288584887.jpg',
-    status: 'current',
-  },
-  {
-    id: 'id3',
-    lessonTitle: 'Saying how you are',
-    lessonDescription: 'Talk about how you feel',
-    thumbnail:
-      'https://kenh14cdn.com/thumb_w/660/2019/12/26/garlicheaven79728792465586074371474299227813850164136n-1577341862556288584887.jpg',
-    status: 'lock',
-  },
-  {
-    id: 'id4',
-    lessonTitle: 'Developing fluency',
-    lessonDescription: 'Introduce yourself',
-    thumbnail:
-      'https://kenh14cdn.com/thumb_w/660/2019/12/26/garlicheaven79728792465586074371474299227813850164136n-1577341862556288584887.jpg',
-    status: 'lock',
-  },
-  {
-    id: 'id5',
-    lessonTitle: 'Check point Introduce',
-    lessonDescription: 'Test your skills to access the next chapter',
-    thumbnail:
-      'https://kenh14cdn.com/thumb_w/660/2019/12/26/garlicheaven79728792465586074371474299227813850164136n-1577341862556288584887.jpg',
-    status: 'lock',
-    type: 'checkpoint',
-  },
-]
-
-const MOCK_DATA_LESSON = [
-  {
-    lessonComplete: 1,
-    data: MOCK_DATA,
-    title: 'Introduce my self',
-    status: 'unlock',
-    index: 0,
-  },
-  {
-    lessonComplete: 1,
-    data: MOCK_DATA,
-    title: 'Introduce my self 2',
-    status: 'lock',
-    index: 1,
-  },
-  {
-    lessonComplete: 1,
-    data: MOCK_DATA,
-    title: 'Introduce my self 3',
-    status: 'lock',
-    index: 2,
-  },
-  {
-    lessonComplete: 1,
-    data: MOCK_DATA,
-    title: 'Introduce my self 4',
-    status: 'lock',
-    index: 3,
-  },
-]
+import { Chapter, KnowledgeService, Lesson } from '@services'
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
+import LottieView from 'lottie-react-native'
+import { MOCK_DATA_LESSON } from './mock'
+import { navigate } from '@navigation'
 
 export type SectionData = (typeof MOCK_DATA_LESSON)[number]
 
+const parseDataToLessonData = (
+  data: Lesson[],
+  fakeState?: boolean,
+  chapterStatus?: 'lock' | 'unlock',
+): ItemLessonProps[] => {
+  return data.map((item, index, arr) => {
+    return {
+      id: item._id,
+      lessonDescription: item.description,
+      lessonTitle: item.name,
+      status: fakeState && index === 0 ? 'current' : 'lock',
+      thumbnail: item.attachment?.src || '',
+      type: index === arr.length - 1 ? 'checkpoint' : 'normal',
+      chapterStatus: chapterStatus || 'lock',
+    }
+  })
+}
+
+const parseDataToSectionData = (data: Chapter[]): SectionData[] => {
+  return data.map((item, index) => {
+    return {
+      data: parseDataToLessonData(
+        item.lessons,
+        index === 0,
+        index === 0 ? 'unlock' : 'lock',
+      ),
+      index: item.order,
+      lessonComplete: index === 0 ? 1 : 0,
+      status: index === 0 ? 'unlock' : 'lock',
+      title: item.name,
+    }
+  })
+}
+
 export const LessonMap = () => {
   const { colors } = useTheme()
+  const [data, setData] = React.useState<SectionData[]>([])
 
   const onStartExaminationPress = (id: string) => {
     console.log('onStartExamination', id)
+    navigate('DETAIL_LESSON_SCREEN', { lessonId: id })
   }
 
   const onStartLessonPress = (id: string, isRestart?: boolean) => {
     console.log('onStartLesson', id, 'with isRestart', !!isRestart)
+    navigate('DETAIL_LESSON_SCREEN', { lessonId: id })
   }
 
   const onUnlockPress = (id: string) => {
     console.log('onUnlockPress', id)
   }
+
+  const callApi = async () => {
+    try {
+      const res = await KnowledgeService.getChapterAndLesson()
+      setData(parseDataToSectionData(res.data.data.chapters))
+      console.log(res.data.data.chapters)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  React.useEffect(() => {
+    callApi()
+  }, [])
 
   const renderMapItem: SectionListRenderItem<ItemLessonProps, SectionData> = ({
     item,
@@ -139,6 +120,7 @@ export const LessonMap = () => {
         >
           <Text
             size={64}
+            lineHeight={64}
             fontFamily="cutie"
             color={
               item.section.status === 'unlock'
@@ -146,7 +128,7 @@ export const LessonMap = () => {
                 : colors.greyPrimary
             }
           >
-            {item.section.index! + 1}
+            {item.section.index!}
           </Text>
           <Block style={styles.headerLabelBlock}>
             <Text
@@ -188,16 +170,34 @@ export const LessonMap = () => {
   return (
     <Container>
       <Block style={styles.listContainer}>
-        <SectionList
-          removeClippedSubviews
-          renderItem={renderMapItem}
-          sections={MOCK_DATA_LESSON}
-          stickySectionHeadersEnabled={true}
-          showsVerticalScrollIndicator={false}
-          renderSectionHeader={renderSectionHeader}
-          SectionSeparatorComponent={() => <Block height={10} />}
-          keyExtractor={(item, index) => item.lessonTitle + index}
-        />
+        {data?.length > 0 ? (
+          <Animated.View entering={FadeIn} exiting={FadeOut}>
+            <SectionList
+              sections={data}
+              removeClippedSubviews
+              renderItem={renderMapItem}
+              stickySectionHeadersEnabled={true}
+              showsVerticalScrollIndicator={false}
+              renderSectionHeader={renderSectionHeader}
+              SectionSeparatorComponent={() => <Block height={10} />}
+              keyExtractor={(item, index) => item.lessonTitle + index}
+            />
+          </Animated.View>
+        ) : (
+          <BlockAnimated
+            flex
+            alignCenter
+            justifyCenter
+            entering={FadeIn}
+            exiting={FadeOut}
+          >
+            <LottieView
+              autoPlay
+              source={animation.beeFlying}
+              style={styles.loadingAnimation}
+            />
+          </BlockAnimated>
+        )}
       </Block>
     </Container>
   )
@@ -217,4 +217,8 @@ const styles = StyleSheet.create({
     gap: normalize.h(20),
   },
   headerLabelBlock: { gap: 5 },
+  loadingAnimation: {
+    height: normalize.v(500),
+    aspectRatio: 1,
+  },
 })
