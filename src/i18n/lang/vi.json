@@ -48,6 +48,10 @@
     "lets_answer_some_questions": "Trả lời một số câu hỏi nào!",
     "test": "Bài kiểm tra",
     "take_the_test_to_let_us_know_your_capabilities": "Thực hiện bài kiểm tra để chúng tôi biết năng lực của bạn",
+    "time": " {{countdown}}s",
+    "easy": "siêu dễ",
+    "normal": "bình thường",
+    "hard": "khó",
     "level_of_difficult": "Độ khó: ",
     "check": "Kiểm tra",
     "correct": "Đúng rồi nè!",
@@ -121,6 +125,9 @@
     "choose_correct_image": "Chọn hình phù hợp với từ",
     "choose_translation": "Chọn bản dịch",
     "congratulation": "Tuyệt vời!!!",
-    "reward": "Phần thưởng"
+    "reward": "Phần thưởng",
+    "already_have_or_create_account": "Đã có hoặc tạo tài khoản",
+    "continue_as_guest": "Tiếp tục bằng tài khoản khách"
+
   }
 }

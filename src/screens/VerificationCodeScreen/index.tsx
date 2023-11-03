@@ -14,8 +14,8 @@ import { useTheme } from '@themes'
 import { BackArrow } from '@assets'
 import { goBack, navigate } from '@navigation'
 import { useAppDispatch, useAppSelector } from '@hooks'
-import { verifyAccount } from '@redux/actions/auth.action'
-
+import { verifyAccount, verifyForgotPassword } from '@redux/actions/auth.action'
+import SendAgain from "@screens/VerificationCodeScreen/components/SendAgain";
 export const VerificationCodeScreen = () => {
   const [value, setValue] = React.useState<string>('')
   const verifyCodeInputRef = React.createRef<VerifyCodeInputRefFunction>()
@@ -23,16 +23,17 @@ export const VerificationCodeScreen = () => {
   const { normalize } = useTheme()
   const email = useAppSelector((state) => state.root.auth.email)
 
-  const onReceiveAgain = () => {
-    console.log('onReceiveAgain')
-  }
+
   const dispatch = useAppDispatch()
   const isVerified = useAppSelector((state) => state.root.user.isVerified)
+  const user = useAppSelector((state) => state.root.user)
+  const forgotToken = useAppSelector((state) => state.root.auth.forgotPasswordToken)
 
   const onSubmit = (value: string) => {
     Keyboard.dismiss()
-    dispatch(verifyAccount(value))
     ToastAndroid.show('submit with value ' + value, ToastAndroid.SHORT)
+    if (value && !user.email) dispatch(verifyForgotPassword(value));
+    else dispatch(verifyAccount(value));
   }
 
   useEffect(() => {
@@ -40,6 +41,12 @@ export const VerificationCodeScreen = () => {
       navigate('BOTTOM_TAB')
     }
   }, [isVerified])
+
+  useEffect(() => {
+    if (!user.email && forgotToken) {
+      navigate('RESET_PASSWORD_SCREEN')
+    }
+  }, [forgotToken])
 
   return (
     <Container>
@@ -66,20 +73,11 @@ export const VerificationCodeScreen = () => {
               marginTop: normalize.m(120),
             }}
           />
-
           <Block row marginTop={38} justifyCenter>
             <Text size={'h4'} color={'greySuperDark'} fontFamily="bold">
               {t('without_code').concat(' ')}
             </Text>
-
-            <Text
-              onPress={onReceiveAgain}
-              color="orangeDark"
-              fontFamily="bold"
-              size={'h4'}
-            >
-              {t('send_again')}
-            </Text>
+            <SendAgain/>
           </Block>
         </Block>
       </DismissKeyBoardBlock>

@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import { RootState } from '@hooks'
 import { UserData } from '@services/UserService'
 import { AuthService, LoginParams, SignUpParams } from '@services/AuthService'
 
@@ -12,11 +13,13 @@ export interface LoginResponse {
   }
 }
 
-export const signUp = createAsyncThunk<any, SignUpParams
->('auth/signIn', async (params) => {
-  const response = await AuthService.signUp(params)
-  return response.data
-})
+export const signUp = createAsyncThunk<any, SignUpParams>(
+  'auth/signIn',
+  async (params) => {
+    const response = await AuthService.signUp(params)
+    return response.data
+  },
+)
 
 export const verifyAccount = createAsyncThunk(
   'auth/verifyAccount',
@@ -26,17 +29,36 @@ export const verifyAccount = createAsyncThunk(
   },
 )
 
-export const login = createAsyncThunk<LoginResponse, LoginParams, {rejectValue: {code: number}}>(
-  'auth/login',
-  async (params, { rejectWithValue }) => {
-    try {
-      const response = await AuthService.login(params)
-      return response.data
-    } catch (e) {
-      return rejectWithValue(e.response.data)
-    }
+export const verifyForgotPassword = createAsyncThunk<
+  {
+    data: string
+  },
+  string
+>('auth/verifyForgotPassword', async (code) => {
+  const response = await AuthService.verifyForgotPassword({ code })
+  return response.data
+})
+export const resendVerifyCode = createAsyncThunk(
+  'auth/resendVerifyCode',
+  async (_, thunkAPI) => {
+    const email = (thunkAPI.getState() as RootState).root.auth.email
+    if (!email) return undefined
+    const response = await AuthService.forgotPassword({ email })
+    return response.data
   },
 )
+export const login = createAsyncThunk<
+  LoginResponse,
+  LoginParams,
+  { rejectValue: { code: number } }
+>('auth/login', async (params, { rejectWithValue }) => {
+  try {
+    const response = await AuthService.login(params)
+    return response.data
+  } catch (e) {
+    return rejectWithValue(e.response.data)
+  }
+})
 
 export const resendVerifyEmail = createAsyncThunk<any, string>(
   'auth/resend-verified-code-email',

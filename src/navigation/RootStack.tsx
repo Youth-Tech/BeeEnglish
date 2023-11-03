@@ -25,9 +25,11 @@ import {
   DetailLessonScreen,
   LessonMap,
   CongratulationScreen,
+  NavigateScreen,
 } from '@screens'
 import DetailPost from 'screens/DetailPostScreen'
 import StreakScreen from '@screens/StreakScreen'
+import { useAppSelector } from '@hooks'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -36,13 +38,13 @@ const screenOptions = {
   cardOverlayEnabled: true,
   headerShown: false,
 }
-
 const RootStack = () => {
+  const isSignedIn = useAppSelector((state) => state.root.auth.isSignedIn)
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName="LOGIN_SCREEN"
+        initialRouteName={isSignedIn ? 'BOTTOM_TAB' : 'NAVIGATE_SCREEN'}
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -58,6 +60,7 @@ const RootStack = () => {
             name="SEND_PASSWORD_SCREEN"
             component={SendPasswordScreen}
           />
+          <Stack.Screen name={'NAVIGATE_SCREEN'} component={NavigateScreen} />
           <Stack.Screen name="LOGIN_SCREEN" component={LoginScreen} />
           <Stack.Screen name="REGISTER_SCREEN" component={RegisterScreen} />
           <Stack.Screen name="SPLASH_SCREEN" component={SplashScreen} />

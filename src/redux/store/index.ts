@@ -19,7 +19,7 @@ const persistConfig = {
   key: 'root',
   storage: reduxStorage,
   timeout: 30000,
-  whitelist: ['auth', 'themApp', 'config'],
+  whitelist: ['auth', 'themeApp', 'config', 'user'],
   stateReconciler: autoMergeLevel2,
 }
 
