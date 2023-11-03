@@ -2,13 +2,13 @@ interface PostResponse {
   id: number
   title: string
   english: string
-  vietnamese: string
+  vietnamese: strings
   type: string
   topic: string
   level: string
   note: string
   creator: string
-  attachments: string
+  attachment: string
   flag: boolean
 }
 
@@ -33,7 +33,7 @@ interface Badges {
   id: string
   name: string
   desc: string
-  attachments: {
+  attachment: {
     id: string
     type: string
     src: string

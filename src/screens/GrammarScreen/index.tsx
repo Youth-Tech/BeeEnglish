@@ -41,7 +41,7 @@ const parseQuizDataToQuestion = (quizzes: Quiz[]): Question[] => {
       answer: item.answer,
       id: item._id,
       correctAnswer: item.correctAnswer,
-      wordImage: item.attachments?.src,
+      wordImage: item.attachment?.src,
       type: QuestionType[item.type],
     }
   })
@@ -201,7 +201,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
           <WordChoice wordListRef={wordChoiceRef} data={currentQuestion.data} />
         )
       case QuestionType.multipleWord:
-        if (question.attachments?.src) {
+        if (question.attachment?.src) {
           return (
             <VocabularyOptions
               ref={vocabOptionRef}

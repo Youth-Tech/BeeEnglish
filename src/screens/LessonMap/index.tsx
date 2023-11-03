@@ -30,7 +30,7 @@ const parseDataToLessonData = (
       lessonDescription: item.description,
       lessonTitle: item.name,
       status: fakeState && index === 0 ? 'current' : 'lock',
-      thumbnail: item.attachments?.src || '',
+      thumbnail: item.attachment?.src || '',
       type: index === arr.length - 1 ? 'checkpoint' : 'normal',
       chapterStatus: chapterStatus || 'lock',
     }

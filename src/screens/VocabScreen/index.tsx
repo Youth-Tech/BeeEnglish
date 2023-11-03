@@ -23,54 +23,53 @@ interface VocabScreenProps {}
 const vocabularyData: FlipVocabularyProps[] = [
   {
     id: '1',
-    english: 'Cat',
-    vietnamese: 'Con mèo',
-    pronunciation: '/kat/',
-    exampleEnglish: 'A cat lying on the ground',
-    exampleVietnamese: 'Con mèo đang nằm trên sàn',
-    attachments: {
-      image:
-        'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
+    english: 'Mother',
+    vietnamese: 'Người mẹ',
+    pronunciation: '/ˈmʌð.ər/',
+    exampleEnglish: 'My mother is very beatiful',
+    exampleVietnamese: 'Mẹ tôi rất xinh đẹp',
+    attachment: {
+      image: 'https://cdn-icons-png.flaticon.com/512/4478/4478097.png',
     },
     difficulty: Difficulty.easy,
     isBookmarked: false,
   },
   {
     id: '2',
-    english: 'Cat2',
-    vietnamese: 'Con mèo2',
-    pronunciation: '/kat/',
-    exampleEnglish: 'A cat lying on the ground',
-    exampleVietnamese: 'Con mèo đang nằm trên sàn',
-    attachments: {
+    english: 'Grandfather',
+    vietnamese: 'Người ông',
+    pronunciation: '/ˈɡræn.fɑː.ðər/',
+    exampleEnglish: 'My grandfather is very kind',
+    exampleVietnamese: 'Ông của tôi rất tốt',
+    attachment: {
       image:
-        'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
+        'https://images-ext-2.discordapp.net/external/xkVkmdmOzEPh8Pv9CY4GRdE3ZNgZhm98JJr32jMdl-o/https/png.pngtree.com/png-vector/20190115/ourlarge/pngtree-cartoon-old-man-crutches-grandfather-old-grandfather-cartoon-png-image_338331.jpg?width=468&height=468',
     },
     difficulty: Difficulty.easy,
     isBookmarked: false,
   },
   {
     id: '3',
-    english: 'Cat3',
-    vietnamese: 'Con mèo3',
-    pronunciation: '/kat/',
+    english: 'Grandmother',
+    vietnamese: 'Người bà',
+    pronunciation: '/ˈɡræn.mʌð.ər/',
     exampleEnglish: 'A cat lying on the ground',
     exampleVietnamese: 'Con mèo đang nằm trên sàn',
-    attachments: {
+    attachment: {
       image:
-        'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
+        'https://images-ext-2.discordapp.net/external/06Y2tYMkBHJ49xDOacnygUQlz_2J01gKKJjQ50KoTaE/https/png.pngtree.com/png-vector/20190130/ourlarge/pngtree-cartoon-hand-drawn-grandmother-with-a-cane-paintedcomiccharactergrandmaold-mancrutchcaring-for-png-image_667922.jpg?width=468&height=468',
     },
     difficulty: Difficulty.easy,
     isBookmarked: false,
   },
   {
     id: '4',
-    english: 'Cat4',
-    vietnamese: 'Con mèo4',
+    english: 'Cat',
+    vietnamese: 'Con mèo',
     pronunciation: '/kat/',
     exampleEnglish: 'A cat lying on the ground',
     exampleVietnamese: 'Con mèo đang nằm trên sàn',
-    attachments: {
+    attachment: {
       image:
         'https://g5-assets-cld-res.cloudinary.com/image/upload/x_44,y_0,h_1138,w_2017,c_crop/q_auto,f_auto,fl_lossy,c_fill,g_center,h_406,w_720/v1621535723/g5/g5-c-5lzenrews-olympus-property-management/g5-cl-1k8w0sqbn3-olympus-northpoint/services/OlympusNorthpoint_May2021_2_s8tomu.jpg',
     },

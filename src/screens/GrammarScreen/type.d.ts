@@ -5,7 +5,7 @@ interface Question {
   answer: string | Answer[] | string[]
   correctAnswer?: string
   type: import('./constants').QuestionType
-  attachments?: Attachment
+  attachment?: Attachment
 }
 
 interface Answer {

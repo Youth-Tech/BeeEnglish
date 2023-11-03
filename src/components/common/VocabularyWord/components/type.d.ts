@@ -12,7 +12,7 @@ export interface FlipVocabularyProps {
   pronunciation: string
   exampleEnglish: string
   exampleVietnamese: string
-  attachments?: WordAttachment
+  attachment?: WordAttachment
   difficulty?: Difficulty
   setData?: React.Dispatch<React.SetStateAction<FlipVocabularyProps>>
   isBookmarked?: boolean

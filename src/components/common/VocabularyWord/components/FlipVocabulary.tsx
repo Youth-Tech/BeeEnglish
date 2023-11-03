@@ -28,7 +28,7 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
     pronunciation,
     exampleEnglish,
     exampleVietnamese,
-    attachments,
+    attachment,
     isBookmarked,
     onPressSoundProgress,
     onPressBookmark,
@@ -124,7 +124,7 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
           <Block alignCenter>
             <Image
               source={{
-                uri: attachments?.image,
+                uri: attachment?.image,
               }}
               width={199}
               height={199}
