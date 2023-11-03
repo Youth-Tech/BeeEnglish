@@ -2,7 +2,7 @@ interface PostResponse {
   id: number
   title: string
   english: string
-  vietnamese: string
+  vietnamese: strings
   type: string
   topic: string
   level: string

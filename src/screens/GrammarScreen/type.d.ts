@@ -4,7 +4,7 @@ interface Question {
   wordImage?: string
   answer: string | Answer[] | string[]
   correctAnswer?: string
-  type: QuestionType
+  type: import('./constants').QuestionType
   attachment?: Attachment
 }
 

@@ -19,13 +19,15 @@ import {
   VocabularyOptionsFunc,
   VocabularyOptions,
   BlockAnimated,
+  LeaveProcessModal,
 } from '@components'
 import { Icon, animation } from '@assets'
 import { normalize, useTheme } from '@themes'
-import { RootStackParamList, goBack } from '@navigation'
+import { RootStackParamList, goBack, navigateAndReset } from '@navigation'
 import { KnowledgeService, Quiz } from '@services'
 import { QuestionType } from './constants'
 import LottieView from 'lottie-react-native'
+import { ModalFunction } from '@components/bases/Modal/type'
 
 export type GrammarScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -55,7 +57,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   const optionRef = React.useRef<QuestionRefFunction>(null)
   const vocabChoiceRef = React.useRef<VocabularyChoiceFunc>(null)
   const vocabOptionRef = React.useRef<VocabularyOptionsFunc>(null)
-
+  const leaveModalRef = React.useRef<ModalFunction>(null)
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
 
@@ -98,7 +100,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   }, [result])
 
   const onClosePress = () => {
-    goBack()
+    leaveModalRef.current?.openModal()
   }
 
   const onCheckPress = () => {
@@ -181,7 +183,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
         wordChoiceRef.current?.onTriggerAnimation()
       }
 
-      setCurrentQuestion((_) => {
+      setCurrentQuestion(() => {
         return {
           index: nextQuestion,
           data: questions[nextQuestion],
@@ -330,6 +332,16 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
           </Portal>
         )}
       </Block>
+      <LeaveProcessModal
+        ref={leaveModalRef}
+        onPressApprove={() => {
+          leaveModalRef.current?.dismissModal()
+          navigateAndReset([{ name: 'BOTTOM_TAB' }], 0)
+        }}
+        onPressCancel={() => {
+          leaveModalRef.current?.dismissModal()
+        }}
+      />
     </Container>
   )
 }
