@@ -3,9 +3,12 @@ import React from 'react'
 import { Block, Container, Image, ShadowButton, Text } from '@components'
 import { images } from '../../assets/images/index'
 import { useTheme } from '@themes'
+import { navigate } from '@navigation'
+import { useTranslation } from 'react-i18next'
 
 export const NavigateScreen = () => {
   const { colors } = useTheme()
+  const { t } = useTranslation()
   return (
     <Container>
       <Block backgroundColor={colors.white} flex>
@@ -36,14 +39,18 @@ export const NavigateScreen = () => {
             shadowButtonColor={colors.orangeLighter}
             buttonColor={colors.orangePrimary}
             onPress={() => {
-              console.log('press')
+              navigate('LOGIN_SCREEN')
             }}
           >
             <Text size={'h3'} fontFamily="bold" color={colors.white}>
-              Đã có hoặc tạo tài khoản
+              {t('already_have_or_create_account')}
             </Text>
           </ShadowButton>
-          <Pressable onPress={() => {}}>
+          <Pressable
+            onPress={() => {
+              navigate('BOTTOM_TAB')
+            }}
+          >
             <Text
               marginTop={20}
               size={'h3'}
@@ -51,7 +58,7 @@ export const NavigateScreen = () => {
               center
               textDecorationLine="underline"
             >
-              Tiếp tục bằng tài khoản khách
+              {t('continue_as_guest')}
             </Text>
           </Pressable>
         </Block>
@@ -59,5 +66,3 @@ export const NavigateScreen = () => {
     </Container>
   )
 }
-
-

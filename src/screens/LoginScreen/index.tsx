@@ -1,28 +1,28 @@
 import {
-  Pressable,
-  KeyboardAvoidingView,
   DocumentSelectionState,
   Keyboard,
+  KeyboardAvoidingView,
+  Pressable,
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
-  Text,
   Block,
-  TextInput,
   Container,
-  ShadowButton,
   DismissKeyBoardBlock,
+  ShadowButton,
+  SocialLoginButton,
+  Text,
+  TextInput,
 } from '@components'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { TokenService } from '@services'
-import { SocialLoginButton } from '@components'
 import { AuthService } from '@services/AuthService'
 import { DeviceInfoConfig, Provider } from '@configs'
-import { goBack, navigate, replace } from '@navigation'
+import { navigate, replace } from '@navigation'
 import {
   defaultUserState,
   setAuthState,
@@ -32,10 +32,12 @@ import {
 import { signingWithFacebook, signingWithGoogle } from '@utils/authUtils'
 import { useValidateInput } from '@utils/validateInput'
 import { login, resendVerifyEmail } from '@redux/actions/auth.action'
+import { useNavigation } from '@react-navigation/native'
 
 export const LoginScreen = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const navigation = useNavigation()
   const { colors, normalize } = useTheme()
   const [email, setEmail] = React.useState('')
   const [checkMail, setCheckMail] = useState(true)
@@ -159,7 +161,12 @@ export const LoginScreen = () => {
         <DismissKeyBoardBlock style={{ flex: 1 }}>
           <Block flex paddingHorizontal={24} paddingTop={10} space="between">
             <Block>
-              <Icon state="Back" onPress={goBack} />
+              <Icon
+                state="Back"
+                onPress={() => {
+                  navigation.canGoBack() && navigation.goBack()
+                }}
+              />
               <Text
                 color={colors.black}
                 size={'heading'}

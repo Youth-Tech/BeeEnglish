@@ -33,6 +33,7 @@ export const PUBLIC_ROUTE = {
   DETAIL_POST_SCREEN: 'DETAIL_POST_SCREEN',
   STREAK_SCREEN: 'STREAK_SCREEN',
   TEST_SCREEN: 'TEST_SCREEN',
+  NAVIGATE_SCREEN: 'NAVIGATE_SCREEN',
 } as const
 
 export type RootStackParamList = {
@@ -61,6 +62,7 @@ export type RootStackParamList = {
   [PUBLIC_ROUTE.DETAIL_POST_SCREEN]: { id: string }
   [PUBLIC_ROUTE.ABOUT_THE_TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.TEST_SCREEN]: undefined
+  [PUBLIC_ROUTE.NAVIGATE_SCREEN]: undefined
   [AUTH_ROUTE.LEARNED_WORD_SCREEN]: undefined
   [AUTH_ROUTE.GRAMMAR_SCREEN]: undefined
   [AUTH_ROUTE.SAVED_WORD_SCREEN]: undefined

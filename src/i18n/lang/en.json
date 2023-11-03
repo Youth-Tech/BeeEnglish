@@ -124,6 +124,8 @@
     "do_you_want_to_leave": "Are you willing to leave?",
     "continue_lesson": "You will know more about the language!",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "already_have_or_create_account": "Already have or create an account",
+    "continue_as_guest": "Continue as a guest"
   }
 }

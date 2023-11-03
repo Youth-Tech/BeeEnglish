@@ -18,7 +18,7 @@ export type AuthState = {
   isSignedIn?: boolean
 }
 
-const defaultAuthState: AuthState = {
+export const defaultAuthState: AuthState = {
   accessToken: undefined,
   refreshToken: undefined,
   providerId: undefined,
@@ -54,11 +54,12 @@ const authSlice = createSlice({
       .addCase(signUp.fulfilled, (state) => {
         state.isSignedIn = true
       })
-      .addCase(login.fulfilled, (_, action) => {
+      .addCase(login.fulfilled, (state, action) => {
         action.payload &&
           TokenService.setAccessToken(action.payload.data.tokens.accessToken)
         action.payload &&
           TokenService.setRefreshToken(action.payload.data.tokens.refreshToken)
+        state.isSignedIn = true
       })
       .addCase(login.rejected, (state, action) => {
         console.log(action.payload)

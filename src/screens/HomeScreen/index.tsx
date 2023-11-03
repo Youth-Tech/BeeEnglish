@@ -1,23 +1,21 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Block, Container, Image, Modal, Text } from '@components'
+import { Block, Container, Image, Text } from '@components'
 import { useTheme } from '@themes'
 import { Icon } from '@assets'
-import { View, FlatList, ListRenderItemInfo, Pressable } from 'react-native'
+import { FlatList, ListRenderItemInfo, Pressable, View } from 'react-native'
 import {
+  DailyTask,
+  LessonProgressItem,
+  LessonProgressItemProps,
   NewsItem,
   NewsItemProps,
   NewsProgress,
   NewsProgressProps,
-  DailyTask,
-  LessonProgressItem,
-  LessonProgressItemProps,
   ToolItem,
 } from './components'
-import { Portal, Host } from 'react-native-portalize'
-import { widthScreen } from '@utils/helpers'
-import { ModalFunction } from '@components/bases/Modal/type'
+
 const learningData = [
   {
     id: 1,

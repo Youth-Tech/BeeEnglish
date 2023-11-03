@@ -2,19 +2,32 @@ import React from 'react'
 import { Block, Container, Text } from '@components'
 import { Icon } from '@assets'
 import { makeStyles, normalize, useTheme } from '@themes'
-import { goBack } from '@navigation'
+import { goBack, navigateAndReset } from '@navigation'
 import { useTranslation } from 'react-i18next'
 import { Pressable } from 'react-native'
+import { useAppDispatch } from '@hooks'
+import {
+  defaultAuthState,
+  defaultUserState,
+  setAuthState,
+  setUserState,
+} from '@redux/reducers'
+import { useNavigation } from '@react-navigation/native'
 
 export const SettingScreen = () => {
   const { colors } = useTheme()
   const { t } = useTranslation()
   const styles = useStyle()
+  const dispatch = useAppDispatch()
   const onPressPremiumUser = () => {}
   const onPressProfile = () => {}
   const onPressPassword = () => {}
   const onPressNotification = () => {}
-  const onPressLogout = () => {}
+  const onPressLogout = () => {
+    dispatch(setAuthState(defaultAuthState))
+    dispatch(setUserState(defaultUserState))
+    navigateAndReset([{ name: 'LOGIN_SCREEN' }], 0)
+  }
   const onPressRate = () => {}
   const onPressHelp = () => {}
   return (
