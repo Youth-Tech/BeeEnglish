@@ -2,18 +2,11 @@ import React, { useRef } from 'react'
 import { Pressable } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { makeStyles, useTheme } from '@themes'
-import { Answer, QuestionType } from '@screens'
-import { Block, Image, Text } from '@components/bases'
+import { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
 import { images, SoundProgress, SoundProgressFcRef } from '@assets'
-import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
+import { Block, BlockAnimated, Image, Text } from '@components/bases'
 import ImageAnswer from '@components/common/VocabularyChoice/components/ImageAnswer'
 
-export interface Question {
-  id: string
-  question: string
-  answer: string | Answer[]
-  type: QuestionType
-}
 export interface VocabularyChoiceProps {
   data: Question
 }
@@ -21,7 +14,6 @@ export interface VocabularyChoiceFunc {
   check: () => boolean
   onTriggerAnimation: () => void
 }
-const AnimatedBlock = Animated.createAnimatedComponent(Block)
 export const VocabularyChoice = React.forwardRef<
   VocabularyChoiceFunc,
   VocabularyChoiceProps
@@ -56,7 +48,7 @@ export const VocabularyChoice = React.forwardRef<
   return (
     <>
       {visible && (
-        <AnimatedBlock
+        <BlockAnimated
           flex
           entering={FadeInRight.duration(500)}
           exiting={FadeOutLeft.duration(500)}
@@ -89,12 +81,12 @@ export const VocabularyChoice = React.forwardRef<
               >
                 <ImageAnswer
                   isSelected={userAnswer === index ? true : false}
-                  answerImage={item.option}
+                  answerImage={(item.option as Attachment).src!}
                 />
               </Pressable>
             ))}
           </Block>
-        </AnimatedBlock>
+        </BlockAnimated>
       )}
     </>
   )

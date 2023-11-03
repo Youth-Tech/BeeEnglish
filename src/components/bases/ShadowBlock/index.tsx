@@ -4,6 +4,7 @@ import { useTheme } from '@themes'
 import { ShadowBlockProps } from './type'
 import { handleColor } from '@components/utils'
 import { Text } from '../Text'
+import Animated from 'react-native-reanimated'
 
 /**
  * Create a block with awesome shadow
@@ -117,7 +118,7 @@ export const ShadowBlock: React.FC<ShadowBlockProps> = (props) => {
           </Block>
         )}
         <Block
-          flex 
+          flex
           {...rest}
           radius={radius}
           borderLeftWidth={borderWidth}

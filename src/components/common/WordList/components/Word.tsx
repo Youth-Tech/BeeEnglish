@@ -1,4 +1,4 @@
-import Animated, {
+import {
   runOnUI,
   useAnimatedStyle,
   useDerivedValue,
@@ -7,21 +7,10 @@ import Animated, {
 import React from 'react'
 import { Pressable } from 'react-native'
 
-import { Offset } from '..'
 import Placeholder from './Placeholder'
 import { wordAnimationConfig } from '@assets'
-import { Block, ShadowBlock, Text } from '@components/bases'
+import { BlockAnimated, ShadowBlock, Text } from '@components/bases'
 import { CONTAINER_WIDTH, WORD_HEIGHT } from '@components/common/WordList'
-
-export interface WordProps {
-  id: string
-  word: string
-  index?: number
-  lines?: number
-  offsets?: Offset[]
-}
-
-const BlockAnimated = Animated.createAnimatedComponent(Block)
 
 const byOrder = (a: Offset, b: Offset) => {
   'worklet'

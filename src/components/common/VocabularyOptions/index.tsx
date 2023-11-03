@@ -1,11 +1,10 @@
 import React from 'react'
 import { Pressable } from 'react-native'
-import { Answer, Question } from '@screens'
 import { useTranslation } from 'react-i18next'
 import { makeStyles, useTheme } from '@themes'
 import { images, SoundProgress } from '@assets'
-import { Block, Image, Text } from '@components/bases'
-import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
+import { Block, BlockAnimated, Image, Text } from '@components/bases'
+import { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
 
 export interface VocabularyOptionsFunc {
   check: () => boolean
@@ -16,7 +15,6 @@ export interface VocabularyOptionsProps {
   data: Question
 }
 
-const AnimatedBlock = Animated.createAnimatedComponent(Block)
 export const VocabularyOptions = React.forwardRef<
   VocabularyOptionsFunc,
   VocabularyOptionsProps
@@ -47,7 +45,7 @@ export const VocabularyOptions = React.forwardRef<
   return (
     <>
       {visible && (
-        <AnimatedBlock
+        <BlockAnimated
           flex
           paddingTop={30}
           space={'between'}
@@ -124,7 +122,7 @@ export const VocabularyOptions = React.forwardRef<
               )
             })}
           </Block>
-        </AnimatedBlock>
+        </BlockAnimated>
       )}
     </>
   )

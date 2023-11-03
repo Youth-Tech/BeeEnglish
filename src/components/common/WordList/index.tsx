@@ -1,7 +1,6 @@
-import Animated, {
+import {
   runOnJS,
   runOnUI,
-  SharedValue,
   FadeOutLeft,
   FadeInRight,
   useSharedValue,
@@ -10,63 +9,46 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
 import { normalize } from '@themes'
-import { shuffle, widthScreen } from '@utils/helpers'
-import { Lines, Word, WordProps } from './components'
-import { Block, ShadowBlock, Text } from '@components/bases'
-
-export type SharedValues<T extends Record<string, string | number | boolean>> =
-  {
-    [K in keyof T]: SharedValue<T[K]>
-  }
-const AnimatedBlock = Animated.createAnimatedComponent(Block)
-
-export type Offset = SharedValues<{
-  order: number
-  width: number
-  height: number
-  x: number
-  y: number
-  originalX: number
-  originalY: number
-}> & {
-  value: WordProps
-}
+import { widthScreen } from '@utils/helpers'
+import { Lines, Word } from './components'
+import { Block, BlockAnimated, ShadowBlock, Text } from '@components/bases'
 
 export const WORD_HEIGHT = 50
 export const MARGIN_TOP = 40
 export const CONTAINER_WIDTH = widthScreen - normalize.h(10) * 2
 
-const sentenceToList = (sentence: string): WordProps[] => {
-  return shuffle(
-    sentence
-      .trim()
-      .split(' ')
-      .map((item, index) => {
-        return {
-          id: index.toString(),
-          word: item,
-          index,
-        }
-      }),
-  )
-}
-
-export interface WordListProps {
-  sentence: string
-}
-
-export interface WordListRefFunc {
-  check: (value: string) => boolean
+const answersWordPropsToList = (answers: string[]): WordProps[] => {
+  return answers.map((item, index) => {
+    return {
+      id: index.toString(),
+      word: item,
+      index,
+    }
+  })
 }
 
 export const WordList = React.forwardRef<WordListRefFunc, WordListProps>(
-  ({ sentence }, ref) => {
-    const [data, setData] = React.useState<WordProps[]>(
-      sentenceToList(sentence),
-    )
+  ({ answers }, ref) => {
     const [lines, setLines] = React.useState(0)
     const [ready, setReady] = React.useState(false)
 
+    React.useImperativeHandle(ref, () => ({
+      check(value) {
+        const currentValue = offsets
+          .filter((item) => item.order.value !== -1)
+          .sort((a, b) => (a.order.value > b.order.value ? 1 : -1))
+          .map((item) => {
+            return item.value.word
+          })
+
+        return value === currentValue.join(' ')
+      },
+      onTriggerAnimation() {
+        setReady(false)
+      },
+    }))
+
+    const data = answersWordPropsToList(answers)
     //pre calculate data dimension
     let offsets: Offset[] = data.map((item) => {
       return {
@@ -80,24 +62,6 @@ export const WordList = React.forwardRef<WordListRefFunc, WordListProps>(
         originalY: useSharedValue(0),
       }
     })
-
-    React.useEffect(() => {
-      setData(sentenceToList(sentence))
-      setReady(false)
-    }, [sentence])
-
-    React.useImperativeHandle(ref, () => ({
-      check(value) {
-        const currentValue = offsets
-          .filter((item) => item.order.value !== -1)
-          .sort((a, b) => (a.order.value > b.order.value ? 1 : -1))
-          .map((item) => {
-            return item.value.word
-          })
-
-        return value === currentValue.join(' ')
-      },
-    }))
 
     if (!ready) {
       return (
@@ -157,7 +121,7 @@ export const WordList = React.forwardRef<WordListRefFunc, WordListProps>(
     }
 
     return (
-      <AnimatedBlock
+      <BlockAnimated
         exiting={FadeOutLeft.duration(500)}
         entering={FadeInRight.duration(500)}
       >
@@ -184,7 +148,7 @@ export const WordList = React.forwardRef<WordListRefFunc, WordListProps>(
             )
           })}
         </Block>
-      </AnimatedBlock>
+      </BlockAnimated>
     )
   },
 )

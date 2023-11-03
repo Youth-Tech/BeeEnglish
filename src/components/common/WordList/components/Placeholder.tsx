@@ -1,6 +1,5 @@
 import React from 'react'
 import { Block } from '@components/bases'
-import { Offset } from '..'
 import { makeStyles } from '@themes'
 
 const Placeholder = (offset: Offset) => {

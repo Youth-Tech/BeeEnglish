@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { VocabularyFunc } from '@components/common/VocabularyWord/type'
 import { FlipVocabularyProps } from '@components/common/VocabularyWord/components/type'
 import { ModalFunction } from '@components/bases/Modal/type'
+import { navigate } from '@navigation'
 
 interface VocabScreenProps {}
 
@@ -93,6 +94,7 @@ export const VocabScreen: React.FC<VocabScreenProps> = (props) => {
   }
   const handleNextVocab = () => {
     if (currentPos + 1 > vocabularyData.length - 1) {
+      navigate('CONGRATULATION_SCREEN')
       return
     }
     setCurrentPos((prev) => prev + 1)

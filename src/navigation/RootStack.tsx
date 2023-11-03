@@ -24,6 +24,7 @@ import {
   SettingScreen,
   DetailLessonScreen,
   LessonMap,
+  CongratulationScreen,
   NavigateScreen,
 } from '@screens'
 import DetailPost from 'screens/DetailPostScreen'
@@ -50,6 +51,10 @@ const RootStack = () => {
           <Stack.Screen
             name="RESET_PASSWORD_SCREEN"
             component={PasswordResetScreen}
+          />
+          <Stack.Screen
+            name="CONGRATULATION_SCREEN"
+            component={CongratulationScreen}
           />
           <Stack.Screen
             name="SEND_PASSWORD_SCREEN"

@@ -99,7 +99,7 @@
     "video": "Video thực tế",
     "more_example": "Xem thêm ví dụ",
     "word_difficulty": "Cấp độ từ",
-    "choose_word_difficulty":"Bạn hãy chọn cấp độ từ phù hợp với trình độ của bạn.",
+    "choose_word_difficulty": "Bạn hãy chọn cấp độ từ phù hợp với trình độ của bạn.",
     "hard": "Khó",
     "normal": "Bình thường",
     "simple": "Đơn giản",
@@ -124,6 +124,8 @@
     "total_point": "Tổng điểm",
     "choose_correct_image": "Chọn hình phù hợp với từ",
     "choose_translation": "Chọn bản dịch",
+    "congratulation": "Tuyệt vời!!!",
+    "reward": "Phần thưởng",
     "already_have_or_create_account": "Đã có hoặc tạo tài khoản",
     "continue_as_guest": "Tiếp tục bằng tài khoản khách"
 
