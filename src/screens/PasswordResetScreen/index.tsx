@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import {
-  TextInput,
-  Text,
   Block,
-  ShadowButton,
   Container,
   DismissKeyBoardBlock,
+  ShadowButton,
+  Text,
+  TextInput,
 } from '@components'
 import { BackArrow } from '@assets'
-import { goBack } from '@navigation'
+import { goBack, navigate } from '@navigation'
 import { useTranslation } from 'react-i18next'
 import {
   DocumentSelectionState,
@@ -17,6 +17,8 @@ import {
 } from 'react-native'
 import { useValidateInput } from '@utils/validateInput'
 import { useTheme } from '@themes'
+import { useAppSelector } from '@hooks'
+import { AuthService } from '@services/AuthService'
 
 export const PasswordResetScreen = () => {
   const { colors } = useTheme()
@@ -27,7 +29,9 @@ export const PasswordResetScreen = () => {
   const [checkConfirmPass, setCheckConfirmPass] = useState(true)
   const passwordRef = React.useRef<DocumentSelectionState>()
   const confirmRef = React.useRef<DocumentSelectionState>()
-
+  const forgotPasswordToken = useAppSelector(
+    (state) => state.root.auth.forgotPasswordToken,
+  )
   const handlePasswordSubmit = () => {
     confirmRef.current?.focus()
   }
@@ -63,6 +67,18 @@ export const PasswordResetScreen = () => {
     return 'hello'
   }
 
+  const callAPI = async () => {
+    if (!forgotPasswordToken) return
+    await AuthService.resetPassword({
+      forgotPasswordToken,
+      newPassword: password,
+      confirmPassword,
+    })
+    navigate('LOGIN_SCREEN')
+  }
+  const onSubmit = () => {
+    callAPI()
+  }
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
       <Container hasScroll>
@@ -150,15 +166,18 @@ export const PasswordResetScreen = () => {
               marginBottom={50}
               marginLeft={50}
               marginRight={50}
+              justifyCenter
+              alignCenter
             >
               <ShadowButton
                 buttonHeight={40}
+                buttonWidth={200}
                 buttonBorderSize={2}
                 buttonBorderColor={'orangePrimary'}
                 shadowHeight={10}
                 buttonRadius={8}
                 shadowButtonColor={'orangeLighter'}
-                onPress={() => {}}
+                onPress={onSubmit}
               >
                 <Text fontFamily="bold" size={'h3'} color="white">
                   {t('change_password')}

@@ -43,7 +43,7 @@ export const EmailRegistrationScreen = () => {
           <TextInput
             containerStyle={styles.textInputContainerStyle}
             value={phoneNumber}
-            onChangeText={setPhoneNumber}
+            onChangeText={setPhoneNumber} 
             keyboardType="number-pad"
             inputStyle={styles.inputStyle}
             placeholder="example@gamil.com"

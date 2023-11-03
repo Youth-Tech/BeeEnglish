@@ -1,6 +1,11 @@
 import { Provider } from '@configs'
 import { TokenService } from '@services'
-import { login, resendVerifyEmail, signUp } from '@redux/actions/auth.action'
+import {
+  login,
+  resendVerifyEmail,
+  signUp,
+  verifyForgotPassword,
+} from '@redux/actions/auth.action'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export type AuthState = {
@@ -8,6 +13,7 @@ export type AuthState = {
   refreshToken?: string
   providerId?: Provider
   email?: string
+  forgotPasswordToken?: string
   isResendVerifyEmail?: boolean
   isSignedIn?: boolean
 }
@@ -17,6 +23,7 @@ const defaultAuthState: AuthState = {
   refreshToken: undefined,
   providerId: undefined,
   email: undefined,
+  forgotPasswordToken: undefined,
   isResendVerifyEmail: false,
   isSignedIn: false,
 }
@@ -40,6 +47,10 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(verifyForgotPassword.fulfilled, (state, action) => {
+        state.forgotPasswordToken = action.payload.data
+      })
+
       .addCase(signUp.fulfilled, (state) => {
         state.isSignedIn = true
       })
@@ -55,7 +66,7 @@ const authSlice = createSlice({
           state.isResendVerifyEmail = true
         }
       })
-    .addCase(resendVerifyEmail.fulfilled, () => {})
+      .addCase(resendVerifyEmail.fulfilled, () => {})
   },
 })
 
