@@ -18,7 +18,7 @@ import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { goBack, navigate } from '@navigation'
 import { useTranslation } from 'react-i18next'
-import {setAuthState, setEmailSignIn} from '@redux/reducers'
+import { setAuthState, setEmailSignIn } from '@redux/reducers'
 import { signUp } from '@redux/actions/auth.action'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { useValidateInput } from '@utils/validateInput'
@@ -37,6 +37,7 @@ export const RegisterScreen = () => {
   const [disabledLogin, setDisabledLogin] = React.useState(true)
   const [confirmPassword, setConfirmPassword] = React.useState('')
   const [checkConfirmPass, setCheckConfirmPass] = useState(true)
+  const fullNameInputRef = React.useRef<DocumentSelectionState>()
   const emailInputRef = React.useRef<DocumentSelectionState>()
   const passwordInputRef = React.useRef<DocumentSelectionState>()
   const confirmPasswordInputRef = React.useRef<DocumentSelectionState>()
@@ -103,8 +104,28 @@ export const RegisterScreen = () => {
   const goLogin = () => {
     navigate('LOGIN_SCREEN')
   }
+  const isErrorBeforeSubmit = () => {
+    if (!validate.validateFullName(fullName)) {
+      fullNameInputRef.current?.focus()
+      return true
+    }
+    if (!validate.validateEmail(email)) {
+      emailInputRef.current?.focus()
+      return true
+    }
+    if (!validate.validatePassword(password)) {
+      passwordInputRef.current?.focus()
+      return true
+    }
+    if (!validate.validateConfirmPassword(confirmPassword, password)) {
+      confirmPasswordInputRef.current?.focus()
+      return true
+    }
+    return false
+  }
   const onSubmit = async () => {
-    dispatch(setAuthState({isSignedIn: false}))
+    if (isErrorBeforeSubmit()) return
+    dispatch(setAuthState({ isSignedIn: false }))
     dispatch(signUp({ email, password, confirmPassword, fullName }))
     dispatch(setEmailSignIn(email))
   }
@@ -143,7 +164,7 @@ export const RegisterScreen = () => {
                   placeholder={t('full_name_placeholder')}
                   onChangeText={(value) => {
                     setFullName(value)
-                    useValidateInput().checkError(checkFullName, ()=>{
+                    useValidateInput().checkError(checkFullName, () => {
                       onCheckFullName(value)
                     })
                   }}
@@ -194,13 +215,13 @@ export const RegisterScreen = () => {
                     useValidateInput().checkError(checkPass, () => {
                       onCheckPass(value, 'password')
                     })
-                    if(value.length > 8 && confirmPassword.length > 8) {
-                      onCheckPass(confirmPassword, "confirmPassword")
+                    if (value.length > 8 && confirmPassword.length > 8) {
+                      onCheckPass(confirmPassword, 'confirmPassword')
                       useValidateInput().checkError(checkConfirmPass, () => {
                         onCheckPass(value, 'confirmPassword')
                       })
-                      showError("confirmPassword")
-                      console.log("xin chao")
+                      showError('confirmPassword')
+                      console.log('xin chao')
                     }
                   }}
                   returnKeyType="next"
