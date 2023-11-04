@@ -8,59 +8,80 @@ import { widthScreen } from '@utils/helpers'
 import { Block, BlockAnimated, Image, Text } from '@components/bases'
 
 export interface WordChoiceProps {
-  wordListRef?: React.Ref<WordListRefFunc> | undefined
   data: Question
 }
 
-export const WordChoice: React.FC<WordChoiceProps> = ({
-  data,
-  wordListRef,
-}) => {
-  const { colors, normalize } = useTheme()
-  return (
-    <BlockAnimated
-      flex
-      exiting={FadeOutLeft.duration(500)}
-      entering={FadeInRight.duration(500)}
-    >
-      <Text size={'h1'} fontFamily="bold" marginTop={40}>
-        Viết lại câu bằng tiếng Anh
-      </Text>
+export const WordChoice = React.forwardRef<WordListRefFunc, WordChoiceProps>(
+  ({ data }, ref) => {
+    const { colors, normalize } = useTheme()
+    const [visible, setVisible] = React.useState(true)
+    const wordListRef = React.useRef<WordListRefFunc>(null)
 
-      <Block row justifyStart alignCenter marginTop={30}>
-        <Image
-          source={images.BeeTeacher}
-          width={60}
-          height={60}
-          resizeMode="contain"
-        />
-        <Block
-          borderWidth={1}
-          borderColor={colors.greyLight}
-          radius={10}
-          alignCenter
-          justifyCenter
-          marginLeft={16}
-          // flex
-          style={{
-            maxWidth:
-              widthScreen - normalize.h(15) - normalize.h(60) - normalize.h(20),
-          }}
-        >
-          <Text
-            paddingHorizontal={20}
-            paddingVertical={14}
-            size={'h4'}
-            fontFamily="semiBold"
+    React.useImperativeHandle(ref, () => ({
+      check(value) {
+        return !!wordListRef.current?.check(value)
+      },
+      onTriggerAnimation() {
+        setVisible(false)
+        setVisible(true)
+      },
+    }))
+
+    return (
+      <>
+        {visible && (
+          <BlockAnimated
+            flex
+            exiting={FadeOutLeft.duration(500)}
+            entering={FadeInRight.duration(500)}
           >
-            {data.question}
-          </Text>
-        </Block>
-      </Block>
+            <Text size={'h1'} fontFamily="bold" marginTop={40}>
+              Viết lại câu bằng tiếng Anh
+            </Text>
 
-      <Block flex justifyCenter marginTop={10}>
-        <WordList ref={wordListRef} answers={data.answer as string[]} />
-      </Block>
-    </BlockAnimated>
-  )
-}
+            <Block row justifyStart alignCenter marginTop={30}>
+              <Image
+                width={60}
+                height={60}
+                resizeMode="contain"
+                source={images.BeeTeacher}
+              />
+              <Block
+                radius={10}
+                alignCenter
+                justifyCenter
+                borderWidth={1}
+                marginLeft={16}
+                borderColor={colors.greyLight}
+                style={{
+                  maxWidth:
+                    widthScreen -
+                    normalize.h(15) -
+                    normalize.h(60) -
+                    normalize.h(20),
+                }}
+              >
+                <Text
+                  size={'h4'}
+                  paddingVertical={14}
+                  fontFamily="semiBold"
+                  paddingHorizontal={20}
+                >
+                  {data.question}
+                </Text>
+              </Block>
+            </Block>
+
+            <Block flex justifyCenter marginTop={10}>
+              <WordList
+                key={data.id}
+                ref={wordListRef}
+                answers={data.answer as string[]}
+              />
+            </Block>
+          </BlockAnimated>
+        )}
+      </>
+    )
+  },
+)

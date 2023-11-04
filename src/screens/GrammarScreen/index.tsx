@@ -38,12 +38,12 @@ export type GrammarScreenProps = NativeStackScreenProps<
 const parseQuizDataToQuestion = (quizzes: Quiz[]): Question[] => {
   return quizzes.map((item) => {
     return {
-      question: item.question,
-      answer: item.answer,
       id: item._id,
-      correctAnswer: item.correctAnswer,
-      wordImage: item.attachment?.src,
+      answer: item.answer,
+      question: item.question,
       type: QuestionType[item.type],
+      wordImage: item.attachment?.src,
+      correctAnswer: item.correctAnswer,
     }
   })
 }
@@ -86,7 +86,6 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
         data: parseRes[0],
       })
       setQuestions(parseRes)
-      // console.log(parseRes)
     } catch (error) {
       console.log(error)
     }
@@ -125,7 +124,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
       ...prev,
       show: false,
     }))
-    nextQuestion()
+    handleNextQuestion()
   }
 
   const checkResult = () => {
@@ -166,7 +165,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
     })
   }
 
-  const nextQuestion = () => {
+  const handleNextQuestion = () => {
     //next question
     const nextQuestion =
       currentQuestion.index + 1 >= questions.length
@@ -205,9 +204,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
     switch (question.type) {
       case QuestionType.cloze:
-        return (
-          <WordChoice wordListRef={wordChoiceRef} data={currentQuestion.data} />
-        )
+        return <WordChoice data={question} ref={wordChoiceRef} />
       case QuestionType.multipleWord:
         if (question.attachment?.src) {
           return (
