@@ -43,15 +43,7 @@ interface Badges {
 interface Attachment {
   id?: any
   src?: string
-  type?: EAttachment
-}
-
-// Media Enum
-enum EAttachment {
-  Image = 'image',
-  Video = 'video',
-  Audio = 'audio',
-  Subtitle = 'subtitle',
+  type?: import('@utils/enums').EAttachment
 }
 
 // Quiz Enum

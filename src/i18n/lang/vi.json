@@ -49,9 +49,6 @@
     "test": "Bài kiểm tra",
     "take_the_test_to_let_us_know_your_capabilities": "Thực hiện bài kiểm tra để chúng tôi biết năng lực của bạn",
     "time": " {{countdown}}s",
-    "easy": "siêu dễ",
-    "normal": "bình thường",
-    "hard": "khó",
     "level_of_difficult": "Độ khó: ",
     "check": "Kiểm tra",
     "correct": "Đúng rồi nè!",
@@ -128,6 +125,7 @@
     "reward": "Phần thưởng",
     "already_have_or_create_account": "Đã có hoặc tạo tài khoản",
     "continue_as_guest": "Tiếp tục bằng tài khoản khách",
-    "loading_text": "Chú ong đang tìm mật, xin đợi một chút !!"
+    "loading_text": "Chú ong đang tìm mật, xin đợi một chút !!",
+    "function_in_develop": "Chức năng đang phát triển!"
   }
 }
