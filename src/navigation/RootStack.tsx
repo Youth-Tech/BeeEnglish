@@ -5,30 +5,30 @@ import { navigationRef } from './NavigationServices'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import {
+  LessonMap,
   TestScreen,
+  VocabScreen,
   LoginScreen,
-  ExamTestScreen,
+  SplashScreen,
+  GrammarScreen,
+  SettingScreen,
+  NavigateScreen,
   RegisterScreen,
+  ExamTestScreen,
+  SavedWordScreen,
+  DetailWordScreen,
+  DictionaryScreen,
+  LearnedWordScreen,
   SendPasswordScreen,
+  DetailLessonScreen,
   AboutTheTestScreen,
   PasswordResetScreen,
+  CongratulationScreen,
   VerificationCodeScreen,
   EmailRegistrationScreen,
-  DictionaryScreen,
-  SplashScreen,
-  VocabScreen,
-  LearnedWordScreen,
-  GrammarScreen,
-  DetailWordScreen,
-  SavedWordScreen,
-  SettingScreen,
-  DetailLessonScreen,
-  LessonMap,
-  CongratulationScreen,
-  NavigateScreen,
+  StreakScreen,
+  DetailPost,
 } from '@screens'
-import DetailPost from 'screens/DetailPostScreen'
-import StreakScreen from '@screens/StreakScreen'
 import { useAppSelector } from '@hooks'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -60,17 +60,17 @@ const RootStack = () => {
             name="SEND_PASSWORD_SCREEN"
             component={SendPasswordScreen}
           />
-          <Stack.Screen name={'NAVIGATE_SCREEN'} component={NavigateScreen} />
           <Stack.Screen name="LOGIN_SCREEN" component={LoginScreen} />
-          <Stack.Screen name="REGISTER_SCREEN" component={RegisterScreen} />
           <Stack.Screen name="SPLASH_SCREEN" component={SplashScreen} />
+          <Stack.Screen name="REGISTER_SCREEN" component={RegisterScreen} />
+          <Stack.Screen name={'NAVIGATE_SCREEN'} component={NavigateScreen} />
           <Stack.Screen name="DICTIONARY_SCREEN" component={DictionaryScreen} />
           <Stack.Screen
             name="ABOUT_THE_TEST_SCREEN"
             component={AboutTheTestScreen}
           />
-          <Stack.Screen name="EXAM_TEST_SCREEN" component={ExamTestScreen} />
           <Stack.Screen name="DETAIL_POST_SCREEN" component={DetailPost} />
+          <Stack.Screen name="EXAM_TEST_SCREEN" component={ExamTestScreen} />
           <Stack.Screen
             name="EMAIL_REGISTRATION_SCREEN"
             component={EmailRegistrationScreen}
@@ -84,9 +84,9 @@ const RootStack = () => {
             name="DETAIL_WORD_SCREEN"
             component={DetailWordScreen}
           />
-          <Stack.Screen name="SAVED_WORD_SCREEN" component={SavedWordScreen} />
-          <Stack.Screen name="STREAK_SCREEN" component={StreakScreen} />
           <Stack.Screen name="TEST_SCREEN" component={TestScreen} />
+          <Stack.Screen name="STREAK_SCREEN" component={StreakScreen} />
+          <Stack.Screen name="SAVED_WORD_SCREEN" component={SavedWordScreen} />
           <Stack.Screen
             name="LEARNED_WORD_SCREEN"
             component={LearnedWordScreen}
@@ -95,9 +95,9 @@ const RootStack = () => {
             name="DETAIL_LESSON_SCREEN"
             component={DetailLessonScreen}
           />
-          <Stack.Screen name="GRAMMAR_SCREEN" component={GrammarScreen} />
-          <Stack.Screen name="SETTING_SCREEN" component={SettingScreen} />
           <Stack.Screen name="LESSON_MAP_SCREEN" component={LessonMap} />
+          <Stack.Screen name="SETTING_SCREEN" component={SettingScreen} />
+          <Stack.Screen name="GRAMMAR_SCREEN" component={GrammarScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

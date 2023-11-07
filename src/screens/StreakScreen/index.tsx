@@ -72,7 +72,7 @@ const TaskData: TaskItemProps[] = [
   },
 ]
 const AnimatedBlock = Animated.createAnimatedComponent(Block)
-const StreakScreen = () => {
+export const StreakScreen = () => {
   const { t } = useTranslation()
   const rotateModal = useSharedValue(0)
   const { colors, normalize } = useTheme()
@@ -228,5 +228,3 @@ const StreakScreen = () => {
     </Container>
   )
 }
-
-export default StreakScreen

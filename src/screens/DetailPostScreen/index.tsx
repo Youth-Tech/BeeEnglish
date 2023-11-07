@@ -15,7 +15,7 @@ import { changeBottomSheetState, changeShowComment } from '@redux/reducers'
 import BottomSheetWord from '@screens/DetailPostScreen/components/BottomSheetWord'
 import BottomSheetComment from '@screens/DetailPostScreen/components/BottomSheetComment'
 
-const DetailPost: React.FC = () => {
+export const DetailPost: React.FC = () => {
   const styles = useStyles()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
@@ -90,5 +90,3 @@ const DetailPost: React.FC = () => {
     </Container>
   )
 }
-
-export default DetailPost
