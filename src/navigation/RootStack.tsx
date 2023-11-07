@@ -5,27 +5,28 @@ import { navigationRef } from './NavigationServices'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import {
-  TestScreen,
-  LoginScreen,
-  ExamTestScreen,
-  RegisterScreen,
-  SendPasswordScreen,
   AboutTheTestScreen,
-  PasswordResetScreen,
-  VerificationCodeScreen,
-  EmailRegistrationScreen,
-  DictionaryScreen,
-  SplashScreen,
-  VocabScreen,
-  LearnedWordScreen,
-  GrammarScreen,
-  DetailWordScreen,
-  SavedWordScreen,
-  SettingScreen,
-  DetailLessonScreen,
-  LessonMap,
   CongratulationScreen,
+  DetailLessonScreen,
+  DetailWordScreen,
+  DictionaryScreen,
+  EmailRegistrationScreen,
+  ExamTestScreen,
+  GrammarScreen,
+  LearnedWordScreen,
+  LessonMap,
+  LoginScreen,
   NavigateScreen,
+  PasswordResetScreen,
+  RegisterScreen,
+  SavedWordScreen,
+  SendPasswordScreen,
+  SettingScreen,
+  SplashScreen,
+  TestScreen,
+  VerificationCodeScreen,
+  VideoScreen,
+  VocabScreen,
 } from '@screens'
 import DetailPost from 'screens/DetailPostScreen'
 import StreakScreen from '@screens/StreakScreen'
@@ -44,7 +45,10 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName={isSignedIn ? 'BOTTOM_TAB' : 'NAVIGATE_SCREEN'}
+        initialRouteName={
+          // isSignedIn ? 'BOTTOM_TAB' : 'NAVIGATE_SCREEN'
+          'VIDEO_SCREEN'
+        }
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -98,6 +102,7 @@ const RootStack = () => {
           <Stack.Screen name="GRAMMAR_SCREEN" component={GrammarScreen} />
           <Stack.Screen name="SETTING_SCREEN" component={SettingScreen} />
           <Stack.Screen name="LESSON_MAP_SCREEN" component={LessonMap} />
+          <Stack.Screen name="VIDEO_SCREEN" component={VideoScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
