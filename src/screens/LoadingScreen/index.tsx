@@ -1,12 +1,12 @@
 import React from 'react'
-import { Block, BlockAnimated, Text } from '@components'
-import { FadeIn, FadeOut } from 'react-native-reanimated'
-import LottieView from 'lottie-react-native'
 import { animation } from '@assets'
 import { StyleSheet } from 'react-native'
+import LottieView from 'lottie-react-native'
 import { baseStyles, useTheme } from '@themes'
 import { useTranslation } from 'react-i18next'
 import { Portal } from 'react-native-portalize'
+import { Block, BlockAnimated, Text } from '@components'
+import { FadeIn, FadeOut } from 'react-native-reanimated'
 
 export const LoadingScreen = () => {
   const { colors } = useTheme()
@@ -26,11 +26,11 @@ export const LoadingScreen = () => {
           style={styles.loadingAnimation}
         />
         <Block
-          style={baseStyles.absoluteFill}
           justifyEnd
+          alignCenter
           marginBottom={130}
           paddingHorizontal={20}
-          alignCenter
+          style={baseStyles.absoluteFill}
         >
           <Text size={'heading'} fontFamily={'bold'} color={colors.orangeDark}>
             LOADING...
@@ -45,7 +45,6 @@ export const LoadingScreen = () => {
 }
 const styles = StyleSheet.create({
   loadingAnimation: {
-    // width: '100%',
     height: '100%',
     aspectRatio: 1,
   },
