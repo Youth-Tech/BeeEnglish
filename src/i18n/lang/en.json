@@ -127,6 +127,7 @@
     "congratulation": "Congratulation!!!",
     "reward": "Reward",
     "already_have_or_create_account": "Already have or create an account",
-    "continue_as_guest": "Continue as a guest"
+    "continue_as_guest": "Continue as a guest",
+    "loading_text": "A bee is finding honey for you, please wait !!"
   }
 }
