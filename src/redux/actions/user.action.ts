@@ -15,8 +15,11 @@ export const updateUserAvatar = createAsyncThunk<
   try {
     if (imagePickerData.assets != undefined) {
       const formData = new FormData()
-      console.log(imagePickerData.assets[0].uri)
-      formData.append('file', imagePickerData.assets[0].uri)
+      formData.append('file', {
+        uri: imagePickerData.assets[0].uri,
+        type: 'image/jpeg',
+        name: 'image.jpg',
+      })
 
       const resUpload = await MediaService.upLoadImage(formData)
       const resUpdateAvatar = await UserService.updateUserAvatar({
