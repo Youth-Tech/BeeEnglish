@@ -1,11 +1,10 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
-import LottieView from 'lottie-react-native'
 import { useTranslation } from 'react-i18next'
 import { Portal } from 'react-native-portalize'
 import { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
+import { Icon } from '@assets'
 import {
   Text,
   Block,
@@ -22,11 +21,11 @@ import {
   VocabularyChoiceFunc,
   VocabularyOptionsFunc,
 } from '@components'
+import { useTheme } from '@themes'
 import { useBackHandler } from '@hooks'
-import { Icon, animation } from '@assets'
 import { QuestionType } from './constants'
-import { normalize, useTheme } from '@themes'
 import { KnowledgeService, Quiz } from '@services'
+import { LoadingScreen } from '@screens/LoadingScreen'
 import { ModalFunction } from '@components/bases/Modal/type'
 import { RootStackParamList, navigateAndReset } from '@navigation'
 
@@ -130,7 +129,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   const checkResult = () => {
     if (currentQuestion.data === null) return
 
-    let result: boolean = !!null
+    let result: boolean = false
 
     if (currentQuestion.data.type === QuestionType.multipleWord) {
       if (currentQuestion.data.wordImage) {
@@ -225,17 +224,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   }
 
   if (questions.length <= 0 && currentQuestion.data === null) {
-    return (
-      <Container>
-        <Block flex alignCenter justifyCenter>
-          <LottieView
-            autoPlay
-            source={animation.beeFlying}
-            style={styles.loadingAnimation}
-          />
-        </Block>
-      </Container>
-    )
+    return <LoadingScreen />
   }
 
   return (
@@ -352,10 +341,3 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
     </Container>
   )
 }
-
-const styles = StyleSheet.create({
-  loadingAnimation: {
-    height: normalize.v(500),
-    aspectRatio: 1,
-  },
-})

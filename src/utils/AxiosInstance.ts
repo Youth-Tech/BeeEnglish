@@ -98,6 +98,11 @@ const ApiUtil = {
   put: <ResponseType>(url: string, body: {}, headers?: AxiosRequestHeaders) =>
     AxiosInstance({ headers }).put<ResponseType>(url, body).then(responseBody),
 
+  patch: <ResponseType>(url: string, body: {}, headers?: AxiosRequestHeaders) =>
+    AxiosInstance({ headers })
+      .patch<ResponseType>(url, body)
+      .then(responseBody),
+
   delete: <ResponseType>(url: string, headers?: AxiosRequestHeaders) =>
     AxiosInstance({ headers }).delete<ResponseType>(url).then(responseBody),
 

@@ -1,25 +1,27 @@
 import React from 'react'
-import { Block, Container, Text } from '@components'
-import { Icon } from '@assets'
-import { makeStyles, normalize, useTheme } from '@themes'
-import { goBack, navigateAndReset } from '@navigation'
+import { Pressable, ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
-import { useAppDispatch } from '@hooks'
+
 import {
-  defaultAuthState,
-  defaultUserState,
   setAuthState,
   setUserState,
+  defaultAuthState,
+  defaultUserState,
 } from '@redux/reducers'
-import { useNavigation } from '@react-navigation/native'
+import { Icon } from '@assets'
+import { useAppDispatch } from '@hooks'
+import { Block, Container, Text } from '@components'
+import { goBack, navigateAndReset } from '@navigation'
+import { makeStyles, normalize, useTheme } from '@themes'
 
 export const SettingScreen = () => {
   const { colors } = useTheme()
   const { t } = useTranslation()
   const styles = useStyle()
   const dispatch = useAppDispatch()
-  const onPressPremiumUser = () => {}
+  const onPressPremiumUser = () => {
+    ToastAndroid.show(t('function_in_develop'), ToastAndroid.SHORT)
+  }
   const onPressProfile = () => {}
   const onPressPassword = () => {}
   const onPressNotification = () => {}
@@ -56,9 +58,9 @@ export const SettingScreen = () => {
             marginTop={24}
           >
             <Pressable
-              style={styles.premimumUserSection}
-              android_ripple={{ color: colors.orangeLighter }}
               onPress={onPressPremiumUser}
+              style={styles.premiumUserSection}
+              android_ripple={{ color: colors.orangeLighter }}
             >
               <Block row>
                 <Text color={colors.white} fontFamily="bold" size={'h2'}>
@@ -156,7 +158,7 @@ export const SettingScreen = () => {
           </Pressable>
           <Pressable style={styles.options} onPress={onPressHelp}>
             <Block row alignCenter>
-              <Icon state="About"></Icon>
+              <Icon state="About" />
               <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
                 {t('help')}
               </Text>
@@ -166,7 +168,7 @@ export const SettingScreen = () => {
               onPress={() => {
                 console.log('press')
               }}
-            ></Icon>
+            />
           </Pressable>
         </Block>
       </Block>
@@ -175,7 +177,7 @@ export const SettingScreen = () => {
 }
 
 const useStyle = makeStyles()(({}) => ({
-  premimumUserSection: {
+  premiumUserSection: {
     paddingVertical: normalize.v(18),
     paddingHorizontal: normalize.h(20),
   },

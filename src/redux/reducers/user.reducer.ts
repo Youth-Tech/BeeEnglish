@@ -1,12 +1,19 @@
-import { UserData } from '@services/UserService'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+import { EAttachment } from '@utils/enums'
+import { UserData } from '@services/UserService'
+import { updateUserAvatar } from '@redux/actions'
 import { login, signUp, verifyAccount } from '@redux/actions/auth.action'
 
 export const defaultUserState: UserData = {
   _id: '',
   email: '',
   fullName: '',
-  avatar: '',
+  avatar: {
+    id: '',
+    src: '',
+    type: EAttachment.Image,
+  },
   badges: [],
   courseCompleted: [],
   createdAt: '',
@@ -53,6 +60,13 @@ const userSlice = createSlice({
         return {
           ...state,
           ...action.payload.data.user,
+        }
+      })
+      .addCase(updateUserAvatar.fulfilled, (state, action) => {
+        // console.log(action.payload?.code)
+        return {
+          ...state,
+          ...action.payload?.data,
         }
       })
   },

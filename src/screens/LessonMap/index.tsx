@@ -6,11 +6,11 @@ import {
   SectionListRenderItem,
 } from 'react-native'
 import React from 'react'
-import LottieView from 'lottie-react-native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 
+import { Icon } from '@assets'
 import { navigate } from '@navigation'
-import { Icon, animation } from '@assets'
+import { LoadingScreen } from '@screens'
 import { MOCK_DATA_LESSON } from './mock'
 import { normalize, useTheme } from '@themes'
 import { ItemLesson, ItemLessonProps } from './components'
@@ -167,38 +167,26 @@ export const LessonMap = () => {
     )
   }
 
+  if (data?.length <= 0) {
+    return <LoadingScreen />
+  }
+
   return (
     <Container>
-      <Block style={styles.listContainer}>
-        {data?.length > 0 ? (
-          <Animated.View entering={FadeIn} exiting={FadeOut}>
-            <SectionList
-              sections={data}
-              removeClippedSubviews
-              renderItem={renderMapItem}
-              stickySectionHeadersEnabled={true}
-              showsVerticalScrollIndicator={false}
-              renderSectionHeader={renderSectionHeader}
-              SectionSeparatorComponent={() => <Block height={10} />}
-              keyExtractor={(item, index) => item.lessonTitle + index}
-            />
-          </Animated.View>
-        ) : (
-          <BlockAnimated
-            flex
-            alignCenter
-            justifyCenter
-            entering={FadeIn}
-            exiting={FadeOut}
-          >
-            <LottieView
-              autoPlay
-              source={animation.beeFlying}
-              style={styles.loadingAnimation}
-            />
-          </BlockAnimated>
-        )}
-      </Block>
+      <BlockAnimated entering={FadeIn} style={styles.listContainer}>
+        <Animated.View entering={FadeIn} exiting={FadeOut}>
+          <SectionList
+            sections={data}
+            removeClippedSubviews
+            renderItem={renderMapItem}
+            stickySectionHeadersEnabled={true}
+            showsVerticalScrollIndicator={false}
+            renderSectionHeader={renderSectionHeader}
+            SectionSeparatorComponent={() => <Block height={10} />}
+            keyExtractor={(item, index) => item.lessonTitle + index}
+          />
+        </Animated.View>
+      </BlockAnimated>
     </Container>
   )
 }

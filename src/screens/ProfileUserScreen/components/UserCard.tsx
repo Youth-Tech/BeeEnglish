@@ -1,31 +1,59 @@
 import React from 'react'
-import { useStyles } from './styles'
-import { Block, Image, Text } from '@components'
+import { useTranslation } from 'react-i18next'
 import { TouchableOpacity } from 'react-native'
+
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
-import {useTranslation} from "react-i18next";
+import { useStyles } from './styles'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { getUserData } from '@redux/selectors'
+import { Block, Image, Text } from '@components'
+import {
+  launchImageLibrary,
+  ImageLibraryOptions,
+} from 'react-native-image-picker'
+import { updateUserAvatar } from '@redux/actions'
 
 const UserCard: React.FC = () => {
-  const { colors } = useTheme()
   const styles = useStyles()
+  const { colors } = useTheme()
   const { t } = useTranslation()
-  const url =
-    'https://scontent.fsgn5-6.fna.fbcdn.net/v/t39.30808-1/344801128_1233279023987872_6973065749643585930_n.jpg?stp=dst-jpg_p320x320&_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=sknRvPwEFvAAX84riq0&_nc_ht=scontent.fsgn5-6.fna&cb_e2o_trans=t&oh=00_AfAQyGppVYNVQ77uqckdPGNxbeo0Om2HPARyfzkxHR5t0g&oe=653A7321'
+  const dispatch = useAppDispatch()
+  const userData = useAppSelector(getUserData)
+
+  const onUpdateImagePress = async () => {
+    let options: ImageLibraryOptions = {
+      mediaType: 'photo',
+      includeBase64: true,
+    }
+
+    try {
+      const res = await launchImageLibrary(options)
+      dispatch(updateUserAvatar(res))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <Block style={styles.boxUserCard}>
       <Block style={styles.boxAvatar}>
-        <Image source={{ uri: url }} style={styles.avatarUser} />
+        <Image
+          source={{ uri: userData.avatar.src }}
+          style={styles.avatarUser}
+        />
         <Block shadow style={styles.buttonBrush}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onUpdateImagePress}>
             <Icon state={'PenBrush'} fill={colors.white} />
           </TouchableOpacity>
         </Block>
       </Block>
       <Text size={'h1'} fontFamily={'bold'} marginTop={20}>
-        Nguyễn Tuấn Anh
+        {userData.fullName}
       </Text>
-      <Text size={'h3'} color={colors.greyDark}>{t("joined_on")} 20/12/2020</Text>
+      <Text size={'h3'} color={colors.greyDark}>
+        {t('joined_on')} {new Date(userData.createdAt).toLocaleDateString()}
+      </Text>
     </Block>
   )
 }

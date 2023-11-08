@@ -1,3 +1,5 @@
+import { t } from 'i18next'
+
 /**
  *
  * @param current: `Date` This is day that you want to handle
@@ -55,4 +57,15 @@ export const getDateName = (
   nameOptions: 'long' | 'short' | 'narrow' = 'short',
 ) => {
   return date.toLocaleDateString(locale, { weekday: nameOptions })
+}
+
+export const getDaySession = () => {
+  const currentHours = new Date().getHours() + 1
+  if (currentHours >= 0 && currentHours <= 12) {
+    return t('good_morning')
+  } else if (currentHours >= 13 && currentHours <= 18) {
+    return t('good_afternoon')
+  } else {
+    return t('good_evening')
+  }
 }
