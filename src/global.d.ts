@@ -1,19 +1,33 @@
+interface Topic {
+  id: string
+  name: string
+  description: string
+  atachment: Attachment
+}
+
+interface Level {
+  id: string
+  name: string
+  description: string
+  atachment: Attachment
+  score: number
+}
 interface PostResponse {
-  id: number
+  id: string
   title: string
-  english: string
-  vietnamese: strings
+  english: string[]
+  vietnamese: string[]
   type: string
-  topic: string
-  level: string
-  note: string
-  creator: string
-  attachment: string
-  flag: boolean
+  topic?: Topic
+  level?: Level
+  note?: string
+  creator?: User
+  attachment: Attachment
+  flag?: boolean
 }
 
 interface User {
-  id: number
+  id: string
   username: string
   fullName: string
   email: string
