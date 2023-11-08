@@ -56,7 +56,14 @@ export const ShadowButton: React.FC<ButtonShadowProps> = (props) => {
           : buttonHeight,
       },
     ]
-  }, [props])
+  }, [
+    colors,
+    disabled,
+    buttonWidth,
+    buttonHeight,
+    buttonRadius,
+    shadowButtonColor,
+  ])
 
   const buttonShadowHeight = useSharedValue(-shadowHeight)
 

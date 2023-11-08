@@ -126,6 +126,14 @@
     "already_have_or_create_account": "Đã có hoặc tạo tài khoản",
     "continue_as_guest": "Tiếp tục bằng tài khoản khách",
     "loading_text": "Chú ong đang tìm mật, xin đợi một chút !!",
-    "function_in_develop": "Chức năng đang phát triển!"
+    "function_in_develop": "Chức năng đang phát triển!",
+    "language": "Ngôn ngữ",
+    "vn": "Việt nam",
+    "us": "English",
+    "old_password": "Mật khẩu cũ",
+    "new_password": "Mật khẩu mới",
+    "re_new_password": "Nhập lại mật khẩu mới",
+    "old_password_is_wrong": "Mật khẩu cũ sai!",
+    "change_pass_success": "Thay đổi mật khẩu thành công"
   }
 }

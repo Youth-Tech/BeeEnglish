@@ -126,6 +126,14 @@
     "already_have_or_create_account": "Already have or create an account",
     "continue_as_guest": "Continue as a guest",
     "loading_text": "A bee is finding honey for you, please wait !!",
-    "function_in_develop": "The function is in the process of development!"
+    "function_in_develop": "The function is in the process of development!",
+    "language": "Language",
+    "vn": "Vietnam",
+    "us": "English",
+    "old_password": "Old password",
+    "new_password": "New password",
+    "re_new_password": "Confirm your new password",
+    "old_password_is_wrong": "Old password is wrong!!",
+    "change_pass_success": "Change password successfully!"
   }
 }
