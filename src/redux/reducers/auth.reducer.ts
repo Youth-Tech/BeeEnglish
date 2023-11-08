@@ -1,12 +1,13 @@
-import { Provider } from '@configs'
-import { TokenService } from '@services'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
 import {
   login,
-  resendVerifyEmail,
   signUp,
+  resendVerifyEmail,
   verifyForgotPassword,
 } from '@redux/actions/auth.action'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Provider } from '@configs'
+import { TokenService } from '@services'
 
 export type AuthState = {
   accessToken?: string

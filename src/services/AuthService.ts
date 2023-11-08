@@ -1,7 +1,6 @@
 import APIUtils from '@utils/AxiosInstance'
-import { LoginResponse, SignUpResponse } from '@redux/actions/auth.action'
-import ApiUtil from '@utils/AxiosInstance'
 import { DefaultResponse } from '@services'
+import { LoginResponse, SignUpResponse } from '@redux/actions/auth.action'
 
 export interface OAuthRes {
   code?: number
@@ -102,6 +101,6 @@ export const AuthService = {
     })
   },
   changePassword(body: ChangePasswordParams) {
-    return ApiUtil.post<ChangePasswordRes>('/auth/change-password', body)
+    return APIUtils.post<ChangePasswordRes>('/auth/change-password', body)
   },
 } as const

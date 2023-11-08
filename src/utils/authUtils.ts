@@ -1,5 +1,6 @@
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next'
 import { GoogleSignin as GoogleSignIn } from '@react-native-google-signin/google-signin'
+
 import { Provider } from '@configs'
 
 export const signingWithGoogle = async () => {
