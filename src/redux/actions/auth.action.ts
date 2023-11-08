@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+
 import { RootState } from '@hooks'
 import { UserData } from '@services/UserService'
 import { AuthService, LoginParams, SignUpParams } from '@services/AuthService'

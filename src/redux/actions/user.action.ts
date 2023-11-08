@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { MediaService } from '@services'
 import { ImagePickerResponse } from 'react-native-image-picker'
+
+import { MediaService } from '@services'
 import { UserData, UserService } from '@services/UserService'
 
 export interface UpdateUserAvatarPayload {
