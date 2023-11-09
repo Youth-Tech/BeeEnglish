@@ -5,6 +5,7 @@ import { colors, normalize, useTheme } from '@themes'
 import { Circle, Svg } from 'react-native-svg'
 
 type TThemeColor = { primary: string; secondary: string }
+
 const COLORS: Array<TThemeColor> = [
   {
     primary: colors.dark.orangePrimary,
@@ -27,6 +28,7 @@ const COLORS: Array<TThemeColor> = [
     secondary: colors.dark.red,
   },
 ]
+
 export interface LessonProgressItemProps {
   index?: number
   topicName: string
@@ -35,6 +37,7 @@ export interface LessonProgressItemProps {
   progress: number
   onPress?: () => void
 }
+
 export const LessonProgressItem = (props: LessonProgressItemProps) => {
   const { index, topicImage, topicName, lessonLabel, progress, onPress } = props
   const { colors } = useTheme()

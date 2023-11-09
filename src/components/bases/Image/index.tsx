@@ -71,7 +71,7 @@ export const Image: React.FC<ImageProps> = (props) => {
     return (
       <ImageComponent
         source={placeholderImage || images.placeholder}
-        resizeMode="contain"
+        resizeMode="cover"
         {...placeholderImageProps}
         style={[
           imageStyle,

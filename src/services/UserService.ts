@@ -1,9 +1,11 @@
+import { DefaultResponse } from '@services'
 import APIUtils from '@utils/AxiosInstance'
 import { AxiosRequestHeaders } from 'axios'
 
 const enum endPoints {
   getUserData = 'user/me',
   updateUserAvatar = '/user/me',
+  updateProgressLearning = '/user/update-progress-learning',
 }
 
 export interface UserData {
@@ -35,6 +37,22 @@ export interface UpdateUserAvatarRequest {
   avatar: Attachment
 }
 
+export interface UpdateProgressLearningRequest {
+  chapter: string
+  lessons: string[]
+}
+
+export interface UpdateProgressLearningResponse extends DefaultResponse {
+  data: {
+    _id: string
+    chapter: string
+    user: string
+    createdAt: string
+    lessons: string[]
+    updatedAt: string
+  }
+}
+
 export const UserService = {
   getUserData(token: string) {
     return APIUtils.get<UserStateResponse>(endPoints.getUserData, {
@@ -46,5 +64,12 @@ export const UserService = {
 
   updateUserAvatar(body: UpdateUserAvatarRequest) {
     return APIUtils.patch<UserStateResponse>(endPoints.updateUserAvatar, body)
+  },
+
+  updateProgressLearning(body: UpdateProgressLearningRequest) {
+    return APIUtils.patch<UpdateProgressLearningResponse>(
+      endPoints.updateProgressLearning,
+      body,
+    )
   },
 } as const

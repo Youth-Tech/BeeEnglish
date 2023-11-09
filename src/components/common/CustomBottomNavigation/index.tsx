@@ -83,7 +83,14 @@ export const CustomBottomNavigation: React.FC<BottomTabBarProps> = ({
     )
   }
   return (
-    <Block row height={80} alignCenter backgroundColor={colors.white}>
+    <Block
+      row
+      shadow
+      height={80}
+      alignCenter
+      elevation={20}
+      backgroundColor={'#fff'}
+    >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key]
         const isFocused = state.index === index

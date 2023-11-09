@@ -1,24 +1,25 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Block, BlockAnimated, Container, Image, Text } from '@components'
-import { useTheme } from '@themes'
-import { Icon } from '@assets'
+import { FadeIn } from 'react-native-reanimated'
 import { FlatList, ListRenderItemInfo, Pressable, View } from 'react-native'
+
 import {
+  NewsItem,
+  ToolItem,
   DailyTask,
+  NewsProgress,
   LessonProgressItem,
   LessonProgressItemProps,
-  NewsItem,
-  NewsItemProps,
-  NewsProgress,
-  NewsProgressProps,
-  ToolItem,
 } from './components'
-import { LoadingScreen } from '@screens'
+import { Icon } from '@assets'
+import { navigate } from '@navigation'
 import { useAppSelector } from '@hooks'
+import { LoadingScreen } from '@screens'
+import { colorTopic, useTheme } from '@themes'
 import { getUserData } from '@redux/selectors'
 import { getDaySession } from '@utils/dateUtils'
-import { FadeIn } from 'react-native-reanimated'
+import { PostServices } from '@services/PostService'
+import { Block, BlockAnimated, Container, Image, Text } from '@components'
 
 const learningData = [
   {
@@ -89,11 +90,37 @@ const newsData = [
     progress: 50,
   },
 ]
+
+export const parsePostData = (
+  postData: PostResponse[],
+  colors: string[],
+): (PostResponse & { textColor: string })[] => {
+  const colorValue: Record<string, string> = {}
+
+  postData.forEach((item) => {
+    const isInclude = Object.keys(colorValue).includes(item.topic.name)
+    if (!isInclude) {
+      colorValue[item.topic.name] =
+        colors[Math.floor(Math.random() * colors.length)]
+    }
+  })
+
+  return postData.map((item) => {
+    return {
+      ...item,
+      textColor: colorValue[item.topic.name],
+    }
+  })
+}
+
 export const HomeScreen = () => {
   const [t] = useTranslation()
   const { colors, normalize } = useTheme()
   const [isLoading, setIsLoading] = React.useState(true)
   const userData = useAppSelector(getUserData)
+  const [postData, setPostData] = React.useState<
+    (PostResponse & { textColor: string })[]
+  >([])
 
   const onPressDictionary = () => {}
   const onPressVideo = () => {}
@@ -105,11 +132,11 @@ export const HomeScreen = () => {
   }: ListRenderItemInfo<LessonProgressItemProps>) => {
     return (
       <View
+        key={`item-${index}`}
         style={[
           index === 0 ? { marginStart: normalize.h(20) } : {},
           { flexDirection: 'row', alignItems: 'center' },
         ]}
-        key={`item-${index}`}
       >
         <LessonProgressItem
           lessonLabel={item.lessonLabel}
@@ -140,7 +167,7 @@ export const HomeScreen = () => {
   const renderNewsProgressItem = ({
     index,
     item,
-  }: ListRenderItemInfo<NewsProgressProps>) => {
+  }: ListRenderItemInfo<PostResponse & { textColor: string }>) => {
     return (
       <View
         style={[
@@ -152,10 +179,11 @@ export const HomeScreen = () => {
         key={`item-${index}`}
       >
         <NewsProgress
+          progress={50}
           title={item.title}
-          image={item.image}
-          progress={item.progress}
-          index={index}
+          topic={item.topic.name}
+          topicColor={item.textColor}
+          image={item.attachment[0].src || ''}
         />
         {index === newsData.length - 1 && (
           <Pressable onPress={onLearningWatchMore}>
@@ -176,27 +204,44 @@ export const HomeScreen = () => {
   const renderNewsItem = ({
     index,
     item,
-  }: ListRenderItemInfo<NewsItemProps>) => {
+  }: ListRenderItemInfo<PostResponse & { textColor: string }>) => {
     return (
-      <View
+      <Pressable
+        key={`item-${index}`}
+        onPress={() => navigate('DETAIL_POST_SCREEN', { data: item })}
         style={[
           { marginHorizontal: normalize.h(20) },
           index === newsData.length - 1
             ? { marginBottom: normalize.v(19) }
             : {},
         ]}
-        key={`item-${index}`}
       >
-        <NewsItem title={item.title} image={item.image} />
-      </View>
+        <NewsItem
+          title={item.title}
+          topic={item.topic?.name}
+          createAt={item.createdAt}
+          textColor={item.textColor}
+          image={item.attachment[0].src || ''}
+        />
+      </Pressable>
     )
+  }
+
+  const callPost = async () => {
+    try {
+      const res = await PostServices.getAllPost()
+      setPostData(parsePostData(res.data.data.posts, colorTopic))
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   React.useEffect(() => {
     setIsLoading(false)
+    callPost()
   }, [])
 
-  if (isLoading) {
+  if (isLoading || postData.length <= 0) {
     return <LoadingScreen />
   }
 
@@ -272,12 +317,12 @@ export const HomeScreen = () => {
             {t('learning')}
           </Text>
           <FlatList
-            data={learningData}
-            keyExtractor={(_, index) => `item-${index}`}
-            renderItem={renderLessonProgressItem}
             horizontal
-            showsHorizontalScrollIndicator={false}
+            data={learningData}
+            renderItem={renderLessonProgressItem}
             style={{ marginTop: normalize.v(10) }}
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(_, index) => `item-${index}`}
           />
         </Block>
         <Block marginTop={17}>
@@ -290,30 +335,31 @@ export const HomeScreen = () => {
             {t('watched')}
           </Text>
           <FlatList
-            data={newsData}
-            keyExtractor={(_, index) => `item-${index}`}
-            renderItem={renderNewsProgressItem}
             horizontal
+            data={postData}
+            renderItem={renderNewsProgressItem}
             showsHorizontalScrollIndicator={false}
             style={{ marginTop: normalize.v(10) }}
+            keyExtractor={(_, index) => `item-${index}`}
           />
         </Block>
         <Block marginTop={17}>
           <Text
             size={'h2'}
-            fontFamily="bold"
-            color={colors.black}
             marginLeft={20}
+            fontFamily="bold"
+            marginBottom={-10}
+            color={colors.black}
           >
             {t('news')}
           </Text>
           <FlatList
-            data={newsData}
-            keyExtractor={(_, index) => `item-${index}`}
+            data={postData}
             renderItem={renderNewsItem}
             scrollEnabled={false}
-            showsHorizontalScrollIndicator={false}
             style={{ marginTop: normalize.v(10) }}
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(_, index) => `item-${index}`}
           />
         </Block>
       </BlockAnimated>

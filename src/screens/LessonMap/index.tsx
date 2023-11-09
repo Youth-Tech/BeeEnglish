@@ -13,42 +13,61 @@ import { navigate } from '@navigation'
 import { LoadingScreen } from '@screens'
 import { MOCK_DATA_LESSON } from './mock'
 import { normalize, useTheme } from '@themes'
-import { ItemLesson, ItemLessonProps } from './components'
 import { Chapter, KnowledgeService, Lesson } from '@services'
 import { Text, Block, Container, BlockAnimated } from '@components'
+import { InfoOnStartLesson, ItemLesson, ItemLessonProps } from './components'
 
-export type SectionData = (typeof MOCK_DATA_LESSON)[number]
+export type SectionData = (typeof MOCK_DATA_LESSON)[number] & {
+  chapterId: string
+}
 
 const parseDataToLessonData = (
   data: Lesson[],
-  fakeState?: boolean,
   chapterStatus?: 'lock' | 'unlock',
 ): ItemLessonProps[] => {
+  const listLessonWithOrder = data.filter((item) => item.status === true)
+
+  const currentLesson =
+    listLessonWithOrder.length > 0
+      ? listLessonWithOrder[listLessonWithOrder.length - 1]
+      : data[0]
+
   return data.map((item, index, arr) => {
+    const nextLesson = arr[index + 1] || item
+
     return {
       id: item._id,
       lessonDescription: item.description,
       lessonTitle: item.name,
-      status: fakeState && index === 0 ? 'current' : 'lock',
+      status: !item.status
+        ? 'lock'
+        : item._id === currentLesson._id
+        ? 'current'
+        : 'complete',
       thumbnail: item.attachment?.src || '',
       type: index === arr.length - 1 ? 'checkpoint' : 'normal',
       chapterStatus: chapterStatus || 'lock',
+      nextLessonId: nextLesson._id,
     }
   })
 }
 
 const parseDataToSectionData = (data: Chapter[]): SectionData[] => {
-  return data.map((item, index) => {
+  return data.map((item) => {
+    let lessonComplete = item.lessons.filter(
+      (item) => item.status === true,
+    ).length
+
     return {
       data: parseDataToLessonData(
         item.lessons,
-        index === 0,
-        index === 0 ? 'unlock' : 'lock',
+        item.status ? 'unlock' : 'lock',
       ),
+      lessonComplete,
       index: item.order,
-      lessonComplete: index === 0 ? 1 : 0,
-      status: index === 0 ? 'unlock' : 'lock',
       title: item.name,
+      status: item.status ? 'unlock' : 'lock',
+      chapterId: item._id,
     }
   })
 }
@@ -62,9 +81,12 @@ export const LessonMap = () => {
     navigate('DETAIL_LESSON_SCREEN', { lessonId: id })
   }
 
-  const onStartLessonPress = (id: string, isRestart?: boolean) => {
-    console.log('onStartLesson', id, 'with isRestart', !!isRestart)
-    navigate('DETAIL_LESSON_SCREEN', { lessonId: id })
+  const onStartLessonPress = ({
+    nextLessonId,
+    chapterId,
+    lessonId,
+  }: InfoOnStartLesson) => {
+    navigate('DETAIL_LESSON_SCREEN', { lessonId, chapterId, nextLessonId })
   }
 
   const onUnlockPress = (id: string) => {
@@ -75,7 +97,6 @@ export const LessonMap = () => {
     try {
       const res = await KnowledgeService.getChapterAndLesson()
       setData(parseDataToSectionData(res.data.data.chapters))
-      // console.log(res.data.data.chapters)
     } catch (error) {
       console.log(error)
     }
@@ -95,6 +116,8 @@ export const LessonMap = () => {
         {...item}
         key={index}
         onUnlockPress={onUnlockPress}
+        chapterId={section.chapterId}
+        nextLessonId={item.nextLessonId}
         onStartLessonPress={onStartLessonPress}
         isEndItem={index === section.data.length - 1}
         onStartExaminationPress={onStartExaminationPress}

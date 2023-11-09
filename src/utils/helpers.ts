@@ -1,4 +1,5 @@
-import { Dimensions } from 'react-native'
+import { t } from 'i18next'
+import { Dimensions, Platform, NativeModules } from 'react-native'
 
 export const formatDate = (_day: Date) => {
   const newDate = new Date(_day)
@@ -85,4 +86,50 @@ export function shuffle(array: any[]) {
   }
 
   return array
+}
+
+export const supportedLanguages = ['en', 'vi'] as const
+
+export type LangType = (typeof supportedLanguages)[number]
+
+export function getDeviceLanguage(): LangType {
+  const locale =
+    Platform.OS === 'ios'
+      ? NativeModules.SettingsManager.settings.AppleLocale ||
+        NativeModules.SettingsManager.settings.AppleLanguages[0] // iOS 13
+      : NativeModules.I18nManager.localeIdentifier
+
+  const [lowerCaseLocale] = locale.split('_')
+
+  if (supportedLanguages.includes(lowerCaseLocale)) {
+    return lowerCaseLocale
+  }
+  return 'vi' as LangType
+}
+
+export function timeSince(date: Date) {
+  var seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000)
+
+  var interval = seconds / 31536000
+
+  if (interval > 1) {
+    return Math.floor(interval) + ' '.concat(t('year').concat(' ' + t('ago')))
+  }
+  interval = seconds / 2592000
+  if (interval > 1) {
+    return Math.floor(interval) + ' '.concat(t('month').concat(' ' + t('ago')))
+  }
+  interval = seconds / 86400
+  if (interval > 1) {
+    return Math.floor(interval) + ' '.concat(t('day').concat(' ' + t('ago')))
+  }
+  interval = seconds / 3600
+  if (interval > 1) {
+    return Math.floor(interval) + ' '.concat(t('hours').concat(' ' + t('ago')))
+  }
+  interval = seconds / 60
+  if (interval > 1) {
+    return Math.floor(interval) + ' '.concat(t('minute').concat(' ' + t('ago')))
+  }
+  return Math.floor(seconds) + ' '.concat(t('second').concat(' ' + t('ago')))
 }

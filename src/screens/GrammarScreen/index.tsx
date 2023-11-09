@@ -22,12 +22,13 @@ import {
   VocabularyOptionsFunc,
 } from '@components'
 import { useTheme } from '@themes'
-import { useBackHandler } from '@hooks'
 import { QuestionType } from './constants'
-import { KnowledgeService, Quiz } from '@services'
 import { LoadingScreen } from '@screens/LoadingScreen'
+import { useAppDispatch, useBackHandler } from '@hooks'
+import { RootStackParamList, goBack } from '@navigation'
+import { setLoadingStatusAction } from '@redux/reducers'
 import { ModalFunction } from '@components/bases/Modal/type'
-import { RootStackParamList, navigateAndReset } from '@navigation'
+import { KnowledgeService, Quiz, UserService } from '@services'
 
 export type GrammarScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -41,7 +42,8 @@ const parseQuizDataToQuestion = (quizzes: Quiz[]): Question[] => {
       answer: item.answer,
       question: item.question,
       type: QuestionType[item.type],
-      wordImage: item.attachment?.src,
+      attachment: item.attachments,
+      wordImage: item.attachments?.[0]?.src || '',
       correctAnswer: item.correctAnswer,
     }
   })
@@ -51,7 +53,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   route,
   navigation,
 }) => {
-  const { lessonId } = route.params
+  const { nextLessonId, lessonId, chapterId } = route.params
 
   const leaveModalRef = React.useRef<ModalFunction>(null)
   const wordChoiceRef = React.useRef<WordListRefFunc>(null)
@@ -60,6 +62,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   const vocabOptionRef = React.useRef<VocabularyOptionsFunc>(null)
 
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const { colors, normalize } = useTheme()
 
   const [step, setStep] = React.useState(0)
@@ -173,8 +176,8 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
     if (nextQuestion == -1) {
       console.log('complete quiz')
+      updateLessonComplete()
       setStep(100)
-      navigation.navigate('CONGRATULATION_SCREEN')
     } else {
       if (questions[nextQuestion].type === QuestionType.multipleWord) {
         optionRef.current?.triggerChangeLayout()
@@ -198,6 +201,20 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
     }
   }
 
+  const updateLessonComplete = async () => {
+    dispatch(setLoadingStatusAction(true))
+    try {
+      await UserService.updateProgressLearning({
+        chapter: chapterId,
+        lessons: [nextLessonId],
+      })
+      navigation.navigate('CONGRATULATION_SCREEN')
+    } catch (error) {
+      console.log(error)
+    }
+    dispatch(setLoadingStatusAction(false))
+  }
+
   const renderQuestion = (question: Question) => {
     if (currentQuestion.data === null) return <></>
 
@@ -205,7 +222,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
       case QuestionType.cloze:
         return <WordChoice data={question} ref={wordChoiceRef} />
       case QuestionType.multipleWord:
-        if (question.attachment?.src) {
+        if (question.wordImage !== '') {
           return (
             <VocabularyOptions
               ref={vocabOptionRef}
@@ -332,7 +349,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
         ref={leaveModalRef}
         onPressApprove={() => {
           leaveModalRef.current?.dismissModal()
-          navigateAndReset([{ name: 'BOTTOM_TAB' }], 0)
+          goBack()
         }}
         onPressCancel={() => {
           leaveModalRef.current?.dismissModal()
