@@ -54,7 +54,11 @@ export type RootStackParamList = {
   [AUTH_ROUTE.REGISTER_SCREEN]: undefined
   [AUTH_ROUTE.VOCAB_SCREEN]: { lessonId: string }
   [AUTH_ROUTE.SETTING_SCREEN]: undefined
-  [AUTH_ROUTE.DETAIL_LESSON_SCREEN]: { lessonId: string }
+  [AUTH_ROUTE.DETAIL_LESSON_SCREEN]: {
+    lessonId: string
+    nextLessonId: string
+    chapterId: string
+  }
   [AUTH_ROUTE.DICTIONARY_SCREEN]: undefined
   [AUTH_ROUTE.LESSON_MAP_SCREEN]: undefined
 
@@ -63,12 +67,16 @@ export type RootStackParamList = {
   [PUBLIC_ROUTE.STREAK_SCREEN]: undefined
   [PUBLIC_ROUTE.EXAM_TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.TEST_SCREEN]: undefined
-  [PUBLIC_ROUTE.DETAIL_POST_SCREEN]: { id: string }
+  [PUBLIC_ROUTE.DETAIL_POST_SCREEN]: { post: PostResponse }
   [PUBLIC_ROUTE.ABOUT_THE_TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.NAVIGATE_SCREEN]: undefined
   [AUTH_ROUTE.LEARNED_WORD_SCREEN]: undefined
-  [AUTH_ROUTE.GRAMMAR_SCREEN]: { lessonId: string }
+  [AUTH_ROUTE.GRAMMAR_SCREEN]: {
+    lessonId: string
+    nextLessonId: string
+    chapterId: string
+  }
   [AUTH_ROUTE.SAVED_WORD_SCREEN]: undefined
   [AUTH_ROUTE.DETAIL_WORD_SCREEN]: undefined
   [AUTH_ROUTE.CONGRATULATION_SCREEN]: undefined

@@ -2,14 +2,14 @@ interface Topic {
   id: string
   name: string
   description: string
-  atachment: Attachment
+  attachment: Attachment
 }
 
 interface Level {
   id: string
   name: string
   description: string
-  atachment: Attachment
+  attachment: Attachment
   score: number
 }
 interface PostResponse {
@@ -18,12 +18,14 @@ interface PostResponse {
   english: string[]
   vietnamese: string[]
   type: string
-  topic?: Topic
-  level?: Level
-  note?: string
+  topic: Topic
+  level: Level
+  note: string
   creator?: User
-  attachment: Attachment
+  attachment: Attachment[]
   flag?: boolean
+  createdAt: string
+  updateAt: string
 }
 
 interface User {

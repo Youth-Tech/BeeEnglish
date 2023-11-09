@@ -1,16 +1,13 @@
 import i18next from 'i18next'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-
-export const supportedLanguages = ['en', 'vi'] as const
-
-export type LangType = (typeof supportedLanguages)[number]
+import { LangType, getDeviceLanguage } from '@utils/helpers'
 
 export type ConfigType = {
   lang: LangType
 }
 
 const initialState: ConfigType = {
-  lang: 'vi',
+  lang: getDeviceLanguage(),
 }
 
 const configSlice = createSlice({

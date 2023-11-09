@@ -1,9 +1,10 @@
-import { useTheme } from '@themes'
-import { RootStackParamList, goBack } from '@navigation'
-import { Icon, images } from '@assets'
-import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import FastImage from 'react-native-fast-image'
+
+import { useTheme } from '@themes'
+import { Icon, images } from '@assets'
+import React, { useState } from 'react'
+import { RootStackParamList, goBack } from '@navigation'
 import { ImageBackground, Pressable } from 'react-native'
 import { Text, Block, Container, Image } from '@components'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
@@ -14,11 +15,10 @@ export type DetailLessonScreenProps = NativeStackScreenProps<
 >
 
 export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
-  navigation,
   route,
+  navigation,
 }) => {
-  const { lessonId } = route.params
-  console.log(lessonId)
+  const { lessonId, chapterId, nextLessonId } = route.params
 
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
@@ -29,9 +29,14 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
     if (blockNumber === 1) {
       navigation.navigate('VOCAB_SCREEN', { lessonId })
     } else if (blockNumber === 2) {
-      navigation.navigate('GRAMMAR_SCREEN', { lessonId })
+      navigation.navigate('GRAMMAR_SCREEN', {
+        lessonId,
+        chapterId,
+        nextLessonId,
+      })
     }
   }
+
   return (
     <Container>
       <ImageBackground
@@ -40,7 +45,7 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
       >
         <Block space="between" row paddingHorizontal={20}>
           <Icon state="Back" onPress={goBack}></Icon>
-          <Icon state="MenuHeading" onPress={() => {}}></Icon>
+          <Icon state="MenuHeading" onPress={() => {}} />
         </Block>
 
         <Block
@@ -110,11 +115,7 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
               }}
             >
               <Block alignCenter>
-                <Image
-                  source={images.MultipleChoice}
-                  width={75}
-                  height={75}
-                ></Image>
+                <Image source={images.MultipleChoice} width={75} height={75} />
                 <Text center fontFamily="bold" size={'h3'}>
                   {t('multiple_choice')}
                 </Text>

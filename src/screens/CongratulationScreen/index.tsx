@@ -2,9 +2,9 @@ import React from 'react'
 import LottieView from 'lottie-react-native'
 import { useTranslation } from 'react-i18next'
 
-import { pop } from '@navigation'
 import { animation } from '@assets'
 import { useBackHandler } from '@hooks'
+import { navigateAndReset } from '@navigation'
 import { makeStyles, useTheme } from '@themes'
 import { Block, Container, ShadowButton, Text } from '@components'
 
@@ -22,7 +22,14 @@ export const CongratulationScreen = () => {
 
   const onContinuePress = () => {
     //TODO: submit exam result
-    pop(2)
+    navigateAndReset(
+      [
+        {
+          name: 'BOTTOM_TAB',
+        },
+      ],
+      0,
+    )
   }
 
   return (

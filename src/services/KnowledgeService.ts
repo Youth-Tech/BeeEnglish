@@ -8,6 +8,7 @@ export interface Lesson {
   chapter: string
   description: string
   attachment: Attachment | null
+  status: boolean
 }
 
 export interface Chapter {
@@ -17,6 +18,7 @@ export interface Chapter {
   course: string
   lessons: Lesson[]
   attachment: Attachment | null
+  status: boolean
 }
 
 export interface GetChapterAndLessonRes extends DefaultResponse {
@@ -32,7 +34,7 @@ export interface Quiz {
   flag?: boolean
   question: string
   correctAnswer?: string
-  attachment?: Attachment
+  attachments?: Attachment[]
 }
 
 export interface GetQuizByLessonIdRes extends DefaultResponse {
@@ -44,7 +46,7 @@ export interface GetQuizByLessonIdRes extends DefaultResponse {
 export const KnowledgeService = {
   getChapterAndLesson: () => {
     return ApiUtil.get<GetChapterAndLessonRes>(
-      '/knowledge/chapter/get-chapters-and-lessons',
+      `/knowledge/chapter/get-chapters-and-lessons?timestamp=${new Date().getTime()}`,
     )
   },
 

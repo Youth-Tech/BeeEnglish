@@ -128,12 +128,20 @@
     "loading_text": "Chú ong đang tìm mật, xin đợi một chút !!",
     "function_in_develop": "Chức năng đang phát triển!",
     "language": "Ngôn ngữ",
-    "vn": "Việt nam",
-    "us": "English",
+    "vn": "Tiếng Việt",
+    "us": "Tiếng Anh",
     "old_password": "Mật khẩu cũ",
     "new_password": "Mật khẩu mới",
     "re_new_password": "Nhập lại mật khẩu mới",
     "old_password_is_wrong": "Mật khẩu cũ sai!",
-    "change_pass_success": "Thay đổi mật khẩu thành công"
+    "change_pass_success": "Thay đổi mật khẩu thành công",
+    "year": "năm",
+    "month": "tháng",
+    "day": "ngày",
+    "week": "tuần",
+    "ago": "trước",
+    "hours": "giờ",
+    "minute": "phút",
+    "second": "giây"
   }
 }
