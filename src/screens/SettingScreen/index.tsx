@@ -1,37 +1,62 @@
 import React from 'react'
-import { Pressable, ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
+import { Pressable, ToastAndroid } from 'react-native'
 
 import {
+  LangType,
   setAuthState,
   setUserState,
   defaultAuthState,
   defaultUserState,
+  updateConfigAction,
 } from '@redux/reducers'
 import { Icon } from '@assets'
-import { useAppDispatch } from '@hooks'
-import { Block, Container, Text } from '@components'
-import { goBack, navigateAndReset } from '@navigation'
+import { getLangConfig } from '@redux/selectors'
+import { goBack, navigate, navigateAndReset } from '@navigation'
+import { useAppDispatch, useAppSelector } from '@hooks'
 import { makeStyles, normalize, useTheme } from '@themes'
+import { Block, Container, Modal, Text } from '@components'
+import { ModalFunction } from '@components/bases/Modal/type'
 
 export const SettingScreen = () => {
+  const styles = useStyle()
   const { colors } = useTheme()
   const { t } = useTranslation()
-  const styles = useStyle()
   const dispatch = useAppDispatch()
+  const langConfig = useAppSelector(getLangConfig)
+  const modalLanguageRef = React.useRef<ModalFunction>(null)
+
   const onPressPremiumUser = () => {
     ToastAndroid.show(t('function_in_develop'), ToastAndroid.SHORT)
   }
+
   const onPressProfile = () => {}
-  const onPressPassword = () => {}
+
+  const onPressPassword = () => {
+    navigate('CHANGE_PASSWORD_SCREEN')
+  }
+
   const onPressNotification = () => {}
+
   const onPressLogout = () => {
     dispatch(setAuthState(defaultAuthState))
     dispatch(setUserState(defaultUserState))
     navigateAndReset([{ name: 'LOGIN_SCREEN' }], 0)
   }
+
   const onPressRate = () => {}
+
   const onPressHelp = () => {}
+
+  const onPressLanguage = () => {
+    modalLanguageRef.current?.openModal()
+  }
+
+  const onLanguageChange = (lang: LangType) => {
+    dispatch(updateConfigAction({ lang }))
+    modalLanguageRef.current?.dismissModal()
+  }
+
   return (
     <Container hasScroll>
       <Block flex>
@@ -49,13 +74,13 @@ export const SettingScreen = () => {
             </Text>
           </Block>
 
-          <Block width={24} height={24}></Block>
+          <Block width={24} height={24} />
         </Block>
         <Block marginHorizontal={20}>
           <Block
             backgroundColor={colors.orangePrimary}
             radius={10}
-            marginTop={24}
+            marginTop={15}
           >
             <Pressable
               onPress={onPressPremiumUser}
@@ -67,7 +92,7 @@ export const SettingScreen = () => {
                   {t('premium_membership')}
                 </Text>
                 <Block marginLeft={12}>
-                  <Icon state="Crown" fill={colors.white}></Icon>
+                  <Icon state="Crown" fill={colors.white} />
                 </Block>
               </Block>
               <Text
@@ -90,71 +115,46 @@ export const SettingScreen = () => {
                 {t('profile')}
               </Text>
             </Block>
-            <Icon
-              state="RightArrow"
-              onPress={() => {
-                console.log('press')
-              }}
-            ></Icon>
+            <Icon state="RightArrow" />
           </Pressable>
           <Pressable style={styles.options} onPress={onPressPassword}>
             <Block row alignCenter>
-              <Icon state="Password"></Icon>
+              <Icon state="Password" />
               <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
                 {t('password')}
               </Text>
             </Block>
-            <Icon
-              state="RightArrow"
-              onPress={() => {
-                console.log('press')
-              }}
-            ></Icon>
+            <Icon state="RightArrow" />
           </Pressable>
           <Pressable style={styles.options} onPress={onPressNotification}>
             <Block row alignCenter>
-              <Icon state="Notification"></Icon>
+              <Icon state="Notification" />
               <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
                 {t('notifications')}
               </Text>
             </Block>
-            <Icon
-              state="RightArrow"
-              onPress={() => {
-                console.log('press')
-              }}
-            ></Icon>
+            <Icon state="RightArrow" />
           </Pressable>
           <Pressable style={styles.options} onPress={onPressLogout}>
             <Block row alignCenter>
-              <Icon state="Logout"></Icon>
+              <Icon state="Logout" />
               <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
                 {t('logout')}
               </Text>
             </Block>
-            <Icon
-              state="RightArrow"
-              onPress={() => {
-                console.log('press')
-              }}
-            ></Icon>
+            <Icon state="RightArrow" />
           </Pressable>
           <Text fontFamily="bold" size={'h2'} marginTop={32}>
             {t('more')}
           </Text>
           <Pressable style={styles.options} onPress={onPressRate}>
             <Block row alignCenter>
-              <Icon state="StartOutLine"></Icon>
+              <Icon state="StartOutLine" />
               <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
                 {t('rate_review')}
               </Text>
             </Block>
-            <Icon
-              state="RightArrow"
-              onPress={() => {
-                console.log('press')
-              }}
-            ></Icon>
+            <Icon state="RightArrow" />
           </Pressable>
           <Pressable style={styles.options} onPress={onPressHelp}>
             <Block row alignCenter>
@@ -163,15 +163,61 @@ export const SettingScreen = () => {
                 {t('help')}
               </Text>
             </Block>
-            <Icon
-              state="RightArrow"
-              onPress={() => {
-                console.log('press')
-              }}
-            />
+            <Icon state="RightArrow" />
+          </Pressable>
+          <Pressable style={styles.options} onPress={onPressLanguage}>
+            <Block row alignCenter>
+              <Icon state="Language" />
+              <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
+                {t('language')}
+              </Text>
+            </Block>
+            <Icon state="RightArrow" />
           </Pressable>
         </Block>
       </Block>
+
+      {/* modal language */}
+      <Modal position="center" animationType="fade" ref={modalLanguageRef}>
+        <Block
+          radius={10}
+          margin={30}
+          paddingVertical={5}
+          paddingHorizontal={20}
+          backgroundColor={colors.white}
+        >
+          <Pressable onPress={() => onLanguageChange('vi')}>
+            <Block row alignCenter gap={15}>
+              <Icon state="VietNamFlag" />
+              <Block
+                row
+                flex
+                alignCenter
+                space="between"
+                paddingVertical={15}
+                borderBottomWidth={1}
+                borderColor={colors.greyLight}
+              >
+                <Text fontFamily="semiBold">{t('vn')}</Text>
+                {langConfig === 'vi' && (
+                  <Icon state="CheckNormal" fill={colors.orangeDark} />
+                )}
+              </Block>
+            </Block>
+          </Pressable>
+          <Pressable onPress={() => onLanguageChange('en')}>
+            <Block paddingVertical={15} row alignCenter gap={15}>
+              <Icon state="UsFlag" />
+              <Text fontFamily="semiBold" flex>
+                {t('us')}
+              </Text>
+              {langConfig === 'en' && (
+                <Icon state="CheckNormal" fill={colors.orangeDark} />
+              )}
+            </Block>
+          </Pressable>
+        </Block>
+      </Modal>
     </Container>
   )
 }
@@ -184,7 +230,7 @@ const useStyle = makeStyles()(({}) => ({
   options: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     marginTop: normalize.v(24),
+    justifyContent: 'space-between',
   },
 }))

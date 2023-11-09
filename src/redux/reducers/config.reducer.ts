@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import i18next from 'i18next'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 export const supportedLanguages = ['en', 'vi'] as const
 

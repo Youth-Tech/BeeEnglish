@@ -8,7 +8,7 @@ import {
   Text,
 } from '@components'
 import { Icon } from '@assets'
-import { goBack, navigate } from '@navigation'
+import { RootStackParamList, goBack, navigate } from '@navigation'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@themes'
 import { AuthService } from '@services/AuthService'
@@ -16,43 +16,60 @@ import { DocumentSelectionState } from 'react-native'
 import { debounce } from 'lodash'
 import { useAppDispatch } from '@hooks'
 import { defaultUserState, setAuthState, setUserState } from '@redux/reducers'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
-export const SendPasswordScreen = () => {
-  const { t } = useTranslation()
+export type SendPasswordScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'SEND_PASSWORD_SCREEN'
+>
+
+export const SendPasswordScreen: React.FC<SendPasswordScreenProps> = () => {
   const { colors } = useTheme()
+  const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+
   const [email, setEmail] = React.useState('')
   const [checkMail, setCheckMail] = useState(true)
+
   const emailInputRef = React.useRef<DocumentSelectionState>()
+
   const onCheckEmail = (value: string) => {
     const pattern =
       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
     if (pattern.test(value)) setCheckMail(true)
     else setCheckMail(false)
   }
-  const dispatch = useAppDispatch();
-
 
   const showError = () => {
     if (email.length === 0) return `${t('email')}${t('is_required')}`
     if (!checkMail) return `${t('email')}${t('is_invalid')}`
     return ''
   }
+
   const checkError = debounce((value: string) => {
     if (!checkMail) onCheckEmail(value)
   }, 300)
+
   const onDisabled = () => {
     if (email.length <= 3) return true
     return !checkMail
   }
+
   const callAPI = async () => {
-    await AuthService.forgotPassword({ email })
-    navigate('VERIFICATION_CODE_SCREEN')
+    try {
+      await AuthService.forgotPassword({ email })
+      navigate('VERIFICATION_CODE_SCREEN')
+    } catch (error) {
+      console.log(error)
+    }
   }
+
   const onSubmit = async () => {
-    callAPI();
-    dispatch(setUserState(defaultUserState));
-    dispatch(setAuthState({forgotPasswordToken: undefined}));
+    callAPI()
+    dispatch(setUserState(defaultUserState))
+    dispatch(setAuthState({ forgotPasswordToken: undefined }))
   }
+
   return (
     <Container>
       <DismissKeyBoardBlock>

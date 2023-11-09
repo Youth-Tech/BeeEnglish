@@ -2,10 +2,10 @@ import { combineReducers } from '@reduxjs/toolkit'
 
 import { AuthReducer } from './auth.reducer'
 import { ThemeReducer } from './theme.reducer'
-import { AppStateReducer } from './appState.reducer'
 import { ConfigReducer } from './config.reducer'
-import {UserReducer} from "@redux/reducers/user.reducer";
-import {DetailPostReducer} from "@redux/reducers/detailPost.reducer";
+import { AppStateReducer } from './appState.reducer'
+import { UserReducer } from '@redux/reducers/user.reducer'
+import { DetailPostReducer } from '@redux/reducers/detailPost.reducer'
 
 export const rootReducer = combineReducers({
   auth: AuthReducer,
