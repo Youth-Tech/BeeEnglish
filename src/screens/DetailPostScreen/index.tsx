@@ -49,9 +49,11 @@ export const DetailPost: React.FC = () => {
         <FlatList
           style={styles.listParagraph}
           scrollEnabled={false}
-          data={posts}
-          renderItem={({ item }) => <ContentPost data={item} />}
-          keyExtractor={(item) => item.id.toString()}
+          data={posts.english}
+          renderItem={({ item, index }) => (
+            <ContentPost english={item} vietnamese={posts.vietnamese[index]} />
+          )}
+          keyExtractor={(_, index) => index.toString()}
         />
         <EmotionPost />
         <Text size={'h3'} fontFamily={'bold'} marginTop={10}>

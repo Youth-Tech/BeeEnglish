@@ -46,7 +46,7 @@ const RootStack = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName={isSignedIn ? 'BOTTOM_TAB' : 'BOTTOM_TAB'}
+        initialRouteName={isSignedIn ? 'BOTTOM_TAB' : 'LOGIN_SCREEN'}
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
