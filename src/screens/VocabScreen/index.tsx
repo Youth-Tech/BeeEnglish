@@ -1,15 +1,15 @@
 import React, { useRef } from 'react'
-import {
-  Block,
-  Container,
-  Difficulty,
-  LeaveProcessModal,
-  Progress,
-  ShadowButton,
-  Text,
-  VocabularyWord,
-} from '@components'
 
+import {
+  Text,
+  Block,
+  Progress,
+  Container,
+  ShadowButton,
+  Difficulty,
+  VocabularyWord,
+  LeaveProcessModal,
+} from '@components'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { useTranslation } from 'react-i18next'

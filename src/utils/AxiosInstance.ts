@@ -1,11 +1,12 @@
 import axios, {
   AxiosResponse,
+  AxiosRequestConfig,
   AxiosRequestHeaders,
   InternalAxiosRequestConfig,
-  AxiosRequestConfig,
 } from 'axios'
 
 import { BASE_URL } from '@configs'
+import { replace } from '@navigation'
 import { TokenService } from '@services'
 import { handleErrorMessage } from '@utils/errorUtils'
 
@@ -61,7 +62,7 @@ const AxiosInstance = ({
         try {
           //refresh token
           const refreshToken = TokenService.getRefreshToken()
-          console.log(refreshToken)
+          // console.log(refreshToken)
           const res = await axiosInstance.post<RefreshTokenRes>(
             '/auth/refresh-token',
             {
@@ -78,7 +79,7 @@ const AxiosInstance = ({
 
           return axiosInstance(originalConfig)
         } catch (_error) {
-          return Promise.reject(_error)
+          replace("LOGIN_SCREEN")
         }
       }
       handleErrorMessage(
