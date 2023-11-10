@@ -9,7 +9,7 @@ export interface TaskItemProps {
   honeyAmount: number
   onPress?: () => void
 }
-const TaskItem: React.FC<TaskItemProps> = (props) => {
+export const TaskItem: React.FC<TaskItemProps> = (props) => {
   const { taskType, taskName, honeyAmount, onPress } = props
   const { normalize, colors } = useTheme()
 
@@ -62,4 +62,3 @@ const TaskItem: React.FC<TaskItemProps> = (props) => {
     </ShadowBlock>
   )
 }
-export default TaskItem

@@ -13,10 +13,9 @@ export interface NewsItemProps {
 }
 
 export const NewsItem: React.FC<NewsItemProps> = (props) => {
-  const { title, image, topic, createAt, textColor } = props
+  const { title, image, topic, createAt } = props
   const { colors } = useTheme()
   const styles = useStyle(props)
-  console.log(textColor)
   return (
     <Block
       row
@@ -58,7 +57,7 @@ export const NewsItem: React.FC<NewsItemProps> = (props) => {
   )
 }
 
-const useStyle = makeStyles<NewsItemProps>()(({ normalize, colors }) => ({
+const useStyle = makeStyles<NewsItemProps>()(({ normalize }) => ({
   imageStyle: {
     aspectRatio: 1,
     width: normalize.h(90),
