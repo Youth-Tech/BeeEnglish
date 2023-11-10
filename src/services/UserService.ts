@@ -55,6 +55,9 @@ export interface UpdateProgressLearningResponse extends DefaultResponse {
     updatedAt: string
   }
 }
+export interface BookmarkWordResponse extends DefaultResponse {
+  data: UserData
+}
 
 export interface GetStreakRequest {
   start: string
@@ -87,7 +90,12 @@ export const UserService = {
       body,
     )
   },
-
+  bookmarkWord(wordId: string) {
+    return APIUtils.patch<BookmarkWordResponse>(
+      `/user/bookmark-word/${wordId}`,
+      {},
+    )
+  },
   getStreak(params: GetStreakRequest) {
     return APIUtils.get<GetStreakResponse>(endPoints.getStreak, undefined, {
       params,

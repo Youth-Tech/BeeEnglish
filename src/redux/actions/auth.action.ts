@@ -58,11 +58,7 @@ export const resendVerifyCode = createAsyncThunk(
 export const login = createAsyncThunk<
   LoginResponse,
   LoginParams,
-  {
-    rejectValue: {
-      code: number
-    }
-  }
+  { rejectValue: { code: number; subMessage: string } }
 >('auth/login', async (params, { rejectWithValue }) => {
   try {
     const response = await AuthService.login(params)

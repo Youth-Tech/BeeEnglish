@@ -1,18 +1,12 @@
 import { Difficulty } from '@components'
+import { Word } from '@services'
 
-export interface WordAttachment {
-  image?: string
-  sound?: string
-}
+// export interface WordAttachment {
+//   image?: string
+//   sound?: string
+// }
 
-export interface FlipVocabularyProps {
-  id: string
-  english: string
-  vietnamese: string
-  pronunciation: string
-  exampleEnglish: string
-  exampleVietnamese: string
-  attachment?: WordAttachment
+export interface FlipVocabularyProps extends Word {
   difficulty?: Difficulty
   setData?: React.Dispatch<React.SetStateAction<FlipVocabularyProps>>
   isBookmarked?: boolean
