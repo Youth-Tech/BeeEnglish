@@ -96,5 +96,17 @@ export const colors = {
   },
 }
 
+export const colorTopic = [
+  '#22B07D',
+  '#056F49',
+  '#174B3E',
+  '#FE7D43',
+  '#F4B80A',
+  '#FF4B4D',
+  '#BC2F31',
+  '#4C6AC5',
+  '#002800',
+]
+
 export type ThemeColor = typeof colors
 export type ColorsMode = typeof colors.light

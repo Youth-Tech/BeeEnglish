@@ -2,7 +2,9 @@ import axios, {
   AxiosResponse,
   AxiosRequestHeaders,
   InternalAxiosRequestConfig,
+  AxiosRequestConfig,
 } from 'axios'
+
 import { BASE_URL } from '@configs'
 import { TokenService } from '@services'
 import { handleErrorMessage } from '@utils/errorUtils'
@@ -93,8 +95,14 @@ const responseBody = <ResponseType>(response: AxiosResponse<ResponseType>) =>
   response
 
 const ApiUtil = {
-  get: <ResponseType>(url: string, headers?: AxiosRequestHeaders) =>
-    AxiosInstance({ headers }).get<ResponseType>(url).then(responseBody),
+  get: <ResponseType>(
+    url: string,
+    headers?: AxiosRequestHeaders,
+    requestOption?: AxiosRequestConfig,
+  ) =>
+    AxiosInstance({ headers })
+      .get<ResponseType>(url, requestOption)
+      .then(responseBody),
 
   post: <ResponseType>(url: string, body: {}, headers?: AxiosRequestHeaders) =>
     AxiosInstance({ headers }).post<ResponseType>(url, body).then(responseBody),
@@ -102,8 +110,19 @@ const ApiUtil = {
   put: <ResponseType>(url: string, body: {}, headers?: AxiosRequestHeaders) =>
     AxiosInstance({ headers }).put<ResponseType>(url, body).then(responseBody),
 
-  delete: <ResponseType>(url: string, headers?: AxiosRequestHeaders) =>
-    AxiosInstance({ headers }).delete<ResponseType>(url).then(responseBody),
+  patch: <ResponseType>(url: string, body: {}, headers?: AxiosRequestHeaders) =>
+    AxiosInstance({ headers })
+      .patch<ResponseType>(url, body)
+      .then(responseBody),
+
+  delete: <ResponseType>(
+    url: string,
+    headers?: AxiosRequestHeaders,
+    requestOption?: AxiosRequestConfig,
+  ) =>
+    AxiosInstance({ headers })
+      .delete<ResponseType>(url, requestOption)
+      .then(responseBody),
 
   postFile: <ResponseType>(
     url: string,

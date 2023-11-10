@@ -9,18 +9,26 @@ import { Icon, TIcon, images } from '@assets'
 import { normalize, useTheme } from '@themes'
 import { Block, Image, ShadowButton, Text } from '@components/bases'
 
+export interface InfoOnStartLesson {
+  lessonId: string
+  nextLessonId: string
+  chapterId: string
+  isRestart?: boolean
+}
 export interface ItemLessonProps {
   id: string
   thumbnail: string
+  chapterId?: string
   lessonTitle: string
   isEndItem?: boolean
+  nextLessonId: string
   lessonDescription: string
   type?: 'normal' | 'checkpoint'
   chapterStatus: 'lock' | 'unlock'
   status: 'complete' | 'lock' | 'current'
   onUnlockPress?: (lessonId: string) => void
   onStartExaminationPress?: (lessonId: string) => void
-  onStartLessonPress?: (lessonId: string, isRestart?: boolean) => void
+  onStartLessonPress?: (info: InfoOnStartLesson) => void
 }
 
 const getTypeOfModal = new Map([
@@ -41,7 +49,9 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
   id,
   type,
   status,
+  chapterId,
   lessonTitle,
+  nextLessonId,
   onUnlockPress,
   lessonDescription,
   onStartLessonPress,
@@ -99,7 +109,13 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
               buttonColor={colors.yellowDark}
               buttonBorderColor={colors.orangePrimary}
               shadowButtonColor={colors.orangePrimary}
-              onPress={() => onStartLessonPress?.(id!)}
+              onPress={() =>
+                onStartLessonPress?.({
+                  lessonId: id!,
+                  chapterId: chapterId!,
+                  nextLessonId: nextLessonId!,
+                })
+              }
             >
               <Text size={'h4'} fontFamily="bold" paddingHorizontal={10}>
                 {t('continue_learn')}
@@ -113,7 +129,14 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
               buttonColor={colors.white}
               buttonBorderColor={colors.orangePrimary}
               shadowButtonColor={colors.orangePrimary}
-              onPress={() => onStartLessonPress?.(id!, true)}
+              onPress={() =>
+                onStartLessonPress?.({
+                  lessonId: id!,
+                  chapterId: chapterId!,
+                  nextLessonId: nextLessonId!,
+                  isRestart: true,
+                })
+              }
             >
               <Text size={'h4'} fontFamily="bold" paddingHorizontal={10}>
                 {t('learn_again')}
@@ -134,7 +157,11 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
                 ? onStartExaminationPress?.(id!)
                 : status === 'lock'
                 ? onUnlockPress?.(id!)
-                : onStartLessonPress?.(id!)
+                : onStartLessonPress?.({
+                    lessonId: id!,
+                    chapterId: chapterId!,
+                    nextLessonId: nextLessonId!,
+                  })
             }
             buttonBorderColor={colors.orangePrimary}
             shadowButtonColor={colors.orangePrimary}
@@ -161,9 +188,11 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
 export const ItemLesson: React.FC<ItemLessonProps> = ({
   id,
   status,
+  chapterId,
   thumbnail,
   isEndItem,
   lessonTitle,
+  nextLessonId,
   chapterStatus,
   onUnlockPress,
   type = 'normal',
@@ -195,7 +224,9 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
                 id={id}
                 type={type}
                 status={status}
+                chapterId={chapterId}
                 lessonTitle={lessonTitle}
+                nextLessonId={nextLessonId}
                 onUnlockPress={onUnlockPress}
                 lessonDescription={lessonDescription}
                 onStartLessonPress={onStartLessonPress}

@@ -74,6 +74,13 @@ export interface BlockProps extends DefaultStyleProps, ViewProps {
 
   /**
    * ```
+   * gap <=> { gap: number}
+   * ```
+   */
+  gap?: number
+
+  /**
+   * ```
    * justifyStart <=> { justifyContent: "flex-start"}
    * ```
    */

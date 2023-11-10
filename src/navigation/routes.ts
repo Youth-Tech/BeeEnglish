@@ -15,6 +15,7 @@ export const AUTH_ROUTE = {
   LOGIN_SCREEN: 'LOGIN_SCREEN',
   REGISTER_SCREEN: 'REGISTER_SCREEN',
   VOCAB_SCREEN: 'VOCAB_SCREEN',
+  CHANGE_PASSWORD_SCREEN: 'CHANGE_PASSWORD_SCREEN',
 
   LEARNED_WORD_SCREEN: 'LEARNED_WORD_SCREEN',
   GRAMMAR_SCREEN: 'GRAMMAR_SCREEN',
@@ -47,12 +48,17 @@ export type RootStackParamList = {
   [AUTH_ROUTE.VERIFICATION_CODE_SCREEN]: undefined
   [AUTH_ROUTE.EMAIL_REGISTRATION_SCREEN]: undefined
   [AUTH_ROUTE.SEND_PASSWORD_SCREEN]: undefined
+  [AUTH_ROUTE.CHANGE_PASSWORD_SCREEN]: undefined
   [AUTH_ROUTE.RESET_PASSWORD_SCREEN]: undefined
   [AUTH_ROUTE.LOGIN_SCREEN]: undefined
   [AUTH_ROUTE.REGISTER_SCREEN]: undefined
   [AUTH_ROUTE.VOCAB_SCREEN]: { lessonId: string }
   [AUTH_ROUTE.SETTING_SCREEN]: undefined
-  [AUTH_ROUTE.DETAIL_LESSON_SCREEN]: { lessonId: string }
+  [AUTH_ROUTE.DETAIL_LESSON_SCREEN]: {
+    lessonId: string
+    nextLessonId: string
+    chapterId: string
+  }
   [AUTH_ROUTE.DICTIONARY_SCREEN]: undefined
   [AUTH_ROUTE.LESSON_MAP_SCREEN]: undefined
 
@@ -61,12 +67,16 @@ export type RootStackParamList = {
   [PUBLIC_ROUTE.STREAK_SCREEN]: undefined
   [PUBLIC_ROUTE.EXAM_TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.TEST_SCREEN]: undefined
-  [PUBLIC_ROUTE.DETAIL_POST_SCREEN]: { id: string }
+  [PUBLIC_ROUTE.DETAIL_POST_SCREEN]: { post: PostResponse }
   [PUBLIC_ROUTE.ABOUT_THE_TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.NAVIGATE_SCREEN]: undefined
   [AUTH_ROUTE.LEARNED_WORD_SCREEN]: undefined
-  [AUTH_ROUTE.GRAMMAR_SCREEN]: { lessonId: string }
+  [AUTH_ROUTE.GRAMMAR_SCREEN]: {
+    lessonId: string
+    nextLessonId: string
+    chapterId: string
+  }
   [AUTH_ROUTE.SAVED_WORD_SCREEN]: undefined
   [AUTH_ROUTE.DETAIL_WORD_SCREEN]: undefined
   [AUTH_ROUTE.CONGRATULATION_SCREEN]: undefined

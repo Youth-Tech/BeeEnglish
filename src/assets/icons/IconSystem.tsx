@@ -10,8 +10,9 @@ import Svg, {
   Stop,
   Circle,
   Ellipse,
+  Mask,
 } from 'react-native-svg'
-import { colors, ColorsMode } from '@themes'
+import { colors } from '@themes'
 
 export interface Props extends SvgProps {
   fill?: string
@@ -1071,9 +1072,10 @@ const QuestionMark = ({ ...props }: Props) => (
     <Defs>
       <ClipPath id="clip0_657_2402">
         <Rect width={30} height={30} fill="white" />
-        </ClipPath>
+      </ClipPath>
     </Defs>
-  </Svg>)
+  </Svg>
+)
 const Present = ({ ...props }: Props) => (
   <Svg width={25} height={25} viewBox="0 0 25 25" fill="none" {...props}>
     <G clipPath="url(#clip0_405_811)">
@@ -1330,7 +1332,7 @@ const BookmarkEmotionOutline = ({
     {...props}
   >
     <Path d="M3 2a1 1 0 0 0-1 1v15l2.978-2.717a3 3 0 0 1 4.044 0L12 18V3a1 1 0 0 0-1-1H3zm0-2h8a3 3 0 0 1 3 3v15a2 2 0 0 1-3.348 1.477L7.674 16.76a1 1 0 0 0-1.348 0l-2.978 2.717A2 2 0 0 1 0 18V3a3 3 0 0 1 3-3z" />
-    </Svg>
+  </Svg>
 )
 const QuestionIcon = (props: Props) => (
   <Svg width={20} height={20} fill="none" {...props}>
@@ -1402,6 +1404,100 @@ const IconLockSmall = (props: Props) => (
     />
   </Svg>
 )
+
+const IconLanguage = (props: Props) => (
+  <Svg width={24} height={24} fill="none" {...props}>
+    <Path
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.5}
+      d="M2 12c0 5.523 4.477 10 10 10s10-4.477 10-10S17.523 2 12 2 2 6.477 2 12Z"
+    />
+    <Path
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.5}
+      d="M13 2.05S16 6 16 12c0 6-3 9.95-3 9.95m-2 0S8 18 8 12c0-6 3-9.95 3-9.95M2.63 15.5h18.74m-18.74-7h18.74"
+    />
+  </Svg>
+)
+
+const IconFlagVietnam = (props: Props) => (
+  <Svg width={24} height={24} fill="none" {...props}>
+    <G clipPath="url(#a)">
+      <Path
+        fill="#F42F4C"
+        d="M12 23.25c6.213 0 11.25-5.037 11.25-11.25S18.213.75 12 .75.75 5.787.75 12 5.787 23.25 12 23.25Z"
+      />
+      <Path
+        fill="#FFE62E"
+        d="m12 14.625 3.713 2.625-1.388-4.275L18 10.2h-4.575L12 6l-1.387 4.2H6l3.675 2.775-1.388 4.275L12 14.625Z"
+      />
+    </G>
+    <Defs>
+      <ClipPath id="a">
+        <Path fill="#fff" d="M0 0h24v24H0z" />
+      </ClipPath>
+    </Defs>
+  </Svg>
+)
+
+const IconUsFlag = (props: Props) => (
+  <Svg width={24} height={24} fill="none" {...props}>
+    <G clipPath="url(#a)">
+      <Mask
+        id="b"
+        width={24}
+        height={24}
+        x={0}
+        y={0}
+        maskUnits="userSpaceOnUse"
+        style={{
+          maskType: 'luminance',
+        }}
+      >
+        <Path
+          fill="#fff"
+          d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12Z"
+        />
+      </Mask>
+      <G mask="url(#b)">
+        <Path
+          fill="#EEE"
+          d="M12 0h12v3l-1.5 1.5L24 6v3l-1.5 1.5L24 12v3l-1.5 1.5L24 18v3l-12 1.5L0 21v-3l1.5-1.5L0 15v-3L12 0Z"
+        />
+        <Path
+          fill="#D80027"
+          d="M10.5 3H24v3H10.5V3Zm0 6H24v3H12l-1.5-3ZM0 15h24v3H0v-3Zm0 6h24v3H0v-3Z"
+        />
+        <Path fill="#0052B4" d="M0 0h12v12H0V0Z" />
+        <Path
+          fill="#EEE"
+          d="m8.766 11.39 2.671-1.921h-3.28l2.671 1.922L9.797 8.25l-1.031 3.14Zm-3.797 0L7.64 9.47H4.359l2.672 1.922L6 8.25l-1.031 3.14Zm-3.797 0L3.844 9.47H.563l2.671 1.922-1.03-3.141-1.032 3.14Zm7.594-3.796 2.671-1.922h-3.28l2.671 1.922-1.031-3.14-1.031 3.14Zm-3.797 0L7.64 5.672H4.359l2.672 1.922L6 4.454l-1.031 3.14Zm-3.797 0 2.672-1.922H.563l2.671 1.922-1.03-3.14-1.032 3.14ZM8.766 3.75l2.671-1.922h-3.28l2.671 1.922L9.797.61 8.766 3.75Zm-3.797 0L7.64 1.828H4.359L7.031 3.75 6 .61 4.969 3.75Zm-3.797 0 2.672-1.922H.563L3.233 3.75 2.204.61 1.171 3.75Z"
+        />
+      </G>
+    </G>
+    <Defs>
+      <ClipPath id="a">
+        <Path fill="#fff" d="M0 0h24v24H0z" />
+      </ClipPath>
+    </Defs>
+  </Svg>
+)
+
+const IconCheckNormal = (props: Props) => (
+  <Svg width={24} height={24} fill="none" {...props}>
+    <Path
+      fill={props.fill || '#000'}
+      fillRule="evenodd"
+      d="M19.17 6.93a1.125 1.125 0 0 1 0 1.59l-9.146 9.146a1.124 1.124 0 0 1-1.603-.014l-3.604-3.726a1.125 1.125 0 1 1 1.617-1.565l2.809 2.904L17.58 6.93a1.125 1.125 0 0 1 1.59 0Z"
+      clipRule="evenodd"
+    />
+  </Svg>
+)
+
 const Icons = {
   LeftArrow: {
     state: 'LeftArrow',
@@ -1647,8 +1743,23 @@ const Icons = {
     state: 'IconLockSmall',
     icon: IconLockSmall,
   },
+  Language: {
+    state: 'Language',
+    icon: IconLanguage,
+  },
+  VietNamFlag: {
+    state: 'VietNam',
+    icon: IconFlagVietnam,
+  },
+  UsFlag: {
+    state: 'UsFlag',
+    icon: IconUsFlag,
+  },
+  CheckNormal: {
+    state: 'CheckNormal',
+    icon: IconCheckNormal,
+  },
 }
-
 
 export type TIcon = keyof typeof Icons
 
@@ -1719,4 +1830,8 @@ export {
   LighterIcon,
   CheckSmallIcon,
   IconLockSmall,
+  IconLanguage,
+  IconFlagVietnam,
+  IconUsFlag,
+  IconCheckNormal,
 }

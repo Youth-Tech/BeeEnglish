@@ -142,6 +142,22 @@
     "upload_failed": "Tải ảnh lên thất bại",
     "resend_limit": "Bị giới hạn gửi lại",
     "user_not_found": "Tài khoản không thể tìm thấy",
-
+    "function_in_develop": "Chức năng đang phát triển!",
+    "language": "Ngôn ngữ",
+    "vn": "Tiếng Việt",
+    "us": "Tiếng Anh",
+    "old_password": "Mật khẩu cũ",
+    "new_password": "Mật khẩu mới",
+    "re_new_password": "Nhập lại mật khẩu mới",
+    "old_password_is_wrong": "Mật khẩu cũ sai!",
+    "change_pass_success": "Thay đổi mật khẩu thành công",
+    "year": "năm",
+    "month": "tháng",
+    "day": "ngày",
+    "week": "tuần",
+    "ago": "trước",
+    "hours": "giờ",
+    "minute": "phút",
+    "second": "giây"
   }
 }

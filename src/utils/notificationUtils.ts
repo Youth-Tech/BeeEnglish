@@ -1,6 +1,6 @@
 import notifee, {
-  AndroidBadgeIconType,
   AndroidImportance,
+  AndroidBadgeIconType,
 } from '@notifee/react-native'
 import messaging, {
   FirebaseMessagingTypes,

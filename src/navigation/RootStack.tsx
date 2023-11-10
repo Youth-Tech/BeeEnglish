@@ -1,15 +1,14 @@
 import React from 'react'
-import { RootStackParamList } from './routes'
-import { RootBottomTab } from './RootBottomTab'
-import { navigationRef } from './NavigationServices'
-import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+
 import {
   LessonMap,
   TestScreen,
+  DetailPost,
   VocabScreen,
   LoginScreen,
   SplashScreen,
+  StreakScreen,
   GrammarScreen,
   SettingScreen,
   NavigateScreen,
@@ -23,13 +22,16 @@ import {
   DetailLessonScreen,
   AboutTheTestScreen,
   PasswordResetScreen,
+  ChangePasswordScreen,
   CongratulationScreen,
   VerificationCodeScreen,
   EmailRegistrationScreen,
-  StreakScreen,
-  DetailPost,
 } from '@screens'
 import { useAppSelector } from '@hooks'
+import { RootStackParamList } from './routes'
+import { RootBottomTab } from './RootBottomTab'
+import { navigationRef } from './NavigationServices'
+import { NavigationContainer } from '@react-navigation/native'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -78,6 +80,10 @@ const RootStack = () => {
           <Stack.Screen
             name="VERIFICATION_CODE_SCREEN"
             component={VerificationCodeScreen}
+          />
+          <Stack.Screen
+            name="CHANGE_PASSWORD_SCREEN"
+            component={ChangePasswordScreen}
           />
           <Stack.Screen name="VOCAB_SCREEN" component={VocabScreen} />
           <Stack.Screen

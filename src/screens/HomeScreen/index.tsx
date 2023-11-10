@@ -1,20 +1,25 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Block, Container, Image, Text } from '@components'
-import { useTheme } from '@themes'
-import { Icon } from '@assets'
+import { FadeIn } from 'react-native-reanimated'
 import { FlatList, ListRenderItemInfo, Pressable, View } from 'react-native'
+
 import {
+  NewsItem,
+  ToolItem,
   DailyTask,
+  NewsProgress,
   LessonProgressItem,
   LessonProgressItemProps,
-  NewsItem,
-  NewsItemProps,
-  NewsProgress,
-  NewsProgressProps,
-  ToolItem,
 } from './components'
+import { Icon } from '@assets'
+import { navigate } from '@navigation'
+import { useAppSelector } from '@hooks'
+import { LoadingScreen } from '@screens'
+import { colorTopic, useTheme } from '@themes'
+import { getUserData } from '@redux/selectors'
+import { getDaySession } from '@utils/dateUtils'
+import { PostServices } from '@services/PostService'
+import { Block, BlockAnimated, Container, Image, Text } from '@components'
 
 const learningData = [
   {
@@ -85,24 +90,53 @@ const newsData = [
     progress: 50,
   },
 ]
+
+export const parsePostData = (
+  postData: PostResponse[],
+  colors: string[],
+): (PostResponse & { textColor: string })[] => {
+  const colorValue: Record<string, string> = {}
+
+  postData.forEach((item) => {
+    const isInclude = Object.keys(colorValue).includes(item.topic.name)
+    if (!isInclude) {
+      colorValue[item.topic.name] =
+        colors[Math.floor(Math.random() * colors.length)]
+    }
+  })
+
+  return postData.map((item) => {
+    return {
+      ...item,
+      textColor: colorValue[item.topic.name],
+    }
+  })
+}
+
 export const HomeScreen = () => {
   const [t] = useTranslation()
-  const dispatch = useDispatch()
   const { colors, normalize } = useTheme()
+  const [isLoading, setIsLoading] = React.useState(true)
+  const userData = useAppSelector(getUserData)
+  const [postData, setPostData] = React.useState<
+    (PostResponse & { textColor: string })[]
+  >([])
+
   const onPressDictionary = () => {}
   const onPressVideo = () => {}
   const onLearningWatchMore = () => {}
+
   const renderLessonProgressItem = ({
     index,
     item,
   }: ListRenderItemInfo<LessonProgressItemProps>) => {
     return (
       <View
+        key={`item-${index}`}
         style={[
           index === 0 ? { marginStart: normalize.h(20) } : {},
           { flexDirection: 'row', alignItems: 'center' },
         ]}
-        key={`item-${index}`}
       >
         <LessonProgressItem
           lessonLabel={item.lessonLabel}
@@ -129,10 +163,11 @@ export const HomeScreen = () => {
       </View>
     )
   }
+
   const renderNewsProgressItem = ({
     index,
     item,
-  }: ListRenderItemInfo<NewsProgressProps>) => {
+  }: ListRenderItemInfo<PostResponse & { textColor: string }>) => {
     return (
       <View
         style={[
@@ -144,10 +179,11 @@ export const HomeScreen = () => {
         key={`item-${index}`}
       >
         <NewsProgress
+          progress={50}
           title={item.title}
-          image={item.image}
-          progress={item.progress}
-          index={index}
+          topic={item.topic.name}
+          topicColor={item.textColor}
+          image={item.attachment[0].src || ''}
         />
         {index === newsData.length - 1 && (
           <Pressable onPress={onLearningWatchMore}>
@@ -164,139 +200,169 @@ export const HomeScreen = () => {
       </View>
     )
   }
+
   const renderNewsItem = ({
     index,
     item,
-  }: ListRenderItemInfo<NewsItemProps>) => {
+  }: ListRenderItemInfo<PostResponse & { textColor: string }>) => {
     return (
-      <View
+      <Pressable
+        key={`item-${index}`}
+        onPress={() => navigate('DETAIL_POST_SCREEN', { data: item })}
         style={[
           { marginHorizontal: normalize.h(20) },
           index === newsData.length - 1
             ? { marginBottom: normalize.v(19) }
             : {},
         ]}
-        key={`item-${index}`}
       >
-        <NewsItem title={item.title} image={item.image} />
-      </View>
+        <NewsItem
+          title={item.title}
+          topic={item.topic?.name}
+          createAt={item.createdAt}
+          textColor={item.textColor}
+          image={item.attachment[0].src || ''}
+        />
+      </Pressable>
     )
   }
+
+  const callPost = async () => {
+    try {
+      const res = await PostServices.getAllPost()
+      setPostData(parsePostData(res.data.data.posts, colorTopic))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  React.useEffect(() => {
+    setIsLoading(false)
+    callPost()
+  }, [])
+
+  if (isLoading || postData.length <= 0) {
+    return <LoadingScreen />
+  }
+
   return (
     <Container hasScroll>
-      <Block flex backgroundColor={colors.white} paddingHorizontal={20}>
-        <Block row alignCenter space="between">
-          <Block row>
+      <BlockAnimated flex entering={FadeIn}>
+        <Block flex backgroundColor={colors.white} paddingHorizontal={20}>
+          <Block row alignCenter space="between">
             <Block row>
-              <Image
-                width={45}
-                height={45}
-                radius={22.5}
-                source={{
-                  uri: 'https://i.pinimgVo.com/736x/9b/88/51/9b88513699abae664fc34b23c3d0a6d3.jpg',
-                }}
-                resizeMode="cover"
-              />
-              <Block justifyCenter marginLeft={8}>
-                <Text size={'h4'} fontFamily="semiBold" color={colors.black}>
-                  Hey, Duy Vo
-                </Text>
-                <Block row alignCenter marginTop={4}>
-                  <Text size={'h5'} fontFamily="semiBold">
-                    Chào buổi sáng
+              <Block row>
+                <Image
+                  width={45}
+                  height={45}
+                  radius={22.5}
+                  resizeMode="cover"
+                  source={{
+                    uri: userData.avatar.src,
+                  }}
+                />
+                <Block justifyCenter marginLeft={8}>
+                  <Text size={'h4'} fontFamily="semiBold" color={colors.black}>
+                    Hey, {userData.fullName}
                   </Text>
-                  <Icon
-                    state="Tree"
-                    fill={colors.greyPrimary}
-                    style={{ marginStart: normalize.h(3) }}
-                  />
+                  <Block row alignCenter marginTop={4}>
+                    <Text size={'h5'} fontFamily="semiBold">
+                      {getDaySession()}
+                    </Text>
+                    <Icon
+                      state="Tree"
+                      fill={colors.greyPrimary}
+                      style={{ marginStart: normalize.h(3) }}
+                    />
+                  </Block>
                 </Block>
               </Block>
             </Block>
+            <Icon state="Fire" />
           </Block>
-          <Icon state="Fire" />
+          <Block marginTop={10}>
+            <DailyTask
+              icon="LearnBook"
+              taskName="Học bài 15 phút"
+              finishedTask={0}
+              totalTask={5}
+              onPress={() => {
+                console.log('streak screen')
+              }}
+            />
+          </Block>
+          <Block marginTop={17}>
+            <Text size={'h2'} fontFamily="bold" color={colors.black}>
+              {t('tools')}
+            </Text>
+            <Block row marginTop={18}>
+              <ToolItem
+                icon="DictionaryColorized"
+                name={t('dictionary')}
+                onPress={onPressDictionary}
+              />
+              <View style={{ marginStart: normalize.h(28) }}>
+                <ToolItem icon="Video" name="Video" onPress={onPressVideo} />
+              </View>
+            </Block>
+          </Block>
         </Block>
-        <Block marginTop={10}>
-          <DailyTask
-            icon="LearnBook"
-            taskName="Học bài 15 phút"
-            finishedTask={0}
-            totalTask={5}
-            onPress={() => {
-              console.log('streak screen')
-            }}
+        <Block marginTop={17}>
+          <Text
+            size={'h2'}
+            fontFamily="bold"
+            color={colors.black}
+            marginLeft={20}
+          >
+            {t('learning')}
+          </Text>
+          <FlatList
+            horizontal
+            data={learningData}
+            renderItem={renderLessonProgressItem}
+            style={{ marginTop: normalize.v(10) }}
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(_, index) => `item-${index}`}
           />
         </Block>
         <Block marginTop={17}>
-          <Text size={'h2'} fontFamily="bold" color={colors.black}>
-            {t('tools')}
+          <Text
+            size={'h2'}
+            fontFamily="bold"
+            color={colors.black}
+            marginLeft={20}
+          >
+            {t('watched')}
           </Text>
-          <Block row marginTop={18}>
-            <ToolItem
-              icon="DictionaryColorized"
-              name={t('dictionary')}
-              onPress={onPressDictionary}
-            />
-            <View style={{ marginStart: normalize.h(28) }}>
-              <ToolItem icon="Video" name="Video" onPress={onPressVideo} />
-            </View>
-          </Block>
+          <FlatList
+            horizontal
+            data={postData}
+            renderItem={renderNewsProgressItem}
+            showsHorizontalScrollIndicator={false}
+            style={{ marginTop: normalize.v(10) }}
+            keyExtractor={(_, index) => `item-${index}`}
+          />
         </Block>
-      </Block>
-      <Block marginTop={17}>
-        <Text
-          size={'h2'}
-          fontFamily="bold"
-          color={colors.black}
-          marginLeft={20}
-        >
-          {t('learning')}
-        </Text>
-        <FlatList
-          data={learningData}
-          keyExtractor={(_, index) => `item-${index}`}
-          renderItem={renderLessonProgressItem}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={{ marginTop: normalize.v(10) }}
-        />
-      </Block>
-      <Block marginTop={17}>
-        <Text
-          size={'h2'}
-          fontFamily="bold"
-          color={colors.black}
-          marginLeft={20}
-        >
-          {t('watched')}
-        </Text>
-        <FlatList
-          data={newsData}
-          keyExtractor={(_, index) => `item-${index}`}
-          renderItem={renderNewsProgressItem}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={{ marginTop: normalize.v(10) }}
-        />
-      </Block>
-      <Block marginTop={17}>
-        <Text
-          size={'h2'}
-          fontFamily="bold"
-          color={colors.black}
-          marginLeft={20}
-        >
-          {t('news')}
-        </Text>
-        <FlatList
-          data={newsData}
-          keyExtractor={(_, index) => `item-${index}`}
-          renderItem={renderNewsItem}
-          scrollEnabled={false}
-          showsHorizontalScrollIndicator={false}
-          style={{ marginTop: normalize.v(10) }}
-        />
-      </Block>
+        <Block marginTop={17}>
+          <Text
+            size={'h2'}
+            marginLeft={20}
+            fontFamily="bold"
+            marginBottom={-10}
+            color={colors.black}
+          >
+            {t('news')}
+          </Text>
+          <FlatList
+            data={postData}
+            renderItem={renderNewsItem}
+            scrollEnabled={false}
+            style={{ marginTop: normalize.v(10) }}
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(_, index) => `item-${index}`}
+          />
+        </Block>
+      </BlockAnimated>
     </Container>
   )
 }
