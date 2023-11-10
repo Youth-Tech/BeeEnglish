@@ -1,11 +1,14 @@
+import { AxiosRequestHeaders } from 'axios'
+
 import { DefaultResponse } from '@services'
 import APIUtils from '@utils/AxiosInstance'
-import { AxiosRequestHeaders } from 'axios'
 
 const enum endPoints {
   getUserData = 'user/me',
   updateUserAvatar = '/user/me',
   updateProgressLearning = '/user/update-progress-learning',
+  getStreak = '/user/get-streaks',
+  updateStreak = '/user/update-streak',
 }
 
 export interface UserData {
@@ -53,6 +56,18 @@ export interface UpdateProgressLearningResponse extends DefaultResponse {
   }
 }
 
+export interface GetStreakRequest {
+  start: string
+  end: string
+}
+
+export interface GetStreakResponse extends DefaultResponse {
+  data: {
+    streaks: string[]
+    streakCount: number
+  }
+}
+
 export const UserService = {
   getUserData(token: string) {
     return APIUtils.get<UserStateResponse>(endPoints.getUserData, {
@@ -71,5 +86,15 @@ export const UserService = {
       endPoints.updateProgressLearning,
       body,
     )
+  },
+
+  getStreak(params: GetStreakRequest) {
+    return APIUtils.get<GetStreakResponse>(endPoints.getStreak, undefined, {
+      params,
+    })
+  },
+
+  updateStreak() {
+    return APIUtils.patch<GetStreakResponse>(endPoints.updateStreak, {})
   },
 } as const

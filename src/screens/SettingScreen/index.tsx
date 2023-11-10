@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, ToastAndroid } from 'react-native'
 
 import {
-  LangType,
   setAuthState,
   setUserState,
   defaultAuthState,
@@ -11,12 +10,13 @@ import {
   updateConfigAction,
 } from '@redux/reducers'
 import { Icon } from '@assets'
+import {LangType} from "@utils/helpers";
 import { getLangConfig } from '@redux/selectors'
-import { goBack, navigate, navigateAndReset } from '@navigation'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { makeStyles, normalize, useTheme } from '@themes'
 import { Block, Container, Modal, Text } from '@components'
 import { ModalFunction } from '@components/bases/Modal/type'
+import { goBack, navigate, navigateAndReset } from '@navigation'
 
 export const SettingScreen = () => {
   const styles = useStyle()

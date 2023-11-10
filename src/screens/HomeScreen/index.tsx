@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { FadeIn } from 'react-native-reanimated'
+import { FadeIn, FadeOut } from 'react-native-reanimated'
 import { FlatList, ListRenderItemInfo, Pressable, View } from 'react-native'
 
 import {
@@ -13,12 +13,13 @@ import {
 } from './components'
 import { Icon } from '@assets'
 import { navigate } from '@navigation'
-import { useAppSelector } from '@hooks'
 import { LoadingScreen } from '@screens'
 import { colorTopic, useTheme } from '@themes'
-import { getUserData } from '@redux/selectors'
+import { getStreakThunk } from '@redux/actions'
 import { getDaySession } from '@utils/dateUtils'
 import { PostServices } from '@services/PostService'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { getStreak, getUserData } from '@redux/selectors'
 import { Block, BlockAnimated, Container, Image, Text } from '@components'
 
 const learningData = [
@@ -114,10 +115,14 @@ export const parsePostData = (
 }
 
 export const HomeScreen = () => {
+  const dispatch = useAppDispatch()
+  const hasStreak = useAppSelector(getStreak).streakCount
+
+  const userData = useAppSelector(getUserData)
   const [t] = useTranslation()
   const { colors, normalize } = useTheme()
+
   const [isLoading, setIsLoading] = React.useState(true)
-  const userData = useAppSelector(getUserData)
   const [postData, setPostData] = React.useState<
     (PostResponse & { textColor: string })[]
   >([])
@@ -239,6 +244,9 @@ export const HomeScreen = () => {
   React.useEffect(() => {
     setIsLoading(false)
     callPost()
+
+    //get streak
+    dispatch(getStreakThunk())
   }, [])
 
   if (isLoading || postData.length <= 0) {
@@ -278,7 +286,11 @@ export const HomeScreen = () => {
                 </Block>
               </Block>
             </Block>
-            <Icon state="Fire" />
+            {hasStreak > 3 && (
+              <BlockAnimated entering={FadeIn} exiting={FadeOut}>
+                <Icon state="Fire" />
+              </BlockAnimated>
+            )}
           </Block>
           <Block marginTop={10}>
             <DailyTask
@@ -286,9 +298,7 @@ export const HomeScreen = () => {
               taskName="Học bài 15 phút"
               finishedTask={0}
               totalTask={5}
-              onPress={() => {
-                console.log('streak screen')
-              }}
+              onPress={() => navigate('STREAK_SCREEN')}
             />
           </Block>
           <Block marginTop={17}>

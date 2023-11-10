@@ -8,8 +8,10 @@ export interface StreakDayProps {
   date: string
   type: TStreakDay
 }
-const StreakDay: React.FC<StreakDayProps> = ({ date, type }) => {
+export const StreakDay: React.FC<StreakDayProps> = ({ date, type }) => {
   const { colors } = useTheme()
+  const _date = new Date(date)
+
   return (
     <Block
       width={30}
@@ -29,7 +31,9 @@ const StreakDay: React.FC<StreakDayProps> = ({ date, type }) => {
         fontFamily={'semiBold'}
         color={type === 'isAttendance' ? colors.white : colors.black}
       >
-        {date}
+        {_date.toLocaleDateString(undefined, {
+          day:'2-digit'
+        })}
       </Text>
       {type === 'isAttendance' && (
         <Icon
@@ -42,4 +46,3 @@ const StreakDay: React.FC<StreakDayProps> = ({ date, type }) => {
     </Block>
   )
 }
-export default StreakDay
