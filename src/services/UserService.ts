@@ -52,7 +52,9 @@ export interface UpdateProgressLearningResponse extends DefaultResponse {
     updatedAt: string
   }
 }
-
+export interface BookmarkWordResponse extends DefaultResponse {
+  data: UserData
+}
 export const UserService = {
   getUserData(token: string) {
     return APIUtils.get<UserStateResponse>(endPoints.getUserData, {
@@ -70,6 +72,12 @@ export const UserService = {
     return APIUtils.patch<UpdateProgressLearningResponse>(
       endPoints.updateProgressLearning,
       body,
+    )
+  },
+  bookmarkWord(wordId: string) {
+    return APIUtils.patch<BookmarkWordResponse>(
+      `/user/bookmark-word/${wordId}`,
+      {},
     )
   },
 } as const

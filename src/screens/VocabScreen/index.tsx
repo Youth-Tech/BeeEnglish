@@ -18,7 +18,7 @@ import { FlipVocabularyProps } from '@components/common/VocabularyWord/component
 import { ModalFunction } from '@components/bases/Modal/type'
 import { navigate, RootStackParamList } from '@navigation'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { KnowledgeService, Word } from '@services'
+import { KnowledgeService, ReviewService, UserService, Word } from '@services'
 import { LoadingScreen } from '@screens/LoadingScreen'
 
 type VocabScreenProps = NativeStackScreenProps<
@@ -69,9 +69,55 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
     console.log('hey')
     leaveModal.current?.openModal()
   }
+  const callAPIBookmark = async (wordId: string) => {
+    try {
+      const response = await UserService.bookmarkWord(wordId)
+      console.log(response.data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const callAPIWordReview = async (wordId: string, difficulty: string) => {
+    try {
+      const response = await ReviewService.toggleWordReview({
+        word: wordId,
+        difficulty: difficulty,
+      })
+      console.log(response.data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const callMultipleAPIBookmark = async () => {
+    const promises = wordData.map((item) => {
+      if (item.isBookmarked === true) {
+        return callAPIBookmark(item._id)
+      }
+    })
+    try {
+      const results = await Promise.all(promises)
+      console.log('Results' + results)
+    } catch (e) {
+      console.log('error' + e)
+    }
+  }
+  const callMultipleWordReview = async () => {
+    const promises = wordData.map((item) => {
+      return callAPIWordReview(item._id, item.difficulty)
+    })
+    try {
+      const results = await Promise.all(promises)
+      console.log('Results' + results)
+    } catch (e) {
+      console.log(e)
+    }
+  }
   const handleNextVocab = () => {
     if (currentPos + 1 > wordData.length - 1) {
       navigate('CONGRATULATION_SCREEN')
+      //TODO: handle bookmark here
+      callMultipleAPIBookmark()
+      callMultipleWordReview()
       return
     }
     setCurrentPos((prev) => prev + 1)
@@ -100,7 +146,6 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
   const callApi = async () => {
     try {
       const response = await KnowledgeService.getWordByLessonId(lessonId)
-      console.log(formatData(response.data.data.words))
       setWordData(formatData(response.data.data.words))
     } catch (e) {
       console.log(e)

@@ -16,9 +16,9 @@ import Animated, {
 } from 'react-native-reanimated'
 
 export enum Difficulty {
-  'easy' = 0,
-  'medium' = 1,
-  'hard' = 2,
+  'easy' = 'easy',
+  'medium' = 'medium',
+  'hard' = 'hard',
 }
 const AnimatedBlock = Animated.createAnimatedComponent(Block)
 
@@ -228,7 +228,7 @@ export const VocabularyWord = React.forwardRef<
                     const tempData = data
                     console.log(tempData.difficulty)
                     tempData.difficulty =
-                      difficulties[Number(value) as Difficulty].value
+                      difficulties[value as Difficulty].value
                     setData(tempData)
                     forceUpdate()
                     selectModalRef.current?.dismissModal()
@@ -237,9 +237,9 @@ export const VocabularyWord = React.forwardRef<
                   <Text
                     size={'h3'}
                     fontFamily={'bold'}
-                    color={difficulties[Number(value) as Difficulty].color}
+                    color={difficulties[value as Difficulty].color}
                   >
-                    {difficulties[Number(value) as Difficulty].label}
+                    {difficulties[value as Difficulty].label}
                   </Text>
                 </Pressable>
               ))}
