@@ -51,9 +51,7 @@ const authSlice = createSlice({
         state.forgotPasswordToken = action.payload.data
       })
 
-      .addCase(signUp.fulfilled, (state) => {
-        state.isSignedIn = true
-      })
+      .addCase(signUp.fulfilled, (state) => {})
       .addCase(login.fulfilled, (state, action) => {
         action.payload &&
           TokenService.setAccessToken(action.payload.data.tokens.accessToken)
@@ -63,7 +61,7 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         console.log(action.payload)
-        if (action.payload?.code == 403) {
+        if (action.payload?.subMessage == 'PLEASE_VERIFY_EMAIL_403') {
           state.isResendVerifyEmail = true
         }
       })

@@ -27,7 +27,7 @@
     "forgot_password": "Forgot password",
     "email": "Email",
     "is_required": " is required",
-    "is_invalid": " is invalidate",
+    "is_invalid": " must have at least 1 capital, 1 normal character and 1 number",
     "is_too_short": " must be at least 8 characters",
     "is_too_long": " must be at most 30 characters",
     "is_full_name": " must be at least 3 characters",
