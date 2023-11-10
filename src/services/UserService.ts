@@ -25,7 +25,7 @@ export interface UserData {
   postBookmarks: []
   role: string
   score: number
-  streak: number
+  streaks: string[]
   username: string
   wordBookmarks: []
   provider: string

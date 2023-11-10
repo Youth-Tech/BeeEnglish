@@ -1,10 +1,12 @@
 import {
   Keyboard,
   Pressable,
-  DocumentSelectionState,
   KeyboardAvoidingView,
+  DocumentSelectionState,
 } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { useEffect, useState } from 'react'
+
 import {
   Text,
   Block,
@@ -16,18 +18,30 @@ import {
 } from '@components'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
-import { goBack, navigate } from '@navigation'
-import { useTranslation } from 'react-i18next'
-import { setAuthState, setEmailSignIn } from '@redux/reducers'
-import { signUp } from '@redux/actions/auth.action'
-import { useAppDispatch, useAppSelector } from '@hooks'
+import { Provider } from '@configs'
+import { goBack, navigate, replace } from '@navigation'
 import { useValidateInput } from '@utils/validateInput'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { setAuthState, setEmailSignIn } from '@redux/reducers'
+import { loginOAuthThunk, signUp } from '@redux/actions/auth.action'
 
 export const RegisterScreen = () => {
   const dispatch = useAppDispatch()
   const validate = useValidateInput()
+
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
+
+  const isSignedIn = useAppSelector((state) => state.root.auth.isSignedIn)
+  const isSignedInOAuth = useAppSelector(
+    (state) => state.root.auth.isSignedInOAuth,
+  )
+
+  const fullNameInputRef = React.useRef<DocumentSelectionState>()
+  const emailInputRef = React.useRef<DocumentSelectionState>()
+  const passwordInputRef = React.useRef<DocumentSelectionState>()
+  const confirmPasswordInputRef = React.useRef<DocumentSelectionState>()
+
   const [email, setEmail] = React.useState('')
   const [fullName, setFullName] = React.useState('')
   const [password, setPassword] = React.useState('')
@@ -37,13 +51,15 @@ export const RegisterScreen = () => {
   const [disabledLogin, setDisabledLogin] = React.useState(true)
   const [confirmPassword, setConfirmPassword] = React.useState('')
   const [checkConfirmPass, setCheckConfirmPass] = useState(true)
-  const fullNameInputRef = React.useRef<DocumentSelectionState>()
-  const emailInputRef = React.useRef<DocumentSelectionState>()
-  const passwordInputRef = React.useRef<DocumentSelectionState>()
-  const confirmPasswordInputRef = React.useRef<DocumentSelectionState>()
-  const isSignedIn = useAppSelector((state) => state.root.auth.isSignedIn)
-  const handleLoginGoogle = () => {}
-  const handleLoginFacebook = () => {}
+
+  const handleLoginGoogle = () => {
+    dispatch(loginOAuthThunk({ providerId: Provider.google }))
+  }
+
+  const handleLoginFacebook = () => {
+    dispatch(loginOAuthThunk({ providerId: Provider.google }))
+  }
+
   useEffect(() => {
     email.length > 0 && password.length >= 6 && fullName.length >= 3
       ? setDisabledLogin(false)
@@ -132,10 +148,12 @@ export const RegisterScreen = () => {
 
   useEffect(() => {
     // console.log("Email: ", emailUser, "isVerified: ", isVerified)
-    if (isSignedIn) {
+    if (isSignedIn && !isSignedInOAuth) {
       navigate('VERIFICATION_CODE_SCREEN')
+    } else if (isSignedInOAuth) {
+      replace('BOTTOM_TAB')
     }
-  }, [isSignedIn])
+  }, [isSignedIn, isSignedInOAuth])
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
