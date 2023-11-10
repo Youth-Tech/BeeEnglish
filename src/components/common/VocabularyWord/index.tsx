@@ -17,9 +17,8 @@ import Animated, {
 
 export enum Difficulty {
   'easy' = 0,
-  'simple' = 1,
-  'normal' = 2,
-  'hard' = 4,
+  'medium' = 1,
+  'hard' = 2,
 }
 const AnimatedBlock = Animated.createAnimatedComponent(Block)
 
@@ -35,15 +34,10 @@ export const VocabularyWord = React.forwardRef<
       value: Difficulty.easy,
       color: colors.greenLighter,
     },
-    [Difficulty.simple]: {
-      label: i18next.t('simple'),
-      value: Difficulty.simple,
+    [Difficulty.medium]: {
+      label: i18next.t('medium'),
+      value: Difficulty.medium,
       color: colors.orangeThick,
-    },
-    [Difficulty.normal]: {
-      label: i18next.t('normal'),
-      value: Difficulty.normal,
-      color: colors.bluePrimary,
     },
     [Difficulty.hard]: {
       label: i18next.t('hard'),
@@ -97,19 +91,18 @@ export const VocabularyWord = React.forwardRef<
     setData(tempData)
     forceUpdate()
   }
+
   return (
     <Block flex>
       <AnimatedBlock style={[rTranslate]}>
         <Block paddingTop={15} alignCenter>
           <Block marginTop={15}>
             <FlipVocabulary
-              id={data.id}
+              _id={data._id}
+              senses={data.senses}
               english={data.english}
-              vietnamese={data.vietnamese}
+              attachments={data.attachments}
               pronunciation={data.pronunciation}
-              exampleEnglish={data.exampleEnglish}
-              exampleVietnamese={data.exampleVietnamese}
-              attachment={data.attachment}
               isBookmarked={data.isBookmarked}
               onPressBookmark={onPressBookmark}
               onPressMoreExample={onPressMoreExample}
@@ -197,18 +190,10 @@ export const VocabularyWord = React.forwardRef<
               </Block>
               <Block row marginTop={8}>
                 <Text size={'h3'} fontFamily={'bold'}>
-                  {t('normal')}:
+                  {t('medium')}:
                 </Text>
                 <Text marginLeft={3} size={'h3'} fontFamily={'regular'}>
                   {t('review_after_day', { val: 1 })}
-                </Text>
-              </Block>
-              <Block row marginTop={8}>
-                <Text size={'h3'} fontFamily={'bold'}>
-                  {t('simple')}:
-                </Text>
-                <Text marginLeft={3} size={'h3'} fontFamily={'regular'}>
-                  {t('review_after_week', { val: 1 })}
                 </Text>
               </Block>
               <Block row marginTop={8}>
@@ -241,6 +226,7 @@ export const VocabularyWord = React.forwardRef<
                   android_ripple={{ color: colors.borderColor }}
                   onPress={() => {
                     const tempData = data
+                    console.log(tempData.difficulty)
                     tempData.difficulty =
                       difficulties[Number(value) as Difficulty].value
                     setData(tempData)

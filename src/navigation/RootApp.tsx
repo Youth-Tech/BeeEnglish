@@ -15,6 +15,7 @@ import RootStack from './RootStack'
 import { useAppSelector } from '@hooks'
 import { Block, Text } from '@components'
 import { getIsLoading } from '@redux/selectors'
+import Toast from 'react-native-toast-message'
 
 export const RootApp = () => {
   const [netInfo, setNetInfo] = React.useState<Types.NetInfoState>({
@@ -97,6 +98,7 @@ export const RootApp = () => {
         </Block>
       )}
       <RootStack />
+      <Toast position={'bottom'} bottomOffset={20} />
     </>
   )
 }

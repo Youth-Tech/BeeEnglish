@@ -111,8 +111,7 @@
     "word_difficulty": "Word difficulty",
     "choose_word_difficulty": "Choose a word whose difficulty level is appropriate for you",
     "hard": "Hard",
-    "normal": "Normal",
-    "simple": "Simple",
+    "medium": "Medium",
     "easy": "Easy",
     "review_after_minutes": "Review the word after {{val}} minutes",
     "review_after_day": "Review the word after {{val}} day",
@@ -128,6 +127,20 @@
     "reward": "Reward",
     "already_have_or_create_account": "Already have or create an account",
     "continue_as_guest": "Continue as a guest",
-    "loading_text": "A bee is finding honey for you, please wait !!"
+    "loading_text": "A bee is finding honey for you, please wait !!",
+    "change_pass_success": "Change password successfully!",
+    "error_occured": "An error occured",
+    "fail_authenticate": "Failed to authenticate",
+    "please_verify_email": "Please verify your email",
+    "wrong_password": "Wrong password",
+    "email_not_available": "Email is not available",
+    "invalid_code": "Invalid OTP code",
+    "invalid_auth": "Invalid authenticated information",
+    "log_out_failed": "Failed to log out",
+    "no_permission": "You have no permission",
+    "upload_failed": "Failed to upload",
+    "resend_limit": "Resend is limited",
+    "user_not_found": "User not found"
+
   }
 }

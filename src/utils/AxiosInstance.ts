@@ -5,6 +5,7 @@ import axios, {
 } from 'axios'
 import { BASE_URL } from '@configs'
 import { TokenService } from '@services'
+import { handleErrorMessage } from '@utils/errorUtils'
 
 export interface RefreshTokenRes {
   message: string
@@ -78,7 +79,10 @@ const AxiosInstance = ({
           return Promise.reject(_error)
         }
       }
-
+      handleErrorMessage(
+        error?.response?.data.subMessage,
+        error?.response?.data.message,
+      )
       return Promise.reject(error)
     },
   ) // callback

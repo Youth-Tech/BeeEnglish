@@ -34,13 +34,42 @@ export interface Quiz {
   correctAnswer?: string
   attachment?: Attachment
 }
-
+export enum EWord {
+  Noun = 'noun',
+  Verb = 'verb',
+  Adjective = 'adjective',
+  Adverb = 'adverb',
+  Pronoun = 'pronoun',
+  Preposition = 'preposition',
+  Conjunction = 'conjunction',
+  Interjection = 'interjection',
+}
+export interface Senses {
+  _id: string
+  type: EWord
+  vietnamese: string
+  exampleEnglish: string
+  exampleVietnamese: string
+  synonyms: Array<string>
+  antonyms: Array<string>
+}
+export interface Word {
+  _id: string
+  english: string
+  pronunciation: string
+  attachments: Attachment[]
+  senses: Array<Senses>
+}
 export interface GetQuizByLessonIdRes extends DefaultResponse {
   data: {
     quizzes: Quiz[]
   }
 }
-
+export interface GetWordByLessonIdRes extends DefaultResponse {
+  data: {
+    words: Word[]
+  }
+}
 export const KnowledgeService = {
   getChapterAndLesson: () => {
     return ApiUtil.get<GetChapterAndLessonRes>(
@@ -51,6 +80,11 @@ export const KnowledgeService = {
   getQuizByLessonId: (lessonId: string) => {
     return ApiUtil.get<GetQuizByLessonIdRes>(
       `/knowledge/quiz/${lessonId}/get-quizzes-by-lesson?page=1&limit=20`,
+    )
+  },
+  getWordByLessonId: (lessonId: string) => {
+    return ApiUtil.get<GetWordByLessonIdRes>(
+      `/knowledge/word/${lessonId}/get-words-by-lesson`,
     )
   },
 } as const

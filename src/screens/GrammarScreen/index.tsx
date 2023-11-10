@@ -28,7 +28,7 @@ import { QuestionType } from './constants'
 import { normalize, useTheme } from '@themes'
 import { KnowledgeService, Quiz } from '@services'
 import { ModalFunction } from '@components/bases/Modal/type'
-import { RootStackParamList, navigateAndReset } from '@navigation'
+import { RootStackParamList, navigateAndReset, goBack } from '@navigation'
 
 export type GrammarScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -343,7 +343,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
         ref={leaveModalRef}
         onPressApprove={() => {
           leaveModalRef.current?.dismissModal()
-          navigateAndReset([{ name: 'BOTTOM_TAB' }], 0)
+          goBack()
         }}
         onPressCancel={() => {
           leaveModalRef.current?.dismissModal()
