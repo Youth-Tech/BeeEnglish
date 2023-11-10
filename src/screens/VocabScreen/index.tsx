@@ -1,22 +1,22 @@
 import React, { useRef } from 'react'
-import {
-  Block,
-  Container,
-  Difficulty,
-  LeaveProcessModal,
-  Progress,
-  ShadowButton,
-  Text,
-  VocabularyWord,
-} from '@components'
+import { useTranslation } from 'react-i18next'
 
+import {
+  Text,
+  Block,
+  Progress,
+  Container,
+  ShadowButton,
+  Difficulty,
+  VocabularyWord,
+  LeaveProcessModal,
+} from '@components'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
-import { useTranslation } from 'react-i18next'
-import { VocabularyFunc } from '@components/common/VocabularyWord/type'
-import { FlipVocabularyProps } from '@components/common/VocabularyWord/components/type'
-import { ModalFunction } from '@components/bases/Modal/type'
 import { navigate } from '@navigation'
+import { VocabularyFunc } from '@components/common/VocabularyWord/type'
+import { ModalFunction } from '@components/bases/Modal/type'
+import { FlipVocabularyProps } from '@components/common/VocabularyWord/components/type'
 
 interface VocabScreenProps {}
 
@@ -77,7 +77,7 @@ const vocabularyData: FlipVocabularyProps[] = [
     isBookmarked: false,
   },
 ]
-export const VocabScreen: React.FC<VocabScreenProps> = (props) => {
+export const VocabScreen: React.FC<VocabScreenProps> = (_) => {
   const { t } = useTranslation()
   const { colors } = useTheme()
   const [data, setData] = React.useState({})

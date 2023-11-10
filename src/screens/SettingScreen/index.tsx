@@ -10,6 +10,7 @@ import {
   updateConfigAction,
 } from '@redux/reducers'
 import { Icon } from '@assets'
+import {TokenService} from "@services";
 import {LangType} from "@utils/helpers";
 import { getLangConfig } from '@redux/selectors'
 import { useAppDispatch, useAppSelector } from '@hooks'
@@ -41,6 +42,7 @@ export const SettingScreen = () => {
   const onPressLogout = () => {
     dispatch(setAuthState(defaultAuthState))
     dispatch(setUserState(defaultUserState))
+    TokenService.clearToken()
     navigateAndReset([{ name: 'LOGIN_SCREEN' }], 0)
   }
 

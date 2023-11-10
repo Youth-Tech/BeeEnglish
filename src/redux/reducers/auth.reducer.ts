@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import {
   login,
   signUp,
+  loginOAuthThunk,
   resendVerifyEmail,
   verifyForgotPassword,
 } from '@redux/actions/auth.action'
@@ -17,6 +18,7 @@ export type AuthState = {
   forgotPasswordToken?: string
   isResendVerifyEmail?: boolean
   isSignedIn?: boolean
+  isSignedInOAuth?: boolean
 }
 
 export const defaultAuthState: AuthState = {
@@ -27,6 +29,7 @@ export const defaultAuthState: AuthState = {
   forgotPasswordToken: undefined,
   isResendVerifyEmail: false,
   isSignedIn: false,
+  isSignedInOAuth: false
 }
 
 const authSlice = createSlice({
@@ -69,6 +72,14 @@ const authSlice = createSlice({
         }
       })
       .addCase(resendVerifyEmail.fulfilled, () => {})
+      .addCase(loginOAuthThunk.fulfilled, (state, action) => {
+        action.payload &&
+          TokenService.setAccessToken(action.payload.data.tokens.accessToken)
+        action.payload &&
+          TokenService.setRefreshToken(action.payload.data.tokens.refreshToken)
+        state.isSignedIn = true
+        state.isSignedInOAuth = true
+      })
   },
 })
 
