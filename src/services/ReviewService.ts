@@ -8,11 +8,28 @@ export interface ToggleWordRequest {
 export interface ToggleWordResponse extends DefaultResponse {
   data: Word
 }
+export interface WordReviews {
+  _id: string
+  user: string
+  word: Word
+  difficulty: string
+  stage: number
+}
+export interface GetAllWordsResponse extends DefaultResponse {
+  data: {
+    wordsReview: WordReviews[]
+  }
+}
 const endPoints = {
   toggleWordReview: '/word-review/toggle',
+  getAllWordReviews: '/word-review/get-all',
 }
+
 export const ReviewService = {
   toggleWordReview(body: ToggleWordRequest) {
     return ApiUtil.post<ToggleWordResponse>(endPoints.toggleWordReview, body)
+  },
+  getAllWordReviews() {
+    return ApiUtil.get<GetAllWordsResponse>(endPoints.getAllWordReviews)
   },
 } as const

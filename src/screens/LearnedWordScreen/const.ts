@@ -3,7 +3,7 @@ export interface dataProps {
   word: string
   wordType: string
   translation: string
-  difficulty: 'easy' | 'normal' | 'hard'
+  difficulty: 'easy' | 'medium' | 'hard'
 }
 export const data: dataProps[] = [
   {

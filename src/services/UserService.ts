@@ -9,6 +9,7 @@ const enum endPoints {
   updateProgressLearning = '/user/update-progress-learning',
   getStreak = '/user/get-streaks',
   updateStreak = '/user/update-streak',
+  getWordsBookmark = '/user/get-words-bookmark',
 }
 
 export interface UserData {
@@ -104,5 +105,8 @@ export const UserService = {
 
   updateStreak() {
     return APIUtils.patch<GetStreakResponse>(endPoints.updateStreak, {})
+  },
+  getWordsBookmark() {
+    return APIUtils.get(endPoints.getWordsBookmark)
   },
 } as const
