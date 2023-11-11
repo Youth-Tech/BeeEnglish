@@ -1,6 +1,6 @@
 import { AxiosRequestHeaders } from 'axios'
 
-import { DefaultResponse } from '@services'
+import { DefaultResponse, Word } from '@services'
 import APIUtils from '@utils/AxiosInstance'
 
 const enum endPoints {
@@ -71,7 +71,11 @@ export interface GetStreakResponse extends DefaultResponse {
     streakCount: number
   }
 }
-
+export interface GetWordsBookmarkResponse extends DefaultResponse {
+  data: {
+    words: Word[]
+  }
+}
 export const UserService = {
   getUserData(token: string) {
     return APIUtils.get<UserStateResponse>(endPoints.getUserData, {
@@ -107,6 +111,6 @@ export const UserService = {
     return APIUtils.patch<GetStreakResponse>(endPoints.updateStreak, {})
   },
   getWordsBookmark() {
-    return APIUtils.get(endPoints.getWordsBookmark)
+    return APIUtils.get<GetWordsBookmarkResponse>(endPoints.getWordsBookmark)
   },
 } as const

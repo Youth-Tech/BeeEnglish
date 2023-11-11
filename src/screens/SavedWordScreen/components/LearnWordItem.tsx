@@ -5,10 +5,11 @@ import { useTheme } from '@themes'
 import { SoundProgress } from '@assets'
 import { DataLearnProps } from '../const'
 import { Block, Text } from '@components'
+import { Word } from '@services'
 
 export interface Props {
   index?: number
-  data: DataLearnProps
+  data: Word
   onPressAudio?: () => void
   onPress?: () => void
 }
@@ -19,7 +20,7 @@ export const LearnWordItem: React.FC<Props> = ({
   onPressAudio,
 }) => {
   const { colors } = useTheme()
-
+  const isSenseEmpty = Object.keys(data.senses[0]).length === 0
   return (
     <Pressable onPress={onPress}>
       <Block
@@ -40,7 +41,7 @@ export const LearnWordItem: React.FC<Props> = ({
               numberOfLines={1}
               ellipsizeMode="tail"
             >
-              {data.word}
+              {data.english}
             </Text>
             <Text
               lineHeight={30}
@@ -49,11 +50,11 @@ export const LearnWordItem: React.FC<Props> = ({
               color={colors.greyPrimary}
               marginLeft={3}
             >
-              /{data.wordType}/
+              /{data.pronunciation}/
             </Text>
           </Block>
           <Text fontFamily="semiBold" size={'h4'} lineHeight={30}>
-            {data.translation}
+            {isSenseEmpty ? '' : data.senses[0].vietnamese}
           </Text>
         </Block>
         <Block height={20}></Block>
