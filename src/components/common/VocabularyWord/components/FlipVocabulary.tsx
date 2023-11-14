@@ -19,6 +19,7 @@ import Animated, {
   useDerivedValue,
   useAnimatedStyle,
 } from 'react-native-reanimated'
+import Sound from 'react-native-sound'
 
 const AnimatedBlock = Animated.createAnimatedComponent(Block)
 const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
@@ -28,7 +29,6 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
     senses,
     attachments,
     pronunciation,
-
     isBookmarked,
     onPressSoundProgress,
     onPressBookmark,
@@ -37,7 +37,18 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
   const { t } = useTranslation()
   const rotateY = useSharedValue(0)
   const { colors, normalize } = useTheme()
+  const soundUrl = attachments.find((o) => o.type === 'audio')
+  console.log(soundUrl?.src)
+  const sound = new Sound(
+    soundUrl?.src ??
+      'https://api.dictionaryapi.dev/media/pronunciations/en/default-uk.mp3',
+    '',
+    (error) => {
+      if (error) console.log('Fail to load sound')
+    },
+  )
   const soundProgressRef = React.useRef<SoundProgressFcRef>(null)
+  const soundProgressRef1 = React.useRef<SoundProgressFcRef>(null)
   const rotateYValue = useDerivedValue(() => {
     return withSpring(rotateY.value === 0 ? 0 : 180, withSpringConfig)
   })
@@ -89,6 +100,16 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
   }
   const handleSoundProgress = () => {
     soundProgressRef.current?.start()
+    soundProgressRef1.current?.start()
+    sound.play((success) => {
+      if (success) {
+        console.log('successfully finished playing')
+        soundProgressRef.current?.pause()
+        soundProgressRef1.current?.pause()
+      } else {
+        console.log('playback failed due to audio decoding errors')
+      }
+    })
   }
   const isAttachmentEmpty = Object.keys(attachments[0]).length === 0
   const isSensesEmpty = Object.keys(senses[0]).length === 0
@@ -144,7 +165,7 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
                     marginBottom: normalize.v(3),
                     marginStart: normalize.h(5),
                   }}
-                  onPress={onPressSoundProgress}
+                  onPress={handleSoundProgress}
                 >
                   <SoundProgress
                     fill={colors.orangeDark}
@@ -225,7 +246,7 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
                   >
                     <SoundProgress
                       fill={colors.orangeDark}
-                      ref={soundProgressRef}
+                      ref={soundProgressRef1}
                     />
                   </Pressable>
                 </Block>

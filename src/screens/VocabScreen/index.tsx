@@ -5,21 +5,22 @@ import {
   Block,
   Progress,
   Container,
-  ShadowButton,
   Difficulty,
+  ShadowButton,
   VocabularyWord,
   LeaveProcessModal,
 } from '@components'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
+import { useAppSelector } from '@hooks'
 import { useTranslation } from 'react-i18next'
-import { VocabularyFunc } from '@components/common/VocabularyWord/type'
-import { FlipVocabularyProps } from '@components/common/VocabularyWord/components/type'
-import { ModalFunction } from '@components/bases/Modal/type'
-import { navigate, RootStackParamList } from '@navigation'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { KnowledgeService, ReviewService, UserService, Word } from '@services'
 import { LoadingScreen } from '@screens/LoadingScreen'
+import { navigate, RootStackParamList } from '@navigation'
+import { ModalFunction } from '@components/bases/Modal/type'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { VocabularyFunc } from '@components/common/VocabularyWord/type'
+import { KnowledgeService, ReviewService, UserService, Word } from '@services'
+import { FlipVocabularyProps } from '@components/common/VocabularyWord/components/type'
 
 type VocabScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -58,6 +59,12 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
   const { t } = useTranslation()
   const { lessonId } = route.params
   const { colors } = useTheme()
+  const bookmarkWords = useAppSelector(
+    (state) => state.root.bookmarkReducer.bookmarkWords,
+  )
+  const reviewWords = useAppSelector(
+    (state) => state.root.wordReviewReducer.reviewWords,
+  )
   const [wordData, setWordData] = React.useState<FlipVocabularyProps[]>([])
   const [data, setData] = React.useState<FlipVocabularyProps>(null)
   const [step, setStep] = React.useState(0)
@@ -66,8 +73,31 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
   const [nextText, setNextText] = React.useState(t('continue_button'))
   const leaveModal = useRef<ModalFunction>(null)
   const onClosePress = () => {
-    console.log('hey')
     leaveModal.current?.openModal()
+  }
+  const isIdInBookmarkArray = (id: string) => {
+    const idSet = new Set(bookmarkWords.map((o) => o._id))
+    return idSet.has(id)
+  }
+  const filterDifficulty = (id: string) => {
+    console.log(id)
+    const filteredWord = reviewWords.find((word) => word.word._id === id)
+    console.log(filteredWord)
+    if (filteredWord) {
+      console.log('heyyyyyy')
+      switch (filteredWord.difficulty) {
+        case 'easy':
+          return Difficulty.easy
+        case 'medium':
+          return Difficulty.medium
+        case 'hard':
+          return Difficulty.hard
+        default:
+          return Difficulty.easy
+      }
+    } else {
+      return Difficulty.easy
+    }
   }
   const callAPIBookmark = async (wordId: string) => {
     try {
@@ -112,12 +142,28 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
       console.log(e)
     }
   }
+
+  const handleCallApi = () => {
+    wordData.forEach((e) => {
+      if (e.isBookmarked === true) {
+        if (isIdInBookmarkArray(e._id)) {
+          return
+        } else {
+          callAPIBookmark(e._id)
+        }
+      } else {
+        if (isIdInBookmarkArray(e._id)) {
+          callAPIBookmark(e._id)
+        }
+      }
+    })
+  }
   const handleNextVocab = () => {
     if (currentPos + 1 > wordData.length - 1) {
       navigate('CONGRATULATION_SCREEN')
-      //TODO: handle bookmark here
-      callMultipleAPIBookmark()
+      handleCallApi()
       callMultipleWordReview()
+
       return
     }
     setCurrentPos((prev) => prev + 1)
@@ -138,11 +184,12 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
         pronunciation: item.pronunciation,
         attachments: item.attachments,
         senses: item.senses,
-        difficulty: Difficulty.easy,
-        isBookmarked: false,
+        difficulty: filterDifficulty(item._id),
+        isBookmarked: isIdInBookmarkArray(item._id) ? true : false,
       }
     })
   }
+
   const callApi = async () => {
     try {
       const response = await KnowledgeService.getWordByLessonId(lessonId)
@@ -158,12 +205,8 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
     console.log(wordData.length)
     if (wordData.length > 0) {
       setData(wordData[0])
-      console.log('hey')
     }
   }, [wordData])
-  React.useEffect(() => {
-    console.log('data', data)
-  }, [data])
   React.useEffect(() => {
     if (currentPos === wordData.length - 1) {
       setNextText(t('finish'))

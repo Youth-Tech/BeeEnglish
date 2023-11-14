@@ -1,18 +1,20 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { Block, Container, TextInput } from '@components'
-import { useTheme } from '@themes'
 import { Icon } from '@assets'
+import { useTheme } from '@themes'
+import { useTranslation } from 'react-i18next'
 import { LearnedWordItem } from './components'
-import { data, dataProps } from './const'
+import { ReviewService, WordReviews } from '@services'
+import { Block, Container, TextInput } from '@components'
 import HeaderApp from '@components/common/HeaderComponent'
 import { MasonryFlashList, MasonryListRenderItem } from '@shopify/flash-list'
 
 export const LearnedWordScreen = () => {
   const { colors } = useTheme()
   const { t } = useTranslation()
-
-  const renderLearnedWordItem: MasonryListRenderItem<dataProps> = (info) => {
+  const [learnedWordData, setLearnedWordData] = React.useState<WordReviews[]>(
+    [],
+  )
+  const renderLearnedWordItem: MasonryListRenderItem<WordReviews> = (info) => {
     const { item, index } = info
     return (
       <Block key={`item-${index}`} paddingBottom={10}>
@@ -20,6 +22,18 @@ export const LearnedWordScreen = () => {
       </Block>
     )
   }
+  const callApi = async () => {
+    try {
+      const response = await ReviewService.getAllWordReviews()
+      console.log(response.data.data)
+      setLearnedWordData(response.data.data.wordsReview)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  React.useEffect(() => {
+    callApi()
+  }, [])
   return (
     <Container statusColor={colors.orangePrimary}>
       <Block
@@ -59,8 +73,8 @@ export const LearnedWordScreen = () => {
         <Block radius={15} flex overflow="scroll">
           <MasonryFlashList
             scrollEnabled={true}
-            data={data}
-            keyExtractor={(item) => item.id.toString()}
+            data={learnedWordData}
+            keyExtractor={(_, index) => `item-learned-word-${index}`}
             renderItem={renderLearnedWordItem}
             showsVerticalScrollIndicator={false}
             numColumns={2}

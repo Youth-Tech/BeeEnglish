@@ -3,18 +3,19 @@ import { useTranslation } from 'react-i18next'
 import { FlatList, ListRenderItemInfo, StyleSheet } from 'react-native'
 
 import {
-  Text,
   Block,
-  TextInput,
   Container,
   DismissKeyBoardBlock,
+  Text,
+  TextInput,
 } from '@components'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { goBack } from '@navigation'
 import { LearnWordItem } from './components/LearnWordItem'
 import { SavedWordItem } from './components/SavedWordItem'
-import { DataSavedWordProps, DataLearnProps } from './const'
+import { DataLearnProps } from './const'
+import { KnowledgeService, UserService, Word } from '@services'
 
 const learnData: DataLearnProps[] = [
   {
@@ -43,67 +44,87 @@ const learnData: DataLearnProps[] = [
   },
 ]
 
-const savedWordData: DataSavedWordProps[] = [
-  {
-    id: 1,
-    word: 'Chicken',
-    wordType: 'noun',
-    wordPronounce: 'ˈtʃɪk.ɪn',
-  },
-  {
-    id: 2,
-    word: 'Chicken',
-    wordType: 'noun',
-    wordPronounce: 'ˈtʃɪk.ɪn',
-  },
-  {
-    id: 3,
-    word: 'Chicken',
-    wordType: 'noun',
-    wordPronounce: 'ˈtʃɪk.ɪn',
-  },
-  {
-    id: 4,
-    word: 'Chicken',
-    wordType: 'noun',
-    wordPronounce: 'ˈtʃɪk.ɪn',
-  },
-  {
-    id: 5,
-    word: 'Chicken',
-    wordType: 'noun',
-    wordPronounce: 'ˈtʃɪk.ɪn',
-  },
-]
+// const savedWordData: DataSavedWordProps[] = [
+//   {
+//     id: 1,
+//     word: 'Chicken',
+//     wordType: 'noun',
+//     wordPronounce: 'ˈtʃɪk.ɪn',
+//   },
+//   {
+//     id: 2,
+//     word: 'Chicken',
+//     wordType: 'noun',
+//     wordPronounce: 'ˈtʃɪk.ɪn',
+//   },
+//   {
+//     id: 3,
+//     word: 'Chicken',
+//     wordType: 'noun',
+//     wordPronounce: 'ˈtʃɪk.ɪn',
+//   },
+//   {
+//     id: 4,
+//     word: 'Chicken',
+//     wordType: 'noun',
+//     wordPronounce: 'ˈtʃɪk.ɪn',
+//   },
+//   {
+//     id: 5,
+//     word: 'Chicken',
+//     wordType: 'noun',
+//     wordPronounce: 'ˈtʃɪk.ɪn',
+//   },
+// ]
 
 export const SavedWordScreen = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
   const [textSearch, setTextSearch] = React.useState('')
-
-  const onDeleteWordPress = (word: DataSavedWordProps) => {
-    console.log('onDeleteWordPress', word.id)
-  }
-
-  const renderSavedWordItem = ({
-    index,
-    item,
-  }: ListRenderItemInfo<DataSavedWordProps>) => {
+  const [savedWordData, setSavedWordData] = React.useState<Word[]>([])
+  const [suggestionWord, setSuggestionWord] = React.useState<Word[]>([])
+  const renderSavedWordItem = ({ index, item }: ListRenderItemInfo<Word>) => {
     return (
       <SavedWordItem
         data={item}
         key={index}
-        onDeletePress={() => onDeleteWordPress(item)}
+        onDeletePress={() => {
+          callAPIDeleteSavedWord(item._id)
+        }}
       />
     )
   }
-
-  const renderLearnItem = ({
-    index,
-    item,
-  }: ListRenderItemInfo<DataLearnProps>) => {
+  const callAPI = async () => {
+    try {
+      const response = await UserService.getWordsBookmark()
+      setSavedWordData(response.data.data.words)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const callAPIDeleteSavedWord = async (wordId: string) => {
+    try {
+      const response = await UserService.bookmarkWord(wordId)
+      setSavedWordData(response.data.data.wordBookmarks)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const callAPIGetAllWords = async () => {
+    try {
+      const response = await KnowledgeService.getAllWord(1, 5)
+      setSuggestionWord(response.data.data.words)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const renderLearnItem = ({ index, item }: ListRenderItemInfo<Word>) => {
     return <LearnWordItem data={item} key={index} />
   }
+  React.useEffect(() => {
+    callAPI()
+    callAPIGetAllWords()
+  }, [])
   return (
     <Container statusColor={colors.orangePrimary}>
       <DismissKeyBoardBlock>
@@ -162,7 +183,7 @@ export const SavedWordScreen = () => {
                 <FlatList
                   scrollEnabled={false}
                   data={savedWordData}
-                  keyExtractor={(item) => item.id.toString()}
+                  keyExtractor={(_, index) => `item-saved-word-${index}`}
                   renderItem={renderSavedWordItem}
                   showsHorizontalScrollIndicator={false}
                 />
@@ -177,8 +198,8 @@ export const SavedWordScreen = () => {
             <Block marginVertical={15}>
               <FlatList
                 horizontal={true}
-                data={learnData}
-                keyExtractor={(item) => item.id.toString()}
+                data={suggestionWord}
+                keyExtractor={(_, index) => `item-suggest-word-${index}`}
                 renderItem={renderLearnItem}
                 showsHorizontalScrollIndicator={false}
               />

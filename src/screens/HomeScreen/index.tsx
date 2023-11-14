@@ -127,9 +127,13 @@ export const HomeScreen = () => {
     (PostResponse & { textColor: string })[]
   >([])
 
-  const onPressDictionary = () => {}
+  const onPressDictionary = () => {
+    navigate('DICTIONARY_SCREEN')
+  }
   const onPressVideo = () => {}
-  const onLearningWatchMore = () => {}
+  const onLearningWatchMore = () => {
+    navigate('LEARNING_SCREEN')
+  }
 
   const renderLessonProgressItem = ({
     index,
