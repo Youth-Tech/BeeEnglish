@@ -110,7 +110,11 @@ export const UserService = {
   updateStreak() {
     return APIUtils.patch<GetStreakResponse>(endPoints.updateStreak, {})
   },
-  getWordsBookmark() {
-    return APIUtils.get<GetWordsBookmarkResponse>(endPoints.getWordsBookmark)
+  getWordsBookmark(lessonId?: string) {
+    return APIUtils.get<GetWordsBookmarkResponse>(
+      lessonId
+        ? endPoints.getWordsBookmark.concat(`?lesson=${lessonId}`)
+        : endPoints.getWordsBookmark,
+    )
   },
 } as const

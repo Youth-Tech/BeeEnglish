@@ -29,7 +29,11 @@ export const ReviewService = {
   toggleWordReview(body: ToggleWordRequest) {
     return ApiUtil.post<ToggleWordResponse>(endPoints.toggleWordReview, body)
   },
-  getAllWordReviews() {
-    return ApiUtil.get<GetAllWordsResponse>(endPoints.getAllWordReviews)
+  getAllWordReviews(lessonId?: string) {
+    return ApiUtil.get<GetAllWordsResponse>(
+      lessonId
+        ? endPoints.getAllWordReviews.concat(`?lesson=${lessonId}`)
+        : endPoints.getAllWordReviews,
+    )
   },
 } as const
