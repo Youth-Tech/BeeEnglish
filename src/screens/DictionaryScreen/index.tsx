@@ -143,10 +143,16 @@ export const DictionaryScreen = () => {
               <VocabularyItem
                 name={t('vocabulary_learned')}
                 image={images.BeeReading}
+                onPress={() => {
+                  navigate('LEARNED_WORD_SCREEN')
+                }}
               />
               <VocabularyItem
                 name={t('saved_vocabulary')}
                 image={images.BeePencil}
+                onPress={() => {
+                  navigate('SAVED_WORD_SCREEN')
+                }}
               />
             </Block>
           </ScrollView>

@@ -1,11 +1,10 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
-import LottieView from 'lottie-react-native'
 import { useTranslation } from 'react-i18next'
 import { Portal } from 'react-native-portalize'
 import { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
+import { Icon } from '@assets'
 import {
   Text,
   Block,
@@ -22,13 +21,14 @@ import {
   VocabularyChoiceFunc,
   VocabularyOptionsFunc,
 } from '@components'
-import { useBackHandler } from '@hooks'
-import { Icon, animation } from '@assets'
+import { useTheme } from '@themes'
 import { QuestionType } from './constants'
-import { normalize, useTheme } from '@themes'
-import { KnowledgeService, Quiz } from '@services'
+import { LoadingScreen } from '@screens/LoadingScreen'
+import { useAppDispatch, useBackHandler } from '@hooks'
+import { RootStackParamList, goBack } from '@navigation'
+import { setLoadingStatusAction } from '@redux/reducers'
 import { ModalFunction } from '@components/bases/Modal/type'
-import { RootStackParamList, navigateAndReset } from '@navigation'
+import { KnowledgeService, Quiz, UserService } from '@services'
 
 export type GrammarScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -42,7 +42,8 @@ const parseQuizDataToQuestion = (quizzes: Quiz[]): Question[] => {
       answer: item.answer,
       question: item.question,
       type: QuestionType[item.type],
-      wordImage: item.attachment?.src,
+      attachment: item.attachments,
+      wordImage: item.attachments?.[0]?.src || '',
       correctAnswer: item.correctAnswer,
     }
   })
@@ -52,7 +53,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   route,
   navigation,
 }) => {
-  const { lessonId } = route.params
+  const { nextLessonId, lessonId, chapterId } = route.params
 
   const leaveModalRef = React.useRef<ModalFunction>(null)
   const wordChoiceRef = React.useRef<WordListRefFunc>(null)
@@ -61,6 +62,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   const vocabOptionRef = React.useRef<VocabularyOptionsFunc>(null)
 
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const { colors, normalize } = useTheme()
 
   const [step, setStep] = React.useState(0)
@@ -130,7 +132,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   const checkResult = () => {
     if (currentQuestion.data === null) return
 
-    let result: boolean = !!null
+    let result: boolean = false
 
     if (currentQuestion.data.type === QuestionType.multipleWord) {
       if (currentQuestion.data.wordImage) {
@@ -174,8 +176,8 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
     if (nextQuestion == -1) {
       console.log('complete quiz')
+      updateLessonComplete()
       setStep(100)
-      navigation.navigate('CONGRATULATION_SCREEN')
     } else {
       if (questions[nextQuestion].type === QuestionType.multipleWord) {
         optionRef.current?.triggerChangeLayout()
@@ -199,6 +201,20 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
     }
   }
 
+  const updateLessonComplete = async () => {
+    dispatch(setLoadingStatusAction(true))
+    try {
+      await UserService.updateProgressLearning({
+        chapter: chapterId,
+        lessons: [nextLessonId],
+      })
+      navigation.navigate('CONGRATULATION_SCREEN')
+    } catch (error) {
+      console.log(error)
+    }
+    dispatch(setLoadingStatusAction(false))
+  }
+
   const renderQuestion = (question: Question) => {
     if (currentQuestion.data === null) return <></>
 
@@ -206,7 +222,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
       case QuestionType.cloze:
         return <WordChoice data={question} ref={wordChoiceRef} />
       case QuestionType.multipleWord:
-        if (question.attachment?.src) {
+        if (question.wordImage !== '') {
           return (
             <VocabularyOptions
               ref={vocabOptionRef}
@@ -225,17 +241,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   }
 
   if (questions.length <= 0 && currentQuestion.data === null) {
-    return (
-      <Container>
-        <Block flex alignCenter justifyCenter>
-          <LottieView
-            autoPlay
-            source={animation.beeFlying}
-            style={styles.loadingAnimation}
-          />
-        </Block>
-      </Container>
-    )
+    return <LoadingScreen />
   }
 
   return (
@@ -343,7 +349,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
         ref={leaveModalRef}
         onPressApprove={() => {
           leaveModalRef.current?.dismissModal()
-          navigateAndReset([{ name: 'BOTTOM_TAB' }], 0)
+          goBack()
         }}
         onPressCancel={() => {
           leaveModalRef.current?.dismissModal()
@@ -352,10 +358,3 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
     </Container>
   )
 }
-
-const styles = StyleSheet.create({
-  loadingAnimation: {
-    height: normalize.v(500),
-    aspectRatio: 1,
-  },
-})

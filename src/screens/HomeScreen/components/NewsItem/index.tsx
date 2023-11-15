@@ -1,50 +1,72 @@
 import React from 'react'
+
+import { timeSince } from '@utils/helpers'
+import { makeStyles, useTheme } from '@themes'
 import { Block, Text, Image } from '@components'
-import { Pressable } from 'react-native'
-import { useTheme } from '@themes'
 
 export interface NewsItemProps {
   title: string
   image: string
-  onPress?: () => void
+  topic: string
+  createAt: string
+  textColor: string
 }
 
-export const NewsItem: React.FC<NewsItemProps> = ({
-  title,
-  image,
-  onPress,
-}) => {
+export const NewsItem: React.FC<NewsItemProps> = (props) => {
+  const { title, image, topic, createAt } = props
   const { colors } = useTheme()
+  const styles = useStyle(props)
   return (
-    <Pressable onPress={onPress}>
-      <Block
-        row
-        shadow
-        radius={10}
-        height={60}
-        alignCenter
-        paddingHorizontal={10}
-        marginTop={14}
-        backgroundColor={colors.white}
-      >
-        <Image
-          radius={5}
-          width={50}
-          height={50}
-          source={{ uri: image }}
-          resizeMode="cover"
-        />
-        <Block flex marginLeft={15}>
+    <Block
+      row
+      gap={10}
+      alignCenter
+      space="between"
+      paddingVertical={15}
+      borderBottomWidth={1}
+      backgroundColor="white"
+      borderColor={colors.greyLighter}
+    >
+      <Block flex space="between" gap={20}>
+        <Text fontFamily="semiBold" numberOfLines={3}>
+          {title}
+        </Text>
+        <Block row alignCenter gap={10}>
           <Text
-            numberOfLines={2}
-            size={'h3'}
+            size={10}
+            paddingVertical={4}
             fontFamily="semiBold"
-            lineHeight={19}
+            paddingHorizontal={5}
+            style={styles.topicTextStyle}
           >
-            {title}
+            {topic}
+          </Text>
+          <Text size={10} fontFamily="semiBold" color={colors.greyPrimary}>
+            {timeSince(new Date(createAt))}
           </Text>
         </Block>
       </Block>
-    </Pressable>
+      <Image
+        source={{
+          uri: image,
+        }}
+        resizeMode="cover"
+        style={styles.imageStyle}
+      />
+    </Block>
   )
 }
+
+const useStyle = makeStyles<NewsItemProps>()(({ normalize }) => ({
+  imageStyle: {
+    aspectRatio: 1,
+    width: normalize.h(90),
+    borderRadius: normalize.m(5),
+  },
+  topicTextStyle: ({ textColor }) => ({
+    flex: 0,
+    borderRadius: 5,
+    color: textColor,
+    backgroundColor: `${textColor}20`,
+  }),
+}))

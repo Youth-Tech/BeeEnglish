@@ -1,12 +1,14 @@
-import { Provider } from '@configs'
-import { TokenService } from '@services'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
 import {
   login,
-  resendVerifyEmail,
   signUp,
+  loginOAuthThunk,
+  resendVerifyEmail,
   verifyForgotPassword,
 } from '@redux/actions/auth.action'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Provider } from '@configs'
+import { TokenService } from '@services'
 
 export type AuthState = {
   accessToken?: string
@@ -16,6 +18,7 @@ export type AuthState = {
   forgotPasswordToken?: string
   isResendVerifyEmail?: boolean
   isSignedIn?: boolean
+  isSignedInOAuth?: boolean
 }
 
 export const defaultAuthState: AuthState = {
@@ -26,6 +29,7 @@ export const defaultAuthState: AuthState = {
   forgotPasswordToken: undefined,
   isResendVerifyEmail: false,
   isSignedIn: false,
+  isSignedInOAuth: false
 }
 
 const authSlice = createSlice({
@@ -51,9 +55,7 @@ const authSlice = createSlice({
         state.forgotPasswordToken = action.payload.data
       })
 
-      .addCase(signUp.fulfilled, (state) => {
-        state.isSignedIn = true
-      })
+      .addCase(signUp.fulfilled, (state) => {})
       .addCase(login.fulfilled, (state, action) => {
         action.payload &&
           TokenService.setAccessToken(action.payload.data.tokens.accessToken)
@@ -63,11 +65,19 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         console.log(action.payload)
-        if (action.payload?.code == 403) {
+        if (action.payload?.subMessage == 'PLEASE_VERIFY_EMAIL_403') {
           state.isResendVerifyEmail = true
         }
       })
       .addCase(resendVerifyEmail.fulfilled, () => {})
+      .addCase(loginOAuthThunk.fulfilled, (state, action) => {
+        action.payload &&
+          TokenService.setAccessToken(action.payload.data.tokens.accessToken)
+        action.payload &&
+          TokenService.setRefreshToken(action.payload.data.tokens.refreshToken)
+        state.isSignedIn = true
+        state.isSignedInOAuth = true
+      })
   },
 })
 

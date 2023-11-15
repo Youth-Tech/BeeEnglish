@@ -1,34 +1,29 @@
-import { useTheme } from '@themes'
-import { Icon, images } from '@assets'
-import React, { useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
-import FastImage from 'react-native-fast-image'
-import { Block, Container, Modal, ShadowButton, Text } from '@components'
-import TaskItem, {
-  TaskItemProps,
-} from '@screens/StreakScreen/components/TaskItem'
-import WeekCalendar from '@screens/StreakScreen/components/WeekCalendar'
-import StreakDay, {
-  StreakDayProps,
-} from '@screens/StreakScreen/components/StreakDay'
-import { ModalFunction } from '@components/bases/Modal/type'
 import Animated, {
-  withTiming,
   withRepeat,
+  withTiming,
   useSharedValue,
   cancelAnimation,
   useAnimatedStyle,
 } from 'react-native-reanimated'
+import { Pressable } from 'react-native'
+import React, { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import FastImage from 'react-native-fast-image'
 
-const CalendarData: StreakDayProps[] = [
-  { date: '09', type: 'normal' },
-  { date: '10', type: 'isAttendance' },
-  { date: '11', type: 'isAttendance' },
-  { date: '12', type: 'isAttendance' },
-  { date: '13', type: 'current' },
-  { date: '14', type: 'normal' },
-  { date: '15', type: 'normal' },
-]
+import {
+  TaskItem,
+  StreakDay,
+  TaskItemProps,
+  WeekCalendar,
+} from '@screens/StreakScreen/components'
+import { useTheme } from '@themes'
+import { Icon, images } from '@assets'
+import { getStreak } from '@redux/selectors'
+import { updateStreakThunk } from '@redux/actions'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { ModalFunction } from '@components/bases/Modal/type'
+import { Block, Container, Modal, ShadowButton, Text } from '@components'
+
 const TaskData: TaskItemProps[] = [
   {
     taskType: 'money',
@@ -71,29 +66,45 @@ const TaskData: TaskItemProps[] = [
     honeyAmount: 56,
   },
 ]
+
 const AnimatedBlock = Animated.createAnimatedComponent(Block)
-const StreakScreen = () => {
+export const StreakScreen = () => {
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
-  const rotateModal = useSharedValue(0)
   const { colors, normalize } = useTheme()
-  const [isPresent, setIsPresent] = React.useState(false)
+
   const modalRef = React.useRef<ModalFunction>(null)
+
+  const rotateModal = useSharedValue(0)
+  const streakDays = useAppSelector(getStreak).streaks
+
+  const isPresent = !!streakDays.find(
+    (item) =>
+      new Date(item.date).toLocaleDateString() === new Date().toLocaleDateString() &&
+      item.type === 'isAttendance',
+  )
+
   const handleOpenModal = useCallback(() => {
     rotateModal.value = withRepeat(withTiming(180, { duration: 1000 }), -1)
     modalRef.current?.openModal()
   }, [])
-  const handleAttend = () => {
-    setIsPresent(!isPresent)
-  }
+
   const onCloseModal = () => {
     cancelAnimation(rotateModal)
     rotateModal.value = 0
   }
+
   const rStyle = useAnimatedStyle(() => {
     return {
       transform: [{ rotate: `${rotateModal.value}deg` }],
     }
   })
+
+  const handleAttend = () => {
+    dispatch(updateStreakThunk())
+  }
+
+
   return (
     <Container hasScroll>
       <Block paddingHorizontal={20} paddingTop={15}>
@@ -108,9 +119,11 @@ const StreakScreen = () => {
           </Text>
           <Icon state={'Present'} onPress={handleOpenModal} />
         </Block>
-        <Block marginTop={15}>
-          <WeekCalendar data={CalendarData} />
-        </Block>
+        <Pressable onPress={handleOpenModal}>
+          <Block marginTop={15}>
+            <WeekCalendar data={streakDays} />
+          </Block>
+        </Pressable>
         <Block marginTop={20} row space={'between'}>
           <Text size={'h3'} fontFamily={'bold'} color={colors.black}>
             {t('mission')}
@@ -150,7 +163,7 @@ const StreakScreen = () => {
             borderColor={colors.orangeDark}
           >
             <Block marginTop={29} row>
-              {CalendarData.map((item, index) => (
+              {streakDays.map((item, index) => (
                 <Block
                   key={`item-date-${index}`}
                   marginLeft={index > 0 ? 10 : 0}
@@ -184,18 +197,18 @@ const StreakScreen = () => {
               {isPresent ? t('comeback_tomorrow') : t('welcome_back')}
             </Text>
             <ShadowButton
-              onPress={handleAttend}
+              shadowHeight={7}
               buttonHeight={40}
               buttonWidth={263}
               buttonRadius={10}
-              shadowButtonColor={colors.orangeLighter}
-              buttonColor={colors.orangePrimary}
-              shadowHeight={7}
               containerStyle={{
                 alignSelf: 'center',
                 marginTop: normalize.v(26),
               }}
               disabled={isPresent}
+              onPress={handleAttend}
+              buttonColor={colors.orangePrimary}
+              shadowButtonColor={colors.orangeLighter}
             >
               <Text color="white" fontFamily="bold" size={'h3'}>
                 {t('attend')}
@@ -205,15 +218,15 @@ const StreakScreen = () => {
         </Block>
         <Block
           absolute
-          alignSelf={'center'}
           top={-10}
-          justifyCenter
           alignCenter
+          justifyCenter
+          alignSelf={'center'}
         >
           <FastImage
             source={images.StreakBox}
-            style={{ width: normalize.h(210.5), height: normalize.h(37.04) }}
             resizeMode={FastImage.resizeMode.contain}
+            style={{ width: normalize.h(210.5), height: normalize.h(37.04) }}
           />
           <Text
             size={'h3'}
@@ -228,5 +241,3 @@ const StreakScreen = () => {
     </Container>
   )
 }
-
-export default StreakScreen

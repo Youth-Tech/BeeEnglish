@@ -1,19 +1,35 @@
+interface Topic {
+  id: string
+  name: string
+  description: string
+  attachment: Attachment
+}
+
+interface Level {
+  id: string
+  name: string
+  description: string
+  attachment: Attachment
+  score: number
+}
 interface PostResponse {
-  id: number
+  id: string
   title: string
-  english: string
-  vietnamese: strings
+  english: string[]
+  vietnamese: string[]
   type: string
-  topic: string
-  level: string
+  topic: Topic
+  level: Level
   note: string
-  creator: string
-  attachment: string
-  flag: boolean
+  creator?: User
+  attachment: Attachment[]
+  flag?: boolean
+  createdAt: string
+  updateAt: string
 }
 
 interface User {
-  id: number
+  id: string
   username: string
   fullName: string
   email: string
@@ -43,15 +59,7 @@ interface Badges {
 interface Attachment {
   id?: any
   src?: string
-  type?: EAttachment
-}
-
-// Media Enum
-enum EAttachment {
-  Image = 'image',
-  Video = 'video',
-  Audio = 'audio',
-  Subtitle = 'subtitle',
+  type?: import('@utils/enums').EAttachment
 }
 
 // Quiz Enum

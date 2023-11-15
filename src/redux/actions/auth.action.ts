@@ -1,7 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+
 import { RootState } from '@hooks'
 import { UserData } from '@services/UserService'
-import { AuthService, LoginParams, SignUpParams } from '@services/AuthService'
+import {
+  AuthService,
+  LoginParams,
+  OAuthRes,
+  SignUpParams,
+} from '@services/AuthService'
+import { DeviceInfoConfig, Provider } from '@configs'
+import { signingWithFacebook, signingWithGoogle } from '@utils/authUtils'
 
 export interface LoginResponse {
   data: {
@@ -50,7 +58,7 @@ export const resendVerifyCode = createAsyncThunk(
 export const login = createAsyncThunk<
   LoginResponse,
   LoginParams,
-  { rejectValue: { code: number } }
+  { rejectValue: { code: number; subMessage: string } }
 >('auth/login', async (params, { rejectWithValue }) => {
   try {
     const response = await AuthService.login(params)
@@ -67,3 +75,30 @@ export const resendVerifyEmail = createAsyncThunk<any, string>(
     return response.data
   },
 )
+
+export const loginOAuthThunk = createAsyncThunk<
+  OAuthRes | undefined,
+  {
+    providerId: Provider
+  }
+>('auth/oAuthLogin', async ({ providerId }) => {
+  try {
+    const loginHandle =
+      providerId == Provider.facebook ? signingWithFacebook : signingWithGoogle
+
+    const resOAuth = await loginHandle()
+
+    const res = await AuthService.oAuthLogin({
+      accessToken: resOAuth as string,
+      deviceId: DeviceInfoConfig.deviceId,
+      deviceName: DeviceInfoConfig.deviceName,
+      provider: providerId,
+    })
+
+    return res.data
+  } catch (error) {
+    console.log(`Error login with ${Provider[providerId]}`, error.message)
+  }
+
+  return undefined
+})

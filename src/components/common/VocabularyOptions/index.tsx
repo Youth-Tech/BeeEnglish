@@ -115,7 +115,7 @@ export const VocabularyOptions = React.forwardRef<
                       size={'h3'}
                       fontFamily="semiBold"
                     >
-                      {(data.answer as Answer[])[index].option}
+                      {(data.answer as Answer[])[index].option as string}
                     </Text>
                   </Block>
                 </Pressable>

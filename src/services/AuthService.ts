@@ -1,16 +1,13 @@
 import APIUtils from '@utils/AxiosInstance'
+import { DefaultResponse } from '@services'
 import { LoginResponse, SignUpResponse } from '@redux/actions/auth.action'
 
-export interface OAuthRes {
-  code?: number
-  message?: string
-  data?: {
-    accessToken: string
-    refreshToken: string
-  }
+export interface OAuthRes extends LoginResponse, DefaultResponse{
+
 }
+
 export interface OAuthParams {
-  provider: number
+  provider: string
   accessToken: string
   deviceId: string
   deviceName: string
@@ -31,6 +28,15 @@ export interface ResetPasswordParams {
 export interface LoginParams {
   email: string
   password: string
+}
+
+export interface ChangePasswordParams {
+  oldPassword: string
+  newPassword: string
+  confirmPassword: string
+}
+export interface ChangePasswordRes extends DefaultResponse {
+  code?: number
 }
 
 export const AuthService = {
@@ -89,5 +95,8 @@ export const AuthService = {
       newPassword,
       confirmPassword,
     })
+  },
+  changePassword(body: ChangePasswordParams) {
+    return APIUtils.post<ChangePasswordRes>('/auth/change-password', body)
   },
 } as const

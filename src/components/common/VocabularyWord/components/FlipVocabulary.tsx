@@ -8,6 +8,7 @@ import {
   SoundProgress,
   withSpringConfig,
   SoundProgressFcRef,
+  images,
 } from '@assets'
 import { Pressable } from 'react-native'
 import Animated, {
@@ -18,17 +19,16 @@ import Animated, {
   useDerivedValue,
   useAnimatedStyle,
 } from 'react-native-reanimated'
+import Sound from 'react-native-sound'
 
 const AnimatedBlock = Animated.createAnimatedComponent(Block)
 const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
   const {
-    id,
+    _id,
     english,
-    vietnamese,
+    senses,
+    attachments,
     pronunciation,
-    exampleEnglish,
-    exampleVietnamese,
-    attachment,
     isBookmarked,
     onPressSoundProgress,
     onPressBookmark,
@@ -37,7 +37,18 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
   const { t } = useTranslation()
   const rotateY = useSharedValue(0)
   const { colors, normalize } = useTheme()
+  const soundUrl = attachments.find((o) => o.type === 'audio')
+  console.log(soundUrl?.src)
+  const sound = new Sound(
+    soundUrl?.src ??
+      'https://api.dictionaryapi.dev/media/pronunciations/en/default-uk.mp3',
+    '',
+    (error) => {
+      if (error) console.log('Fail to load sound')
+    },
+  )
   const soundProgressRef = React.useRef<SoundProgressFcRef>(null)
+  const soundProgressRef1 = React.useRef<SoundProgressFcRef>(null)
   const rotateYValue = useDerivedValue(() => {
     return withSpring(rotateY.value === 0 ? 0 : 180, withSpringConfig)
   })
@@ -89,9 +100,21 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
   }
   const handleSoundProgress = () => {
     soundProgressRef.current?.start()
+    soundProgressRef1.current?.start()
+    sound.play((success) => {
+      if (success) {
+        console.log('successfully finished playing')
+        soundProgressRef.current?.pause()
+        soundProgressRef1.current?.pause()
+      } else {
+        console.log('playback failed due to audio decoding errors')
+      }
+    })
   }
+  const isAttachmentEmpty = Object.keys(attachments[0]).length === 0
+  const isSensesEmpty = Object.keys(senses[0]).length === 0
   return (
-    <Pressable onPress={handleClickVocab} key={id}>
+    <Pressable onPress={handleClickVocab} key={_id}>
       <AnimatedBlock
         width={320}
         height={423}
@@ -123,9 +146,11 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
           </AnimatedBlock>
           <Block alignCenter>
             <Image
-              source={{
-                uri: attachment?.image,
-              }}
+              source={
+                isAttachmentEmpty
+                  ? images.BeeDiscovery
+                  : { uri: attachments[0].src }
+              }
               width={199}
               height={199}
               resizeMode={'contain'}
@@ -133,14 +158,14 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
             <AnimatedBlock style={rotateContentStyleFront} alignCenter>
               <Block marginTop={14} row alignCenter>
                 <Text size={'heading'} fontFamily={'bold'} color={colors.black}>
-                  {english}
+                  {english ?? 'Default'}
                 </Text>
                 <Pressable
                   style={{
                     marginBottom: normalize.v(3),
                     marginStart: normalize.h(5),
                   }}
-                  onPress={onPressSoundProgress}
+                  onPress={handleSoundProgress}
                 >
                   <SoundProgress
                     fill={colors.orangeDark}
@@ -154,7 +179,7 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
                 color={colors.greyPrimary}
                 marginTop={5}
               >
-                /{pronunciation}/
+                /{pronunciation ?? 'dɪˈfɒlt'}/
               </Text>
               <Text
                 size={'h2'}
@@ -162,7 +187,9 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
                 paddingHorizontal={27}
                 marginTop={20}
               >
-                {exampleEnglish}
+                {isSensesEmpty
+                  ? 'This is a default example'
+                  : senses[0].exampleEnglish}
               </Text>
             </AnimatedBlock>
           </Block>
@@ -195,10 +222,11 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
             <Block width={199} height={199} />
             <AnimatedBlock
               flex
-              space={'between'}
               alignCenter
-              style={[rotateContentStyleBack]}
+              width={'100%'}
+              space={'between'}
               paddingHorizontal={18}
+              style={[rotateContentStyleBack]}
             >
               <Block alignCenter>
                 <Block marginTop={14} row alignCenter>
@@ -207,7 +235,7 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
                     fontFamily={'bold'}
                     color={colors.black}
                   >
-                    {vietnamese}
+                    {senses[0].vietnamese ?? ''}
                   </Text>
                   <Pressable
                     style={{
@@ -218,7 +246,7 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
                   >
                     <SoundProgress
                       fill={colors.orangeDark}
-                      ref={soundProgressRef}
+                      ref={soundProgressRef1}
                     />
                   </Pressable>
                 </Block>
@@ -229,7 +257,9 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
                   paddingHorizontal={27}
                   marginTop={20}
                 >
-                  {exampleVietnamese}
+                  {isSensesEmpty
+                    ? 'Ví dụ mặc định'
+                    : senses[0].exampleVietnamese}
                 </Text>
               </Block>
               <Pressable

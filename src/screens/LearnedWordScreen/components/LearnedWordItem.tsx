@@ -5,10 +5,11 @@ import { useTheme } from '@themes'
 import { SoundProgress } from '@assets'
 import { Pressable } from 'react-native'
 import { dataProps } from '@screens/LearnedWordScreen/const'
+import { ReviewService, WordReviews } from '@services'
 
 export interface LearnedWordItemProps {
   index?: number
-  data: dataProps
+  data: WordReviews
   onPressAudio?: () => void
   onPress?: () => void
 }
@@ -25,13 +26,14 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
   if (data.difficulty === 'easy') {
     difficultyText = t('easy')
     dotColor = colors.greenLighter
-  } else if (data.difficulty === 'normal') {
-    difficultyText = t('normal')
+  } else if (data.difficulty === 'medium') {
+    difficultyText = t('medium')
     dotColor = colors.bluePrimary
   } else if (data.difficulty === 'hard') {
     difficultyText = t('hard')
     dotColor = colors.redThick
   }
+  const isSensesEmpty = Object.keys(data.word.senses).length === 0
   return (
     <Pressable onPress={onPress}>
       <Block
@@ -52,7 +54,7 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
               numberOfLines={1}
               ellipsizeMode="tail"
             >
-              {data.word}
+              {data.word.english}
             </Text>
             <Text
               lineHeight={30}
@@ -61,12 +63,12 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
               color={colors.greyPrimary}
               marginLeft={3}
             >
-              /{data.wordType}/
+              /{data.word.pronunciation}/
             </Text>
           </Block>
 
           <Text fontFamily="semiBold" size={'h4'} lineHeight={30}>
-            {data.translation}
+            {isSensesEmpty ? '' : data.word.senses[0].vietnamese}
           </Text>
         </Block>
         <Block row paddingLeft={7} paddingTop={9} alignCenter>

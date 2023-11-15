@@ -1,12 +1,16 @@
-import { useTheme } from '@themes'
-import { RootStackParamList, goBack } from '@navigation'
-import { Icon, images } from '@assets'
-import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import FastImage from 'react-native-fast-image'
+
+import { useTheme } from '@themes'
+import { Icon, images } from '@assets'
+import React, { useState } from 'react'
+import { goBack, RootStackParamList } from '@navigation'
 import { ImageBackground, Pressable } from 'react-native'
-import { Text, Block, Container, Image } from '@components'
+import { Block, Container, Image, Text } from '@components'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { ReviewService, UserService } from '@services'
+import { useAppDispatch } from '@hooks'
+import { updateBookmarkWords, updateReviewWords } from '@redux/reducers'
 
 export type DetailLessonScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -14,24 +18,49 @@ export type DetailLessonScreenProps = NativeStackScreenProps<
 >
 
 export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
-  navigation,
   route,
+  navigation,
 }) => {
-  const { lessonId } = route.params
-  console.log(lessonId)
+  const { lessonId, chapterId, nextLessonId } = route.params
 
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const { colors, normalize } = useTheme()
   const [activeBlock, setActiveBlock] = useState(0)
-
+  const getWordBookmarksByLesson = async () => {
+    try {
+      const response = await UserService.getWordsBookmark(lessonId)
+      //TODO: add to redux
+      dispatch(updateBookmarkWords(response.data.data.words))
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const getWordReviewsByLesson = async () => {
+    try {
+      const response = await ReviewService.getAllWordReviews(lessonId)
+      //TODO: add to redux
+      dispatch(updateReviewWords(response.data.data.wordsReview))
+    } catch (e) {
+      console.log(e)
+    }
+  }
   const onPressChange = (blockNumber: number) => {
     setActiveBlock(blockNumber)
     if (blockNumber === 1) {
       navigation.navigate('VOCAB_SCREEN', { lessonId })
     } else if (blockNumber === 2) {
-      navigation.navigate('GRAMMAR_SCREEN', { lessonId })
+      navigation.navigate('GRAMMAR_SCREEN', {
+        lessonId,
+        chapterId,
+        nextLessonId,
+      })
     }
   }
+  React.useEffect(() => {
+    getWordBookmarksByLesson()
+    getWordReviewsByLesson()
+  })
   return (
     <Container>
       <ImageBackground
@@ -40,7 +69,7 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
       >
         <Block space="between" row paddingHorizontal={20}>
           <Icon state="Back" onPress={goBack}></Icon>
-          <Icon state="MenuHeading" onPress={() => {}}></Icon>
+          <Icon state="MenuHeading" onPress={() => {}} />
         </Block>
 
         <Block
@@ -110,11 +139,7 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
               }}
             >
               <Block alignCenter>
-                <Image
-                  source={images.MultipleChoice}
-                  width={75}
-                  height={75}
-                ></Image>
+                <Image source={images.MultipleChoice} width={75} height={75} />
                 <Text center fontFamily="bold" size={'h3'}>
                   {t('multiple_choice')}
                 </Text>

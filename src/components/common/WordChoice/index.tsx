@@ -72,7 +72,7 @@ export const WordChoice = React.forwardRef<WordListRefFunc, WordChoiceProps>(
               </Block>
             </Block>
 
-            <Block flex justifyCenter marginTop={10}>
+            <Block flex justifyCenter marginTop={20}>
               <WordList
                 key={data.id}
                 ref={wordListRef}

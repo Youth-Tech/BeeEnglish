@@ -1,7 +1,11 @@
 import React from 'react'
-import { normalize } from '@themes'
-import { useStyles } from './styles'
 import { useTranslation } from 'react-i18next'
+import { Pressable, ListRenderItemInfo } from 'react-native'
+
+import { useStyles } from './styles'
+import { colorTopic, normalize } from '@themes'
+import { parsePostData } from '@screens/HomeScreen'
+import { PostServices } from '@services/PostService'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { NewsItem } from '@screens/HomeScreen/components'
 import HeaderApp from '@components/common/HeaderComponent'
@@ -15,17 +19,64 @@ import { changeBottomSheetState, changeShowComment } from '@redux/reducers'
 import BottomSheetWord from '@screens/DetailPostScreen/components/BottomSheetWord'
 import BottomSheetComment from '@screens/DetailPostScreen/components/BottomSheetComment'
 
-const DetailPost: React.FC = () => {
+export const DetailPost: React.FC = () => {
   const styles = useStyles()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const data = useAppSelector((state) => state.root.detailPost)
+
+  const [postData, setPostData] = React.useState<
+    (PostResponse & { textColor: string })[]
+  >([])
+
   const onCloseBottomSheet = () => {
     dispatch(changeBottomSheetState(false))
   }
   const onCloseComment = () => {
     dispatch(changeShowComment(false))
   }
+
+  const onPostItemPress = (item: PostResponse) => {}
+
+  const renderNewsItem = ({
+    index,
+    item,
+  }: ListRenderItemInfo<PostResponse & { textColor: string }>) => {
+    return (
+      <Pressable
+        key={`item-${index}`}
+        onPress={() => onPostItemPress(item)}
+        style={[
+          { marginHorizontal: normalize.h(20) },
+          index === newsData.length - 1
+            ? { marginBottom: normalize.v(19) }
+            : {},
+        ]}
+      >
+        <NewsItem
+          title={item.title}
+          topic={item.topic?.name}
+          createAt={item.createdAt}
+          textColor={item.textColor}
+          image={item.attachment[0].src || ''}
+        />
+      </Pressable>
+    )
+  }
+
+  const callPost = async () => {
+    try {
+      const res = await PostServices.getAllPost()
+      setPostData(parsePostData(res.data.data.posts, colorTopic))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  React.useEffect(() => {
+    callPost()
+  }, [])
+
   return (
     <Container style={styles.container}>
       <HeaderApp title={t('detail_post_header')} />
@@ -47,42 +98,42 @@ const DetailPost: React.FC = () => {
           </Block>
         </Block>
         <FlatList
-          style={styles.listParagraph}
+          data={posts.english}
           scrollEnabled={false}
-          data={posts}
-          renderItem={({ item }) => <ContentPost data={item} />}
-          keyExtractor={(item) => item.id.toString()}
+          style={styles.listParagraph}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <ContentPost english={item} vietnamese={posts.vietnamese[index]} />
+          )}
         />
         <EmotionPost />
         <Text size={'h3'} fontFamily={'bold'} marginTop={10}>
           {t('news')}
         </Text>
         <FlatList
-          data={newsData}
-          keyExtractor={(_, index) => `item-${index}`}
-          renderItem={({ item }) => (
-            <NewsItem title={item.title} image={item.image} />
-          )}
+          data={postData}
           scrollEnabled={false}
+          renderItem={renderNewsItem}
           showsHorizontalScrollIndicator={false}
+          keyExtractor={(_, index) => `item-${index}`}
         />
       </ScrollView>
 
       {/*<BottomSheetComment />*/}
       <BottomSheetApp
-        snapPoints={['20%', '20%', '50%', '70%']}
-        visible={data.isShowBottomSheet}
         onClose={onCloseBottomSheet}
-        backgroundStyle={{ borderRadius: normalize.m(10), elevation: 10 }}
         children={<BottomSheetWord />}
+        visible={data.isShowBottomSheet}
+        snapPoints={['20%', '20%', '50%', '70%']}
+        backgroundStyle={{ borderRadius: normalize.m(10), elevation: 10 }}
       />
 
       <BottomSheetApp
-        height={Dimensions.get('window').height}
-        snapPoints={['100%', '100%']}
-        visible={data.isShowComment}
         onClose={onCloseComment}
+        visible={data.isShowComment}
         enablePanDownToClose={false}
+        snapPoints={['100%', '100%']}
+        height={Dimensions.get('window').height}
         backgroundStyle={{ borderRadius: normalize.m(10), elevation: 10 }}
       >
         <BottomSheetComment />
@@ -90,5 +141,3 @@ const DetailPost: React.FC = () => {
     </Container>
   )
 }
-
-export default DetailPost
