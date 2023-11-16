@@ -4,7 +4,6 @@ import { Portal } from 'react-native-portalize'
 import { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
-import { Icon } from '@assets'
 import {
   Text,
   Block,
@@ -21,6 +20,13 @@ import {
   VocabularyChoiceFunc,
   VocabularyOptionsFunc,
 } from '@components'
+import {
+  Quiz,
+  UserService,
+  KnowledgeService,
+  UpdateProgressLearningRequest,
+} from '@services'
+import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { QuestionType } from './constants'
 import { LoadingScreen } from '@screens/LoadingScreen'
@@ -28,7 +34,6 @@ import { useAppDispatch, useBackHandler } from '@hooks'
 import { RootStackParamList, goBack } from '@navigation'
 import { setLoadingStatusAction } from '@redux/reducers'
 import { ModalFunction } from '@components/bases/Modal/type'
-import { KnowledgeService, Quiz, UserService } from '@services'
 
 export type GrammarScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -53,8 +58,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   route,
   navigation,
 }) => {
-  const { nextLessonId, lessonId, chapterId } = route.params
-
+  const { nextLessonId, lessonId, chapterId, checkpointLesson } = route.params
   const leaveModalRef = React.useRef<ModalFunction>(null)
   const wordChoiceRef = React.useRef<WordListRefFunc>(null)
   const optionRef = React.useRef<QuestionRefFunction>(null)
@@ -72,29 +76,31 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
     show: false,
     status: 'no_status',
   })
+
   const [currentQuestion, setCurrentQuestion] = React.useState<CurrentQuestion>(
     {
       index: 0,
       data: null,
     },
   )
+  const checkpointScore = result?.reduce((total, current) => {
+    if (current.result === 'correct') {
+      return total + 1
+    }
+    return total
+  }, 0) ?? 0
 
-  const getQuizByLessonId = async () => {
-    try {
-      const res = await KnowledgeService.getQuizByLessonId(lessonId)
-      const parseRes = parseQuizDataToQuestion(res.data.data.quizzes)
+  React.useEffect(() => {
+    if (checkpointLesson !== undefined && checkpointLesson?.length > 0) {
+      const parseRes = parseQuizDataToQuestion(checkpointLesson)
       setCurrentQuestion({
         index: 0,
         data: parseRes[0],
       })
       setQuestions(parseRes)
-    } catch (error) {
-      console.log(error)
+    } else {
+      getQuizByLessonId()
     }
-  }
-
-  React.useEffect(() => {
-    getQuizByLessonId()
   }, [])
 
   React.useEffect(() => {
@@ -167,6 +173,20 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
     })
   }
 
+  const getQuizByLessonId = async () => {
+    try {
+      const res = await KnowledgeService.getQuizByLessonId(lessonId)
+      const parseRes = parseQuizDataToQuestion(res.data.data.quizzes)
+      setCurrentQuestion({
+        index: 0,
+        data: parseRes[0],
+      })
+      setQuestions(parseRes)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const handleNextQuestion = () => {
     //next question
     const nextQuestion =
@@ -202,13 +222,23 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   }
 
   const updateLessonComplete = async () => {
+    console.log('checkpointScore', ((checkpointScore/questions.length) * 100))
+
     dispatch(setLoadingStatusAction(true))
+    const body: UpdateProgressLearningRequest =
+      checkpointLesson !== undefined
+        ? {
+            chapter: chapterId,
+            checkpointScore: ((checkpointScore/questions.length) * 100),
+          }
+        : {
+            chapter: chapterId,
+            lessons: [nextLessonId],
+          }
+
     try {
-      await UserService.updateProgressLearning({
-        chapter: chapterId,
-        lessons: [nextLessonId],
-      })
-      navigation.navigate('CONGRATULATION_SCREEN')
+      await UserService.updateProgressLearning(body)
+      navigation.navigate('CONGRATULATION_SCREEN', {})
     } catch (error) {
       console.log(error)
     }

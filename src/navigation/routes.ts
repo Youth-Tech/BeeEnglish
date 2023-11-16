@@ -1,5 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
+import {Quiz} from "@services";
+
 export const AUTH_ROUTE = {
   //BOTTOM_TAB
   BOTTOM_TAB: 'BOTTOM_TAB',
@@ -58,6 +60,7 @@ export type RootStackParamList = {
     lessonId: string
     nextLessonId: string
     chapterId: string
+    checkpointLesson?: Quiz[]
   }
   [AUTH_ROUTE.DICTIONARY_SCREEN]: undefined
   [AUTH_ROUTE.LESSON_MAP_SCREEN]: undefined
@@ -75,11 +78,14 @@ export type RootStackParamList = {
   [AUTH_ROUTE.GRAMMAR_SCREEN]: {
     lessonId: string
     nextLessonId: string
-    chapterId: string
+    chapterId: string,
+    checkpointLesson?: Quiz[]
   }
   [AUTH_ROUTE.SAVED_WORD_SCREEN]: undefined
   [AUTH_ROUTE.DETAIL_WORD_SCREEN]: undefined
-  [AUTH_ROUTE.CONGRATULATION_SCREEN]: undefined
+  [AUTH_ROUTE.CONGRATULATION_SCREEN]: {
+    status?: 'success' | 'failure'
+  }
 }
 
 export type RouteKeys = keyof typeof AUTH_ROUTE | keyof typeof PUBLIC_ROUTE
