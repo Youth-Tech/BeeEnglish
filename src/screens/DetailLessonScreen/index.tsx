@@ -21,8 +21,7 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
   route,
   navigation,
 }) => {
-  const { lessonId, chapterId, nextLessonId } = route.params
-
+  const { lessonId, chapterId, nextLessonId, checkpointLesson } = route.params
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { colors, normalize } = useTheme()
@@ -54,6 +53,7 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
         lessonId,
         chapterId,
         nextLessonId,
+        checkpointLesson
       })
     }
   }

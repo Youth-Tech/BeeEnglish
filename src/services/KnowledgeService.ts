@@ -17,8 +17,9 @@ export interface Chapter {
   order: number
   course: string
   lessons: Lesson[]
-  attachment: Attachment | null
   status: boolean
+  attachment: Attachment | null
+  checkpoint?: Quiz[]
 }
 
 export interface GetChapterAndLessonRes extends DefaultResponse {
@@ -89,11 +90,13 @@ export const KnowledgeService = {
       `/knowledge/quiz/${lessonId}/get-quizzes-by-lesson?page=1&limit=20`,
     )
   },
+
   getWordByLessonId: (lessonId: string) => {
     return ApiUtil.get<GetWordByLessonIdRes>(
       `/knowledge/word/${lessonId}/get-words-by-lesson`,
     )
   },
+
   getAllWord: (page: number, limit: number) => {
     return ApiUtil.get<GetAllWordResponse>(
       `/knowledge/word/get-all?page=${page}&limit=${limit}`,

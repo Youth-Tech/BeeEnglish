@@ -12,6 +12,7 @@ import {
 } from '@utils/notificationUtils'
 import { useTheme } from '@themes'
 import RootStack from './RootStack'
+import {UserService} from "@services";
 import { useAppSelector } from '@hooks'
 import { Block, Text } from '@components'
 import { getIsLoading } from '@redux/selectors'
@@ -31,12 +32,27 @@ export const RootApp = () => {
 
   const { colors } = useTheme()
   const isLoading = useAppSelector(getIsLoading)
+  const isLogin = useAppSelector((state)=>state.root.auth.isSignedIn)
+
+  const updateFCMToken = async (fcmToken: string)=>{
+    try{
+      await UserService.updateFCMToken({
+        fcmToken
+      })
+    }catch (e) {
+      console.log(e)
+    }
+  }
 
   const handleRequestPostNotification = async () => {
     const isGranted = await requestUserPermission()
     if (isGranted) {
       let fcmToken = await getFCMToken()
       console.log(fcmToken)
+
+      if(isLogin){
+        updateFCMToken(fcmToken || "")
+      }
 
       await createChannelId()
       notificationListener()
