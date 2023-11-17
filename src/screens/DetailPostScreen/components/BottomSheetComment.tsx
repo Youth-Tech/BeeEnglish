@@ -2,29 +2,130 @@ import React, { useState } from 'react'
 import { Icon } from '@assets'
 import { useStyles } from '../styles'
 import { Block, Text, TextInput } from '@components'
-import { useAppDispatch } from '@hooks'
+import { useAppDispatch, useAppSelector } from '@hooks'
 import { useTranslation } from 'react-i18next'
-import { changeShowComment } from '@redux/reducers'
-import { DataComment } from '@screens/DetailPostScreen/const'
+import { changeShowComment, setParentCommentId } from '@redux/reducers'
 import CommentComponent from '@components/common/CommentComponent'
-import {Keyboard, TouchableOpacity} from 'react-native'
+import {
+  DocumentSelectionState,
+  Keyboard,
+  TouchableOpacity,
+} from 'react-native'
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import SendMessenger from '@assets/icons/SendMessenger'
 import { normalize, useTheme } from '@themes'
+import { PostServices } from '@services/PostService'
 
-const BottomSheetComment: React.FC = () => {
+export interface BottomSheetCommentProps {
+  postId: string
+}
+
+export interface CommentNested extends Comment {
+  comments: Array<CommentNested>
+}
+
+const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({ postId }) => {
+  const parentCommentId = useAppSelector(
+    (state) => state.root.detailPost.parentCommentId,
+  )
+  const dispatch = useAppDispatch()
   const { colors } = useTheme()
   const styles = useStyles()
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
+
   const [valueComment, setValueComment] = useState('')
+  const textInputRef = React.useRef<DocumentSelectionState>(null)
+  const [listComment, setListComment] = React.useState<Array<CommentNested>>([])
+
+  React.useEffect(() => {
+    getListComment()
+  }, [])
+
+  const getListComment = async () => {
+    try {
+      const res = await PostServices.getPostComments({
+        postId,
+      })
+
+      if (res.status === 200) {
+        const commentData: Array<CommentNested> = res.data.data.comments.map(
+          (item) => ({
+            ...item,
+            comments: [],
+          }),
+        )
+        setListComment(commentData)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const onCloseComment = () => {
     dispatch(changeShowComment(false))
   }
-  const onPressButtonSend = () => {
-    setValueComment('');
-    Keyboard.dismiss();
+
+  const onPressButtonSend = async () => {
+    // const commentId = (Math.random() * 100000000).toString()
+    // const newListComment = listComment
+    //
+    // newListComment.push({
+    //   _id: commentId,
+    //   creator: {
+    //     avatar: {
+    //       src: userInfo.avatar.src || '',
+    //     },
+    //     username: userInfo.username,
+    //     _id: userInfo.id,
+    //     id: userInfo.id,
+    //   },
+    //   content: valueComment,
+    //   createdAt: new Date().toString(),
+    //   id: commentId,
+    //   comments: [],
+    //   parent: parentCommentId === '' ? null : parentCommentId,
+    //   post: postId,
+    //   childCount: 0,
+    //   likeCount: 0,
+    //   updatedAt: new Date().toString(),
+    // })
+    Keyboard.dismiss()
+
+    try {
+      setValueComment('')
+
+      const res = await PostServices.createComment(
+        parentCommentId === ''
+          ? {
+              postId,
+              content: valueComment,
+            }
+          : {
+              postId: postId,
+              parent: parentCommentId,
+              content: valueComment,
+            },
+      )
+
+      if (res.status === 200) {
+        dispatch(setParentCommentId(''))
+
+        if (res.data.data.parent === null) {
+          const newListComment = [...listComment]
+          newListComment.push({
+            ...res.data.data,
+            comments: [],
+          })
+          setListComment(newListComment)
+        } else {
+          getListComment()
+        }
+      }
+    } catch (e) {
+      console.log(e)
+    }
   }
+
   return (
     <Block style={styles.boxComment}>
       <Block style={styles.headerComment}>
@@ -39,12 +140,23 @@ const BottomSheetComment: React.FC = () => {
         style={{ marginHorizontal: 20, marginTop: 20 }}
         showsVerticalScrollIndicator={false}
       >
-        {DataComment.map((item, index) => (
-          <CommentComponent level={1} comment={item} key={index} />
+        {listComment.map((item, index) => (
+          <CommentComponent
+            level={1}
+            key={index}
+            comment={item}
+            postId={postId}
+            listComment={listComment}
+            parentCommentId={item._id}
+            parentCommentIndex={index}
+            textInputRef={textInputRef}
+            setCommentData={setListComment}
+          />
         ))}
       </BottomSheetScrollView>
       <Block style={styles.inputBoxSend}>
         <TextInput
+          ref={textInputRef}
           placeholder={'Viết bình luận'}
           containerStyle={{
             flex: 1,
@@ -58,7 +170,7 @@ const BottomSheetComment: React.FC = () => {
           onChangeText={setValueComment}
         />
         <TouchableOpacity onPress={onPressButtonSend}>
-          <SendMessenger />
+          <SendMessenger onPress={onPressButtonSend} />
         </TouchableOpacity>
       </Block>
     </Block>

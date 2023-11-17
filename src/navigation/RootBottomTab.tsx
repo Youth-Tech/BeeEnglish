@@ -16,7 +16,7 @@ export function RootBottomTab() {
   return (
     <Tab.Navigator
       screenOptions={screenOptions}
-      initialRouteName={'LEARNING_SCREEN'}
+      initialRouteName={'HOME_SCREEN'}
       tabBar={(props) => <CustomBottomNavigation {...props} />}
     >
       <Tab.Screen name="HOME_SCREEN" component={HomeScreen} />

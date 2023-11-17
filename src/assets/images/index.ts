@@ -26,4 +26,5 @@ export const images = {
   BeeWithHoney: require('./BeeWithHoney.png'),
   QuestionBubble: require('./QuestionBubble.png'),
   BeeSad: require('./BeeSad.png'),
+  Checkpoint: require('./checkpoint.png')
 }

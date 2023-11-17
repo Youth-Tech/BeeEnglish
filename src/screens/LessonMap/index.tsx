@@ -11,27 +11,26 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { Icon } from '@assets'
 import { navigate } from '@navigation'
 import { LoadingScreen } from '@screens'
-import { MOCK_DATA_LESSON } from './mock'
 import { normalize, useTheme } from '@themes'
-import { Chapter, KnowledgeService, Lesson } from '@services'
-import { Text, Block, Container, BlockAnimated } from '@components'
-import { InfoOnStartLesson, ItemLesson, ItemLessonProps } from './components'
+import { ItemLesson, ItemLessonProps } from './components'
+import { Chapter, KnowledgeService, Lesson, Quiz } from '@services'
+import { Block, BlockAnimated, Container, Text } from '@components'
+import { defaultCheckPointLessonData } from '@screens/LessonMap/mock'
 
-export type SectionData = (typeof MOCK_DATA_LESSON)[number] & {
+export type SectionData = {
+  lessonComplete: number
+  data: ItemLessonProps[]
+  title: string
+  status: 'lock' | 'unlock'
+  index: number
   chapterId: string
+  checkpoint?: Quiz[]
 }
 
 const parseDataToLessonData = (
   data: Lesson[],
   chapterStatus?: 'lock' | 'unlock',
 ): ItemLessonProps[] => {
-  const listLessonWithOrder = data.filter((item) => item.status === true)
-
-  const currentLesson =
-    listLessonWithOrder.length > 0
-      ? listLessonWithOrder[listLessonWithOrder.length - 1]
-      : data[0]
-
   return data.map((item, index, arr) => {
     const nextLesson = arr[index + 1] || item
 
@@ -39,13 +38,9 @@ const parseDataToLessonData = (
       id: item._id,
       lessonDescription: item.description,
       lessonTitle: item.name,
-      status: !item.status
-        ? 'lock'
-        : item._id === currentLesson._id
-        ? 'current'
-        : 'complete',
+      status: item.status,
       thumbnail: item.attachment?.src || '',
-      type: index === arr.length - 1 ? 'checkpoint' : 'normal',
+      type: 'normal',
       chapterStatus: chapterStatus || 'lock',
       nextLessonId: nextLesson._id,
     }
@@ -54,20 +49,28 @@ const parseDataToLessonData = (
 
 const parseDataToSectionData = (data: Chapter[]): SectionData[] => {
   return data.map((item) => {
-    let lessonComplete = item.lessons.filter(
-      (item) => item.status === true,
-    ).length
+    let lessonComplete = item.lessons.filter((item) => item.status).length
+    const data = parseDataToLessonData(
+      item.lessons,
+      // arr?.[index + 1]?.status || false,
+      item.status ? 'unlock' : 'lock',
+    )
+
+    data.push({
+      ...defaultCheckPointLessonData,
+      checkpoint: item.checkpoint?.questions ?? [],
+      chapterStatus: item.status ? 'unlock' : 'lock',
+      status: (item.checkpoint?.score ?? 0) > 80 ? 'completed' : 'current',
+    })
 
     return {
-      data: parseDataToLessonData(
-        item.lessons,
-        item.status ? 'unlock' : 'lock',
-      ),
+      data,
       lessonComplete,
       index: item.order,
       title: item.name,
       status: item.status ? 'unlock' : 'lock',
       chapterId: item._id,
+      checkpoint: item?.checkpoint?.questions || [],
     }
   })
 }
@@ -76,20 +79,28 @@ export const LessonMap = () => {
   const { colors } = useTheme()
   const [data, setData] = React.useState<SectionData[]>([])
 
-  const onStartExaminationPress = (id: string) => {
-    console.log('onStartExamination', id)
-    navigate('DETAIL_LESSON_SCREEN', { lessonId: id })
+  const onStartExaminationPress = ({
+    chapterId,
+    id: lessonId,
+    checkpoint: checkpointLesson,
+  }: Partial<ItemLessonProps>) => {
+    console.log('onStartExamination', lessonId)
+    navigate('GRAMMAR_SCREEN', { lessonId, checkpointLesson, chapterId })
   }
 
   const onStartLessonPress = ({
-    nextLessonId,
+    id: lessonId,
     chapterId,
-    lessonId,
-  }: InfoOnStartLesson) => {
-    navigate('DETAIL_LESSON_SCREEN', { lessonId, chapterId, nextLessonId })
+    nextLessonId,
+  }: Partial<ItemLessonProps>) => {
+    navigate('DETAIL_LESSON_SCREEN', {
+      lessonId,
+      chapterId,
+      nextLessonId,
+    })
   }
 
-  const onUnlockPress = (id: string) => {
+  const onUnlockPress = ({ id }: Partial<ItemLessonProps>) => {
     console.log('onUnlockPress', id)
   }
 
@@ -118,6 +129,7 @@ export const LessonMap = () => {
         onUnlockPress={onUnlockPress}
         chapterId={section.chapterId}
         nextLessonId={item.nextLessonId}
+        checkpoint={section?.checkpoint || []}
         onStartLessonPress={onStartLessonPress}
         isEndItem={index === section.data.length - 1}
         onStartExaminationPress={onStartExaminationPress}
@@ -175,8 +187,18 @@ export const LessonMap = () => {
                   : colors.greyPrimary
               }
             >
-              Lessons completed: {item.section.lessonComplete}/
-              {item.section.data.length}
+              Lessons completed:{' '}
+              {
+                item.section.data.filter(
+                  (item) =>
+                    item.status === 'completed' && item.type !== 'checkpoint',
+                ).length
+              }
+              /
+              {
+                item.section.data.filter((item) => item.type !== 'checkpoint')
+                  .length
+              }
             </Text>
           </Block>
 

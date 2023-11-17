@@ -1,5 +1,5 @@
 interface Topic {
-  id: string
+  _id: string
   name: string
   description: string
   attachment: Attachment
@@ -12,8 +12,9 @@ interface Level {
   attachment: Attachment
   score: number
 }
+
 interface PostResponse {
-  id: string
+  _id: string
   title: string
   english: string[]
   vietnamese: string[]
@@ -22,10 +23,14 @@ interface PostResponse {
   level: Level
   note: string
   creator?: User
-  attachment: Attachment[]
+  attachments: Attachment[]
   flag?: boolean
   createdAt: string
   updateAt: string
+  liked: boolean
+  usersLiked: string[]
+  likeCount: number
+  commentCount: number
 }
 
 interface User {
@@ -43,6 +48,8 @@ interface User {
   level: string
   wordBookmarks: []
   provider: string
+  deviceId: string
+  deviceName: string
 }
 
 interface Badges {
@@ -54,6 +61,26 @@ interface Badges {
     type: string
     src: string
   }
+}
+
+interface Comment {
+  _id: string
+  content: string
+  post: string
+  creator: {
+    _id: string
+    avatar: {
+      src: string
+    }
+    id: string
+    username: string
+  }
+  parent: string | null
+  createdAt: string
+  updatedAt: string
+  likeCount: number
+  childCount: number
+  id: string
 }
 
 interface Attachment {

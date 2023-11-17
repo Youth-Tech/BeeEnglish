@@ -32,7 +32,8 @@ messaging().setBackgroundMessageHandler(async (remoteMessage) => {
 //get init device info
 const initRun = (async function () {
   DeviceInfoConfig.deviceName = DeviceInfo.getDeviceNameSync()
-  DeviceInfoConfig.deviceId = await DeviceInfo.getUniqueId()
+  const deviceId = await DeviceInfo.getUniqueId()
+  DeviceInfoConfig.deviceId = deviceId.concat(new Date().getTime().toString())
 })()
 
 AppRegistry.registerComponent(appName, () => App)

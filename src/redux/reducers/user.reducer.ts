@@ -2,7 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { EAttachment } from '@utils/enums'
 import { UserData } from '@services/UserService'
-import { loginOAuthThunk, updateUserAvatar } from '@redux/actions'
+import {
+  loginForGuest,
+  loginOAuthThunk,
+  updateUserAvatar,
+} from '@redux/actions'
 import { login, signUp, verifyAccount } from '@redux/actions/auth.action'
 
 export const defaultUserState: UserData = {
@@ -28,6 +32,8 @@ export const defaultUserState: UserData = {
   wordBookmarks: [],
   provider: '',
   refreshToken: '',
+  deviceId: '',
+  deviceName: '',
 }
 
 const userSlice = createSlice({
@@ -72,7 +78,13 @@ const userSlice = createSlice({
       .addCase(loginOAuthThunk.fulfilled, (state, action) => {
         return {
           ...state,
-          ...action.payload?.data.user
+          ...action.payload?.data.user,
+        }
+      })
+      .addCase(loginForGuest.fulfilled, (state, action) => {
+        return {
+          ...state,
+          ...action.payload?.data.user,
         }
       })
   },

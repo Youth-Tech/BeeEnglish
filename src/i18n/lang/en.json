@@ -147,7 +147,6 @@
     "new_password": "New password",
     "re_new_password": "Confirm your new password",
     "old_password_is_wrong": "Old password is wrong!!",
-    "change_pass_success": "Change password successfully!",
     "year": "years",
     "month": "months",
     "day": "days",
@@ -155,6 +154,12 @@
     "ago": "ago",
     "hours": "hours",
     "minute": "minutes",
-    "second": "seconds"
+    "second": "seconds",
+    "comments": "{{amount}} comments",
+    "post_emotion_status_user": "{{user}} and {{amount}} others",
+    "post_emotion_status": "{{amount}} others",
+    "guest_modal_title": "Oh! No",
+    "guest_modal_desc": "Enhance your experience by creating an account!",
+    "guest_modal_button": "Create Account!!"
   }
 }

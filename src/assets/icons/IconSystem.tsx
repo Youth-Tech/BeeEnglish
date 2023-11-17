@@ -1022,12 +1022,23 @@ const CheckIcon = (props: Props) => (
 )
 
 const IncorrectIcon = (props: Props) => (
-  <Svg width={51} height={50} fill="none" {...props}>
-    <Ellipse cx={24.793} cy={25} fill="#fff" rx={24.793} ry={25} />
+  <Svg
+    width={props.size || 51}
+    height={props.size || 50}
+    fill="none"
+    {...props}
+  >
+    <Ellipse
+      cx={!!props.size ? props.size / 2 : 24.793}
+      cy={!!props.size ? props.size / 2 : 25}
+      fill="#fff"
+      rx={!!props.size ? props.size / 2 : 24.793}
+      ry={!!props.size ? props.size / 2 : 25}
+    />
     <Path
       stroke="#FF4B4D"
       strokeLinecap="round"
-      strokeWidth={8}
+      strokeWidth={props.strokeWidth || 8}
       d="m32.164 19-14 14M18.164 19l14 14"
     />
   </Svg>
@@ -1047,14 +1058,7 @@ const Delete = ({
   </Svg>
 )
 const QuestionMark = ({ ...props }: Props) => (
-  <Svg
-    width={30}
-    height={30}
-    viewBox="0 0 30 30"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <Svg width={30} height={30} viewBox="0 0 30 30" fill="none" {...props}>
     <G clipPath="url(#clip0_657_2402)">
       <Path
         d="M17.4805 16.793L22.7468 12.6676L23.569 5.48551L17.4805 2.13371L15.0089 5.53039C16.288 6.17264 17.1964 7.45473 17.3056 8.95051C17.4427 10.832 16.3018 12.5837 14.5301 13.2097C12.176 14.0427 10.5939 16.29 10.5939 18.8022V19.8815C10.5939 21.2874 11.7336 22.427 13.1388 22.427H16.8613L17.4805 16.793ZM10.1379 11.8138H6.41556C5.00989 11.8138 3.87036 10.6743 3.87036 9.26861C3.87036 8.83772 3.90042 8.40389 3.95966 7.9792C4.62651 3.2 8.93046 -0.296698 13.758 0.0201767H17.481L14.8324 2.69445M16.8614 24.8884H13.139C11.7333 24.8884 10.5938 26.0279 10.5938 27.4336V27.4547C10.5938 28.8604 11.7333 29.9999 13.139 29.9999H16.4087"
@@ -1448,6 +1452,7 @@ const IconUsFlag = (props: Props) => (
   <Svg width={24} height={24} fill="none" {...props}>
     <G clipPath="url(#a)">
       <Mask
+        xmlns="http://www.w3.org/2000/svg"
         id="b"
         width={24}
         height={24}
@@ -1495,6 +1500,119 @@ const IconCheckNormal = (props: Props) => (
       d="M19.17 6.93a1.125 1.125 0 0 1 0 1.59l-9.146 9.146a1.124 1.124 0 0 1-1.603-.014l-3.604-3.726a1.125 1.125 0 1 1 1.617-1.565l2.809 2.904L17.58 6.93a1.125 1.125 0 0 1 1.59 0Z"
       clipRule="evenodd"
     />
+  </Svg>
+)
+
+const IconCheckpoint = (props: Props) => (
+  <Svg width={'100%'} height={'100%'} fill="none" {...props}>
+    <Mask
+      xmlns="http://www.w3.org/2000/svg"
+      id="a"
+      width={60}
+      height={60}
+      x={0}
+      y={0}
+      maskUnits="userSpaceOnUse"
+      style={{
+        maskType: 'luminance',
+      }}
+    >
+      <Path fill="#fff" d="M59.534.3H.299v59.234h59.235V.299Z" />
+    </Mask>
+    <G mask="url(#a)">
+      <Mask
+        xmlns="http://www.w3.org/2000/svg"
+        id="b"
+        width={83}
+        height={116}
+        x={-12}
+        y={-45}
+        maskUnits="userSpaceOnUse"
+        style={{
+          maskType: 'luminance',
+        }}
+      >
+        <Path fill="#fff" d="M-11.388-44.181h81.666V70.152h-81.666V-44.18Z" />
+      </Mask>
+      <G mask="url(#b)">
+        <Path
+          fill="#F88800"
+          d="M30.077 58.094c-15.86 0-28.664-12.748-28.664-28.538 0-15.79 12.803-28.54 28.664-28.54 15.86 0 28.663 12.748 28.663 28.54 0 15.793-12.995 28.538-28.663 28.538Z"
+        />
+        <Path
+          fill="#F9A033"
+          d="M29.56 58.614c-15.724 0-28.417-12.637-28.417-28.29C1.143 14.67 13.836 2.03 29.559 2.03s28.417 12.637 28.417 28.293c0 15.655-12.883 28.29-28.417 28.29Z"
+        />
+        <Path
+          fill="#F88800"
+          d="M29.147 53.822c-12.692 0-22.939-10.2-22.939-22.836S16.455 8.15 29.147 8.15c12.691 0 22.937 10.2 22.937 22.835 0 12.637-10.399 22.836-22.937 22.836Z"
+        />
+        <Path
+          fill="#FFCA3A"
+          d="M30.197 52.27c-12.693 0-22.937-10.2-22.937-22.836S17.504 6.599 30.197 6.599c12.692 0 22.937 10.199 22.937 22.835 0 12.636-10.398 22.836-22.937 22.836Z"
+        />
+        <Mask
+          xmlns="http://www.w3.org/2000/svg"
+          id="c"
+          width={109}
+          height={108}
+          x={-25}
+          y={-24}
+          maskUnits="userSpaceOnUse"
+          style={{
+            maskType: 'alpha',
+          }}
+        >
+          <Path
+            stroke="#3D6D96"
+            strokeWidth={44.593}
+            d="M29.807-1.28c17.455 0 31.627 14.014 31.627 31.275 0 17.26-14.172 31.275-31.627 31.275S-1.821 47.256-1.821 29.995c0-17.26 14.173-31.275 31.628-31.275Z"
+          />
+        </Mask>
+        <G mask="url(#c)">
+          <Path
+            fill="#fff"
+            d="m4.592-26.46-34.41 82.625 1.107.55 34.41-82.808-1.107-.368Z"
+          />
+        </G>
+        <Path
+          fill="#FFF2CE"
+          d="M19.02 17.887h17.9c.548 0 .993.445.993.993v12.853c0 .549-.445.993-.993.993h-17.9V17.887Z"
+        />
+        <Path
+          fill="#FFF2CE"
+          d="M27.969 25.801h17.899c.548 0 .993.445.993.993v12.853c0 .549-.445.993-.993.993H28.962a.993.993 0 0 1-.993-.993V25.8Z"
+        />
+        <Path
+          fill="#FFE49D"
+          d="M28.294 40.382a.986.986 0 0 1-.325-.732v-6.925h9.945l-9.62 7.657ZM17.032 15.913a.994.994 0 0 1 1.988 0v33.764l-1.988-1.49V15.914Z"
+        />
+      </G>
+      <Mask
+        xmlns="http://www.w3.org/2000/svg"
+        id="d"
+        width={59}
+        height={59}
+        x={0}
+        y={0}
+        maskUnits="userSpaceOnUse"
+        style={{
+          maskType: 'alpha',
+        }}
+      >
+        <Path
+          fill="#835E31"
+          d="M29.682.45c16.047 0 29.077 13.03 29.077 29.077 0 16.048-13.03 29.078-29.077 29.078-16.048 0-29.078-13.03-29.078-29.078C.604 13.48 13.634.45 29.682.45Z"
+        />
+      </Mask>
+      <G mask="url(#d)">
+        <Path
+          fill="#fff"
+          d="m8.619-32.063-30.691 89.134-9.434-3.249L-.816-35.31l9.435 3.248Z"
+          opacity={0.9}
+        />
+      </G>
+    </G>
   </Svg>
 )
 
@@ -1759,6 +1877,10 @@ const Icons = {
     state: 'CheckNormal',
     icon: IconCheckNormal,
   },
+  Checkpoint: {
+    state: 'Checkpoint',
+    icon: IconCheckpoint,
+  },
 }
 
 export type TIcon = keyof typeof Icons
@@ -1834,4 +1956,5 @@ export {
   IconFlagVietnam,
   IconUsFlag,
   IconCheckNormal,
+  IconCheckpoint,
 }

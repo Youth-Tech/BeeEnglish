@@ -4,6 +4,7 @@ import Tooltip from 'rn-tooltip'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Pressable } from 'react-native'
 
+import { Quiz } from '@services'
 import { widthScreen } from '@utils/helpers'
 import { Icon, TIcon, images } from '@assets'
 import { normalize, useTheme } from '@themes'
@@ -15,20 +16,24 @@ export interface InfoOnStartLesson {
   chapterId: string
   isRestart?: boolean
 }
+
 export interface ItemLessonProps {
   id: string
   thumbnail: string
   chapterId?: string
+  checkpoint?: Quiz[]
   lessonTitle: string
   isEndItem?: boolean
   nextLessonId: string
   lessonDescription: string
   type?: 'normal' | 'checkpoint'
   chapterStatus: 'lock' | 'unlock'
-  status: 'complete' | 'lock' | 'current'
-  onUnlockPress?: (lessonId: string) => void
-  onStartExaminationPress?: (lessonId: string) => void
-  onStartLessonPress?: (info: InfoOnStartLesson) => void
+  status: 'completed' | 'lock' | 'current'
+  onUnlockPress?: (item: Partial<ItemLessonProps>) => void
+  onStartExaminationPress?: (item: Partial<ItemLessonProps>) => void
+  onStartLessonPress?: (
+    item: Partial<ItemLessonProps & { isRestart: boolean }>,
+  ) => void
 }
 
 const getTypeOfModal = new Map([
@@ -45,18 +50,17 @@ const getIconByType = new Map([
   ['checkpoint', 'Question' as TIcon],
 ])
 
-export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
-  id,
-  type,
-  status,
-  chapterId,
-  lessonTitle,
-  nextLessonId,
-  onUnlockPress,
-  lessonDescription,
-  onStartLessonPress,
-  onStartExaminationPress,
-}) => {
+export const PopOver: React.FC<Partial<ItemLessonProps>> = (props) => {
+  const {
+    type,
+    status,
+    lessonTitle,
+    onUnlockPress,
+    chapterStatus,
+    lessonDescription,
+    onStartLessonPress,
+    onStartExaminationPress,
+  } = props
   const { colors } = useTheme()
   const { t } = useTranslation()
 
@@ -76,29 +80,34 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
           }
         />
         <Text fontFamily="bold" size={'h5'} style={styles.textTypeModal}>
-          {type === 'normal'
+          {type === 'normal' && chapterStatus === 'lock'
+            ? getTypeOfModal.get(status || 'complete')
+            : type === 'normal'
             ? getTypeOfModal.get(status || 'complete')
             : getTypeOfModal.get('checkpoint')}
         </Text>
       </Block>
 
       <Text fontFamily="bold" size={'h4'} style={styles.titleModal}>
-        {type === 'checkpoint'
-          ? t('practice_title')
-          : status === 'lock'
+        {(type === 'checkpoint' && chapterStatus === 'lock') ||
+        status === 'lock'
           ? t('lock_title')
+          : type === 'checkpoint'
+          ? t('practice_title')
           : lessonTitle}
       </Text>
+
       <Text size={'h5'}>
-        {type === 'checkpoint'
-          ? t('practice_description')
-          : status === 'lock'
+        {(type === 'checkpoint' && chapterStatus === 'lock') ||
+        status === 'lock'
           ? t('lock_description')
+          : type === 'checkpoint'
+          ? t('practice_description')
           : lessonDescription}
       </Text>
 
       <Block row space="between" marginTop={25} alignCenter>
-        {status === 'complete' ? (
+        {status === 'completed' ? (
           // button for old lesson
           <Block row space="between" marginLeft={-5}>
             <ShadowButton
@@ -111,9 +120,8 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
               shadowButtonColor={colors.orangePrimary}
               onPress={() =>
                 onStartLessonPress?.({
-                  lessonId: id!,
-                  chapterId: chapterId!,
-                  nextLessonId: nextLessonId!,
+                  ...props,
+                  isRestart: false,
                 })
               }
             >
@@ -131,9 +139,7 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
               shadowButtonColor={colors.orangePrimary}
               onPress={() =>
                 onStartLessonPress?.({
-                  lessonId: id!,
-                  chapterId: chapterId!,
-                  nextLessonId: nextLessonId!,
+                  ...props,
                   isRestart: true,
                 })
               }
@@ -153,25 +159,20 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
             buttonColor={colors.yellowDark}
             containerStyle={styles.buttonStart}
             onPress={() =>
-              type === 'checkpoint'
-                ? onStartExaminationPress?.(id!)
-                : status === 'lock'
-                ? onUnlockPress?.(id!)
-                : onStartLessonPress?.({
-                    lessonId: id!,
-                    chapterId: chapterId!,
-                    nextLessonId: nextLessonId!,
-                  })
+              type === 'checkpoint' && chapterStatus === 'unlock'
+                ? onStartExaminationPress?.(props)
+                : status === 'lock' || chapterStatus === 'lock'
+                ? onUnlockPress?.(props)
+                : onStartLessonPress?.(props)
             }
             buttonBorderColor={colors.orangePrimary}
             shadowButtonColor={colors.orangePrimary}
           >
             <Text size={'h4'} fontFamily="bold">
-              {type === 'checkpoint'
-                ? t('start_practice')
-                : status === 'lock'
-                ? t('unlock')
-                : t('lets_start')}
+              {(type === 'checkpoint' || status === 'current') &&
+              chapterStatus === 'unlock'
+                ? t('lets_start')
+                : t('unlock')}
             </Text>
           </ShadowButton>
         )}
@@ -192,10 +193,11 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
   thumbnail,
   isEndItem,
   lessonTitle,
+  checkpoint,
+  type = 'normal',
   nextLessonId,
   chapterStatus,
   onUnlockPress,
-  type = 'normal',
   lessonDescription,
   onStartLessonPress,
   onStartExaminationPress,
@@ -225,8 +227,10 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
                 type={type}
                 status={status}
                 chapterId={chapterId}
+                checkpoint={checkpoint}
                 lessonTitle={lessonTitle}
                 nextLessonId={nextLessonId}
+                chapterStatus={chapterStatus}
                 onUnlockPress={onUnlockPress}
                 lessonDescription={lessonDescription}
                 onStartLessonPress={onStartLessonPress}
@@ -241,30 +245,34 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
               padding={5}
               borderWidth={2}
               borderColor={
-                status === 'complete' ? colors.orangePrimary : '#DAE1EA'
+                status === 'completed' ? colors.orangePrimary : '#DAE1EA'
               }
             >
-              <Image
-                style={styles.lessonImage}
-                source={{
-                  uri: thumbnail,
-                }}
-              />
+              {type === 'checkpoint' ? (
+                <Image style={styles.lessonImage} source={images.Checkpoint} />
+              ) : (
+                <Image
+                  style={styles.lessonImage}
+                  source={{
+                    uri: thumbnail,
+                  }}
+                />
+              )}
 
-              {status === 'lock' &&
-                (type === 'normal' || chapterStatus === 'lock') && (
-                  <Block
-                    alignCenter
-                    radius={68}
-                    justifyCenter
-                    style={StyleSheet.absoluteFill}
-                    backgroundColor="rgba(255, 250, 250, 0.56)"
-                  >
-                    <Icon state="Lock" fill="white" />
-                  </Block>
-                )}
+              {((status !== 'current' && status !== 'completed') ||
+                chapterStatus === 'lock') && (
+                <Block
+                  alignCenter
+                  radius={68}
+                  justifyCenter
+                  style={StyleSheet.absoluteFill}
+                  backgroundColor="rgba(255, 250, 250, 0.56)"
+                >
+                  <Icon state="Lock" fill="white" />
+                </Block>
+              )}
 
-              {status === 'complete' && !isEndItem && (
+              {status === 'completed' && !isEndItem && (
                 <Block absolute bottom={-8} alignSelf="center">
                   <Icon state="CheckSmall" />
                 </Block>
@@ -278,9 +286,9 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
               height={20}
               radius={10}
               alignSelf="center"
-              marginTop={status === 'complete' ? 6 : 4}
+              marginTop={status === 'completed' ? 6 : 4}
               backgroundColor={
-                status === 'complete' ? colors.orangePrimary : '#DAE1EA'
+                status === 'completed' ? colors.orangePrimary : '#DAE1EA'
               }
             />
           )}
@@ -291,10 +299,10 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
           height={68}
           justifyCenter
           backgroundColor={
-            status === 'current'
-              ? '#F3F8F3'
-              : type === 'checkpoint'
+            type === 'checkpoint'
               ? '#FFF2CE'
+              : status === 'current'
+              ? '#F3F8F3'
               : 'transparent'
           }
           style={styles.blockLabel}

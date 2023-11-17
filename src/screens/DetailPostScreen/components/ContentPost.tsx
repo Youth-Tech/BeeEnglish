@@ -14,6 +14,7 @@ const ContentPost: React.FC<ParagraphProps> = ({ english, vietnamese }) => {
   const styles = useStyles(colors)
   const pattern = /\S+(['".,!?;:]?)(?=\s|$)/g
   const words = english.match(pattern)
+
   return (
     <Block>
       <Block style={styles.boxContent}>

@@ -151,7 +151,6 @@
     "new_password": "Mật khẩu mới",
     "re_new_password": "Nhập lại mật khẩu mới",
     "old_password_is_wrong": "Mật khẩu cũ sai!",
-    "change_pass_success": "Thay đổi mật khẩu thành công",
     "year": "năm",
     "month": "tháng",
     "day": "ngày",
@@ -159,6 +158,12 @@
     "ago": "trước",
     "hours": "giờ",
     "minute": "phút",
-    "second": "giây"
+    "second": "giây",
+    "comments": "{{amount}} bình luận",
+    "post_emotion_status_user": "{{user}} và {{amount}} người khác",
+    "post_emotion_status": "{{amount}} người khác",
+    "guest_modal_title": "Oh! Không",
+    "guest_modal_desc": "Tạo tài khoản để có được trải nghiệm trọn vẹn hơn!",
+    "guest_modal_button": "Tạo tài khoản ngay!"
   }
 }

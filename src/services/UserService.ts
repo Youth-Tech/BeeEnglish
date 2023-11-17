@@ -10,6 +10,7 @@ const enum endPoints {
   getStreak = '/user/get-streaks',
   updateStreak = '/user/update-streak',
   getWordsBookmark = '/user/get-words-bookmark',
+  updateFCM = '/user/update-fcm-token',
 }
 
 export interface UserData {
@@ -31,6 +32,8 @@ export interface UserData {
   wordBookmarks: []
   provider: string
   refreshToken: string
+  deviceId: string
+  deviceName?: string
 }
 
 export type UserStateResponse = {
@@ -43,7 +46,8 @@ export interface UpdateUserAvatarRequest {
 
 export interface UpdateProgressLearningRequest {
   chapter: string
-  lessons: string[]
+  lessons?: string[]
+  checkpointScore?: number
 }
 
 export interface UpdateProgressLearningResponse extends DefaultResponse {
@@ -56,6 +60,7 @@ export interface UpdateProgressLearningResponse extends DefaultResponse {
     updatedAt: string
   }
 }
+
 export interface BookmarkWordResponse extends DefaultResponse {
   data: UserData
 }
@@ -71,11 +76,21 @@ export interface GetStreakResponse extends DefaultResponse {
     streakCount: number
   }
 }
+
 export interface GetWordsBookmarkResponse extends DefaultResponse {
   data: {
     words: Word[]
   }
 }
+
+export interface UpdateFCMTokenRequest {
+  fcmToken: string
+}
+
+export interface UpdateFCMTokenResponse extends DefaultResponse {
+  data: {}
+}
+
 export const UserService = {
   getUserData(token: string) {
     return APIUtils.get<UserStateResponse>(endPoints.getUserData, {
@@ -95,6 +110,7 @@ export const UserService = {
       body,
     )
   },
+
   bookmarkWord(wordId: string) {
     return APIUtils.patch<BookmarkWordResponse>(
       `/user/bookmark-word/${wordId}`,
@@ -110,11 +126,16 @@ export const UserService = {
   updateStreak() {
     return APIUtils.patch<GetStreakResponse>(endPoints.updateStreak, {})
   },
+
   getWordsBookmark(lessonId?: string) {
     return APIUtils.get<GetWordsBookmarkResponse>(
       lessonId
         ? endPoints.getWordsBookmark.concat(`?lesson=${lessonId}`)
         : endPoints.getWordsBookmark,
     )
+  },
+
+  updateFCMToken(body: UpdateFCMTokenRequest) {
+    return APIUtils.patch<UpdateFCMTokenResponse>(endPoints.updateFCM, body)
   },
 } as const
