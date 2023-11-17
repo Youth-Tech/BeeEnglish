@@ -14,7 +14,7 @@ import { useTheme } from '@themes'
 import RootStack from './RootStack'
 import {UserService} from "@services";
 import { useAppSelector } from '@hooks'
-import { Block, Text } from '@components'
+import { Block, StatusBar, Text } from '@components'
 import { getIsLoading } from '@redux/selectors'
 import Toast from 'react-native-toast-message'
 
@@ -80,7 +80,7 @@ export const RootApp = () => {
 
   return (
     <>
-      {/* <StatusBar /> */}
+      {/*<StatusBar />*/}
       {isLoading && (
         <Block
           absolute

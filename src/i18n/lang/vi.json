@@ -164,6 +164,7 @@
     "post_emotion_status": "{{amount}} người khác",
     "guest_modal_title": "Oh! Không",
     "guest_modal_desc": "Tạo tài khoản để có được trải nghiệm trọn vẹn hơn!",
-    "guest_modal_button": "Tạo tài khoản ngay!"
+    "guest_modal_button": "Tạo tài khoản ngay!",
+    "learn_with_video": "Học với mẩu video"
   }
 }

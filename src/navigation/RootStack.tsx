@@ -7,6 +7,7 @@ import {
   DetailPost,
   VocabScreen,
   LoginScreen,
+  VideoScreen,
   SplashScreen,
   StreakScreen,
   GrammarScreen,
@@ -18,6 +19,7 @@ import {
   DetailWordScreen,
   DictionaryScreen,
   LearnedWordScreen,
+  ChooseVideoScreen,
   SendPasswordScreen,
   DetailLessonScreen,
   AboutTheTestScreen,
@@ -110,6 +112,10 @@ const RootStack = () => {
           <Stack.Screen name="VIDEO_SCREEN" component={VideoScreen} />
           <Stack.Screen name="SETTING_SCREEN" component={SettingScreen} />
           <Stack.Screen name="GRAMMAR_SCREEN" component={GrammarScreen} />
+          <Stack.Screen
+            name="CHOOSE_VIDEO_SCREEN"
+            component={ChooseVideoScreen}
+          />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

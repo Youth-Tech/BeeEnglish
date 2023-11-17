@@ -160,6 +160,7 @@
     "post_emotion_status": "{{amount}} others",
     "guest_modal_title": "Oh! No",
     "guest_modal_desc": "Enhance your experience by creating an account!",
-    "guest_modal_button": "Create Account!!"
+    "guest_modal_button": "Create Account!!",
+    "learn_with_video": "Learn with video"
   }
 }

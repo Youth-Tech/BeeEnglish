@@ -163,7 +163,9 @@ export const HomeScreen = () => {
   const onPressDictionary = () => {
     navigate('DICTIONARY_SCREEN')
   }
-  const onPressVideo = () => {}
+  const onPressVideo = () => {
+    navigate('CHOOSE_VIDEO_SCREEN')
+  }
   const onLearningWatchMore = () => {
     navigate('LEARNING_SCREEN')
   }

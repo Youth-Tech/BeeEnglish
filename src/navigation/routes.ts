@@ -30,6 +30,7 @@ export const AUTH_ROUTE = {
 
   CONGRATULATION_SCREEN: 'CONGRATULATION_SCREEN',
   VIDEO_SCREEN: 'VIDEO_SCREEN',
+  CHOOSE_VIDEO_SCREEN: 'CHOOSE_VIDEO_SCREEN',
 } as const
 
 export const PUBLIC_ROUTE = {
@@ -63,6 +64,7 @@ export type RootStackParamList = {
     chapterId: string
     checkpointLesson?: Quiz[]
   }
+  [AUTH_ROUTE.CHOOSE_VIDEO_SCREEN]: undefined
   [AUTH_ROUTE.DICTIONARY_SCREEN]: undefined
   [AUTH_ROUTE.LESSON_MAP_SCREEN]: undefined
   [AUTH_ROUTE.VIDEO_SCREEN]: undefined

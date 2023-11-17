@@ -1,14 +1,16 @@
 import React from 'react'
 import { Block, Container } from '@components'
 import { makeStyles, useTheme } from '@themes'
-import VideoListItem, { VideoListItemProps } from './components/VideoListItem'
+import VideoListItem, {
+  VideoListItemProps,
+} from '../ChooseVideoScreen/components/VideoListItem'
 import { ListRenderItemInfo, View } from 'react-native'
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated'
 import { widthScreen } from '@utils/helpers'
-import VideoComponent from '@screens/VideoScreen/components/VideoComponent'
+import VideoComponent from '@screens/ChooseVideoScreen/components/VideoComponent'
 
 export interface VideoScreenProps {}
 const VideoData: VideoListItemProps[] = [
