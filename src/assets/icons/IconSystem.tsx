@@ -1022,12 +1022,23 @@ const CheckIcon = (props: Props) => (
 )
 
 const IncorrectIcon = (props: Props) => (
-  <Svg width={51} height={50} fill="none" {...props}>
-    <Ellipse cx={24.793} cy={25} fill="#fff" rx={24.793} ry={25} />
+  <Svg
+    width={props.size || 51}
+    height={props.size || 50}
+    fill="none"
+    {...props}
+  >
+    <Ellipse
+      cx={!!props.size ? props.size / 2 : 24.793}
+      cy={!!props.size ? props.size / 2 : 25}
+      fill="#fff"
+      rx={!!props.size ? props.size / 2 : 24.793}
+      ry={!!props.size ? props.size / 2 : 25}
+    />
     <Path
       stroke="#FF4B4D"
       strokeLinecap="round"
-      strokeWidth={8}
+      strokeWidth={props.strokeWidth || 8}
       d="m32.164 19-14 14M18.164 19l14 14"
     />
   </Svg>

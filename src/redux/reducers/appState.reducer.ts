@@ -7,6 +7,7 @@ import {
   loginOAuthThunk,
   updateUserAvatar,
   verifyForgotPassword,
+  loginForGuest,
 } from '@redux/actions'
 
 type AppState = {
@@ -82,6 +83,15 @@ const appStateSlice = createSlice({
         state.isLoading = true
       })
       .addCase(loginOAuthThunk.rejected, (state) => {
+        state.isLoading = false
+      })
+      .addCase(loginForGuest.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(loginForGuest.rejected, (state) => {
+        state.isLoading = false
+      })
+      .addCase(loginForGuest.fulfilled, (state) => {
         state.isLoading = false
       })
   },

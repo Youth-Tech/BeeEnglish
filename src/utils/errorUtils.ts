@@ -1,5 +1,6 @@
 import Toast from 'react-native-toast-message'
 import { t } from 'i18next'
+
 const showErrorMessage = (message: string) => {
   Toast.show({
     type: 'error',
@@ -7,6 +8,7 @@ const showErrorMessage = (message: string) => {
     text2: message,
   })
 }
+
 const keyValueError: [string, string][] = [
   ['FAIL_AUTHENTICATE_403', t('fail_authenticate')],
   ['PLEASE_VERIFY_EMAIL_403', t('please_verify_email')],
@@ -20,7 +22,9 @@ const keyValueError: [string, string][] = [
   ['RESEND_LIMIT_403', t('resend_limit')],
   ['USER_NOT_FOUND_400', t('user_not_found')],
 ]
+
 const ERRORS: Map<string, string> = new Map(keyValueError)
+
 type TErrorStatus =
   | 'FAIL_AUTHENTICATE_403'
   | 'PLEASE_VERIFY_EMAIL_403'
@@ -33,6 +37,7 @@ type TErrorStatus =
   | 'UPLOAD_FAILED_500'
   | 'RESEND_LIMIT_403'
   | 'USER_NOT_FOUND_400'
+
 export const handleErrorMessage = (
   subMessage: string | TErrorStatus,
   messageFromServer: string,

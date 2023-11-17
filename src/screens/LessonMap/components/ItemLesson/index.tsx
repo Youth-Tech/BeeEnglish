@@ -28,7 +28,7 @@ export interface ItemLessonProps {
   lessonDescription: string
   type?: 'normal' | 'checkpoint'
   chapterStatus: 'lock' | 'unlock'
-  status: 'complete' | 'lock' | 'current'
+  status: 'completed' | 'lock' | 'current'
   onUnlockPress?: (item: Partial<ItemLessonProps>) => void
   onStartExaminationPress?: (item: Partial<ItemLessonProps>) => void
   onStartLessonPress?: (
@@ -107,7 +107,7 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = (props) => {
       </Text>
 
       <Block row space="between" marginTop={25} alignCenter>
-        {status === 'complete' ? (
+        {status === 'completed' ? (
           // button for old lesson
           <Block row space="between" marginLeft={-5}>
             <ShadowButton
@@ -245,7 +245,7 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
               padding={5}
               borderWidth={2}
               borderColor={
-                status === 'complete' ? colors.orangePrimary : '#DAE1EA'
+                status === 'completed' ? colors.orangePrimary : '#DAE1EA'
               }
             >
               {type === 'checkpoint' ? (
@@ -259,7 +259,7 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
                 />
               )}
 
-              {((status !== 'current' && status !== 'complete') ||
+              {((status !== 'current' && status !== 'completed') ||
                 chapterStatus === 'lock') && (
                 <Block
                   alignCenter
@@ -272,7 +272,7 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
                 </Block>
               )}
 
-              {status === 'complete' && !isEndItem && (
+              {status === 'completed' && !isEndItem && (
                 <Block absolute bottom={-8} alignSelf="center">
                   <Icon state="CheckSmall" />
                 </Block>
@@ -286,9 +286,9 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
               height={20}
               radius={10}
               alignSelf="center"
-              marginTop={status === 'complete' ? 6 : 4}
+              marginTop={status === 'completed' ? 6 : 4}
               backgroundColor={
-                status === 'complete' ? colors.orangePrimary : '#DAE1EA'
+                status === 'completed' ? colors.orangePrimary : '#DAE1EA'
               }
             />
           )}

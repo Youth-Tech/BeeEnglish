@@ -6,6 +6,7 @@ import {
   loginOAuthThunk,
   resendVerifyEmail,
   verifyForgotPassword,
+  loginForGuest,
 } from '@redux/actions/auth.action'
 import { Provider } from '@configs'
 import { TokenService } from '@services'
@@ -14,11 +15,13 @@ export type AuthState = {
   accessToken?: string
   refreshToken?: string
   providerId?: Provider
+  deviceId?: string
   email?: string
   forgotPasswordToken?: string
   isResendVerifyEmail?: boolean
   isSignedIn?: boolean
   isSignedInOAuth?: boolean
+  isLoginWithGuest?: boolean
 }
 
 export const defaultAuthState: AuthState = {
@@ -29,7 +32,9 @@ export const defaultAuthState: AuthState = {
   forgotPasswordToken: undefined,
   isResendVerifyEmail: false,
   isSignedIn: false,
-  isSignedInOAuth: false
+  isSignedInOAuth: false,
+  deviceId: '',
+  isLoginWithGuest: false,
 }
 
 const authSlice = createSlice({
@@ -55,7 +60,7 @@ const authSlice = createSlice({
         state.forgotPasswordToken = action.payload.data
       })
 
-      .addCase(signUp.fulfilled, (state) => {})
+      .addCase(signUp.fulfilled, (_) => {})
       .addCase(login.fulfilled, (state, action) => {
         action.payload &&
           TokenService.setAccessToken(action.payload.data.tokens.accessToken)
@@ -77,6 +82,17 @@ const authSlice = createSlice({
           TokenService.setRefreshToken(action.payload.data.tokens.refreshToken)
         state.isSignedIn = true
         state.isSignedInOAuth = true
+      })
+      .addCase(loginForGuest.fulfilled, (state, action) => {
+        state.isLoginWithGuest = true
+
+        action.payload && (state.deviceId = action.payload.data.user.deviceId)
+
+        action.payload &&
+          TokenService.setAccessToken(action.payload.data.tokens.accessToken)
+
+        action.payload &&
+          TokenService.setRefreshToken(action.payload.data.tokens.refreshToken)
       })
   },
 })

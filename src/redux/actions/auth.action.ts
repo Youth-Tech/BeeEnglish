@@ -4,6 +4,7 @@ import { RootState } from '@hooks'
 import { UserData } from '@services/UserService'
 import {
   AuthService,
+  LoginForGuestRequest,
   LoginParams,
   OAuthRes,
   SignUpParams,
@@ -18,6 +19,7 @@ export interface LoginResponse {
       accessToken: string
       refreshToken: string
     }
+    restored: boolean
   }
 }
 
@@ -98,6 +100,21 @@ export const loginOAuthThunk = createAsyncThunk<
     return res.data
   } catch (error) {
     console.log(`Error login with ${Provider[providerId]}`, error.message)
+  }
+
+  return undefined
+})
+
+export const loginForGuest = createAsyncThunk<
+  LoginResponse | undefined,
+  LoginForGuestRequest
+>('auth/forGuest', async (body) => {
+  try {
+    const res = await AuthService.loginForGuest(body)
+
+    return res.data
+  } catch (e) {
+    console.log('Error when login with guest role', e)
   }
 
   return undefined

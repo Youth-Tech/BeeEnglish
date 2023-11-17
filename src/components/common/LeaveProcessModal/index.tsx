@@ -61,6 +61,7 @@ export const LeaveProcessModal = React.forwardRef<
     </Modal>
   )
 })
+
 const useStyles = makeStyles()(({ colors, normalize }) => ({
   image: {
     width: normalize.h(89),

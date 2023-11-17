@@ -8,7 +8,7 @@ export interface Lesson {
   chapter: string
   description: string
   attachment: Attachment | null
-  status: boolean
+  status: 'completed' | 'current' | 'lock'
 }
 
 export interface Chapter {
@@ -19,7 +19,11 @@ export interface Chapter {
   lessons: Lesson[]
   status: boolean
   attachment: Attachment | null
-  checkpoint?: Quiz[]
+  checkpoint?: {
+    questions: Quiz[],
+    createAt: string,
+    score: number
+  }
 }
 
 export interface GetChapterAndLessonRes extends DefaultResponse {

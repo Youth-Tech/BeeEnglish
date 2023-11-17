@@ -32,6 +32,7 @@ import { RootStackParamList } from './routes'
 import { RootBottomTab } from './RootBottomTab'
 import { navigationRef } from './NavigationServices'
 import { NavigationContainer } from '@react-navigation/native'
+import { getIsLoginWithGuest } from '@redux/selectors'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -41,12 +42,16 @@ const screenOptions = {
   headerShown: false,
 }
 const RootStack = () => {
+  const isSignedWithGuestRole = useAppSelector(getIsLoginWithGuest)
   const isSignedIn = useAppSelector((state) => state.root.auth.isSignedIn)
+
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={screenOptions}
-        initialRouteName={isSignedIn ? 'BOTTOM_TAB' : 'NAVIGATE_SCREEN'}
+        initialRouteName={
+          isSignedIn || isSignedWithGuestRole ? 'BOTTOM_TAB' : 'NAVIGATE_SCREEN'
+        }
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
