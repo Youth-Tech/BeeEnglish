@@ -37,7 +37,9 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
   }
   const getWordReviewsByLesson = async () => {
     try {
-      const response = await ReviewService.getAllWordReviews(lessonId)
+      const response = await ReviewService.getAllWordReviews({
+        lesson: lessonId,
+      })
       //TODO: add to redux
       dispatch(updateReviewWords(response.data.data.wordsReview))
     } catch (e) {
@@ -53,7 +55,7 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
         lessonId,
         chapterId,
         nextLessonId,
-        checkpointLesson
+        checkpointLesson,
       })
     }
   }

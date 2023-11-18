@@ -2,25 +2,24 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Block, Text } from '@components'
 import { useTheme } from '@themes'
-import { SoundProgress } from '@assets'
+import { SoundProgress, SoundProgressFcRef } from '@assets'
 import { Pressable } from 'react-native'
-import { dataProps } from '@screens/LearnedWordScreen/const'
-import { ReviewService, WordReviews } from '@services'
+import { WordReviews } from '@services'
+import Sound from 'react-native-sound'
 
 export interface LearnedWordItemProps {
   index?: number
   data: WordReviews
-  onPressAudio?: () => void
   onPress?: () => void
 }
 
 export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
   data,
-  onPressAudio,
   onPress,
 }) => {
   const { colors } = useTheme()
   const { t } = useTranslation()
+  const soundRef = React.useRef<SoundProgressFcRef>(null)
   let difficultyText = ''
   let dotColor = colors.greyLighter
   if (data.difficulty === 'easy') {
@@ -33,7 +32,30 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
     difficultyText = t('hard')
     dotColor = colors.redThick
   }
-  const isSensesEmpty = Object.keys(data.word.senses).length === 0
+  const soundAttachment = data.attachments.find(
+    (attachment) => attachment?.type === 'audio',
+  )
+  console.log(soundAttachment?.src)
+  const sound = new Sound(
+    soundAttachment?.src ??
+      'https://api.dictionaryapi.dev/media/pronunciations/en/default-uk.mp3',
+    '',
+    (error) => {
+      if (error) console.log('Fail to load sound')
+    },
+  )
+  const handlePressAudio = () => {
+    soundRef.current?.start()
+    sound.play((success) => {
+      if (success) {
+        console.log('successfully finished playing')
+        soundRef.current?.pause()
+      } else {
+        console.log('playback failed due to audio decoding errors')
+      }
+    })
+  }
+  const isSensesEmpty = Object.keys(data.senses[0]).length === 0
   return (
     <Pressable onPress={onPress}>
       <Block
@@ -45,7 +67,11 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
         paddingBottom={10}
       >
         <Block paddingHorizontal={15} paddingTop={17}>
-          <SoundProgress fill={colors.orangePrimary} onPress={onPressAudio} />
+          <SoundProgress
+            ref={soundRef}
+            fill={colors.orangePrimary}
+            onPress={handlePressAudio}
+          />
           <Block row wrap>
             <Text
               fontFamily="bold"
@@ -54,7 +80,7 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
               numberOfLines={1}
               ellipsizeMode="tail"
             >
-              {data.word.english}
+              {data.english}
             </Text>
             <Text
               lineHeight={30}
@@ -63,12 +89,12 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
               color={colors.greyPrimary}
               marginLeft={3}
             >
-              /{data.word.pronunciation}/
+              /{data.pronunciation}/
             </Text>
           </Block>
 
           <Text fontFamily="semiBold" size={'h4'} lineHeight={30}>
-            {isSensesEmpty ? '' : data.word.senses[0].vietnamese}
+            {isSensesEmpty ? '' : data.senses[0].vietnamese}
           </Text>
         </Block>
         <Block row paddingLeft={7} paddingTop={9} alignCenter>

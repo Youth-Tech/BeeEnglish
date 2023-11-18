@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
-import { Block, Container } from '@components'
+import { Block, Container, VoiceDectectorModal } from '@components'
 import Sound from 'react-native-sound'
 import { Button } from 'react-native'
+import { ModalFunction } from '@components/bases/Modal/type'
 
 Sound.setCategory('Playback')
 
@@ -15,21 +16,22 @@ const playRemote = new Sound(
 )
 
 export const TestScreen = () => {
+  const modalRef = useRef<ModalFunction>(null)
   return (
     <Container>
       <Block flex paddingHorizontal={20}>
         <Button
-          title="Play Sound"
+          title="Open modal"
           onPress={() => {
-            playRemote.play()
+            modalRef.current?.openModal()
           }}
         />
-        <Button
-          title="Pause Sound"
-          onPress={() => {
-            playRemote.pause()
-          }}
-        />
+        {/*<Button*/}
+        {/*  title="Pause Sound"*/}
+        {/*  onPress={() => {*/}
+        {/*    playRemote.pause()*/}
+        {/*  }}*/}
+        {/*/>*/}
       </Block>
     </Container>
   )

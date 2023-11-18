@@ -161,6 +161,8 @@
     "guest_modal_title": "Oh! No",
     "guest_modal_desc": "Enhance your experience by creating an account!",
     "guest_modal_button": "Create Account!!",
-    "learn_with_video": "Learn with video"
+    "learn_with_video": "Learn with video",
+    "listen_your_voice": "Listening to your voice",
+    "we_cant_catch_your_voice": "We can't catch your voice"
   }
 }

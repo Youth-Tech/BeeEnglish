@@ -46,8 +46,8 @@ export const handleErrorMessage = (
   console.log('message' + messageFromServer)
   const message = ERRORS.get(subMessage)
   if (message) {
-    showErrorMessage(message ?? messageFromServer)
+    showErrorMessage(message)
   } else {
-    return
+    showErrorMessage(messageFromServer)
   }
 }

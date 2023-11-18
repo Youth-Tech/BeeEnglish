@@ -1,5 +1,5 @@
 import React from 'react'
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator, LogBox } from 'react-native'
 import notifee, { EventType } from '@notifee/react-native'
 import { addEventListener } from '@react-native-community/netinfo'
 import * as Types from '@react-native-community/netinfo/src/internal/types'
@@ -12,11 +12,12 @@ import {
 } from '@utils/notificationUtils'
 import { useTheme } from '@themes'
 import RootStack from './RootStack'
-import {UserService} from "@services";
+import { UserService } from '@services'
 import { useAppSelector } from '@hooks'
 import { Block, StatusBar, Text } from '@components'
 import { getIsLoading } from '@redux/selectors'
 import Toast from 'react-native-toast-message'
+import { Portal } from 'react-native-portalize'
 
 export const RootApp = () => {
   const [netInfo, setNetInfo] = React.useState<Types.NetInfoState>({
@@ -32,14 +33,14 @@ export const RootApp = () => {
 
   const { colors } = useTheme()
   const isLoading = useAppSelector(getIsLoading)
-  const isLogin = useAppSelector((state)=>state.root.auth.isSignedIn)
+  const isLogin = useAppSelector((state) => state.root.auth.isSignedIn)
 
-  const updateFCMToken = async (fcmToken: string)=>{
-    try{
+  const updateFCMToken = async (fcmToken: string) => {
+    try {
       await UserService.updateFCMToken({
-        fcmToken
+        fcmToken,
       })
-    }catch (e) {
+    } catch (e) {
       console.log(e)
     }
   }
@@ -50,8 +51,8 @@ export const RootApp = () => {
       let fcmToken = await getFCMToken()
       console.log(fcmToken)
 
-      if(isLogin){
-        updateFCMToken(fcmToken || "")
+      if (isLogin) {
+        updateFCMToken(fcmToken || '')
       }
 
       await createChannelId()
@@ -77,7 +78,7 @@ export const RootApp = () => {
       })
     }
   }, [])
-
+  LogBox.ignoreLogs(['new NativeEventEmitter'])
   return (
     <>
       {/*<StatusBar />*/}
@@ -114,7 +115,9 @@ export const RootApp = () => {
         </Block>
       )}
       <RootStack />
-      <Toast position={'bottom'} bottomOffset={20} />
+      <Portal>
+        <Toast position={'bottom'} bottomOffset={20} />
+      </Portal>
     </>
   )
 }

@@ -5,15 +5,15 @@ export interface ToggleWordRequest {
   word: string
   difficulty: string
 }
+export interface GetAllWordReviewsReq {
+  lesson: string
+  search: string
+}
 export interface ToggleWordResponse extends DefaultResponse {
   data: Word
 }
-export interface WordReviews {
-  _id: string
-  user: string
-  word: Word
+export interface WordReviews extends Word {
   difficulty: string
-  stage: number
 }
 export interface GetAllWordsResponse extends DefaultResponse {
   data: {
@@ -29,11 +29,11 @@ export const ReviewService = {
   toggleWordReview(body: ToggleWordRequest) {
     return ApiUtil.post<ToggleWordResponse>(endPoints.toggleWordReview, body)
   },
-  getAllWordReviews(lessonId?: string) {
+  getAllWordReviews(params?: Partial<GetAllWordReviewsReq>) {
     return ApiUtil.get<GetAllWordsResponse>(
-      lessonId
-        ? endPoints.getAllWordReviews.concat(`?lesson=${lessonId}`)
-        : endPoints.getAllWordReviews,
+      endPoints.getAllWordReviews,
+      undefined,
+      { params },
     )
   },
 } as const

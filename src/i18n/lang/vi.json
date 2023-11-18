@@ -165,6 +165,8 @@
     "guest_modal_title": "Oh! Không",
     "guest_modal_desc": "Tạo tài khoản để có được trải nghiệm trọn vẹn hơn!",
     "guest_modal_button": "Tạo tài khoản ngay!",
-    "learn_with_video": "Học với mẩu video"
+    "learn_with_video": "Học với mẩu video",
+    "listen_your_voice": "Đang lắng nghe giọng bạn",
+    "we_cant_catch_your_voice": "Không thể nghe thấy giọng bạn"
   }
 }

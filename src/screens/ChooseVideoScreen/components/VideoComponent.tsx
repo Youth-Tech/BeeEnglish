@@ -1,11 +1,11 @@
 import React from 'react'
 import { Block, BlockAnimated, Text } from '@components'
 import Video from 'react-native-video'
-import { ListRenderItemInfo, Pressable, StyleSheet } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import { heightWindow, widthScreen } from '@utils/helpers'
 import { baseStyles, useTheme } from '@themes'
 import BackButton from '@screens/ChooseVideoScreen/components/BackButton'
-import PauseIcon from '@screens/ChooseVideoScreen/components/PauseIcon'
+import PlayIcon from '@assets/icons/PlayIcon'
 import Animated, {
   Extrapolation,
   FadeIn,
@@ -17,18 +17,20 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated'
-import { Gesture, GestureDetector } from 'react-native-gesture-handler'
+import {
+  FlatList,
+  Gesture,
+  GestureDetector,
+} from 'react-native-gesture-handler'
 import { Icon } from '@assets'
 import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
 import { handleColor } from '@components/utils'
 import { G, Rect, Svg } from 'react-native-svg'
 import { Portal } from 'react-native-portalize'
-import SubtitleItem, {
-  SubtitleItemProps,
-} from '@screens/ChooseVideoScreen/components/SubtitleItem'
-import { FlatList } from 'react-native-gesture-handler'
+import SubtitleItem from '@screens/ChooseVideoScreen/components/SubtitleItem'
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes'
 import { NativeScrollEvent } from 'react-native/Libraries/Components/ScrollView/ScrollView'
+
 export interface VideoComponentProps {}
 const script = [
   {
@@ -239,7 +241,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
                         justifyCenter
                         alignCenter
                       >
-                        <PauseIcon />
+                        <PlayIcon />
                       </Block>
                     </BlockAnimated>
                   )}
