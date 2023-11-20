@@ -49,7 +49,7 @@ export async function getFCMToken() {
   }
 }
 
-export async function notificationListener() {
+export function notificationListener() {
   try {
     messaging().onNotificationOpenedApp(async (remoteMessage) => {
       console.log(

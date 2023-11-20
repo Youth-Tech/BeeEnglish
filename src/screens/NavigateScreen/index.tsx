@@ -1,14 +1,39 @@
-import { Pressable } from 'react-native'
 import React from 'react'
-import { Block, Container, Image, ShadowButton, Text } from '@components'
-import { images } from '../../assets/images/index'
-import { useTheme } from '@themes'
-import { navigate } from '@navigation'
+import { Pressable } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
+import { images } from '@assets'
+import { useTheme } from '@themes'
+import { DeviceInfoConfig } from '@configs'
+import { navigate, replace } from '@navigation'
+import { loginForGuest } from '@redux/actions'
+import { getIsLoginWithGuest } from '@redux/selectors'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { Block, Container, Image, ShadowButton, Text } from '@components'
+
 export const NavigateScreen = () => {
+  const dispatch = useAppDispatch()
   const { colors } = useTheme()
   const { t } = useTranslation()
+
+  const isLoginWithGuest = useAppSelector(getIsLoginWithGuest)
+
+  const onContinueWithGuestPress = () => {
+    dispatch(
+      loginForGuest({
+        deviceId: DeviceInfoConfig.deviceId,
+        deviceName: DeviceInfoConfig.deviceName,
+      }),
+    )
+  }
+
+  React.useEffect(() => {
+    if (isLoginWithGuest) {
+      console.log('red')
+      replace('BOTTOM_TAB')
+    }
+  }, [isLoginWithGuest])
+
   return (
     <Container>
       <Block backgroundColor={colors.white} flex>
@@ -46,11 +71,7 @@ export const NavigateScreen = () => {
               {t('already_have_or_create_account')}
             </Text>
           </ShadowButton>
-          <Pressable
-            onPress={() => {
-              navigate('BOTTOM_TAB')
-            }}
-          >
+          <Pressable onPress={onContinueWithGuestPress}>
             <Text
               marginTop={20}
               size={'h3'}

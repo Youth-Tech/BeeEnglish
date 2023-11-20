@@ -2,9 +2,7 @@ import APIUtils from '@utils/AxiosInstance'
 import { DefaultResponse } from '@services'
 import { LoginResponse, SignUpResponse } from '@redux/actions/auth.action'
 
-export interface OAuthRes extends LoginResponse, DefaultResponse{
-
-}
+export interface OAuthRes extends LoginResponse, DefaultResponse {}
 
 export interface OAuthParams {
   provider: string
@@ -19,6 +17,7 @@ export interface SignUpParams {
   confirmPassword: string
   fullName: string
 }
+
 export interface ResetPasswordParams {
   forgotPasswordToken: string
   newPassword: string
@@ -28,6 +27,8 @@ export interface ResetPasswordParams {
 export interface LoginParams {
   email: string
   password: string
+  deviceId: string
+  deviceName: string
 }
 
 export interface ChangePasswordParams {
@@ -35,8 +36,14 @@ export interface ChangePasswordParams {
   newPassword: string
   confirmPassword: string
 }
+
 export interface ChangePasswordRes extends DefaultResponse {
   code?: number
+}
+
+export interface LoginForGuestRequest {
+  deviceId: string
+  deviceName?: string
 }
 
 export const AuthService = {
@@ -57,16 +64,24 @@ export const AuthService = {
       confirmPassword,
     })
   },
+
   verifyAccount({ code }: { code: string }) {
     return APIUtils.post('auth/verify-user', {
       code,
     })
   },
-  login({ email, password }: LoginParams) {
+
+  login({ email, password, deviceName, deviceId }: LoginParams) {
     return APIUtils.post<LoginResponse>('auth/login', {
       email,
       password,
+      deviceId,
+      deviceName,
     })
+  },
+
+  loginForGuest(body: LoginForGuestRequest) {
+    return APIUtils.post<LoginResponse>('auth/login/guest', body)
   },
 
   resendVerifyEmail({ email }: { email: string }) {
@@ -80,11 +95,13 @@ export const AuthService = {
       email,
     })
   },
+
   verifyForgotPassword({ code }: { code: string }) {
     return APIUtils.post<{ data: string }>('auth/verify-forgot-password', {
       code,
     })
   },
+
   resetPassword({
     forgotPasswordToken,
     newPassword,
@@ -96,6 +113,7 @@ export const AuthService = {
       confirmPassword,
     })
   },
+
   changePassword(body: ChangePasswordParams) {
     return APIUtils.post<ChangePasswordRes>('/auth/change-password', body)
   },

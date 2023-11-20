@@ -158,5 +158,13 @@
     "hours": "giờ",
     "minute": "phút",
     "second": "giây",
+    "comments": "{{amount}} bình luận",
+    "post_emotion_status_user": "{{user}} và {{amount}} người khác",
+    "post_emotion_status": "{{amount}} người khác",
+    "guest_modal_title": "Oh! Không",
+    "guest_modal_desc": "Tạo tài khoản để có được trải nghiệm trọn vẹn hơn!",
+    "guest_modal_button": "Tạo tài khoản ngay!",
+    "congratulation_desc": "Bạn đã hoàn thành xuất sắc bài học này",
+    "congratulation_desc_failure": "Bạn cần thêm {{point}} điểm để có thể mở bài tiếp theo. Cố lên!!"
   }
 }

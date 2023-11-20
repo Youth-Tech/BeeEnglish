@@ -29,7 +29,6 @@ export type SectionData = {
 
 const parseDataToLessonData = (
   data: Lesson[],
-  nextChapterStatus: boolean,
   chapterStatus?: 'lock' | 'unlock',
 ): ItemLessonProps[] => {
   return data.map((item, index, arr) => {
@@ -39,11 +38,12 @@ const parseDataToLessonData = (
       id: item._id,
       lessonDescription: item.description,
       lessonTitle: item.name,
-      status: !item.status
-        ? 'lock'
-        : nextChapterStatus
-        ? 'complete'
-        : 'current',
+      status:
+        item.status && item.completed
+          ? 'completed'
+          : item.status
+          ? 'current'
+          : 'lock',
       thumbnail: item.attachment?.src || '',
       type: 'normal',
       chapterStatus: chapterStatus || 'lock',
@@ -53,18 +53,18 @@ const parseDataToLessonData = (
 }
 
 const parseDataToSectionData = (data: Chapter[]): SectionData[] => {
-  return data.map((item, index, arr) => {
+  return data.map((item) => {
     let lessonComplete = item.lessons.filter((item) => item.status).length
     const data = parseDataToLessonData(
       item.lessons,
-      arr?.[index + 1]?.status || false,
       item.status ? 'unlock' : 'lock',
     )
 
     data.push({
       ...defaultCheckPointLessonData,
-      checkpoint: item.checkpoint ?? [],
+      checkpoint: item.checkpoint?.questions ?? [],
       chapterStatus: item.status ? 'unlock' : 'lock',
+      status: (item.checkpoint?.score ?? 0) > 80 ? 'completed' : 'current',
     })
 
     return {
@@ -74,7 +74,7 @@ const parseDataToSectionData = (data: Chapter[]): SectionData[] => {
       title: item.name,
       status: item.status ? 'unlock' : 'lock',
       chapterId: item._id,
-      checkpoint: item?.checkpoint || [],
+      checkpoint: item?.checkpoint?.questions || [],
     }
   })
 }
@@ -191,7 +191,14 @@ export const LessonMap = () => {
                   : colors.greyPrimary
               }
             >
-              Lessons completed: {item.section.lessonComplete}/
+              Lessons completed:{' '}
+              {
+                item.section.data.filter(
+                  (item) =>
+                    item.status === 'completed' && item.type !== 'checkpoint',
+                ).length
+              }
+              /
               {
                 item.section.data.filter((item) => item.type !== 'checkpoint')
                   .length

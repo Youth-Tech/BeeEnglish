@@ -5,14 +5,13 @@ import { addEventListener } from '@react-native-community/netinfo'
 import * as Types from '@react-native-community/netinfo/src/internal/types'
 
 import {
-  getFCMToken,
   createChannelId,
-  notificationListener,
+  getFCMToken,
   requestUserPermission,
 } from '@utils/notificationUtils'
 import { useTheme } from '@themes'
 import RootStack from './RootStack'
-import {UserService} from "@services";
+import { UserService } from '@services'
 import { useAppSelector } from '@hooks'
 import { Block, Text } from '@components'
 import { getIsLoading } from '@redux/selectors'
@@ -26,20 +25,16 @@ export const RootApp = () => {
     details: null,
   })
 
-  React.useEffect((): (() => void) => {
-    return addEventListener(setNetInfo)
-  }, [])
-
   const { colors } = useTheme()
   const isLoading = useAppSelector(getIsLoading)
-  const isLogin = useAppSelector((state)=>state.root.auth.isSignedIn)
+  const isLogin = useAppSelector((state) => state.root.auth.isSignedIn)
 
-  const updateFCMToken = async (fcmToken: string)=>{
-    try{
+  const updateFCMToken = async (fcmToken: string) => {
+    try {
       await UserService.updateFCMToken({
-        fcmToken
+        fcmToken,
       })
-    }catch (e) {
+    } catch (e) {
       console.log(e)
     }
   }
@@ -50,32 +45,34 @@ export const RootApp = () => {
       let fcmToken = await getFCMToken()
       console.log(fcmToken)
 
-      if(isLogin){
-        updateFCMToken(fcmToken || "")
+      if (isLogin) {
+        updateFCMToken(fcmToken || '')
       }
-
       await createChannelId()
-      notificationListener()
     } else {
       console.log('User denied!')
     }
   }
 
   React.useEffect(() => {
-    handleRequestPostNotification()
+    //sub - unSubscribeNetInfo
+    return addEventListener(setNetInfo)
+  }, [])
 
-    return () => {
-      notifee.onForegroundEvent(({ type, detail }) => {
-        switch (type) {
-          case EventType.DISMISSED:
-            console.log('User dismissed notification', detail.notification)
-            break
-          case EventType.PRESS:
-            console.log('User pressed notification', detail.notification)
-            break
-        }
-      })
-    }
+  React.useEffect(() => {
+    handleRequestPostNotification()
+    return notifee.onForegroundEvent(({ type, detail }) => {
+      console.log('User press notifee notification in foreground!')
+
+      switch (type) {
+        case EventType.DISMISSED:
+          console.log('User dismissed notification', detail.notification)
+          break
+        case EventType.PRESS:
+          console.log('User pressed notification', detail.notification)
+          break
+      }
+    })
   }, [])
 
   return (

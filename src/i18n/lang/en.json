@@ -154,5 +154,13 @@
     "hours": "hours",
     "minute": "minutes",
     "second": "seconds",
+    "comments": "{{amount}} comments",
+    "post_emotion_status_user": "{{user}} and {{amount}} others",
+    "post_emotion_status": "{{amount}} others",
+    "guest_modal_title": "Oh! No",
+    "guest_modal_desc": "Enhance your experience by creating an account!",
+    "guest_modal_button": "Create Account!!",
+    "congratulation_desc": "Congratulations on completing this lesson successfully!",
+    "congratulation_desc_failure": "You're just {{point}} points away from unlocking the next lesson. Keep going, you've got this!"
   }
 }

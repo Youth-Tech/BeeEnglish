@@ -10,7 +10,7 @@ const enum endPoints {
   getStreak = '/user/get-streaks',
   updateStreak = '/user/update-streak',
   getWordsBookmark = '/user/get-words-bookmark',
-  updateFCM = '/user/update-fcm-token'
+  updateFCM = '/user/update-fcm-token',
 }
 
 export interface UserData {
@@ -32,6 +32,8 @@ export interface UserData {
   wordBookmarks: []
   provider: string
   refreshToken: string
+  deviceId: string
+  deviceName?: string
 }
 
 export type UserStateResponse = {
@@ -44,8 +46,9 @@ export interface UpdateUserAvatarRequest {
 
 export interface UpdateProgressLearningRequest {
   chapter: string
-  lessons?: string[]
+  lesson?: string
   checkpointScore?: number
+  score?: number
 }
 
 export interface UpdateProgressLearningResponse extends DefaultResponse {
@@ -58,6 +61,7 @@ export interface UpdateProgressLearningResponse extends DefaultResponse {
     updatedAt: string
   }
 }
+
 export interface BookmarkWordResponse extends DefaultResponse {
   data: UserData
 }
@@ -80,14 +84,12 @@ export interface GetWordsBookmarkResponse extends DefaultResponse {
   }
 }
 
-export interface UpdateFCMTokenRequest{
+export interface UpdateFCMTokenRequest {
   fcmToken: string
 }
 
-export interface UpdateFCMTokenResponse extends DefaultResponse{
-  data:{
-
-  }
+export interface UpdateFCMTokenResponse extends DefaultResponse {
+  data: {}
 }
 
 export const UserService = {
@@ -134,8 +136,7 @@ export const UserService = {
     )
   },
 
-  updateFCMToken(body: UpdateFCMTokenRequest){
+  updateFCMToken(body: UpdateFCMTokenRequest) {
     return APIUtils.patch<UpdateFCMTokenResponse>(endPoints.updateFCM, body)
-  }
-
+  },
 } as const

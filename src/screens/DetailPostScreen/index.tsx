@@ -1,47 +1,84 @@
+import {
+  FlatList,
+  Pressable,
+  Dimensions,
+  ScrollView,
+  ListRenderItemInfo,
+} from 'react-native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ListRenderItemInfo } from 'react-native'
+import { FadeIn, FadeOut } from 'react-native-reanimated'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
+import {
+  changeShowComment,
+  setParentCommentId,
+  changeBottomSheetState,
+} from '@redux/reducers'
 import { useStyles } from './styles'
 import { colorTopic, normalize } from '@themes'
+import { RootStackParamList } from '@navigation'
 import { parsePostData } from '@screens/HomeScreen'
 import { PostServices } from '@services/PostService'
+import { LoadingScreen } from '@screens/LoadingScreen'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { NewsItem } from '@screens/HomeScreen/components'
 import HeaderApp from '@components/common/HeaderComponent'
-import { Block, Container, Image, Text } from '@components'
-import { FlatList, ScrollView, Dimensions } from 'react-native'
-import { newsData, posts } from '@screens/DetailPostScreen/const'
+import { newsData } from '@screens/DetailPostScreen/const'
 import BottomSheetApp from '@components/common/BottomSheetComponent'
 import ContentPost from '@screens/DetailPostScreen/components/ContentPost'
 import EmotionPost from '@screens/DetailPostScreen/components/EmotionPost'
-import { changeBottomSheetState, changeShowComment } from '@redux/reducers'
+import { Block, BlockAnimated, Container, Image, Text } from '@components'
 import BottomSheetWord from '@screens/DetailPostScreen/components/BottomSheetWord'
 import BottomSheetComment from '@screens/DetailPostScreen/components/BottomSheetComment'
 
-export const DetailPost: React.FC = () => {
+export type DetailPostScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'DETAIL_POST_SCREEN'
+>
+
+export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
+  const dispatch = useAppDispatch()
   const styles = useStyles()
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
   const data = useAppSelector((state) => state.root.detailPost)
 
+  const scrollViewRef = React.useRef<ScrollView>(null)
+
+  const [isLoading, setIsLoading] = React.useState(true)
+  const [currentPost, setCurrentPost] = React.useState(route.params.post)
   const [postData, setPostData] = React.useState<
-    (PostResponse & { textColor: string })[]
+    (PostResponse & {
+      textColor: string
+    })[]
   >([])
 
   const onCloseBottomSheet = () => {
     dispatch(changeBottomSheetState(false))
   }
+
   const onCloseComment = () => {
     dispatch(changeShowComment(false))
+    dispatch(setParentCommentId(''))
   }
 
-  const onPostItemPress = (item: PostResponse) => {}
+  const onPostItemPress = (postItem: PostResponse) => {
+    setIsLoading(true)
+    setCurrentPost(postItem)
+    scrollViewRef?.current?.scrollTo({
+      animated: false,
+      y: 0,
+    })
+  }
 
   const renderNewsItem = ({
     index,
     item,
-  }: ListRenderItemInfo<PostResponse & { textColor: string }>) => {
+  }: ListRenderItemInfo<
+    PostResponse & {
+      textColor: string
+    }
+  >) => {
     return (
       <Pressable
         key={`item-${index}`}
@@ -58,7 +95,7 @@ export const DetailPost: React.FC = () => {
           topic={item.topic?.name}
           createAt={item.createdAt}
           textColor={item.textColor}
-          image={item.attachment[0].src || ''}
+          image={item.attachments?.[0]?.src ?? ''}
         />
       </Pressable>
     )
@@ -66,7 +103,12 @@ export const DetailPost: React.FC = () => {
 
   const callPost = async () => {
     try {
-      const res = await PostServices.getAllPost()
+      const res = await PostServices.getPostRecommend({
+        activePost: currentPost._id,
+        topic: currentPost.topic._id,
+        limit: 10,
+        page: 1,
+      })
       setPostData(parsePostData(res.data.data.posts, colorTopic))
     } catch (error) {
       console.log(error)
@@ -77,67 +119,93 @@ export const DetailPost: React.FC = () => {
     callPost()
   }, [])
 
+  React.useEffect(() => {
+    setIsLoading(false)
+  }, [currentPost])
+
+  if (isLoading) {
+    return <LoadingScreen />
+  }
+
   return (
     <Container style={styles.container}>
-      <HeaderApp title={t('detail_post_header')} />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ paddingHorizontal: normalize.m(20) }}
+      <BlockAnimated
+        entering={FadeIn}
+        exiting={FadeOut}
+        style={styles.container}
       >
-        <Block style={styles.boxImagePost}>
-          <Image
-            source={{
-              uri: 'https://www.usatoday.com/gcdn/authoring/authoring-images/2023/09/06/USAT/70779211007-xxx-motions-ba-040-4181316.JPG?width=660&height=441&fit=crop&format=pjpg&auto=webp',
-            }}
-            style={styles.image}
-          />
-          <Block style={styles.boxTitle}>
-            <Text style={styles.title} size={'h3'} fontFamily={'bold'}>
-              Luyện kỹ năng đọc hiểu
-            </Text>
+        <HeaderApp title={t('detail_post_header')} />
+        <ScrollView
+          ref={scrollViewRef}
+          showsVerticalScrollIndicator={false}
+          style={{ paddingHorizontal: normalize.m(20) }}
+        >
+          <Block style={styles.boxImagePost}>
+            <Image
+              source={{
+                uri: currentPost.attachments[0].src,
+              }}
+              style={styles.image}
+            />
+            <Block style={styles.boxTitle}>
+              <Text style={styles.title} size={'h3'} fontFamily={'bold'}>
+                Luyện kỹ năng đọc hiểu
+              </Text>
+            </Block>
           </Block>
-        </Block>
-        <FlatList
-          data={posts.english}
-          scrollEnabled={false}
-          style={styles.listParagraph}
-          keyExtractor={(_, index) => index.toString()}
-          renderItem={({ item, index }) => (
-            <ContentPost english={item} vietnamese={posts.vietnamese[index]} />
-          )}
-        />
-        <EmotionPost />
-        <Text size={'h3'} fontFamily={'bold'} marginTop={10}>
-          {t('news')}
-        </Text>
-        <FlatList
-          data={postData}
-          scrollEnabled={false}
-          renderItem={renderNewsItem}
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(_, index) => `item-${index}`}
-        />
-      </ScrollView>
+          <FlatList
+            data={currentPost.english}
+            scrollEnabled={false}
+            style={styles.listParagraph}
+            keyExtractor={(_, index) => index.toString()}
+            renderItem={({ item, index }) => (
+              <ContentPost
+                english={item}
+                vietnamese={currentPost.vietnamese[index]}
+              />
+            )}
+          />
+          <EmotionPost
+            setCurrentPost={setCurrentPost}
+            postId={currentPost._id}
+            liked={currentPost.liked}
+            likeCount={currentPost.likeCount}
+            userLiked={currentPost.usersLiked}
+            commentCount={currentPost.commentCount}
+          />
 
-      {/*<BottomSheetComment />*/}
-      <BottomSheetApp
-        onClose={onCloseBottomSheet}
-        children={<BottomSheetWord />}
-        visible={data.isShowBottomSheet}
-        snapPoints={['20%', '20%', '50%', '70%']}
-        backgroundStyle={{ borderRadius: normalize.m(10), elevation: 10 }}
-      />
+          <Text size={'h3'} fontFamily={'bold'} marginTop={10}>
+            {t('news')}
+          </Text>
+          <FlatList
+            data={postData}
+            scrollEnabled={false}
+            renderItem={renderNewsItem}
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(_, index) => `item-${index}`}
+          />
+        </ScrollView>
 
-      <BottomSheetApp
-        onClose={onCloseComment}
-        visible={data.isShowComment}
-        enablePanDownToClose={false}
-        snapPoints={['100%', '100%']}
-        height={Dimensions.get('window').height}
-        backgroundStyle={{ borderRadius: normalize.m(10), elevation: 10 }}
-      >
-        <BottomSheetComment />
-      </BottomSheetApp>
+        {/*<BottomSheetComment />*/}
+        <BottomSheetApp
+          onClose={onCloseBottomSheet}
+          children={<BottomSheetWord />}
+          visible={data.isShowBottomSheet}
+          snapPoints={['20%', '20%', '50%', '70%']}
+          backgroundStyle={{ borderRadius: normalize.m(10), elevation: 10 }}
+        />
+
+        <BottomSheetApp
+          onClose={onCloseComment}
+          visible={data.isShowComment}
+          enablePanDownToClose={false}
+          snapPoints={['100%', '100%']}
+          height={Dimensions.get('window').height}
+          backgroundStyle={{ borderRadius: normalize.m(10), elevation: 10 }}
+        >
+          <BottomSheetComment postId={currentPost._id} />
+        </BottomSheetApp>
+      </BlockAnimated>
     </Container>
   )
 }

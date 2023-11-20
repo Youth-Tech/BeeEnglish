@@ -24,7 +24,7 @@ import {
 } from '@redux/actions/auth.action'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
-import { Provider } from '@configs'
+import { DeviceInfoConfig, Provider } from '@configs'
 import { navigate, replace } from '@navigation'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { useValidateInput } from '@utils/validateInput'
@@ -63,7 +63,15 @@ export const LoginScreen = () => {
     if (isErrorBeforeSubmit()) return
     dispatch(setUserState(defaultUserState))
     dispatch(setAuthState({ isResendVerifyEmail: false }))
-    if (email && password) dispatch(login({ email, password }))
+    if (email && password)
+      dispatch(
+        login({
+          email,
+          password,
+          deviceId: DeviceInfoConfig.deviceId,
+          deviceName: DeviceInfoConfig.deviceName,
+        }),
+      )
   }
   const goRegister = () => {
     navigate('REGISTER_SCREEN')
@@ -83,7 +91,7 @@ export const LoginScreen = () => {
   }, [dataUser, isResend])
 
   const handleLoginOAuth = async (providerId: Provider) => {
-    dispatch(loginOAuthThunk({providerId}))
+    dispatch(loginOAuthThunk({ providerId }))
   }
 
   React.useEffect(() => {

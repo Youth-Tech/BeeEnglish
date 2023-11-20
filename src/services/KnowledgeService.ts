@@ -8,7 +8,9 @@ export interface Lesson {
   chapter: string
   description: string
   attachment: Attachment | null
+  // status: 'completed' | 'current' | 'lock'
   status: boolean
+  completed: boolean
 }
 
 export interface Chapter {
@@ -19,7 +21,11 @@ export interface Chapter {
   lessons: Lesson[]
   status: boolean
   attachment: Attachment | null
-  checkpoint?: Quiz[]
+  checkpoint?: {
+    questions: Quiz[]
+    createAt: string
+    score: number
+  }
 }
 
 export interface GetChapterAndLessonRes extends DefaultResponse {
@@ -37,6 +43,7 @@ export interface Quiz {
   correctAnswer?: string
   attachments?: Attachment[]
 }
+
 export enum EWord {
   Noun = 'noun',
   Verb = 'verb',
@@ -47,6 +54,7 @@ export enum EWord {
   Conjunction = 'conjunction',
   Interjection = 'interjection',
 }
+
 export interface Senses {
   _id: string
   type: EWord
@@ -56,6 +64,7 @@ export interface Senses {
   synonyms: Array<string>
   antonyms: Array<string>
 }
+
 export interface Word {
   _id: string
   english: string
@@ -63,21 +72,25 @@ export interface Word {
   attachments: Attachment[]
   senses: Array<Senses>
 }
+
 export interface GetQuizByLessonIdRes extends DefaultResponse {
   data: {
     quizzes: Quiz[]
   }
 }
+
 export interface GetWordByLessonIdRes extends DefaultResponse {
   data: {
     words: Word[]
   }
 }
+
 export interface GetAllWordResponse extends DefaultResponse {
   data: {
     words: Word[]
   }
 }
+
 export const KnowledgeService = {
   getChapterAndLesson: () => {
     return ApiUtil.get<GetChapterAndLessonRes>(
@@ -99,7 +112,9 @@ export const KnowledgeService = {
 
   getAllWord: (page: number, limit: number) => {
     return ApiUtil.get<GetAllWordResponse>(
-      `/knowledge/word/get-all?page=${page}&limit=${limit}`,
+      `/knowledge/word/get-all`,
+      undefined,
+      { params: { page, limit } },
     )
   },
 } as const

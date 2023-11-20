@@ -21,6 +21,8 @@ import { PostServices } from '@services/PostService'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { getStreak, getUserData } from '@redux/selectors'
 import { Block, BlockAnimated, Container, Image, Text } from '@components'
+import { useFocusEffect } from '@react-navigation/native'
+import { setIsAdjustPostData } from '@redux/reducers'
 
 const learningData = [
   {
@@ -119,6 +121,9 @@ export const HomeScreen = () => {
   const hasStreak = useAppSelector(getStreak).streakCount
 
   const userData = useAppSelector(getUserData)
+  const isAdjustPostData = useAppSelector(
+    (state) => state.root.detailPost.isAdjustPostData,
+  )
   const [t] = useTranslation()
   const { colors, normalize } = useTheme()
 
@@ -126,6 +131,34 @@ export const HomeScreen = () => {
   const [postData, setPostData] = React.useState<
     (PostResponse & { textColor: string })[]
   >([])
+
+  const callPost = async () => {
+    try {
+      const res = await PostServices.getAllPost()
+      setPostData(parsePostData(res.data.data.posts, colorTopic))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  React.useEffect(() => {
+    setIsLoading(false)
+    callPost()
+
+    //get streak
+    dispatch(getStreakThunk())
+    console.log('useEffect')
+  }, [])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (isAdjustPostData) {
+        callPost()
+        console.log('useFocusEffect')
+        dispatch(setIsAdjustPostData(false))
+      }
+    }, [isAdjustPostData]),
+  )
 
   const onPressDictionary = () => {
     navigate('DICTIONARY_SCREEN')
@@ -192,7 +225,7 @@ export const HomeScreen = () => {
           title={item.title}
           topic={item.topic.name}
           topicColor={item.textColor}
-          image={item.attachment[0].src || ''}
+          image={item.attachments?.[0]?.src ?? ''}
         />
         {index === newsData.length - 1 && (
           <Pressable onPress={onLearningWatchMore}>
@@ -217,7 +250,7 @@ export const HomeScreen = () => {
     return (
       <Pressable
         key={`item-${index}`}
-        onPress={() => navigate('DETAIL_POST_SCREEN', { data: item })}
+        onPress={() => navigate('DETAIL_POST_SCREEN', { post: item })}
         style={[
           { marginHorizontal: normalize.h(20) },
           index === newsData.length - 1
@@ -230,28 +263,11 @@ export const HomeScreen = () => {
           topic={item.topic?.name}
           createAt={item.createdAt}
           textColor={item.textColor}
-          image={item.attachment[0].src || ''}
+          image={item.attachments?.[0]?.src ?? ''}
         />
       </Pressable>
     )
   }
-
-  const callPost = async () => {
-    try {
-      const res = await PostServices.getAllPost()
-      setPostData(parsePostData(res.data.data.posts, colorTopic))
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  React.useEffect(() => {
-    setIsLoading(false)
-    callPost()
-
-    //get streak
-    dispatch(getStreakThunk())
-  }, [])
 
   if (isLoading || postData.length <= 0) {
     return <LoadingScreen />

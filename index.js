@@ -10,6 +10,7 @@ import messaging from '@react-native-firebase/messaging'
 import notifee, { EventType } from '@notifee/react-native'
 import DeviceInfo from 'react-native-device-info'
 import { DeviceInfoConfig } from '@configs'
+import {notificationListener} from "@utils/notificationUtils";
 
 notifee.onBackgroundEvent(async ({ type, detail }) => {
   const { notification, pressAction } = detail
@@ -25,6 +26,8 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
   await notifee.cancelNotification(notification.id)
 })
 
+notificationListener()
+
 messaging().setBackgroundMessageHandler(async (remoteMessage) => {
   console.log('notification on background state', remoteMessage.notification)
 })
@@ -32,7 +35,8 @@ messaging().setBackgroundMessageHandler(async (remoteMessage) => {
 //get init device info
 const initRun = (async function () {
   DeviceInfoConfig.deviceName = DeviceInfo.getDeviceNameSync()
-  DeviceInfoConfig.deviceId = await DeviceInfo.getUniqueId()
+  const deviceId = await DeviceInfo.getUniqueId()
+  DeviceInfoConfig.deviceId = deviceId.concat(new Date().getTime().toString())
 })()
 
 AppRegistry.registerComponent(appName, () => App)
