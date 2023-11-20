@@ -1,14 +1,24 @@
 import React from 'react'
 import LottieView from 'lottie-react-native'
 import { useTranslation } from 'react-i18next'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import { animation } from '@assets'
 import { useBackHandler } from '@hooks'
-import { navigateAndReset } from '@navigation'
 import { makeStyles, useTheme } from '@themes'
+import {navigateAndReset, pop, RootStackParamList} from '@navigation'
 import { Block, Container, ShadowButton, Text } from '@components'
 
-export const CongratulationScreen = () => {
+export type CongratulationScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'CONGRATULATION_SCREEN'
+>
+
+export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
+  route,
+}) => {
+  const { status, point } = route.params
+
   const styles = useStyle()
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
@@ -21,15 +31,18 @@ export const CongratulationScreen = () => {
   })
 
   const onContinuePress = () => {
-    //TODO: submit exam result
-    navigateAndReset(
-      [
-        {
-          name: 'BOTTOM_TAB',
-        },
-      ],
-      0,
-    )
+    if(status === "success"){
+      navigateAndReset(
+          [
+            {
+              name: 'BOTTOM_TAB',
+            },
+          ],
+          0,
+      )
+    }else{
+      pop(2)
+    }
   }
 
   return (
@@ -46,7 +59,11 @@ export const CongratulationScreen = () => {
             {t('congratulation')}
           </Text>
           <Text size={'h2'} fontFamily="bold" center marginTop={10}>
-            Bạn đã hoàn thành xuất sắc bài học này
+            {status === 'success'
+              ? t('congratulation_desc')
+              : t('congratulation_desc_failure', {
+                  point: Math.floor(80 - point),
+                })}
           </Text>
         </Block>
 

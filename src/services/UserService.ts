@@ -46,8 +46,9 @@ export interface UpdateUserAvatarRequest {
 
 export interface UpdateProgressLearningRequest {
   chapter: string
-  lessons?: string[]
+  lesson?: string
   checkpointScore?: number
+  score?: number
 }
 
 export interface UpdateProgressLearningResponse extends DefaultResponse {

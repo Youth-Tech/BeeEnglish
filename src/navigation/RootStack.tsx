@@ -33,6 +33,7 @@ import { RootBottomTab } from './RootBottomTab'
 import { navigationRef } from './NavigationServices'
 import { NavigationContainer } from '@react-navigation/native'
 import { getIsLoginWithGuest } from '@redux/selectors'
+import { LinkingOptions } from '@react-navigation/native/lib/typescript/src/types'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -41,12 +42,27 @@ const screenOptions = {
   cardOverlayEnabled: true,
   headerShown: false,
 }
+
+const linking: LinkingOptions<RootStackParamList> | undefined = {
+  prefixes: ['beeenglish://app'],
+  config: {
+    screens: {
+      SAVED_WORD_SCREEN: {
+        path: 'word-review/:id',
+        parse: {
+          id: (id) => id,
+        },
+      },
+    },
+  },
+}
+
 const RootStack = () => {
   const isSignedWithGuestRole = useAppSelector(getIsLoginWithGuest)
   const isSignedIn = useAppSelector((state) => state.root.auth.isSignedIn)
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer ref={navigationRef} linking={linking}>
       <Stack.Navigator
         screenOptions={screenOptions}
         initialRouteName={
@@ -97,7 +113,7 @@ const RootStack = () => {
           />
           <Stack.Screen name="TEST_SCREEN" component={TestScreen} />
           <Stack.Screen name="STREAK_SCREEN" component={StreakScreen} />
-          <Stack.Screen name="SAVED_WORD_SCREEN" component={SavedWordScreen} />
+          <Stack.Screen name="SAVED_WORD_SCREEN" component={SavedWordScreen}/>
           <Stack.Screen
             name="LEARNED_WORD_SCREEN"
             component={LearnedWordScreen}

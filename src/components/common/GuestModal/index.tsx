@@ -1,10 +1,9 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { images } from '@assets'
+import { navigate } from '@navigation'
 import { makeStyles, useTheme } from '@themes'
-import { RootStackParamList } from '@navigation'
 import { Block, Image, Modal, ShadowButton, Text } from '@components'
 import { ModalFunction, ModalProps } from '@components/bases/Modal/type'
 
@@ -12,15 +11,13 @@ export const GuestModal = React.forwardRef<
   ModalFunction,
   Omit<ModalProps, 'children'>
 >((props, ref) => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>()
   const { colors } = useTheme()
   const { t } = useTranslation()
   const styles = useStyles()
 
   const onButtonPress = () => {
-    navigation.navigate('REGISTER_SCREEN', { isGuest: true })
+    navigate('REGISTER_SCREEN', { isGuest: true })
   }
-
   return (
     <Modal {...props} ref={ref}>
       <Block

@@ -20,7 +20,9 @@ import { t } from 'i18next'
 export const getDatesOfWeek = (current: Date) => {
   const week = []
   // Starting Monday not Sunday
-  current.setDate(current.getDate() - current.getDay() + 1)
+  // 0 = sunday
+  // 1 = monday
+  current.setDate(current.getDate() - (current.getDay() || 7) + 1)
   for (let i = 0; i < 7; i++) {
     week.push(new Date(current))
     current.setDate(current.getDate() + 1)
@@ -70,6 +72,6 @@ export const getDaySession = () => {
   }
 }
 
-export const formatDate = (date: Date) =>{
+export const formatDate = (date: Date) => {
   return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 }

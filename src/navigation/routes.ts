@@ -84,7 +84,8 @@ export type RootStackParamList = {
   [AUTH_ROUTE.SAVED_WORD_SCREEN]: undefined
   [AUTH_ROUTE.DETAIL_WORD_SCREEN]: undefined
   [AUTH_ROUTE.CONGRATULATION_SCREEN]: {
-    status?: 'success' | 'failure'
+    status?: 'success' | 'failure',
+    point: number
   }
 }
 
