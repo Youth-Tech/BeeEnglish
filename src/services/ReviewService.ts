@@ -12,7 +12,8 @@ export interface GetAllWordReviewsReq {
 export interface ToggleWordResponse extends DefaultResponse {
   data: Word
 }
-export interface WordReviews extends Word {
+export interface WordReviews {
+  word: Word
   difficulty: string
 }
 export interface GetAllWordsResponse extends DefaultResponse {

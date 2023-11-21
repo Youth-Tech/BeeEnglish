@@ -8,79 +8,21 @@ import {
   DismissKeyBoardBlock,
   Text,
   TextInput,
+  VoiceDectectorModal,
 } from '@components'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { goBack } from '@navigation'
 import { LearnWordItem } from './components/LearnWordItem'
 import { SavedWordItem } from './components/SavedWordItem'
-import { DataLearnProps } from './const'
 import { KnowledgeService, UserService, Word } from '@services'
-
-const learnData: DataLearnProps[] = [
-  {
-    id: 1,
-    word: 'Chicken',
-    wordType: 'ˈtʃɪk.ɪn',
-    translation: 'Con gà',
-  },
-  {
-    id: 2,
-    word: 'Chicken',
-    wordType: 'ˈtʃɪk.ɪn',
-    translation: 'Con gà',
-  },
-  {
-    id: 3,
-    word: 'Chicken',
-    wordType: 'ˈtʃɪk.ɪn',
-    translation: 'Con gà',
-  },
-  {
-    id: 4,
-    word: 'Chicken',
-    wordType: 'ˈtʃɪk.ɪn',
-    translation: 'Con gà',
-  },
-]
-
-// const savedWordData: DataSavedWordProps[] = [
-//   {
-//     id: 1,
-//     word: 'Chicken',
-//     wordType: 'noun',
-//     wordPronounce: 'ˈtʃɪk.ɪn',
-//   },
-//   {
-//     id: 2,
-//     word: 'Chicken',
-//     wordType: 'noun',
-//     wordPronounce: 'ˈtʃɪk.ɪn',
-//   },
-//   {
-//     id: 3,
-//     word: 'Chicken',
-//     wordType: 'noun',
-//     wordPronounce: 'ˈtʃɪk.ɪn',
-//   },
-//   {
-//     id: 4,
-//     word: 'Chicken',
-//     wordType: 'noun',
-//     wordPronounce: 'ˈtʃɪk.ɪn',
-//   },
-//   {
-//     id: 5,
-//     word: 'Chicken',
-//     wordType: 'noun',
-//     wordPronounce: 'ˈtʃɪk.ɪn',
-//   },
-// ]
+import { ModalFunction } from '@components/bases/Modal/type'
 
 export const SavedWordScreen = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
-  const [textSearch, setTextSearch] = React.useState('')
+  const [searchText, setSearchText] = React.useState('')
+  const modalRef = React.useRef<ModalFunction>(null)
   const [savedWordData, setSavedWordData] = React.useState<Word[]>([])
   const [suggestionWord, setSuggestionWord] = React.useState<Word[]>([])
   const renderSavedWordItem = ({ index, item }: ListRenderItemInfo<Word>) => {
@@ -121,6 +63,27 @@ export const SavedWordScreen = () => {
   const renderLearnItem = ({ index, item }: ListRenderItemInfo<Word>) => {
     return <LearnWordItem data={item} key={index} />
   }
+  const searchApi = async (searchText: string) => {
+    try {
+      const response = await UserService.getWordsBookmark({
+        search: searchText,
+      })
+      setSavedWordData(response.data.data.words)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  React.useEffect(() => {
+    const timeOutSearch = setTimeout(() => {
+      if (searchText.length > 0) {
+        searchApi(searchText)
+      } else {
+        callAPI()
+      }
+    }, 2000)
+
+    return () => clearTimeout(timeOutSearch)
+  }, [searchText])
   React.useEffect(() => {
     callAPI()
     callAPIGetAllWords()
@@ -167,8 +130,8 @@ export const SavedWordScreen = () => {
                 inputContainerStyle={styles.inputStyle}
                 placeholder={t('english_vocabulary')}
                 placeholderTextColor={colors.greyPrimary}
-                value={textSearch}
-                onChangeText={setTextSearch}
+                value={searchText}
+                onChangeText={setSearchText}
                 rightIcon={
                   <Icon
                     state="Microphone"
@@ -207,6 +170,14 @@ export const SavedWordScreen = () => {
           </Block>
         </Block>
       </DismissKeyBoardBlock>
+      <VoiceDectectorModal
+        modalRef={modalRef}
+        setText={setSearchText}
+        onFinishRecord={() => {
+          console.log('finished')
+          modalRef.current?.dismissModal()
+        }}
+      />
     </Container>
   )
 }

@@ -9,8 +9,9 @@ const enum endPoints {
   updateProgressLearning = '/user/update-progress-learning',
   getStreak = '/user/get-streaks',
   updateStreak = '/user/update-streak',
-  getWordsBookmark = '/user/get-words-bookmark',
+  getWordsBookmark = '/user/words-bookmark',
   updateFCM = '/user/update-fcm-token',
+  getLearningStats = '/user/learning-stats',
 }
 
 export interface UserData {
@@ -90,7 +91,13 @@ export interface UpdateFCMTokenRequest {
 export interface UpdateFCMTokenResponse extends DefaultResponse {
   data: {}
 }
-
+export interface GetLearningStatsResponse extends DefaultResponse {
+  data: Array<number>
+}
+export interface GetWordBookmarksReq {
+  lessonId: string
+  search: string
+}
 export const UserService = {
   getUserData(token: string) {
     return APIUtils.get<UserStateResponse>(endPoints.getUserData, {
@@ -127,15 +134,18 @@ export const UserService = {
     return APIUtils.patch<GetStreakResponse>(endPoints.updateStreak, {})
   },
 
-  getWordsBookmark(lessonId?: string) {
+  getWordsBookmark(params?: Partial<GetWordBookmarksReq>) {
     return APIUtils.get<GetWordsBookmarkResponse>(
-      lessonId
-        ? endPoints.getWordsBookmark.concat(`?lesson=${lessonId}`)
-        : endPoints.getWordsBookmark,
+      endPoints.getWordsBookmark,
+      undefined,
+      { params },
     )
   },
 
   updateFCMToken(body: UpdateFCMTokenRequest) {
     return APIUtils.patch<UpdateFCMTokenResponse>(endPoints.updateFCM, body)
+  },
+  getLearningStats() {
+    return APIUtils.get<GetLearningStatsResponse>(endPoints.getLearningStats)
   },
 } as const

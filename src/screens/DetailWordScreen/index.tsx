@@ -3,23 +3,26 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, TouchableOpacity } from 'react-native'
 
 import {
+  CopyIcon,
   Icon,
   images,
-  StarIcon,
-  CopyIcon,
-  VolumeIcon,
   RightArrowIcon,
+  StarIcon,
+  VolumeIcon,
 } from '@assets'
-import { useTheme } from '@themes'
-import { goBack } from '@navigation'
+import { goBack, RootStackParamList } from '@navigation'
 import Content from './components/Content'
 import { heightScreen } from '@utils/helpers'
 import { Block, Container, Image, Text } from '@components'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { KnowledgeService, Word } from '@services'
 
-export const DetailWordScreen = () => {
+type Props = NativeStackScreenProps<RootStackParamList, 'DETAIL_WORD_SCREEN'>
+export const DetailWordScreen = ({ route }: Props) => {
+  const { wordId } = route.params
   const { t } = useTranslation()
-  const { colors } = useTheme()
 
+  const [wordData, setWordData] = React.useState<Word>()
   const onCopyPress = () => {
     console.log('onCopyPress')
   }
@@ -31,7 +34,17 @@ export const DetailWordScreen = () => {
   const onPronunciationPress = () => {
     console.log('onPronunciationPress')
   }
-
+  const callGetWordByIdAPI = async () => {
+    try {
+      const response = await KnowledgeService.getWordById(wordId)
+      setWordData(response.data.data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  React.useEffect(() => {
+    callGetWordByIdAPI()
+  }, [])
   return (
     <Container>
       <Image
@@ -70,7 +83,7 @@ export const DetailWordScreen = () => {
               lineHeight={18}
               fontFamily="bold"
             >
-              Chicken
+              {wordData?.english}
             </Text>
             <Text
               size={'h3'}
@@ -78,7 +91,7 @@ export const DetailWordScreen = () => {
               lineHeight={18}
               fontFamily="regular"
             >
-              /'tʃIk.In/
+              /{wordData?.pronunciation}/
             </Text>
           </Block>
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import { Block, Text } from '@components'
 import RewindIcon from './RewindIcon'
 import { useTheme } from '@themes'
@@ -43,7 +43,7 @@ const SubtitleItem = ({
           <RewindIcon onPress={onPressRewind} />
         </Block>
         <Block alignCenter marginTop={24}>
-          <Text size={'h2'} fontFamily={'bold'}>
+          <Text size={'h2'} fontFamily={'bold'} color={colors.black}>
             {subtitle}
           </Text>
         </Block>
@@ -57,17 +57,21 @@ const SubtitleItem = ({
           borderColor={colors.greyPrimary}
           style={{ alignSelf: 'baseline' }}
         >
-          <Block
-            borderRightWidth={1}
-            borderColor={colors.greyPrimary}
-            paddingVertical={6}
-            paddingHorizontal={14}
-          >
-            <BackButton stroke={colors.black} onPress={onPressPrevious} />
-          </Block>
-          <Block paddingVertical={6} paddingHorizontal={14}>
-            <NextIcon stroke={colors.black} onPress={onPressNext} />
-          </Block>
+          <Pressable onPress={onPressPrevious}>
+            <Block
+              borderRightWidth={1}
+              borderColor={colors.greyPrimary}
+              paddingVertical={6}
+              paddingHorizontal={14}
+            >
+              <BackButton stroke={colors.black} />
+            </Block>
+          </Pressable>
+          <Pressable onPress={onPressNext}>
+            <Block paddingVertical={6} paddingHorizontal={14}>
+              <NextIcon stroke={colors.black} />
+            </Block>
+          </Pressable>
         </Block>
       </Block>
     </Block>

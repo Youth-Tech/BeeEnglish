@@ -5,7 +5,7 @@ import PlayIcon from '@assets/icons/PlayIcon'
 import { useTheme } from '@themes'
 import PauseIcon from '@assets/icons/PauseIcon'
 import Voice from '@react-native-voice/voice'
-import { LogBox, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import WaveForm, {
   WaveFormFunc,

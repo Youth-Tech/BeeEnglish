@@ -12,6 +12,8 @@ import Animated, {
   FadeOut,
   interpolate,
   runOnJS,
+  SlideInDown,
+  SlideOutDown,
   useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
@@ -30,61 +32,26 @@ import { Portal } from 'react-native-portalize'
 import SubtitleItem from '@screens/ChooseVideoScreen/components/SubtitleItem'
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes'
 import { NativeScrollEvent } from 'react-native/Libraries/Components/ScrollView/ScrollView'
+import memoizeOne from 'memoize-one'
 
-export interface VideoComponentProps {}
-const script = [
-  {
-    start: '0.159',
-    end: '1.99',
-    subtitle: 'Different ways to say.',
-  },
-  {
-    start: '2.0',
-    end: '3.75',
-    subtitle: 'Could you repeat please?',
-  },
-  {
-    start: '3.759',
-    end: '5.309',
-    subtitle: 'In English language?',
-  },
-  {
-    start: '7.05',
-    end: '8.159',
-    subtitle: 'I beg your pardon?',
-  },
-  {
-    start: '8.289',
-    end: '9.31',
-    subtitle: "I'm sorry,",
-  },
-  {
-    start: '9.319',
-    end: '10.97',
-    subtitle: "I didn't catch that.",
-  },
-  {
-    start: '11.0',
-    end: '12.029',
-    subtitle: 'Excuse me?',
-  },
-  {
-    start: '12.039',
-    end: '15.047',
-    subtitle: 'Could you repeat please come again.',
-  },
-]
+export interface VideoComponentProps {
+  data: PostResponse
+}
+
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 const AnimatedLineSvg = Animated.createAnimatedComponent(Rect)
 const VideoComponent: React.FC<VideoComponentProps> = (props) => {
+  const { data } = props
   const { colors, normalize } = useTheme()
+  const [script, setScript] = React.useState(data.attachments[0].script)
   const [widthSvg, setWidthSvg] = React.useState<number>(0)
   const progressStepValue = useSharedValue(0)
   const _strokeHeight = normalize.v(5)
   const [, updateState] = React.useState()
   const forceUpdate = React.useCallback(() => updateState({}), [])
-  let currentIndex = 0
+  const currentIndex = React.useRef<number>(0)
   const subtitleListRef = React.useRef<FlatList>(null)
+  const [duration, setDuration] = React.useState<number>(0)
   const animatedProps = useAnimatedProps(() => {
     return {
       width: `${progressStepValue.value}%`,
@@ -109,11 +76,9 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
     offset.value = offset.value + event.changeY
     if (offset.value > height / 2) {
       offset.value = withTiming(height)
-      runOnJS(forceUpdate)()
     }
     if (offset.value < height / 2) {
       offset.value = withTiming(0)
-      runOnJS(forceUpdate)()
     }
     if (offset.value >= height) offset.value = height
     if (offset.value <= 0) offset.value = 0
@@ -146,50 +111,45 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
       opacity,
     }
   })
-  // const renderSubtitleItem = ({
-  //   index,
-  //   item,
-  // }: ListRenderItemInfo<SubtitleItemProps>) => {
-  //   return (
-  //     <Block marginLeft={5}>
-  //       <SubtitleItem
-  //         subtitle={item.subtitle}
-  //         positionText={`${index + 1}/${script.length}`}
-  //       />
-  //     </Block>
-  //   )
-  // }
+
   const handleClickNext = (index: number) => {
-    handleSeek(Number(script[index].start))
-    progressStepValue.value = Number(script[index].start) * (100 / 15.047)
     if (index === script.length - 1) return
+    handleSeek(Number(script[index + 1].start))
     subtitleListRef.current?.scrollToIndex({
       index: index + 1,
       animated: true,
     })
   }
   const handleClickPrevious = (index: number) => {
-    handleSeek(Number(script[index].start))
-    progressStepValue.value = Number(script[index].start) * (100 / 15.047)
     if (index === 0) return
+    handleSeek(Number(script[index - 1].start))
     subtitleListRef.current?.scrollToIndex({
       index: index - 1,
       animated: true,
     })
   }
-  const handleSeek = (seconds: number) => {
+  const handleSeek = memoizeOne((seconds: number) => {
+    setIsPaused(true)
     videoRef.current?.seek(seconds)
-  }
+    progressStepValue.value = seconds * (100 / duration)
+  })
   const onMomentumEndDrag = (
     event: NativeSyntheticEvent<NativeScrollEvent>,
   ) => {
     const index = Math.round(
       event.nativeEvent.contentOffset.x / normalize.h(340),
     )
-    console.log(index)
     handleSeek(Number(script[index].start))
   }
-
+  const scrollToIndex = (index: number) => {
+    subtitleListRef.current?.scrollToIndex({
+      index: currentIndex.current,
+      animated: true,
+    })
+  }
+  React.useEffect(() => {
+    console.log('hello')
+  }, [offset.value])
   const VideoProgress = () => {
     return (
       <Block width={'100%'} height={_strokeHeight} alignCenter justifyCenter>
@@ -220,9 +180,14 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
       </Block>
     )
   }
+
   return (
     <Portal>
-      <Block paddingTop={getStatusBarHeight()}>
+      <BlockAnimated
+        entering={SlideInDown}
+        exiting={SlideOutDown}
+        paddingTop={getStatusBarHeight()}
+      >
         <GestureDetector gesture={panGesture}>
           <BlockAnimated style={[translateY]}>
             <Block row>
@@ -249,39 +214,39 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
                 <Video
                   onLoad={(data) => {
                     console.log('duration:' + data.duration)
+                    setDuration(data.duration)
                   }}
                   source={{
-                    uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+                    uri: data.attachments[0].src,
                   }}
                   ref={videoRef}
                   onBuffer={onBuffer}
                   onError={onError}
                   style={[styles.video]}
-                  repeat={true}
+                  // repeat={true}
+
                   resizeMode={'cover'}
                   paused={isPaused}
-                  onProgress={(data) => {
-                    console.log(data.currentTime)
-                    if (data.currentTime >= Number(script[currentIndex].end)) {
-                      subtitleListRef.current?.scrollToIndex({
-                        index: currentIndex,
-                        animated: false,
-                      })
-                      if (currentIndex === script.length - 1) {
-                        console.log('oke')
-                        currentIndex = 0
-                      } else {
-                        currentIndex++
-                      }
-                      // console.log(currentIndex)
-                    }
-                    progressStepValue.value =
-                      data.currentTime * (100 / data.playableDuration)
+                  onEnd={() => {
+                    currentIndex.current = 0
+                    scrollToIndex(currentIndex.current)
+                    videoRef.current?.seek(0)
                   }}
-                  onSeek={(data) => {
-                    console.log('current time' + data.currentTime)
-                    console.log('seektime' + data.seekTime)
-                    console.log('target' + data.target)
+                  onProgress={(data) => {
+                    // console.log(data.currentTime)
+                    if (isPaused === false) {
+                      progressStepValue.value =
+                        data.currentTime * (100 / data.playableDuration)
+                      if (
+                        data.currentTime >=
+                          Number(script[currentIndex.current].start) &&
+                        currentIndex.current < script.length - 1
+                      ) {
+                        currentIndex.current++
+                        console.log(currentIndex.current)
+                        scrollToIndex(currentIndex.current)
+                      }
+                    }
                   }}
                 />
               </AnimatedPressable>
@@ -296,7 +261,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
                 {offset.value === height && (
                   <>
                     <Text size={'h3'} color={'white'}>
-                      Me and mountains
+                      {data.english}
                     </Text>
                     <Icon state={'Delete'} fill={colors.white} />
                   </>
@@ -315,29 +280,27 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
                 data={script}
                 renderItem={({ item, index }) => {
                   return (
-                    <Block>
-                      <SubtitleItem
-                        subtitle={item.subtitle}
-                        positionText={`${index + 1}/${script.length}`}
-                        onPressNext={() => {
-                          handleClickNext(index)
-                        }}
-                        onPressPrevious={() => {
-                          handleClickPrevious(index)
-                        }}
-                      />
-                    </Block>
+                    <SubtitleItem
+                      subtitle={item.content}
+                      positionText={`${index + 1}/${script.length}`}
+                      onPressNext={() => {
+                        handleClickNext(index)
+                      }}
+                      onPressPrevious={() => {
+                        handleClickPrevious(index)
+                      }}
+                    />
                   )
                 }}
                 scrollEventThrottle={16}
                 snapToAlignment={'center'}
-                pagingEnabled
+                snapToInterval={normalize.h(340)}
                 onMomentumScrollEnd={onMomentumEndDrag}
               />
             </BlockAnimated>
           </BlockAnimated>
         </GestureDetector>
-      </Block>
+      </BlockAnimated>
     </Portal>
   )
 }

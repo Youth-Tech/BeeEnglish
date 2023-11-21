@@ -30,6 +30,7 @@
     "axios": "^1.5.1",
     "i18next": "^23.5.1",
     "lottie-react-native": "^6.4.0",
+    "memoize-one": "^6.0.0",
     "react": "18.2.0",
     "react-i18next": "^13.2.2",
     "react-native": "0.72.4",

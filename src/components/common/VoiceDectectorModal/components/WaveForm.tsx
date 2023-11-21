@@ -76,7 +76,7 @@ const Wave = React.forwardRef<WaveFormFunc, IWaveform>((props, ref) => {
   React.useEffect(() => {
     heightValue.value = withRepeat(
       withSequence(
-        withTiming(max, { duration: 100 * (index! + 2) }),
+        withTiming(max, { duration: 300 * (index! + 2) }),
         withTiming(min),
       ),
       -1,

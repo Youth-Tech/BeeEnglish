@@ -32,7 +32,7 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
     difficultyText = t('hard')
     dotColor = colors.redThick
   }
-  const soundAttachment = data.attachments.find(
+  const soundAttachment = data.word.attachments.find(
     (attachment) => attachment?.type === 'audio',
   )
   console.log(soundAttachment?.src)
@@ -55,7 +55,7 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
       }
     })
   }
-  const isSensesEmpty = Object.keys(data.senses[0]).length === 0
+  const isSensesEmpty = Object.keys(data.word.senses[0]).length === 0
   return (
     <Pressable onPress={onPress}>
       <Block
@@ -80,7 +80,7 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
               numberOfLines={1}
               ellipsizeMode="tail"
             >
-              {data.english}
+              {data.word.english}
             </Text>
             <Text
               lineHeight={30}
@@ -89,12 +89,12 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
               color={colors.greyPrimary}
               marginLeft={3}
             >
-              /{data.pronunciation}/
+              /{data.word.pronunciation}/
             </Text>
           </Block>
 
           <Text fontFamily="semiBold" size={'h4'} lineHeight={30}>
-            {isSensesEmpty ? '' : data.senses[0].vietnamese}
+            {isSensesEmpty ? '' : data.word.senses[0].vietnamese}
           </Text>
         </Block>
         <Block row paddingLeft={7} paddingTop={9} alignCenter>

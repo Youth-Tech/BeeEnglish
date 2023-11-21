@@ -20,8 +20,8 @@ export interface Chapter {
   status: boolean
   attachment: Attachment | null
   checkpoint?: {
-    questions: Quiz[],
-    createAt: string,
+    questions: Quiz[]
+    createAt: string
     score: number
   }
 }
@@ -82,6 +82,9 @@ export interface GetAllWordResponse extends DefaultResponse {
     words: Word[]
   }
 }
+export interface GetWordByIdResponse extends DefaultResponse {
+  data: Word
+}
 export const KnowledgeService = {
   getChapterAndLesson: () => {
     return ApiUtil.get<GetChapterAndLessonRes>(
@@ -105,5 +108,8 @@ export const KnowledgeService = {
     return ApiUtil.get<GetAllWordResponse>(
       `/knowledge/word/get-all?page=${page}&limit=${limit}`,
     )
+  },
+  getWordById: (id: string) => {
+    return ApiUtil.get<GetWordByIdResponse>(`/knowledge/word/${id}`)
   },
 } as const
