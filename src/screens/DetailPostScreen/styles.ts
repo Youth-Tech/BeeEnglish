@@ -1,5 +1,5 @@
-import { fontFamily, makeStyles, normalize } from '@themes'
 import { handleFontSize } from '@components/utils'
+import { fontFamily, makeStyles, normalize } from '@themes'
 import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
 
 export const useStyles = makeStyles()(({ colors }) => ({

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { FadeIn, FadeOut } from 'react-native-reanimated'
+import { useFocusEffect } from '@react-navigation/native'
 import { FlatList, ListRenderItemInfo, Pressable, View } from 'react-native'
 
 import {
@@ -18,11 +19,10 @@ import { colorTopic, useTheme } from '@themes'
 import { getStreakThunk } from '@redux/actions'
 import { getDaySession } from '@utils/dateUtils'
 import { PostServices } from '@services/PostService'
+import { setIsAdjustPostData } from '@redux/reducers'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { getStreak, getUserData } from '@redux/selectors'
 import { Block, BlockAnimated, Container, Image, Text } from '@components'
-import { useFocusEffect } from '@react-navigation/native'
-import { setIsAdjustPostData } from '@redux/reducers'
 
 const learningData = [
   {
@@ -134,7 +134,9 @@ export const HomeScreen = () => {
 
   const callPost = async () => {
     try {
-      const res = await PostServices.getAllPost()
+      const res = await PostServices.getAllPost({
+        type: 'text'
+      })
       setPostData(parsePostData(res.data.data.posts, colorTopic))
     } catch (error) {
       console.log(error)
