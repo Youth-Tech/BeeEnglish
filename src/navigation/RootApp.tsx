@@ -5,9 +5,8 @@ import { addEventListener } from '@react-native-community/netinfo'
 import * as Types from '@react-native-community/netinfo/src/internal/types'
 
 import {
-  getFCMToken,
   createChannelId,
-  notificationListener,
+  getFCMToken,
   requestUserPermission,
 } from '@utils/notificationUtils'
 import { useTheme } from '@themes'
@@ -26,10 +25,6 @@ export const RootApp = () => {
     isInternetReachable: null,
     details: null,
   })
-
-  React.useEffect((): (() => void) => {
-    return addEventListener(setNetInfo)
-  }, [])
 
   const { colors } = useTheme()
   const isLoading = useAppSelector(getIsLoading)
@@ -54,29 +49,31 @@ export const RootApp = () => {
       if (isLogin) {
         updateFCMToken(fcmToken || '')
       }
-
       await createChannelId()
-      notificationListener()
     } else {
       console.log('User denied!')
     }
   }
 
   React.useEffect(() => {
-    handleRequestPostNotification()
+    //sub - unSubscribeNetInfo
+    return addEventListener(setNetInfo)
+  }, [])
 
-    return () => {
-      notifee.onForegroundEvent(({ type, detail }) => {
-        switch (type) {
-          case EventType.DISMISSED:
-            console.log('User dismissed notification', detail.notification)
-            break
-          case EventType.PRESS:
-            console.log('User pressed notification', detail.notification)
-            break
-        }
-      })
-    }
+  React.useEffect(() => {
+    handleRequestPostNotification()
+    return notifee.onForegroundEvent(({ type, detail }) => {
+      console.log('User press notifee notification in foreground!')
+
+      switch (type) {
+        case EventType.DISMISSED:
+          console.log('User dismissed notification', detail.notification)
+          break
+        case EventType.PRESS:
+          console.log('User pressed notification', detail.notification)
+          break
+      }
+    })
   }, [])
   LogBox.ignoreLogs(['new NativeEventEmitter'])
   return (

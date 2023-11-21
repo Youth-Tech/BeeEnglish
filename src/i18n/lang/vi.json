@@ -167,6 +167,8 @@
     "guest_modal_button": "Tạo tài khoản ngay!",
     "learn_with_video": "Học với mẩu video",
     "listen_your_voice": "Đang lắng nghe giọng bạn",
-    "we_cant_catch_your_voice": "Không thể nghe thấy giọng bạn"
+    "we_cant_catch_your_voice": "Không thể nghe thấy giọng bạn",
+    "congratulation_desc": "Bạn đã hoàn thành xuất sắc bài học này",
+    "congratulation_desc_failure": "Bạn cần thêm {{point}} điểm để có thể mở bài tiếp theo. Cố lên!!"
   }
 }

@@ -38,7 +38,12 @@ const parseDataToLessonData = (
       id: item._id,
       lessonDescription: item.description,
       lessonTitle: item.name,
-      status: item.status,
+      status:
+        item.status && item.completed
+          ? 'completed'
+          : item.status
+          ? 'current'
+          : 'lock',
       thumbnail: item.attachment?.src || '',
       type: 'normal',
       chapterStatus: chapterStatus || 'lock',
@@ -52,7 +57,6 @@ const parseDataToSectionData = (data: Chapter[]): SectionData[] => {
     let lessonComplete = item.lessons.filter((item) => item.status).length
     const data = parseDataToLessonData(
       item.lessons,
-      // arr?.[index + 1]?.status || false,
       item.status ? 'unlock' : 'lock',
     )
 

@@ -58,7 +58,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   route,
   navigation,
 }) => {
-  const { nextLessonId, lessonId, chapterId, checkpointLesson } = route.params
+  const { lessonId, chapterId, checkpointLesson } = route.params
   const leaveModalRef = React.useRef<ModalFunction>(null)
   const wordChoiceRef = React.useRef<WordListRefFunc>(null)
   const optionRef = React.useRef<QuestionRefFunction>(null)
@@ -83,12 +83,13 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
       data: null,
     },
   )
-  const checkpointScore = result?.reduce((total, current) => {
-    if (current.result === 'correct') {
-      return total + 1
-    }
-    return total
-  }, 0) ?? 0
+  const checkpointScore =
+    result?.reduce((total, current) => {
+      if (current.result === 'correct') {
+        return total + 1
+      }
+      return total
+    }, 0) ?? 0
 
   React.useEffect(() => {
     if (checkpointLesson !== undefined && checkpointLesson?.length > 0) {
@@ -222,23 +223,28 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   }
 
   const updateLessonComplete = async () => {
-    console.log('checkpointScore', ((checkpointScore/questions.length) * 100))
-
+    const finalPoint = (checkpointScore / questions.length) * 100
+    console.log('checkpointScore', finalPoint)
     dispatch(setLoadingStatusAction(true))
     const body: UpdateProgressLearningRequest =
       checkpointLesson !== undefined
         ? {
             chapter: chapterId,
-            checkpointScore: ((checkpointScore/questions.length) * 100),
+            checkpointScore: finalPoint,
           }
         : {
             chapter: chapterId,
-            lessons: [nextLessonId],
+            lesson: lessonId,
+            score: finalPoint,
           }
 
     try {
       await UserService.updateProgressLearning(body)
-      navigation.navigate('CONGRATULATION_SCREEN', {})
+      dispatch(setLoadingStatusAction(false))
+      navigation.navigate('CONGRATULATION_SCREEN', {
+        status: finalPoint >= 80 ? 'success' : 'failure',
+        point: finalPoint,
+      })
     } catch (error) {
       console.log(error)
     }

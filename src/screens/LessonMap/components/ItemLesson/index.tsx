@@ -40,12 +40,12 @@ const getTypeOfModal = new Map([
   ['lock', i18next.t('lock_lesson')],
   ['current', i18next.t('new_lesson')],
   ['checkpoint', i18next.t('practice')],
-  ['complete', i18next.t('old_lesson')],
+  ['completed', i18next.t('old_lesson')],
 ])
 
 const getIconByType = new Map([
   ['current', 'Lighter' as TIcon],
-  ['complete', 'Lighter' as TIcon],
+  ['completed', 'Lighter' as TIcon],
   ['lock', 'IconLockSmall' as TIcon],
   ['checkpoint', 'Question' as TIcon],
 ])
@@ -75,15 +75,15 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = (props) => {
         <Icon
           state={
             (type === 'normal'
-              ? getIconByType.get(status || 'complete')
+              ? getIconByType.get(status || 'completed')
               : getIconByType.get('checkpoint')) as TIcon
           }
         />
         <Text fontFamily="bold" size={'h5'} style={styles.textTypeModal}>
           {type === 'normal' && chapterStatus === 'lock'
-            ? getTypeOfModal.get(status || 'complete')
+            ? getTypeOfModal.get(status || 'completed')
             : type === 'normal'
-            ? getTypeOfModal.get(status || 'complete')
+            ? getTypeOfModal.get(status || 'completed')
             : getTypeOfModal.get('checkpoint')}
         </Text>
       </Block>

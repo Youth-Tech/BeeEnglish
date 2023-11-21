@@ -63,12 +63,12 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
   }
 
   const onPostItemPress = (postItem: PostResponse) => {
+    setIsLoading(true)
     setCurrentPost(postItem)
     scrollViewRef?.current?.scrollTo({
       animated: false,
       y: 0,
     })
-    setIsLoading(true)
   }
 
   const renderNewsItem = ({

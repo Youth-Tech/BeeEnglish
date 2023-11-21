@@ -163,6 +163,8 @@
     "guest_modal_button": "Create Account!!",
     "learn_with_video": "Learn with video",
     "listen_your_voice": "Listening to your voice",
-    "we_cant_catch_your_voice": "We can't catch your voice"
+    "we_cant_catch_your_voice": "We can't catch your voice",
+    "congratulation_desc": "Congratulations on completing this lesson successfully!",
+    "congratulation_desc_failure": "You're just {{point}} points away from unlocking the next lesson. Keep going, you've got this!"
   }
 }
