@@ -1,23 +1,20 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { goBack, navigate } from '@navigation'
-import { Icon, images } from '@assets'
-import { useTheme } from '@themes'
+
 import {
-  Block,
-  Container,
   Text,
-  TextInput,
+  Block,
   Image,
+  TextInput,
+  Container,
   DismissKeyBoardBlock,
 } from '@components'
-import {
-  DictionaryItem,
-  DictonaryItemProps,
-  VocabularyItem,
-} from './components'
-import { FlatList, ListRenderItemInfo, ScrollView, View } from 'react-native'
+import { useTheme } from '@themes'
 import { dataProps } from './const'
+import { Icon, images } from '@assets'
+import { goBack, navigate } from '@navigation'
+import { DictionaryItem, VocabularyItem } from './components'
+import { FlatList, ListRenderItemInfo, ScrollView, View } from 'react-native'
 
 export const DictionaryScreen = () => {
   const { t } = useTranslation()

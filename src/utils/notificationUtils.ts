@@ -7,8 +7,7 @@ import messaging, {
 } from '@react-native-firebase/messaging'
 
 import { ChannelId } from '@configs'
-import { Platform } from 'react-native'
-import { PermissionsAndroid } from 'react-native'
+import { PermissionsAndroid, Platform } from 'react-native'
 
 export async function requestUserPermission(): Promise<boolean> {
   let enabled = false

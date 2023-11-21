@@ -8,7 +8,6 @@ export interface Lesson {
   chapter: string
   description: string
   attachment: Attachment | null
-  // status: 'completed' | 'current' | 'lock'
   status: boolean
   completed: boolean
 }

@@ -55,7 +55,7 @@ export interface GetRecommendPostRequest {
 
 export const PostServices = {
   getAllPost(params?: Partial<GetAllPostRequest>) {
-    return ApiUtil.get<GetAllPostResponse>(`/post/get-all?page=1&limit=10&type=text`, undefined, {
+    return ApiUtil.get<GetAllPostResponse>(`/post/get-all?page=1&limit=10`, undefined, {
       params,
     })
   },

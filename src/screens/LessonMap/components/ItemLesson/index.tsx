@@ -10,13 +10,6 @@ import { Icon, TIcon, images } from '@assets'
 import { normalize, useTheme } from '@themes'
 import { Block, Image, ShadowButton, Text } from '@components/bases'
 
-export interface InfoOnStartLesson {
-  lessonId: string
-  nextLessonId: string
-  chapterId: string
-  isRestart?: boolean
-}
-
 export interface ItemLessonProps {
   id: string
   thumbnail: string
