@@ -2,14 +2,8 @@ import React from 'react'
 import { Block, BlockAnimated, Image, Text } from '@components'
 import { makeStyles } from '@themes'
 import { Pressable } from 'react-native'
-import Animated, { FadeInDown } from 'react-native-reanimated'
+import { FadeInDown } from 'react-native-reanimated'
 
-// export interface VideoItemData {
-//   id?: string
-//   thumbnail: string
-//   title: string
-//   duration: string
-// }
 export interface VideoItemProps {
   data: PostResponse
   index: number
@@ -30,7 +24,7 @@ const VideoItem: React.FC<VideoItemProps> = (props) => {
       <Pressable style={styles.container} onPress={onPress}>
         <Image
           source={{
-            uri: isAttachmentEmpty ? data.attachments[0].thumbnail : '',
+            uri: isAttachmentEmpty ? '' : data.attachments[0].thumbnail,
           }}
           style={styles.image}
         />

@@ -42,55 +42,58 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
     <BlockAnimated
       width={279}
       radius={10}
+      height={400}
       overflow={'hidden'}
       paddingBottom={15}
       backgroundColor={colors.white}
       shadow
       style={translateYAnimation}
     >
-      <Image
-        source={{
-          uri: src,
-        }}
-        width={'100%'}
-        height={198.18}
-        resizeMode={'cover'}
-      />
-      <Block paddingHorizontal={10} alignStart>
-        <Text
-          size={'h3'}
-          fontFamily={'semiBold'}
-          color={colors.black}
-          marginTop={10}
-        >
-          {title}
-        </Text>
-        <Text
-          size={'h4'}
-          fontFamily={'regular'}
-          color={colors.black}
-          marginTop={20}
-        >
-          {description}
-        </Text>
-        <ShadowButton
-          buttonWidth={238}
-          buttonHeight={46}
-          buttonRadius={15}
-          buttonColor={colors.orangeLight}
-          buttonBorderColor={colors.orangePrimary}
-          shadowButtonColor={colors.orangePrimary}
-          containerStyle={{
-            alignSelf: 'center',
-            marginTop: 20,
+      <Block flex>
+        <Image
+          source={{
+            uri: src,
           }}
-          onPress={onPress}
-        >
-          <Text size={'h3'} fontFamily={'semiBold'}>
-            {t('watch_video')}
+          width={'100%'}
+          height={198.18}
+          resizeMode={'cover'}
+        />
+        <Block paddingHorizontal={10} alignStart>
+          <Text
+            size={'h3'}
+            fontFamily={'semiBold'}
+            color={colors.black}
+            marginTop={10}
+          >
+            {title}
           </Text>
-        </ShadowButton>
+          <Text
+            size={'h4'}
+            fontFamily={'regular'}
+            color={colors.black}
+            marginTop={20}
+          >
+            {description}
+          </Text>
+        </Block>
       </Block>
+      <ShadowButton
+        buttonWidth={238}
+        buttonHeight={46}
+        buttonRadius={15}
+        buttonColor={colors.orangeLight}
+        buttonBorderColor={colors.orangePrimary}
+        shadowButtonColor={colors.orangePrimary}
+        containerStyle={{
+          alignSelf: 'center',
+          marginTop: 20,
+        }}
+        onPress={onPress}
+      >
+        <Text size={'h3'} fontFamily={'semiBold'}>
+          {t('watch_video')}
+        </Text>
+      </ShadowButton>
     </BlockAnimated>
   )
 }

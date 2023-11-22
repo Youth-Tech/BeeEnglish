@@ -94,7 +94,8 @@ export const RegisterScreen = () => {
       case 'password':
         if (password.length === 0) return `${t('password')}${t('is_required')}`
         if (password.length < 8) return `${t('password')}${t('is_too_short')}`
-        if (!checkPass) return `${t('password')}${t('is_invalid')}`
+        if (!checkPass)
+          return `${t('password')}${t('password_need_1_capital_normal_number')}`
         break
       case 'confirmPassword':
         if (confirmPassword.length === 0)

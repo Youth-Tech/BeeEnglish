@@ -107,20 +107,6 @@ export const VideoScreen: React.FC<VideoScreenProps> = (props) => {
   return (
     <Container>
       <VideoComponent />
-      {/*<Block marginTop={20}>*/}
-      {/*  <Animated.FlatList*/}
-      {/*    horizontal*/}
-      {/*    keyExtractor={(_, index) => `item-video-${index}`}*/}
-      {/*    data={recommendData}*/}
-      {/*    onScroll={scrollHandler}*/}
-      {/*    renderItem={renderVideoItemList}*/}
-      {/*    showsHorizontalScrollIndicator={false}*/}
-      {/*    scrollEventThrottle={16}*/}
-      {/*    decelerationRate={'fast'}*/}
-      {/*    snapToAlignment={'start'}*/}
-      {/*    snapToInterval={ITEM_SIZE + normalize.v(10)}*/}
-      {/*  />*/}
-      {/*</Block>*/}
     </Container>
   )
 }

@@ -6,7 +6,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { animation } from '@assets'
 import { useBackHandler } from '@hooks'
 import { makeStyles, useTheme } from '@themes'
-import {navigateAndReset, pop, RootStackParamList} from '@navigation'
+import { navigateAndReset, pop, RootStackParamList } from '@navigation'
 import { Block, Container, ShadowButton, Text } from '@components'
 
 export type CongratulationScreenProps = NativeStackScreenProps<
@@ -31,16 +31,16 @@ export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
   })
 
   const onContinuePress = () => {
-    if(status === "success"){
+    if (status === 'success') {
       navigateAndReset(
-          [
-            {
-              name: 'BOTTOM_TAB',
-            },
-          ],
-          0,
+        [
+          {
+            name: 'BOTTOM_TAB',
+          },
+        ],
+        0,
       )
-    }else{
+    } else {
       pop(2)
     }
   }

@@ -28,7 +28,7 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
   const [activeBlock, setActiveBlock] = useState(0)
   const getWordBookmarksByLesson = async () => {
     try {
-      const response = await UserService.getWordsBookmark(lessonId)
+      const response = await UserService.getWordsBookmark({ lessonId })
       //TODO: add to redux
       dispatch(updateBookmarkWords(response.data.data.words))
     } catch (e) {

@@ -134,7 +134,7 @@ export const HomeScreen = () => {
 
   const callPost = async () => {
     try {
-      const res = await PostServices.getAllPost()
+      const res = await PostServices.getAllPost({ type: 'text' })
       setPostData(parsePostData(res.data.data.posts, colorTopic))
     } catch (error) {
       console.log(error)

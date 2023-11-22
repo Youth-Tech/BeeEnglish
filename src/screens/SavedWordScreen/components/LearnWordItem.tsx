@@ -3,7 +3,6 @@ import { Pressable } from 'react-native'
 
 import { useTheme } from '@themes'
 import { SoundProgress } from '@assets'
-import { DataLearnProps } from '../const'
 import { Block, Text } from '@components'
 import { Word } from '@services'
 

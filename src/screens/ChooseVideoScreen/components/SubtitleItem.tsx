@@ -1,44 +1,44 @@
 import React from 'react'
-import { Pressable, StyleSheet } from 'react-native'
-import { Block, Text } from '@components'
-import RewindIcon from './RewindIcon'
 import { useTheme } from '@themes'
-import { widthScreen } from '@utils/helpers'
+import RewindIcon from './RewindIcon'
+import { Pressable } from 'react-native'
+import { Block, Text } from '@components'
 import BackButton from '@screens/ChooseVideoScreen/components/BackButton'
 import NextIcon from '@screens/ChooseVideoScreen/components/NextIcon'
+
 export interface SubtitleItemProps {
-  onPressRewind?: () => void
   subtitle: string
   positionText: string
-  onPressPrevious?: () => void
   onPressNext?: () => void
+  onPressRewind?: () => void
+  onPressPrevious?: () => void
 }
 const SubtitleItem = ({
-  onPressRewind,
   subtitle,
-  positionText,
-  onPressPrevious,
   onPressNext,
+  positionText,
+  onPressRewind,
+  onPressPrevious,
 }: SubtitleItemProps) => {
   const { colors } = useTheme()
   return (
     <Block
       width={340}
-      borderWidth={1}
-      height={224}
-      borderColor={colors.greyPrimary}
       radius={10}
+      height={224}
       padding={15}
+      borderWidth={1}
       space={'between'}
+      borderColor={colors.greyPrimary}
     >
       <Block>
         <Block
           width={40}
           height={40}
           padding={8}
+          radius={20}
           borderWidth={1}
           borderColor={colors.greyPrimary}
-          radius={20}
         >
           <RewindIcon onPress={onPressRewind} />
         </Block>
@@ -59,10 +59,10 @@ const SubtitleItem = ({
         >
           <Pressable onPress={onPressPrevious}>
             <Block
-              borderRightWidth={1}
-              borderColor={colors.greyPrimary}
               paddingVertical={6}
+              borderRightWidth={1}
               paddingHorizontal={14}
+              borderColor={colors.greyPrimary}
             >
               <BackButton stroke={colors.black} />
             </Block>
@@ -78,6 +78,3 @@ const SubtitleItem = ({
   )
 }
 export default SubtitleItem
-const styles = StyleSheet.create({
-  container: {},
-})

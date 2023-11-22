@@ -109,7 +109,7 @@ export const KnowledgeService = {
 
   getWordByLessonId: (lessonId: string) => {
     return ApiUtil.get<GetWordByLessonIdRes>(
-      `/knowledge/word/${lessonId}/get-words-by-lesson`,
+      `/knowledge/word/${lessonId}/get-words-by-lesson?timestamp=${new Date().getTime()}`,
     )
   },
 

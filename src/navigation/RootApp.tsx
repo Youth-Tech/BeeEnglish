@@ -17,6 +17,7 @@ import { Block, StatusBar, Text } from '@components'
 import { getIsLoading } from '@redux/selectors'
 import Toast from 'react-native-toast-message'
 import { Portal } from 'react-native-portalize'
+import { navigate } from '@navigation/NavigationServices'
 
 export const RootApp = () => {
   const [netInfo, setNetInfo] = React.useState<Types.NetInfoState>({
@@ -71,11 +72,14 @@ export const RootApp = () => {
           break
         case EventType.PRESS:
           console.log('User pressed notification', detail.notification)
+          navigate('DETAIL_WORD_SCREEN', {
+            wordId: detail.notification.data.id,
+          })
           break
       }
     })
   }, [])
-  LogBox.ignoreLogs(['new NativeEventEmitter'])
+
   return (
     <>
       {/*<StatusBar />*/}

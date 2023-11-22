@@ -8,6 +8,7 @@ import { Block, Container, TextInput, VoiceDectectorModal } from '@components'
 import HeaderApp from '@components/common/HeaderComponent'
 import { MasonryFlashList, MasonryListRenderItem } from '@shopify/flash-list'
 import { ModalFunction } from '@components/bases/Modal/type'
+import { navigate } from '@navigation'
 
 export const LearnedWordScreen = () => {
   const { colors } = useTheme()
@@ -21,7 +22,12 @@ export const LearnedWordScreen = () => {
     const { item, index } = info
     return (
       <Block key={`item-${index}`} paddingBottom={10}>
-        <LearnedWordItem data={item} />
+        <LearnedWordItem
+          data={item}
+          onPress={() => {
+            navigate('DETAIL_WORD_SCREEN', { wordId: item.word._id })
+          }}
+        />
       </Block>
     )
   }
