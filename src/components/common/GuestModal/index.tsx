@@ -2,22 +2,18 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { images } from '@assets'
-import { navigate } from '@navigation'
 import { makeStyles, useTheme } from '@themes'
 import { Block, Image, Modal, ShadowButton, Text } from '@components'
 import { ModalFunction, ModalProps } from '@components/bases/Modal/type'
 
 export const GuestModal = React.forwardRef<
   ModalFunction,
-  Omit<ModalProps, 'children'>
+  Omit<ModalProps & { onButtonPress: () => void }, 'children'>
 >((props, ref) => {
   const { colors } = useTheme()
   const { t } = useTranslation()
   const styles = useStyles()
 
-  const onButtonPress = () => {
-    navigate('REGISTER_SCREEN', { isGuest: true })
-  }
   return (
     <Modal {...props} ref={ref}>
       <Block
@@ -54,7 +50,7 @@ export const GuestModal = React.forwardRef<
           buttonHeight={35}
           buttonRadius={10}
           shadowHeight={5}
-          onPress={onButtonPress}
+          onPress={props.onButtonPress}
           buttonColor={colors.orangePrimary}
           containerStyle={styles.buttonStyle}
           shadowButtonColor={colors.orangeLighter}

@@ -1,33 +1,35 @@
 import React from 'react'
+import Toast from 'react-native-toast-message'
 import { ActivityIndicator } from 'react-native'
 import notifee, { EventType } from '@notifee/react-native'
 import { addEventListener } from '@react-native-community/netinfo'
 import * as Types from '@react-native-community/netinfo/src/internal/types'
 
 import {
-  createChannelId,
   getFCMToken,
+  createChannelId,
   requestUserPermission,
 } from '@utils/notificationUtils'
 import { useTheme } from '@themes'
 import RootStack from './RootStack'
 import { UserService } from '@services'
-import { useAppSelector } from '@hooks'
 import { Block, Text } from '@components'
+import { updateProfile } from '@redux/actions'
 import { getIsLoading } from '@redux/selectors'
-import Toast from 'react-native-toast-message'
+import { useAppDispatch, useAppSelector } from '@hooks'
 
 export const RootApp = () => {
-  const [netInfo, setNetInfo] = React.useState<Types.NetInfoState>({
-    type: Types.NetInfoStateType.unknown,
-    isConnected: true,
-    isInternetReachable: null,
-    details: null,
-  })
-
+  const dispatch = useAppDispatch()
   const { colors } = useTheme()
   const isLoading = useAppSelector(getIsLoading)
   const isLogin = useAppSelector((state) => state.root.auth.isSignedIn)
+
+  const [netInfo, setNetInfo] = React.useState<Types.NetInfoState>({
+    details: null,
+    isConnected: true,
+    isInternetReachable: null,
+    type: Types.NetInfoStateType.unknown,
+  })
 
   const updateFCMToken = async (fcmToken: string) => {
     try {
@@ -47,6 +49,7 @@ export const RootApp = () => {
 
       if (isLogin) {
         updateFCMToken(fcmToken || '')
+        dispatch(updateProfile())
       }
       await createChannelId()
     } else {

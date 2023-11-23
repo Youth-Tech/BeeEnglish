@@ -47,7 +47,10 @@ export type RootStackParamList = {
   [AUTH_ROUTE.HOME_SCREEN]: undefined
   [AUTH_ROUTE.LEARNING_SCREEN]: undefined
   [AUTH_ROUTE.PROFILE_SCREEN]: undefined
-  [AUTH_ROUTE.VERIFICATION_CODE_SCREEN]: undefined
+  [AUTH_ROUTE.VERIFICATION_CODE_SCREEN]: {
+    type: "signUp" | 'forgotPassword',
+    email: string
+  }
   [AUTH_ROUTE.EMAIL_REGISTRATION_SCREEN]: undefined
   [AUTH_ROUTE.SEND_PASSWORD_SCREEN]: undefined
   [AUTH_ROUTE.CHANGE_PASSWORD_SCREEN]: undefined

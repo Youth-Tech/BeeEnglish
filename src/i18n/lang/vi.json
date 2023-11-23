@@ -165,6 +165,7 @@
     "guest_modal_desc": "Tạo tài khoản để có được trải nghiệm trọn vẹn hơn!",
     "guest_modal_button": "Tạo tài khoản ngay!",
     "congratulation_desc": "Bạn đã hoàn thành xuất sắc bài học này",
-    "congratulation_desc_failure": "Bạn cần thêm {{point}} điểm để có thể mở bài tiếp theo. Cố lên!!"
+    "congratulation_desc_failure": "Bạn cần thêm {{point}} điểm để có thể mở bài tiếp theo. Cố lên!!",
+    "register_success": "Đăng ký thành công!"
   }
 }

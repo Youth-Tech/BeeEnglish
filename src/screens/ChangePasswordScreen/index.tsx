@@ -1,26 +1,28 @@
 import {
   Keyboard,
-  ToastAndroid,
   KeyboardAvoidingView,
   DocumentSelectionState,
 } from 'react-native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import Toast from 'react-native-toast-message'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import {
   Text,
   Block,
-  Container,
   TextInput,
+  Container,
   ShadowButton,
   DismissKeyBoardBlock,
 } from '@components'
 import { useTheme } from '@themes'
 import { BackArrow } from '@assets'
+import { useAppDispatch } from '@hooks'
 import { AuthService } from '@services/AuthService'
 import { useValidateInput } from '@utils/validateInput'
-import { RootStackParamList, goBack, pop } from '@navigation'
+import { setLoadingStatusAction } from '@redux/reducers'
+import { goBack, pop, RootStackParamList } from '@navigation'
 
 export type ChangePasswordScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -31,6 +33,7 @@ export const ChangePasswordScreen: React.FC<ChangePasswordScreenProps> = () => {
   const { colors } = useTheme()
   const { t } = useTranslation()
   const validate = useValidateInput()
+  const dispatch = useAppDispatch()
 
   const firstTime = React.useRef(true)
   const confirmRef = React.useRef<DocumentSelectionState>()
@@ -96,6 +99,7 @@ export const ChangePasswordScreen: React.FC<ChangePasswordScreenProps> = () => {
 
   const callAPI = async () => {
     try {
+      dispatch(setLoadingStatusAction(true))
       const res = await AuthService.changePassword({
         confirmPassword: confirmNewPassword,
         newPassword: newPassword,
@@ -104,12 +108,23 @@ export const ChangePasswordScreen: React.FC<ChangePasswordScreenProps> = () => {
 
       if (res.status === 200) {
         pop(1)
-        ToastAndroid.show(t('change_pass_success'), ToastAndroid.LONG)
+        Toast.show({
+          type: 'success',
+          text1: t('congratulation'),
+          text2: t('change_pass_success'),
+          position: 'top',
+        })
       }
     } catch (error) {
-      ToastAndroid.show(t('old_password_is_wrong'), ToastAndroid.LONG)
+      Toast.show({
+        type: 'error',
+        text1: t('error_occured'),
+        text2: t('old_password_is_wrong'),
+        position: 'top',
+      })
       oldPasswordRef.current?.focus()
     }
+    dispatch(setLoadingStatusAction(false))
   }
 
   const onSubmit = () => {

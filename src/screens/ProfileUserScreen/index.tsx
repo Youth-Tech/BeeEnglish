@@ -1,51 +1,83 @@
-import { images } from '@assets'
-import { useStyles } from './styles'
-import React, { useRef } from 'react'
-import UserCard from './components/UserCard'
-import { normalize, useTheme } from '@themes'
-import HeaderAccount from './components/HeaderAccount'
-import { Block, Container, LineChart, Text } from '@components'
 import {
   View,
   Easing,
   Animated,
-  ScrollView,
+  FlatList,
   Dimensions,
+  ScrollView,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  FlatList,
 } from 'react-native'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+
+import {
+  statisticField,
+  getStatisticContent,
+  ItemStatisticalProps,
+} from './const'
+import { images } from '@assets'
+import { useStyles } from './styles'
+import { useAppSelector } from '@hooks'
+import UserCard from './components/UserCard'
+import { normalize, useTheme } from '@themes'
+import { getUserData } from '@redux/selectors'
+import HeaderAccount from './components/HeaderAccount'
+import { Block, Container, LineChart, Text } from '@components'
 import StatisticalComponent from './components/StatisticalComponent'
-import { ListBadges, ListStatistical } from './const'
-import BadgesComponent from './components/BadgesComponent'
+
+const widthLineChart = Dimensions.get('window').width - normalize.m(40)
+const widthBackground = Dimensions.get('window').width
 
 export const ProfileUserScreen: React.FC = () => {
+  const userProfile = useAppSelector(getUserData)
+
   const { colors } = useTheme()
   const styles = useStyles()
   const { t } = useTranslation()
-  const scrollY = useRef(new Animated.Value(0)).current
+  const scrollY = React.useRef(new Animated.Value(0)).current
+
+  const prepareStatisticData = React.useMemo((): ItemStatisticalProps[] => {
+    const userDataMap = new Map(Object.entries(userProfile))
+    return statisticField.map((item, index) => {
+      let content = getStatisticContent.get(item)
+      const value = userDataMap.get(item)
+      const finalValue = Array.isArray(value) ? value.length : value
+
+      return {
+        id: index,
+        label: content?.label ?? '',
+        state: content?.state ?? 'StreakIcon',
+        value: finalValue,
+      }
+    })
+  }, [userProfile])
 
   const color = scrollY.interpolate({
     inputRange: [0, 90],
     outputRange: [colors.white, colors.black],
   })
+
   const colorBackground = scrollY.interpolate({
     inputRange: [80, 150],
     outputRange: ['#FFDD76', colors.white],
   })
+
   const translateY = scrollY.interpolate({
     inputRange: [0, 80],
     outputRange: [0, -150],
   })
+
   const opacity = scrollY.interpolate({
     inputRange: [0, 80],
     outputRange: [1, 0],
   })
+
   const opacityHeader = scrollY.interpolate({
     inputRange: [80, 150],
     outputRange: [0, 1],
   })
+
   const data = [
     { id: 0, label: 'Mon', x: 0, y: 3 },
     { id: 1, label: 'Tue', x: 1, y: 1 },
@@ -55,11 +87,11 @@ export const ProfileUserScreen: React.FC = () => {
     { id: 5, label: 'Sat', x: 5, y: 2 },
     { id: 6, label: 'Sun', x: 6, y: 2 },
   ]
-  const widthLineChart = Dimensions.get('window').width - normalize.m(40)
-  const widthBackground = Dimensions.get('window').width
+
   const handleItemClick = () => {
     console.log('click')
   }
+
   const handleOnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     Animated.timing(scrollY, {
       toValue: event.nativeEvent.contentOffset.y,
@@ -68,28 +100,29 @@ export const ProfileUserScreen: React.FC = () => {
       easing: Easing.linear,
     }).start()
   }
+
   return (
     <Container>
       <Animated.View
         style={[styles.boxBackground, { transform: [{ translateY }] }]}
       >
         <Animated.Image
-          source={images.ProfileBackground}
-          style={[styles.backgroundContainer, { width: widthBackground }]}
           tintColor={colorBackground}
           accessibilityIgnoresInvertColors
+          source={images.ProfileBackground}
+          style={[styles.backgroundContainer, { width: widthBackground }]}
         />
       </Animated.View>
       <View style={styles.container}>
         <ScrollView
-          showsVerticalScrollIndicator={false}
           onScroll={handleOnScroll}
           stickyHeaderIndices={[0]}
+          showsVerticalScrollIndicator={false}
         >
           <HeaderAccount
-            opacity={opacityHeader}
-            unOpacity={opacity}
             color={color}
+            unOpacity={opacity}
+            opacity={opacityHeader}
           />
           <UserCard />
           <Block paddingHorizontal={20}>
@@ -97,13 +130,13 @@ export const ProfileUserScreen: React.FC = () => {
               {t('process')}
             </Text>
             <LineChart
-              width={widthLineChart}
-              height={300}
-              data={data}
               haveDots
               haveXAxis
-              haveHorizontalGuides
+              data={data}
+              height={300}
               lineColor="#FFEFAD"
+              haveHorizontalGuides
+              width={widthLineChart}
               onItemClick={handleItemClick}
             />
 
@@ -111,33 +144,24 @@ export const ProfileUserScreen: React.FC = () => {
               {t('statistical')}
             </Text>
             <FlatList
-              scrollEnabled={false}
-              data={ListStatistical}
               numColumns={2}
-              renderItem={({ item }) => <StatisticalComponent {...item} />}
-              keyExtractor={(item) => item.id.toString()}
-              contentContainerStyle={{
-                gap: normalize.m(8),
-                marginTop: normalize.m(20),
-              }}
-              columnWrapperStyle={{
-                gap: normalize.m(8),
-              }}
-            />
-            <Text size={'h2'} fontFamily={'bold'} marginTop={20}>
-              {t('badges')}
-            </Text>
-            <FlatList
               scrollEnabled={false}
-              data={ListBadges}
-              renderItem={({ item }) => <BadgesComponent {...item} />}
+              data={prepareStatisticData}
+              columnWrapperStyle={styles.columnWrapper}
+              contentContainerStyle={styles.statisticContainer}
               keyExtractor={(item) => item.id.toString()}
-              contentContainerStyle={{
-                gap: normalize.m(10),
-                marginTop: normalize.m(20),
-                marginBottom: normalize.m(20),
-              }}
+              renderItem={({ item }) => <StatisticalComponent {...item} />}
             />
+            {/*<Text size={'h2'} fontFamily={'bold'} marginTop={20}>*/}
+            {/*  {t('badges')}*/}
+            {/*</Text>*/}
+            {/*<FlatList*/}
+            {/*  scrollEnabled={false}*/}
+            {/*  data={userProfile.badges}*/}
+            {/*  contentContainerStyle={styles.listBadgesStyle}*/}
+            {/*  keyExtractor={(item) => item.id.toString()}*/}
+            {/*  renderItem={({ item }) => <BadgesComponent {...item} />}*/}
+            {/*/>*/}
           </Block>
         </ScrollView>
       </View>

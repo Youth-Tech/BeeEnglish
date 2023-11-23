@@ -10,13 +10,14 @@ import {
   updateConfigAction,
 } from '@redux/reducers'
 import { Icon } from '@assets'
-import {TokenService} from "@services";
-import {LangType} from "@utils/helpers";
-import { getLangConfig } from '@redux/selectors'
+import { TokenService } from '@services'
+import { LangType } from '@utils/helpers'
+import { oAuthSignOut } from '@utils/authUtils'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { makeStyles, normalize, useTheme } from '@themes'
 import { Block, Container, Modal, Text } from '@components'
 import { ModalFunction } from '@components/bases/Modal/type'
+import { getLangConfig, getUserData } from '@redux/selectors'
 import { goBack, navigate, navigateAndReset } from '@navigation'
 
 export const SettingScreen = () => {
@@ -26,6 +27,10 @@ export const SettingScreen = () => {
   const dispatch = useAppDispatch()
   const langConfig = useAppSelector(getLangConfig)
   const modalLanguageRef = React.useRef<ModalFunction>(null)
+  const isSignedInOAuth = useAppSelector(
+    (state) => state.root.auth.isSignedInOAuth,
+  )
+  const userData = useAppSelector(getUserData)
 
   const onPressPremiumUser = () => {
     ToastAndroid.show(t('function_in_develop'), ToastAndroid.SHORT)
@@ -43,6 +48,11 @@ export const SettingScreen = () => {
     dispatch(setAuthState(defaultAuthState))
     dispatch(setUserState(defaultUserState))
     TokenService.clearToken()
+    if (isSignedInOAuth && userData.provider !== null) {
+      oAuthSignOut(userData.provider, () => {
+        console.log('signOut success')
+      })
+    }
     navigateAndReset([{ name: 'LOGIN_SCREEN' }], 0)
   }
 
@@ -110,15 +120,15 @@ export const SettingScreen = () => {
           <Text fontFamily="bold" size={'h2'} marginTop={32}>
             {t('account')}
           </Text>
-          <Pressable style={styles.options} onPress={onPressProfile}>
-            <Block row alignCenter>
-              <Icon state="UserOutline" />
-              <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
-                {t('profile')}
-              </Text>
-            </Block>
-            <Icon state="RightArrow" />
-          </Pressable>
+          {/*<Pressable style={styles.options} onPress={onPressProfile}>*/}
+          {/*  <Block row alignCenter>*/}
+          {/*    <Icon state="UserOutline" />*/}
+          {/*    <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>*/}
+          {/*      {t('profile')}*/}
+          {/*    </Text>*/}
+          {/*  </Block>*/}
+          {/*  <Icon state="RightArrow" />*/}
+          {/*</Pressable>*/}
           <Pressable style={styles.options} onPress={onPressPassword}>
             <Block row alignCenter>
               <Icon state="Password" />
@@ -128,15 +138,15 @@ export const SettingScreen = () => {
             </Block>
             <Icon state="RightArrow" />
           </Pressable>
-          <Pressable style={styles.options} onPress={onPressNotification}>
-            <Block row alignCenter>
-              <Icon state="Notification" />
-              <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
-                {t('notifications')}
-              </Text>
-            </Block>
-            <Icon state="RightArrow" />
-          </Pressable>
+          {/*<Pressable style={styles.options} onPress={onPressNotification}>*/}
+          {/*  <Block row alignCenter>*/}
+          {/*    <Icon state="Notification" />*/}
+          {/*    <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>*/}
+          {/*      {t('notifications')}*/}
+          {/*    </Text>*/}
+          {/*  </Block>*/}
+          {/*  <Icon state="RightArrow" />*/}
+          {/*</Pressable>*/}
           <Pressable style={styles.options} onPress={onPressLogout}>
             <Block row alignCenter>
               <Icon state="Logout" />
@@ -149,24 +159,24 @@ export const SettingScreen = () => {
           <Text fontFamily="bold" size={'h2'} marginTop={32}>
             {t('more')}
           </Text>
-          <Pressable style={styles.options} onPress={onPressRate}>
-            <Block row alignCenter>
-              <Icon state="StartOutLine" />
-              <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
-                {t('rate_review')}
-              </Text>
-            </Block>
-            <Icon state="RightArrow" />
-          </Pressable>
-          <Pressable style={styles.options} onPress={onPressHelp}>
-            <Block row alignCenter>
-              <Icon state="About" />
-              <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>
-                {t('help')}
-              </Text>
-            </Block>
-            <Icon state="RightArrow" />
-          </Pressable>
+          {/*<Pressable style={styles.options} onPress={onPressRate}>*/}
+          {/*  <Block row alignCenter>*/}
+          {/*    <Icon state="StartOutLine" />*/}
+          {/*    <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>*/}
+          {/*      {t('rate_review')}*/}
+          {/*    </Text>*/}
+          {/*  </Block>*/}
+          {/*  <Icon state="RightArrow" />*/}
+          {/*</Pressable>*/}
+          {/*<Pressable style={styles.options} onPress={onPressHelp}>*/}
+          {/*  <Block row alignCenter>*/}
+          {/*    <Icon state="About" />*/}
+          {/*    <Text marginLeft={12} fontFamily="semiBold" size={'h3'}>*/}
+          {/*      {t('help')}*/}
+          {/*    </Text>*/}
+          {/*  </Block>*/}
+          {/*  <Icon state="RightArrow" />*/}
+          {/*</Pressable>*/}
           <Pressable style={styles.options} onPress={onPressLanguage}>
             <Block row alignCenter>
               <Icon state="Language" />

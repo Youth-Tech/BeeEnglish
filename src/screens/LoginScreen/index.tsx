@@ -86,7 +86,7 @@ export const LoginScreen = () => {
     }
     if (isResend && email) {
       dispatch(resendVerifyEmail(email))
-      navigate('VERIFICATION_CODE_SCREEN')
+      navigate('VERIFICATION_CODE_SCREEN', { type: 'signUp', email })
     }
   }, [dataUser, isResend])
 

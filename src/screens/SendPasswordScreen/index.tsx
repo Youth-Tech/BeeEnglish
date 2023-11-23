@@ -1,22 +1,23 @@
+import { debounce } from 'lodash'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+
 import {
-  Container,
-  TextInput,
-  ShadowButton,
-  Block,
-  DismissKeyBoardBlock,
   Text,
+  Block,
+  TextInput,
+  Container,
+  ShadowButton,
+  DismissKeyBoardBlock,
 } from '@components'
 import { Icon } from '@assets'
-import { RootStackParamList, goBack, navigate } from '@navigation'
-import { useTranslation } from 'react-i18next'
 import { useTheme } from '@themes'
+import { useAppDispatch } from '@hooks'
 import { AuthService } from '@services/AuthService'
 import { DocumentSelectionState } from 'react-native'
-import { debounce } from 'lodash'
-import { useAppDispatch } from '@hooks'
-import { defaultUserState, setAuthState, setUserState } from '@redux/reducers'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { RootStackParamList, goBack, navigate } from '@navigation'
+import {defaultUserState, setAuthState, setLoadingStatusAction, setUserState} from '@redux/reducers'
 
 export type SendPasswordScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -57,11 +58,13 @@ export const SendPasswordScreen: React.FC<SendPasswordScreenProps> = () => {
 
   const callAPI = async () => {
     try {
+      dispatch(setLoadingStatusAction(true))
       await AuthService.forgotPassword({ email })
-      navigate('VERIFICATION_CODE_SCREEN')
+      navigate('VERIFICATION_CODE_SCREEN', { type: 'forgotPassword', email })
     } catch (error) {
       console.log(error)
     }
+    dispatch(setLoadingStatusAction(false))
   }
 
   const onSubmit = async () => {

@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import {
   login,
-  signUp,
-  verifyAccount,
-  loginOAuthThunk,
-  updateUserAvatar,
-  verifyForgotPassword,
   loginForGuest,
+  loginOAuthThunk,
+  signUp,
+  updateUserAvatar,
+  verifyAccount,
+  verifyForgotPassword,
 } from '@redux/actions'
 
 type AppState = {

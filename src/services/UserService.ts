@@ -1,16 +1,19 @@
-import { AxiosRequestHeaders } from 'axios'
-
 import { DefaultResponse, Word } from '@services'
 import APIUtils from '@utils/AxiosInstance'
+import { Provider } from '@configs'
+import { GetAllPostResponse } from '@services/PostService'
 
 const enum endPoints {
   getUserData = 'user/me',
   updateUserAvatar = '/user/me',
   updateProgressLearning = '/user/update-progress-learning',
+  getProgressLearning = '/user/learning-stats',
   getStreak = '/user/get-streaks',
   updateStreak = '/user/update-streak',
   getWordsBookmark = '/user/get-words-bookmark',
   updateFCM = '/user/update-fcm-token',
+  getPostBookmark = '/user/posts-bookmark',
+  bookmarkPost = '/user/bookmark-post/',
 }
 
 export interface UserData {
@@ -24,19 +27,19 @@ export interface UserData {
   id: string
   isVerified: boolean
   level: number
-  postBookmarks: []
+  postBookmarks: string[]
   role: string
   score: number
   streaks: string[]
   username: string
   wordBookmarks: []
-  provider: string
+  provider: Provider | null
   refreshToken: string
   deviceId: string
   deviceName?: string
 }
 
-export type UserStateResponse = {
+export interface UserStateResponse extends DefaultResponse {
   data: UserData
 }
 
@@ -60,6 +63,10 @@ export interface UpdateProgressLearningResponse extends DefaultResponse {
     lessons: string[]
     updatedAt: string
   }
+}
+
+export interface GetProgressLearningResponse extends DefaultResponse {
+  data: number[]
 }
 
 export interface BookmarkWordResponse extends DefaultResponse {
@@ -93,16 +100,18 @@ export interface UpdateFCMTokenResponse extends DefaultResponse {
 }
 
 export const UserService = {
-  getUserData(token: string) {
-    return APIUtils.get<UserStateResponse>(endPoints.getUserData, {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    } as AxiosRequestHeaders)
+  getUserData() {
+    return APIUtils.get<UserStateResponse>(endPoints.getUserData)
   },
 
   updateUserAvatar(body: UpdateUserAvatarRequest) {
     return APIUtils.patch<UserStateResponse>(endPoints.updateUserAvatar, body)
+  },
+
+  getProgressLearning() {
+    return APIUtils.get<GetProgressLearningResponse>(
+      endPoints.getProgressLearning,
+    )
   },
 
   updateProgressLearning(body: UpdateProgressLearningRequest) {
@@ -138,5 +147,13 @@ export const UserService = {
 
   updateFCMToken(body: UpdateFCMTokenRequest) {
     return APIUtils.patch<UpdateFCMTokenResponse>(endPoints.updateFCM, body)
+  },
+
+  getPostBookmark() {
+    return APIUtils.get<GetAllPostResponse>(endPoints.getPostBookmark)
+  },
+
+  bookmarkPost(postId: string) {
+    return APIUtils.patch(`${endPoints.bookmarkPost}/${postId}`, {})
   },
 } as const

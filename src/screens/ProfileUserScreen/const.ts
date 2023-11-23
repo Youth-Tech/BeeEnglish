@@ -6,6 +6,18 @@ export interface ItemStatisticalProps {
   label: string
   value?: string
 }
+
+export const statisticField = ['streak', 'score', 'lessonsCompletedCount']
+export const getStatisticContent: Map<
+    string,
+    Omit<ItemStatisticalProps, 'id' | 'value'>
+> = new Map([
+  [statisticField[0], { state: 'StreakIcon', label: 'attendance_series' }],
+  [statisticField[1], { state: 'StartIcon', label: 'total_point' }],
+  [statisticField[2], { state: 'AgreeIcon', label: 'lesson' }],
+])
+
+
 export const ListStatistical: ItemStatisticalProps[] = [
   {
     id: 1,

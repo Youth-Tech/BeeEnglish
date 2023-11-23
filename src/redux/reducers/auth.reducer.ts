@@ -3,10 +3,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import {
   login,
   signUp,
+  loginForGuest,
+  verifyAccount,
   loginOAuthThunk,
   resendVerifyEmail,
   verifyForgotPassword,
-  loginForGuest,
 } from '@redux/actions/auth.action'
 import { Provider } from '@configs'
 import { TokenService } from '@services'
@@ -22,6 +23,7 @@ export type AuthState = {
   isSignedIn?: boolean
   isSignedInOAuth?: boolean
   isLoginWithGuest?: boolean
+  isSignUp?: boolean
 }
 
 export const defaultAuthState: AuthState = {
@@ -35,6 +37,7 @@ export const defaultAuthState: AuthState = {
   isSignedInOAuth: false,
   deviceId: '',
   isLoginWithGuest: false,
+  isSignUp: false,
 }
 
 const authSlice = createSlice({
@@ -45,6 +48,12 @@ const authSlice = createSlice({
       return {
         ...state,
         ...action.payload,
+      }
+    },
+    setForgotPasswordToken(state: AuthState, action: PayloadAction<string>) {
+      return {
+        ...state,
+        forgotPasswordToken: action.payload,
       }
     },
     setEmailSignIn(state: AuthState, action: PayloadAction<string>) {
@@ -60,12 +69,15 @@ const authSlice = createSlice({
         state.forgotPasswordToken = action.payload.data
       })
 
-      .addCase(signUp.fulfilled, (_) => {})
+      .addCase(signUp.fulfilled, (state) => {
+        state.isSignUp = true
+      })
       .addCase(login.fulfilled, (state, action) => {
         action.payload &&
           TokenService.setAccessToken(action.payload.data.tokens.accessToken)
         action.payload &&
           TokenService.setRefreshToken(action.payload.data.tokens.refreshToken)
+        state.isSignUp = false
         state.isSignedIn = true
       })
       .addCase(login.rejected, (state, action) => {
@@ -94,8 +106,15 @@ const authSlice = createSlice({
         action.payload &&
           TokenService.setRefreshToken(action.payload.data.tokens.refreshToken)
       })
+      .addCase(verifyAccount.fulfilled, (state) => {
+        state.isSignUp = false
+      })
+      .addCase(verifyAccount.rejected, (state) => {
+        state.isSignUp = false
+      })
   },
 })
 
-export const { setAuthState, setEmailSignIn } = authSlice.actions
+export const { setAuthState, setEmailSignIn, setForgotPasswordToken } =
+  authSlice.actions
 export const AuthReducer = authSlice.reducer

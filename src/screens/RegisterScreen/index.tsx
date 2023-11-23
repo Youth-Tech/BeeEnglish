@@ -19,11 +19,12 @@ import {
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { Provider } from '@configs'
-import { goBack, navigate, replace } from '@navigation'
+import { AuthService } from '@services/AuthService'
 import { useValidateInput } from '@utils/validateInput'
 import { useAppDispatch, useAppSelector } from '@hooks'
-import { setAuthState, setEmailSignIn } from '@redux/reducers'
-import { loginOAuthThunk, signUp } from '@redux/actions/auth.action'
+import { setLoadingStatusAction } from '@redux/reducers'
+import { loginOAuthThunk } from '@redux/actions/auth.action'
+import { goBack, navigate, navigateAndReset } from '@navigation'
 
 export const RegisterScreen = () => {
   const dispatch = useAppDispatch()
@@ -32,7 +33,8 @@ export const RegisterScreen = () => {
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
 
-  const isSignedIn = useAppSelector((state) => state.root.auth.isSignedIn)
+  // const isSignedIn = useAppSelector((state) => state.root.auth.isSignedIn)
+  // const isSignUp = useAppSelector((state) => state.root.auth.isSignUp)
   const isSignedInOAuth = useAppSelector(
     (state) => state.root.auth.isSignedInOAuth,
   )
@@ -57,7 +59,7 @@ export const RegisterScreen = () => {
   }
 
   const handleLoginFacebook = () => {
-    dispatch(loginOAuthThunk({ providerId: Provider.google }))
+    dispatch(loginOAuthThunk({ providerId: Provider.facebook }))
   }
 
   useEffect(() => {
@@ -139,21 +141,38 @@ export const RegisterScreen = () => {
     }
     return false
   }
+
   const onSubmit = async () => {
     if (isErrorBeforeSubmit()) return
-    dispatch(setAuthState({ isSignedIn: false }))
-    dispatch(signUp({ email, password, confirmPassword, fullName }))
-    dispatch(setEmailSignIn(email))
+    dispatch(setLoadingStatusAction(true))
+    try {
+      const res = await AuthService.signUp({
+        email,
+        password,
+        confirmPassword,
+        fullName,
+      })
+      if (res.status === 200) {
+        navigate('VERIFICATION_CODE_SCREEN', { type: 'signUp', email })
+      }
+    } catch (e) {
+      console.log(e)
+    }
+    dispatch(setLoadingStatusAction(false))
   }
 
-  useEffect(() => {
-    // console.log("Email: ", emailUser, "isVerified: ", isVerified)
-    if (isSignedIn && !isSignedInOAuth) {
-      navigate('VERIFICATION_CODE_SCREEN')
-    } else if (isSignedInOAuth) {
-      replace('BOTTOM_TAB')
+  React.useEffect(() => {
+    if (isSignedInOAuth) {
+      navigateAndReset(
+        [
+          {
+            name: 'BOTTOM_TAB',
+          },
+        ],
+        0,
+      )
     }
-  }, [isSignedIn, isSignedInOAuth])
+  }, [isSignedInOAuth])
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>

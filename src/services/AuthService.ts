@@ -1,6 +1,12 @@
 import APIUtils from '@utils/AxiosInstance'
 import { DefaultResponse } from '@services'
-import { LoginResponse, SignUpResponse } from '@redux/actions/auth.action'
+import { LoginResponse } from '@redux/actions/auth.action'
+
+export interface SignUpResponse extends DefaultResponse {
+  data: {
+    message: string
+  }
+}
 
 export interface OAuthRes extends LoginResponse, DefaultResponse {}
 
