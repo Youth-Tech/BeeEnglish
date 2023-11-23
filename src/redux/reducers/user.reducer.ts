@@ -5,6 +5,7 @@ import { UserData } from '@services/UserService'
 import {
   loginForGuest,
   loginOAuthThunk,
+  updateProfile,
   updateUserAvatar,
 } from '@redux/actions'
 import { login, signUp, verifyAccount } from '@redux/actions/auth.action'
@@ -30,7 +31,7 @@ export const defaultUserState: UserData = {
   streaks: [],
   username: '',
   wordBookmarks: [],
-  provider: '',
+  provider: null,
   refreshToken: '',
   deviceId: '',
   deviceName: '',
@@ -46,14 +47,23 @@ const userSlice = createSlice({
         ...action.payload,
       }
     },
+    setPostBookmark(
+      state: UserData,
+      action: PayloadAction<Pick<UserData, 'postBookmarks'>>,
+    ) {
+      return {
+        ...state,
+        postBookmarks: action.payload.postBookmarks,
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(signUp.fulfilled, (state, action) => {
+      .addCase(signUp.fulfilled, (state) => {
         console.log('Hello')
         return {
           ...state,
-          ...action.payload.data,
+          // ...action.payload.data,
         }
       })
       .addCase(verifyAccount.fulfilled, (state, action) => {
@@ -87,8 +97,17 @@ const userSlice = createSlice({
           ...action.payload?.data.user,
         }
       })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        if (action.payload !== undefined) {
+          return {
+            ...state,
+            ...action.payload,
+          }
+        }
+        return state
+      })
   },
 })
 
-export const { setUserState } = userSlice.actions
+export const { setUserState, setPostBookmark } = userSlice.actions
 export const UserReducer = userSlice.reducer

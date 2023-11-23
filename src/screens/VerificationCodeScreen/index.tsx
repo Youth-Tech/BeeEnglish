@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
+import { Keyboard } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Keyboard, ToastAndroid } from 'react-native'
+import Toast from 'react-native-toast-message'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import {
   Text,
@@ -10,43 +12,118 @@ import {
   DismissKeyBoardBlock,
   VerifyCodeInputRefFunction,
 } from '@components'
+import {
+  goBack,
+  navigate,
+  navigateAndReset,
+  RootStackParamList,
+} from '@navigation'
 import { useTheme } from '@themes'
 import { BackArrow } from '@assets'
-import { goBack, navigate } from '@navigation'
-import { useAppDispatch, useAppSelector } from '@hooks'
-import { verifyAccount, verifyForgotPassword } from '@redux/actions/auth.action'
-import SendAgain from "@screens/VerificationCodeScreen/components/SendAgain";
-export const VerificationCodeScreen = () => {
+import { useAppDispatch } from '@hooks'
+import { AuthService } from '@services/AuthService'
+import SendAgain from '@screens/VerificationCodeScreen/components/SendAgain'
+import { setForgotPasswordToken, setLoadingStatusAction } from '@redux/reducers'
+
+export type VerificationCodeScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'VERIFICATION_CODE_SCREEN'
+>
+
+export const VerificationCodeScreen: React.FC<VerificationCodeScreenProps> = ({
+  route,
+}) => {
+  const { type, email } = route.params
   const [value, setValue] = React.useState<string>('')
   const verifyCodeInputRef = React.createRef<VerifyCodeInputRefFunction>()
   const { t } = useTranslation()
   const { normalize } = useTheme()
-  const email = useAppSelector((state) => state.root.auth.email)
-
 
   const dispatch = useAppDispatch()
-  const isVerified = useAppSelector((state) => state.root.user.isVerified)
-  const user = useAppSelector((state) => state.root.user)
-  const forgotToken = useAppSelector((state) => state.root.auth.forgotPasswordToken)
+  // const isVerified = useAppSelector((state) => state.root.user.isVerified)
+  // const user = useAppSelector((state) => state.root.user)
+  // const forgotToken = useAppSelector(
+  //   (state) => state.root.auth.forgotPasswordToken,
+  // )
 
   const onSubmit = (value: string) => {
     Keyboard.dismiss()
-    ToastAndroid.show('submit with value ' + value, ToastAndroid.SHORT)
-    if (value && !user.email) dispatch(verifyForgotPassword(value));
-    else dispatch(verifyAccount(value));
+    if (type === 'signUp') {
+      // dispatch(verifyAccount(value))
+      handleVerifyAccount(value)
+    } else {
+      // dispatch(verifyForgotPassword(value))
+      handleVerifyForgotPassword(value)
+    }
   }
 
-  useEffect(() => {
-    if (isVerified) {
-      navigate('BOTTOM_TAB')
+  const handleVerifyForgotPassword = async (code: string) => {
+    try {
+      dispatch(setLoadingStatusAction(true))
+      const res = await AuthService.verifyForgotPassword({ code })
+      if(res.status === 200){
+        dispatch(setForgotPasswordToken(res.data.data))
+        navigate('RESET_PASSWORD_SCREEN')
+      }
+    } catch (e) {
+      console.log(e)
     }
-  }, [isVerified])
+    dispatch(setLoadingStatusAction(false))
+  }
 
-  useEffect(() => {
-    if (!user.email && forgotToken) {
-      navigate('RESET_PASSWORD_SCREEN')
+  const handleVerifyAccount = async (code: string) => {
+    try {
+      dispatch(setLoadingStatusAction(true))
+      const res = await AuthService.verifyAccount({
+        code,
+      })
+      if (res.status === 200) {
+        navigateAndReset(
+          [
+            {
+              name: 'LOGIN_SCREEN',
+            },
+          ],
+          0,
+        )
+        Toast.show({
+          type: 'success',
+          text1: t('congratulation'),
+          text2: t('register_success'),
+          position: 'top',
+        })
+      }
+    } catch (e) {
+      console.log(e)
     }
-  }, [forgotToken])
+    dispatch(setLoadingStatusAction(false))
+  }
+
+  //
+  // useEffect(() => {
+  //   if (isVerified) {
+  //     navigateAndReset(
+  //       [
+  //         {
+  //           name: 'LOGIN_SCREEN',
+  //         },
+  //       ],
+  //       0,
+  //     )
+  //     Toast.show({
+  //       type: 'success',
+  //       text1: t('congratulation'),
+  //       text2: t('register_success'),
+  //       position: 'top',
+  //     })
+  //   }
+  // }, [isVerified])
+  //
+  // useEffect(() => {
+  //   if (!user.email && forgotToken) {
+  //     navigate('RESET_PASSWORD_SCREEN')
+  //   }
+  // }, [forgotToken])
 
   return (
     <Container>
@@ -77,7 +154,7 @@ export const VerificationCodeScreen = () => {
             <Text size={'h4'} color={'greySuperDark'} fontFamily="bold">
               {t('without_code').concat(' ')}
             </Text>
-            <SendAgain/>
+            <SendAgain />
           </Block>
         </Block>
       </DismissKeyBoardBlock>

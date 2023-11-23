@@ -1,7 +1,6 @@
 import { t } from 'i18next'
 
 /**
- *
  * @returns `Array<Date>` Array contain all day of week
  *
  * @example
@@ -31,7 +30,6 @@ export const getDatesOfWeek = (current: Date) => {
 }
 
 /**
- *
  * @returns `Date`
  * @param current: `Date` this is the day that you want to handle.
  * @param amount: `number` this is how many days you want to add to the `current` variable.

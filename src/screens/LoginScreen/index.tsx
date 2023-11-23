@@ -24,8 +24,8 @@ import {
 } from '@redux/actions/auth.action'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
-import { DeviceInfoConfig, Provider } from '@configs'
 import { navigate, replace } from '@navigation'
+import { DeviceInfoConfig, Provider } from '@configs'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { useValidateInput } from '@utils/validateInput'
 import { defaultUserState, setAuthState, setUserState } from '@redux/reducers'
@@ -86,7 +86,7 @@ export const LoginScreen = () => {
     }
     if (isResend && email) {
       dispatch(resendVerifyEmail(email))
-      navigate('VERIFICATION_CODE_SCREEN')
+      navigate('VERIFICATION_CODE_SCREEN', { type: 'signUp', email })
     }
   }, [dataUser, isResend])
 

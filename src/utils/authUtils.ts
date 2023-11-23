@@ -1,4 +1,4 @@
-import { LoginManager, AccessToken } from 'react-native-fbsdk-next'
+import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
 import { GoogleSignin as GoogleSignIn } from '@react-native-google-signin/google-signin'
 
 import { Provider } from '@configs'
@@ -42,22 +42,21 @@ export const signingWithFacebook = async () => {
   }
 }
 
-export const signOut = (
+export const oAuthSignOut = (
   providerId: Provider | undefined,
   onSignOutComplete: () => void,
 ) => {
   try {
-    if (providerId === 0) {
+    if (providerId === Provider.google) {
       GoogleSignIn.signOut()
-    } else if (providerId === 1) {
+    } else if (providerId === Provider.facebook) {
       LoginManager.logOut()
     }
 
     onSignOutComplete()
 
-    return 1
   } catch (error) {
     console.log('Error signing with google', error)
-    return Error('Error signing with google: ' + error)
+    // return Error('Error signing with google: ' + error)
   }
 }

@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import { animation } from '@assets'
-import { useBackHandler } from '@hooks'
+import {updateProfile} from "@redux/actions";
 import { makeStyles, useTheme } from '@themes'
 import { navigateAndReset, pop, RootStackParamList } from '@navigation'
+import {useAppDispatch, useBackHandler} from '@hooks'
 import { Block, Container, ShadowButton, Text } from '@components'
+
 
 export type CongratulationScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -19,6 +21,7 @@ export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
 }) => {
   const { status, point } = route.params
 
+  const dispatch = useAppDispatch()
   const styles = useStyle()
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
@@ -31,7 +34,8 @@ export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
   })
 
   const onContinuePress = () => {
-    if (status === 'success') {
+    if(status === "success"){
+      dispatch(updateProfile())
       navigateAndReset(
         [
           {

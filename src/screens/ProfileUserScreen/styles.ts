@@ -17,4 +17,16 @@ export const useStyles = makeStyles()(({ colors }) => ({
   title: {
     backgroundColor: colors.red,
   },
+  statisticContainer: {
+    gap: normalize.m(8),
+    marginTop: normalize.m(20),
+  },
+  columnWrapper: {
+    gap: normalize.m(8),
+  },
+  listBadgesStyle: {
+    gap: normalize.m(10),
+    marginTop: normalize.m(20),
+    marginBottom: normalize.m(20),
+  },
 }))

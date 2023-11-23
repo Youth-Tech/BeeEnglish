@@ -240,7 +240,6 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
     try {
       await UserService.updateProgressLearning(body)
-      dispatch(setLoadingStatusAction(false))
       navigation.navigate('CONGRATULATION_SCREEN', {
         status: finalPoint >= 80 ? 'success' : 'failure',
         point: finalPoint,

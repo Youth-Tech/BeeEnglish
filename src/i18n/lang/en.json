@@ -177,6 +177,7 @@
     "conjunction": "Conjunction",
     "interjection": "Interjection",
     "example": "Example",
-    "meaning": "Meaning"
+    "meaning": "Meaning",
+    "register_success": "Register successfully!"
   }
 }

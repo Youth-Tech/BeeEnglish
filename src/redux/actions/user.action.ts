@@ -9,6 +9,21 @@ export interface UpdateUserAvatarPayload {
   code: number | undefined
 }
 
+export const updateProfile = createAsyncThunk<UserData | undefined>(
+  'user/getMe',
+  async () => {
+    try {
+      const res = await UserService.getUserData()
+      return res.data.data
+
+    } catch (e) {
+      console.log(e)
+    }
+
+    return undefined
+  },
+)
+
 export const updateUserAvatar = createAsyncThunk<
   UpdateUserAvatarPayload | undefined,
   ImagePickerResponse
