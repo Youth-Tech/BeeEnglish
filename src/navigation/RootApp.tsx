@@ -73,13 +73,13 @@ export const RootApp = () => {
         case EventType.PRESS:
           console.log('User pressed notification', detail.notification)
           navigate('DETAIL_WORD_SCREEN', {
-            wordId: detail.notification.data.id,
+            wordId: detail.notification?.data?.id,
           })
           break
       }
     })
   }, [])
-
+  LogBox.ignoreLogs(['new NativeEventEmitter'])
   return (
     <>
       {/*<StatusBar />*/}

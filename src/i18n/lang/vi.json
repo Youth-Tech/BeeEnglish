@@ -171,7 +171,17 @@
     "we_cant_catch_your_voice": "Không thể nghe thấy giọng bạn",
     "congratulation_desc": "Bạn đã hoàn thành xuất sắc bài học này",
     "congratulation_desc_failure": "Bạn cần thêm {{point}} điểm để có thể mở bài tiếp theo. Cố lên!!",
-    "good_videos": "Những mẩu video hay!"
+    "good_videos": "Những mẩu video hay!",
+    "noun": "Danh từ",
+    "verb": "Động từ",
+    "adjective": "Tính từ",
+    "adverb": "Trạng từ",
+    "pronoun": "Đại từ",
+    "preposition": "Giới từ",
+    "conjunction": "Liên từ",
+    "interjection": "Thán từ",
+    "example": "Ví dụ",
+    "meaning": "Nghĩa"
 
   }
 }

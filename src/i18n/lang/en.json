@@ -167,6 +167,16 @@
     "we_cant_catch_your_voice": "We can't catch your voice",
     "congratulation_desc": "Congratulations on completing this lesson successfully!",
     "congratulation_desc_failure": "You're just {{point}} points away from unlocking the next lesson. Keep going, you've got this!",
-    "good_videos": "Some good videos"
+    "good_videos": "Some good videos",
+    "noun": "Noun",
+    "verb": "Verb",
+    "adjective": "Adjective",
+    "adverb": "Adverb",
+    "pronoun": "Pronoun",
+    "preposition": "Preposition",
+    "conjunction": "Conjunction",
+    "interjection": "Interjection",
+    "example": "Example",
+    "meaning": "Meaning"
   }
 }

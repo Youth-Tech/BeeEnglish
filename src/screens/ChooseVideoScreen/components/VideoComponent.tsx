@@ -60,6 +60,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
   const [duration, setDuration] = React.useState<number>(0)
   const [visibleName, setVisibleName] = React.useState(false)
   const [videoData, setVideoData] = React.useState<PostResponse>(data)
+  const [componentKey, setComponentKey] = React.useState(0)
   const [script, setScript] = React.useState(
     videoData.attachments[0].script ?? [],
   )
@@ -252,7 +253,10 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
       </Block>
     )
   }
-
+  const handleForceRender = () => {
+    // Update the component key to force re-render
+    setComponentKey((prevKey) => prevKey + 1)
+  }
   React.useEffect(() => {
     setRecommendData([
       { key: 'left-spacer' },
@@ -260,8 +264,12 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
       { key: 'right-spacer' },
     ])
   }, [])
+  // React.useEffect(() => {
+  //   setScript(videoData.attachments[0].script ?? [])
+  //   handleForceRender()
+  // }, [videoData])
   return (
-    <Portal>
+    <Portal key={componentKey}>
       <BlockAnimated
         entering={SlideInDown}
         exiting={SlideOutDown}
@@ -418,7 +426,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
     </Portal>
   )
 }
-export default VideoComponent
+export default React.memo(VideoComponent)
 const styles = StyleSheet.create({
   video: {
     aspectRatio: 1920 / 1080,
