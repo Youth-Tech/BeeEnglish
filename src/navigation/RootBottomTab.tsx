@@ -21,7 +21,7 @@ export function RootBottomTab() {
     >
       <Tab.Screen name="HOME_SCREEN" component={HomeScreen} />
       <Tab.Screen name="LEARNING_SCREEN" component={LessonMap} />
-      <Tab.Screen name="GAME_SCREEN" component={TestScreen} />
+      {/*<Tab.Screen name="GAME_SCREEN" component={TestScreen} />*/}
       <Tab.Screen name="PROFILE_SCREEN" component={ProfileUserScreen} />
     </Tab.Navigator>
   )

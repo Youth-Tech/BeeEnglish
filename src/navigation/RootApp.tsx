@@ -1,6 +1,6 @@
 import React from 'react'
+import { ActivityIndicator, LogBox } from 'react-native'
 import Toast from 'react-native-toast-message'
-import { ActivityIndicator } from 'react-native'
 import notifee, { EventType } from '@notifee/react-native'
 import { addEventListener } from '@react-native-community/netinfo'
 import * as Types from '@react-native-community/netinfo/src/internal/types'
@@ -13,6 +13,8 @@ import {
 import { useTheme } from '@themes'
 import RootStack from './RootStack'
 import { UserService } from '@services'
+import { Portal } from 'react-native-portalize'
+import { navigate } from '@navigation/NavigationServices'
 import { Block, Text } from '@components'
 import { updateProfile } from '@redux/actions'
 import { getIsLoading } from '@redux/selectors'
@@ -73,14 +75,17 @@ export const RootApp = () => {
           break
         case EventType.PRESS:
           console.log('User pressed notification', detail.notification)
+          navigate('DETAIL_WORD_SCREEN', {
+            wordId: detail.notification?.data?.id,
+          })
           break
       }
     })
   }, [])
-
+  LogBox.ignoreLogs(['new NativeEventEmitter'])
   return (
     <>
-      {/* <StatusBar /> */}
+      {/*<StatusBar />*/}
       {isLoading && (
         <Block
           absolute
@@ -114,7 +119,9 @@ export const RootApp = () => {
         </Block>
       )}
       <RootStack />
-      <Toast position={'bottom'} bottomOffset={20} />
+      <Portal>
+        <Toast position={'bottom'} bottomOffset={20} />
+      </Portal>
     </>
   )
 }

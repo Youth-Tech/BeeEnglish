@@ -29,6 +29,8 @@ export const AUTH_ROUTE = {
   LESSON_MAP_SCREEN: 'LESSON_MAP_SCREEN',
 
   CONGRATULATION_SCREEN: 'CONGRATULATION_SCREEN',
+  VIDEO_SCREEN: 'VIDEO_SCREEN',
+  CHOOSE_VIDEO_SCREEN: 'CHOOSE_VIDEO_SCREEN',
 } as const
 
 export const PUBLIC_ROUTE = {
@@ -65,8 +67,10 @@ export type RootStackParamList = {
     chapterId: string
     checkpointLesson?: Quiz[]
   }
+  [AUTH_ROUTE.CHOOSE_VIDEO_SCREEN]: undefined
   [AUTH_ROUTE.DICTIONARY_SCREEN]: undefined
   [AUTH_ROUTE.LESSON_MAP_SCREEN]: undefined
+  [AUTH_ROUTE.VIDEO_SCREEN]: undefined
 
   [PUBLIC_ROUTE.SPLASH_SCREEN]: undefined
   [PUBLIC_ROUTE.ABOUT_THE_TEST_SCREEN]: undefined
@@ -85,9 +89,9 @@ export type RootStackParamList = {
     checkpointLesson?: Quiz[]
   }
   [AUTH_ROUTE.SAVED_WORD_SCREEN]: undefined
-  [AUTH_ROUTE.DETAIL_WORD_SCREEN]: undefined
+  [AUTH_ROUTE.DETAIL_WORD_SCREEN]: { wordId: string }
   [AUTH_ROUTE.CONGRATULATION_SCREEN]: {
-    status?: 'success' | 'failure',
+    status?: 'success' | 'failure'
     point: number
   }
 }

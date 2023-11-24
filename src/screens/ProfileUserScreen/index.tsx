@@ -25,6 +25,7 @@ import { getUserData } from '@redux/selectors'
 import HeaderAccount from './components/HeaderAccount'
 import { Block, Container, LineChart, Text } from '@components'
 import StatisticalComponent from './components/StatisticalComponent'
+import { UserService } from '@services'
 
 const widthLineChart = Dimensions.get('window').width - normalize.m(40)
 const widthBackground = Dimensions.get('window').width
@@ -79,13 +80,13 @@ export const ProfileUserScreen: React.FC = () => {
   })
 
   const data = [
-    { id: 0, label: 'Mon', x: 0, y: 3 },
-    { id: 1, label: 'Tue', x: 1, y: 1 },
+    { id: 0, label: 'Mon', x: 0, y: 5 },
+    { id: 1, label: 'Tue', x: 1, y: 2 },
     { id: 2, label: 'Wed', x: 2, y: 2 },
-    { id: 3, label: 'Thu', x: 3, y: 4 },
-    { id: 4, label: 'Fri', x: 4, y: 3 },
-    { id: 5, label: 'Sat', x: 5, y: 2 },
-    { id: 6, label: 'Sun', x: 6, y: 2 },
+    { id: 3, label: 'Thu', x: 3, y: 5 },
+    { id: 4, label: 'Fri', x: 4, y: 5 },
+    { id: 5, label: 'Sat', x: 5, y: 0 },
+    { id: 6, label: 'Sun', x: 6, y: 0 },
   ]
 
   const handleItemClick = () => {
@@ -100,6 +101,15 @@ export const ProfileUserScreen: React.FC = () => {
       easing: Easing.linear,
     }).start()
   }
+  const formatStats = (unformatted: Array<number>) => {}
+  const getUserLearningStats = async () => {
+    try {
+      const response = await UserService.getLearningStats()
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  React.useEffect(() => {}, [])
 
   return (
     <Container>

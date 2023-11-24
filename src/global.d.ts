@@ -83,9 +83,17 @@ interface Comment {
   id: string
 }
 
+interface Script {
+  start: string
+  end: string
+  content: string
+}
 interface Attachment {
   id?: any
+  thumbnail?: string
+  script?: Script[]
   src?: string
+  duration?: number
   type?: import('@utils/enums').EAttachment
 }
 

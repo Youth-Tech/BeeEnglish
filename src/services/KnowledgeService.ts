@@ -89,6 +89,9 @@ export interface GetAllWordResponse extends DefaultResponse {
     words: Word[]
   }
 }
+export interface GetWordByIdResponse extends DefaultResponse {
+  data: Word
+}
 
 export const KnowledgeService = {
   getChapterAndLesson: () => {
@@ -105,7 +108,7 @@ export const KnowledgeService = {
 
   getWordByLessonId: (lessonId: string) => {
     return ApiUtil.get<GetWordByLessonIdRes>(
-      `/knowledge/word/${lessonId}/get-words-by-lesson`,
+      `/knowledge/word/${lessonId}/get-words-by-lesson?timestamp=${new Date().getTime()}`,
     )
   },
 
@@ -115,5 +118,8 @@ export const KnowledgeService = {
       undefined,
       { params: { page, limit } },
     )
+  },
+  getWordById: (id: string) => {
+    return ApiUtil.get<GetWordByIdResponse>(`/knowledge/word/${id}`)
   },
 } as const

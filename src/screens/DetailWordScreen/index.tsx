@@ -3,23 +3,28 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, TouchableOpacity } from 'react-native'
 
 import {
+  CopyIcon,
   Icon,
   images,
-  StarIcon,
-  CopyIcon,
-  VolumeIcon,
   RightArrowIcon,
+  StarIcon,
+  VolumeIcon,
 } from '@assets'
-import { useTheme } from '@themes'
-import { goBack } from '@navigation'
+import { goBack, RootStackParamList } from '@navigation'
 import Content from './components/Content'
 import { heightScreen } from '@utils/helpers'
 import { Block, Container, Image, Text } from '@components'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { KnowledgeService, Word } from '@services'
+import { data } from '@screens/LearnedWordScreen/const'
+import { colors, useTheme } from '@themes'
 
-export const DetailWordScreen = () => {
+type Props = NativeStackScreenProps<RootStackParamList, 'DETAIL_WORD_SCREEN'>
+export const DetailWordScreen = ({ route }: Props) => {
+  const { wordId } = route.params
   const { t } = useTranslation()
   const { colors } = useTheme()
-
+  const [wordData, setWordData] = React.useState<Word>()
   const onCopyPress = () => {
     console.log('onCopyPress')
   }
@@ -31,9 +36,19 @@ export const DetailWordScreen = () => {
   const onPronunciationPress = () => {
     console.log('onPronunciationPress')
   }
-
+  const callGetWordByIdAPI = async () => {
+    try {
+      const response = await KnowledgeService.getWordById(wordId)
+      setWordData(response.data.data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  React.useEffect(() => {
+    callGetWordByIdAPI()
+  }, [])
   return (
-    <Container>
+    <Container hasScroll>
       <Image
         width={'100%'}
         resizeMode="contain"
@@ -41,10 +56,12 @@ export const DetailWordScreen = () => {
         source={images.BG_Detail}
         style={{
           position: 'absolute',
-          zIndex: -1,
+          top: 0,
+          bottom: 0,
         }}
       />
-      <Block flex marginTop={10}>
+
+      <Block paddingVertical={20}>
         <Block row alignCenter space="between" marginHorizontal={24}>
           <Icon state="Back" onPress={goBack} />
           <Text color="black" size={'h3'} fontFamily="bold" center>
@@ -54,12 +71,10 @@ export const DetailWordScreen = () => {
         </Block>
 
         <Block
-          flex
           shadow
           margin={20}
           radius={15}
           elevation={3}
-          marginBottom={40}
           backgroundColor="white"
         >
           <Block column alignCenter justifyCenter>
@@ -70,7 +85,7 @@ export const DetailWordScreen = () => {
               lineHeight={18}
               fontFamily="bold"
             >
-              Chicken
+              {wordData?.english}
             </Text>
             <Text
               size={'h3'}
@@ -78,11 +93,11 @@ export const DetailWordScreen = () => {
               lineHeight={18}
               fontFamily="regular"
             >
-              /'tʃIk.In/
+              /{wordData?.pronunciation}/
             </Text>
           </Block>
 
-          <Block marginTop={15} row space="evenly">
+          <Block marginTop={15} row justifyCenter gap={20}>
             <Pressable onPress={onPronunciationPress}>
               <Block
                 shadow
@@ -97,19 +112,6 @@ export const DetailWordScreen = () => {
               </Block>
             </Pressable>
 
-            <Pressable onPress={onBookmarkPress}>
-              <Block
-                shadow
-                width={50}
-                height={50}
-                alignCenter
-                radius={10}
-                justifyCenter
-                backgroundColor="white"
-              >
-                <StarIcon />
-              </Block>
-            </Pressable>
             <Pressable onPress={onCopyPress}>
               <Block
                 shadow
@@ -125,7 +127,7 @@ export const DetailWordScreen = () => {
             </Pressable>
           </Block>
 
-          <Content />
+          <Content data={wordData?.senses ?? []} />
 
           <Block row alignCenter justifyCenter marginBottom={70}>
             <Text color="black" size={12} fontFamily="bold" margin={5}>

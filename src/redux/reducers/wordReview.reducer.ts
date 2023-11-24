@@ -1,4 +1,4 @@
-import { Word, WordReviews } from '@services'
+import { WordReviews } from '@services'
 import { createSlice } from '@reduxjs/toolkit'
 
 export interface WordReviewWords {

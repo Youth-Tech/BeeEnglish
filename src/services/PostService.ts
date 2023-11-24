@@ -49,13 +49,13 @@ export interface GetRepliesPostCommentResponse extends DefaultResponse {
 export interface GetRecommendPostRequest {
   topic: string
   activePost: string
-  page: number,
+  page: number
   limit: number
 }
 
 export const PostServices = {
   getAllPost(params?: Partial<GetAllPostRequest>) {
-    return ApiUtil.get<GetAllPostResponse>(`/post/get-all?page=1&limit=10`, undefined, {
+    return ApiUtil.get<GetAllPostResponse>(`/post/get-all`, undefined, {
       params,
     })
   },

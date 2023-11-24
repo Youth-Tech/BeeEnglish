@@ -17,7 +17,6 @@ type TBottomState = {
 const BOTTOM_ICON_STATE: Array<TBottomState> = [
   { iconName: 'Home', color: colors.dark.bluePrimary },
   { iconName: 'Dumbell', color: colors.dark.greenLighter },
-  { iconName: 'GamePad', color: colors.dark.purpleLight },
   { iconName: 'User', color: colors.dark.red },
 ]
 type Props = {
@@ -44,7 +43,6 @@ export const CustomBottomNavigation: React.FC<BottomTabBarProps> = ({
   const { colors } = useTheme()
   const scaleYHomeIcon = useSharedValue(1)
   const scaleYDumbellIcon = useSharedValue(1)
-  const scaleYGamePadIcon = useSharedValue(1)
   const scaleYProfileIcon = useSharedValue(1)
   const rStyleHome = useAnimatedStyle(() => {
     return {
@@ -56,23 +54,13 @@ export const CustomBottomNavigation: React.FC<BottomTabBarProps> = ({
       transform: [{ scale: scaleYDumbellIcon.value }],
     }
   })
-  const rStyleGamePad = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: scaleYGamePadIcon.value }],
-    }
-  })
   const rStyleProfile = useAnimatedStyle(() => {
     return {
       transform: [{ scale: scaleYProfileIcon.value }],
     }
   })
-  const rStyleArray = [rStyleHome, rStyleDumbell, rStyleGamePad, rStyleProfile]
-  const scaleValueArray = [
-    scaleYHomeIcon,
-    scaleYDumbellIcon,
-    scaleYGamePadIcon,
-    scaleYProfileIcon,
-  ]
+  const rStyleArray = [rStyleHome, rStyleDumbell, rStyleProfile]
+  const scaleValueArray = [scaleYHomeIcon, scaleYDumbellIcon, scaleYProfileIcon]
   const handleScaleAnimateion = (index: number) => {
     scaleValueArray[index].value = withTiming(
       0.8,

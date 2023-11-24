@@ -165,7 +165,10 @@ export const HomeScreen = () => {
   const onPressDictionary = () => {
     navigate('DICTIONARY_SCREEN')
   }
-  const onPressVideo = () => {}
+  const onPressVideo = () => {
+    navigate('CHOOSE_VIDEO_SCREEN')
+  }
+  const onPressRanking = () => {}
   const onLearningWatchMore = () => {
     navigate('LEARNING_SCREEN')
   }
@@ -327,7 +330,7 @@ export const HomeScreen = () => {
             <Text size={'h2'} fontFamily="bold" color={colors.black}>
               {t('tools')}
             </Text>
-            <Block row marginTop={18}>
+            <Block row marginTop={18} alignCenter justifyCenter>
               <ToolItem
                 icon="DictionaryColorized"
                 name={t('dictionary')}
@@ -335,6 +338,13 @@ export const HomeScreen = () => {
               />
               <View style={{ marginStart: normalize.h(28) }}>
                 <ToolItem icon="Video" name="Video" onPress={onPressVideo} />
+              </View>
+              <View style={{ marginStart: normalize.h(28) }}>
+                <ToolItem
+                  icon="Ranking"
+                  name="Ranking"
+                  onPress={onPressRanking}
+                />
               </View>
             </Block>
           </Block>

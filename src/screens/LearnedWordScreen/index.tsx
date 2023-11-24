@@ -4,13 +4,17 @@ import { useTheme } from '@themes'
 import { useTranslation } from 'react-i18next'
 import { LearnedWordItem } from './components'
 import { ReviewService, WordReviews } from '@services'
-import { Block, Container, TextInput } from '@components'
+import { Block, Container, TextInput, VoiceDectectorModal } from '@components'
 import HeaderApp from '@components/common/HeaderComponent'
 import { MasonryFlashList, MasonryListRenderItem } from '@shopify/flash-list'
+import { ModalFunction } from '@components/bases/Modal/type'
+import { navigate } from '@navigation'
 
 export const LearnedWordScreen = () => {
   const { colors } = useTheme()
   const { t } = useTranslation()
+  const modalRef = React.useRef<ModalFunction>(null)
+  const [searchText, setSearchText] = React.useState('')
   const [learnedWordData, setLearnedWordData] = React.useState<WordReviews[]>(
     [],
   )
@@ -18,7 +22,12 @@ export const LearnedWordScreen = () => {
     const { item, index } = info
     return (
       <Block key={`item-${index}`} paddingBottom={10}>
-        <LearnedWordItem data={item} />
+        <LearnedWordItem
+          data={item}
+          onPress={() => {
+            navigate('DETAIL_WORD_SCREEN', { wordId: item.word._id })
+          }}
+        />
       </Block>
     )
   }
@@ -31,6 +40,22 @@ export const LearnedWordScreen = () => {
       console.log(e)
     }
   }
+  const searchApi = async (searchText: string) => {
+    try {
+      const response = await ReviewService.getAllWordReviews({
+        search: searchText,
+      })
+      setLearnedWordData(response.data.data.wordsReview)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  React.useEffect(() => {
+    const timeOutSearch = setTimeout(() => {
+      searchApi(searchText)
+    }, 2000)
+    return () => clearTimeout(timeOutSearch)
+  }, [searchText])
   React.useEffect(() => {
     callApi()
   }, [])
@@ -65,9 +90,13 @@ export const LearnedWordScreen = () => {
               <Icon
                 state="Microphone"
                 stroke={colors.greyPrimary}
-                onPress={() => {}}
+                onPress={() => {
+                  modalRef.current?.openModal()
+                }}
               ></Icon>
             }
+            value={searchText}
+            onChangeText={setSearchText}
           />
         </Block>
         <Block radius={15} flex overflow="scroll">
@@ -83,6 +112,14 @@ export const LearnedWordScreen = () => {
           />
         </Block>
       </Block>
+      <VoiceDectectorModal
+        modalRef={modalRef}
+        setText={setSearchText}
+        onFinishRecord={() => {
+          console.log('finished')
+          modalRef.current?.dismissModal()
+        }}
+      />
     </Container>
   )
 }

@@ -7,6 +7,7 @@ import {
   DetailPost,
   VocabScreen,
   LoginScreen,
+  VideoScreen,
   SplashScreen,
   StreakScreen,
   GrammarScreen,
@@ -18,6 +19,7 @@ import {
   DetailWordScreen,
   DictionaryScreen,
   LearnedWordScreen,
+  ChooseVideoScreen,
   SendPasswordScreen,
   DetailLessonScreen,
   AboutTheTestScreen,
@@ -32,7 +34,7 @@ import { RootStackParamList } from './routes'
 import { RootBottomTab } from './RootBottomTab'
 import { navigationRef } from './NavigationServices'
 import { NavigationContainer } from '@react-navigation/native'
-import { getIsLoginWithGuest } from '@redux/selectors'
+import { getIsLogin, getIsLoginWithGuest } from '@redux/selectors'
 import { LinkingOptions } from '@react-navigation/native/lib/typescript/src/types'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -59,7 +61,7 @@ const linking: LinkingOptions<RootStackParamList> | undefined = {
 
 const RootStack = () => {
   const isSignedWithGuestRole = useAppSelector(getIsLoginWithGuest)
-  const isSignedIn = useAppSelector((state) => state.root.auth.isSignedIn)
+  const isSignedIn = useAppSelector(getIsLogin)
 
   return (
     <NavigationContainer ref={navigationRef} linking={linking}>
@@ -123,8 +125,13 @@ const RootStack = () => {
             component={DetailLessonScreen}
           />
           <Stack.Screen name="LESSON_MAP_SCREEN" component={LessonMap} />
+          <Stack.Screen name="VIDEO_SCREEN" component={VideoScreen} />
           <Stack.Screen name="SETTING_SCREEN" component={SettingScreen} />
           <Stack.Screen name="GRAMMAR_SCREEN" component={GrammarScreen} />
+          <Stack.Screen
+            name="CHOOSE_VIDEO_SCREEN"
+            component={ChooseVideoScreen}
+          />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

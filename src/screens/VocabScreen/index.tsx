@@ -160,7 +160,7 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
   }
   const handleNextVocab = () => {
     if (currentPos + 1 > wordData.length - 1) {
-      navigate('CONGRATULATION_SCREEN')
+      navigate('CONGRATULATION_SCREEN', { status: 'success', point: 0 })
       handleCallApi()
       callMultipleWordReview()
 

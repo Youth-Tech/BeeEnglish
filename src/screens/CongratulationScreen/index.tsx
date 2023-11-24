@@ -6,9 +6,10 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { animation } from '@assets'
 import {updateProfile} from "@redux/actions";
 import { makeStyles, useTheme } from '@themes'
+import { navigateAndReset, pop, RootStackParamList } from '@navigation'
 import {useAppDispatch, useBackHandler} from '@hooks'
 import { Block, Container, ShadowButton, Text } from '@components'
-import {navigateAndReset, pop, RootStackParamList} from '@navigation'
+
 
 export type CongratulationScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -36,14 +37,14 @@ export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
     if(status === "success"){
       dispatch(updateProfile())
       navigateAndReset(
-          [
-            {
-              name: 'BOTTOM_TAB',
-            },
-          ],
-          0,
+        [
+          {
+            name: 'BOTTOM_TAB',
+          },
+        ],
+        0,
       )
-    }else{
+    } else {
       pop(2)
     }
   }
