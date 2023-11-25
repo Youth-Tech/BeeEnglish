@@ -1,11 +1,11 @@
 import React from 'react'
 import Video from 'react-native-video'
 import {
-  View,
   FlatList,
+  ListRenderItemInfo,
   Pressable,
   StyleSheet,
-  ListRenderItemInfo,
+  View,
 } from 'react-native'
 import PlayIcon from '@assets/icons/PlayIcon'
 import { baseStyles, useTheme } from '@themes'
@@ -13,18 +13,18 @@ import { Block, BlockAnimated, Text } from '@components'
 import { heightWindow, widthScreen } from '@utils/helpers'
 import BackButton from '@screens/ChooseVideoScreen/components/BackButton'
 import Animated, {
-  runOnJS,
+  Extrapolation,
   FadeIn,
   FadeOut,
-  withTiming,
   interpolate,
+  runOnJS,
   SlideInDown,
   SlideOutDown,
-  Extrapolation,
-  useSharedValue,
   useAnimatedProps,
-  useAnimatedStyle,
   useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
 } from 'react-native-reanimated'
 import { Icon } from '@assets'
 import memoizeOne from 'memoize-one'
@@ -414,7 +414,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
             snapToAlignment={'start'}
             contentContainerStyle={{
               marginTop: normalize.v(20),
-              height: normalize.h(400) + 50,
+              height: normalize.h(350) + 50,
               justifyContent: 'center',
               alignItems: 'flex-end',
             }}

@@ -1,26 +1,49 @@
 import React from 'react'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
+import { navigate } from '@navigation'
+import { Task } from '@services/TaskService'
 import { Block, Progress, ShadowBlock, Text } from '@components'
-export type TTask = 'learning' | 'money' | 'game'
+
 export interface TaskItemProps {
-  taskType: TTask
-  taskName: string
-  honeyAmount: number
-  onPress?: () => void
+  data: Task
 }
 export const TaskItem: React.FC<TaskItemProps> = (props) => {
-  const { taskType, taskName, honeyAmount, onPress } = props
+  const { data } = props
   const { normalize, colors } = useTheme()
 
   const renderIcon = () => {
-    switch (taskType) {
-      case 'learning':
+    switch (data.type) {
+      case 'learn':
         return <Icon state={'LearnBook'} />
-      case 'money':
-        return <Icon state={'Money'} />
-      case 'game':
-        return <Icon state={'Boxing'} />
+      case 'read':
+        return <Icon state={'LearnBook'} />
+      case 'time':
+        return <Icon state={'Clock'} />
+
+      default:
+        return <Icon state={'LearnBook'} />
+    }
+  }
+  const handleRedirect = () => {
+    switch (data.type) {
+      case 'learn': {
+        if (data.target) {
+          navigate('DETAIL_LESSON_SCREEN', {
+            lessonId: data.target,
+            chapterId: data.chapter,
+          })
+        }
+        break
+      }
+      case 'time': {
+        navigate('LEARNING_SCREEN')
+        break
+      }
+      case 'read': {
+        navigate('HOME_SCREEN')
+        break
+      }
     }
   }
   return (
@@ -29,36 +52,36 @@ export const TaskItem: React.FC<TaskItemProps> = (props) => {
       height={55}
       alignCenter
       paddingLeft={15}
-      paddingRight={11}
       space={'between'}
+      paddingRight={11}
     >
       <Block flex row alignCenter>
         {renderIcon()}
         <Block marginLeft={13}>
-          <Text size={'h5'} fontFamily={'bold'}>
-            {taskName}
+          <Text size={'h5'} fontFamily={'bold'} center>
+            {data.title}
           </Text>
-          <Block row alignCenter justifyCenter marginTop={3}>
+          <Block row alignCenter gap={7} marginTop={3}>
             <Progress
-              step={50}
+              step={data.progress}
               totalSteps={100}
               progressContainerStyles={{ width: normalize.h(137) }}
             />
-            <Block row justifyCenter alignCenter marginLeft={7}>
+            <Block row justifyCenter alignCenter>
               <Text
                 size={'h5'}
                 lineHeight={18}
                 color={colors.blue}
                 fontFamily={'semiBold'}
               >
-                x{honeyAmount}
+                x{data.score}
               </Text>
               <Icon state={'Honey'} />
             </Block>
           </Block>
         </Block>
       </Block>
-      <Icon state={'GoButton'} onPress={onPress} />
+      <Icon state={'GoButton'} onPress={handleRedirect} />
     </ShadowBlock>
   )
 }

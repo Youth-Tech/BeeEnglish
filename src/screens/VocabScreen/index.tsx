@@ -21,6 +21,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { VocabularyFunc } from '@components/common/VocabularyWord/type'
 import { KnowledgeService, ReviewService, UserService, Word } from '@services'
 import { FlipVocabularyProps } from '@components/common/VocabularyWord/components/type'
+import { TaskService } from '@services/TaskService'
 
 type VocabScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -65,13 +66,13 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
   const reviewWords = useAppSelector(
     (state) => state.root.wordReviewReducer.reviewWords,
   )
-  const [wordData, setWordData] = React.useState<FlipVocabularyProps[]>([])
-  const [data, setData] = React.useState<FlipVocabularyProps>(null)
+  const leaveModal = useRef<ModalFunction>(null)
   const [step, setStep] = React.useState(0)
   const vocabRef = React.useRef<VocabularyFunc>(null)
   const [currentPos, setCurrentPos] = React.useState(0)
   const [nextText, setNextText] = React.useState(t('continue_button'))
-  const leaveModal = useRef<ModalFunction>(null)
+  const [data, setData] = React.useState<FlipVocabularyProps>(null)
+  const [wordData, setWordData] = React.useState<FlipVocabularyProps[]>([])
   const onClosePress = () => {
     leaveModal.current?.openModal()
   }
@@ -118,22 +119,10 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
       console.log(e)
     }
   }
-  const callMultipleAPIBookmark = async () => {
-    const promises = wordData.map((item) => {
-      if (item.isBookmarked === true) {
-        return callAPIBookmark(item._id)
-      }
-    })
-    try {
-      const results = await Promise.all(promises)
-      console.log('Results' + results)
-    } catch (e) {
-      console.log('error' + e)
-    }
-  }
+
   const callMultipleWordReview = async () => {
     const promises = wordData.map((item) => {
-      return callAPIWordReview(item._id, item.difficulty)
+      return callAPIWordReview(item._id, item.difficulty!)
     })
     try {
       const results = await Promise.all(promises)
@@ -163,7 +152,7 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
       navigate('CONGRATULATION_SCREEN', { status: 'success', point: 0 })
       handleCallApi()
       callMultipleWordReview()
-
+      stopCountingTime()
       return
     }
     setCurrentPos((prev) => prev + 1)
@@ -198,8 +187,25 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
       console.log(e)
     }
   }
+  const startCountingTime = async () => {
+    try {
+      const response = await TaskService.startTime()
+      console.log(response.data.message)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const stopCountingTime = async () => {
+    try {
+      const response = await TaskService.stopTime()
+      console.log(response.data.message)
+    } catch (e) {
+      console.log(e)
+    }
+  }
   React.useEffect(() => {
     callApi()
+    startCountingTime()
   }, [])
   React.useEffect(() => {
     console.log(wordData.length)
@@ -217,7 +223,6 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
 
     setStep(currentPos * (100 / (wordData.length - 1)))
   }, [currentPos])
-  // @ts-ignore
   if (wordData.length == 0) {
     return <LoadingScreen />
   }
@@ -285,6 +290,7 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
         ref={leaveModal}
         onPressApprove={() => {
           //TODO: navigate to the screen
+          stopCountingTime()
           navigation.goBack()
         }}
         onPressCancel={() => {

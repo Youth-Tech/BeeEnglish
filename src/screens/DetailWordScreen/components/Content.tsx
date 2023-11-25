@@ -53,63 +53,72 @@ const Content = (props: ContentProps) => {
           <Text marginTop={10} fontFamily="bold" size={'h4'} lineHeight={18}>
             {item.vietnamese}
           </Text>
-          <Block marginTop={10} row>
-            <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
-              {t('example')}:
-            </Text>
-            <Text
-              flex
-              size={'h4'}
-              marginLeft={5}
-              fontFamily="bold"
-              lineHeight={18}
-            >
-              {item.exampleEnglish}
-            </Text>
-          </Block>
+          {item.exampleEnglish?.length > 0 && (
+            <Block marginTop={10} row>
+              <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
+                {t('example')}:
+              </Text>
+              <Text
+                flex
+                size={'h4'}
+                marginLeft={5}
+                fontFamily="bold"
+                lineHeight={18}
+              >
+                {item.exampleEnglish}
+              </Text>
+            </Block>
+          )}
+          {item.exampleVietnamese?.length > 0 && (
+            <Block marginTop={10} row>
+              <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
+                {t('meaning')}:
+              </Text>
+              <Text
+                marginLeft={5}
+                fontFamily="bold"
+                size={'h4'}
+                flex
+                lineHeight={18}
+              >
+                {item.exampleVietnamese}
+              </Text>
+            </Block>
+          )}
 
-          <Block marginTop={10} row>
-            <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
-              {t('meaning')}:
-            </Text>
-            <Text
-              marginLeft={5}
-              fontFamily="bold"
-              size={'h4'}
-              flex
-              lineHeight={18}
-            >
-              {item.exampleVietnamese}
-            </Text>
-          </Block>
-          <Block marginTop={10} row>
-            <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
-              {t('meaning')}:
-            </Text>
-            <Text
-              marginLeft={5}
-              fontFamily="bold"
-              size={'h4'}
-              flex
-              lineHeight={18}
-            >
-              {item.synonyms}
-            </Text>
-          </Block>
-          <Block marginTop={10} row>
-            <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
-              {t('meaning')}:
-            </Text>
-            <Text
-              marginLeft={5}
-              fontFamily="bold"
-              size={'h4'}
-              flex
-              lineHeight={18}
-            >
-              {item.antonyms}
-            </Text>
-          </Block>
+          {item.synonyms.length > 0 && (
+            <Block marginTop={10} row>
+              <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
+                {t('synonyms')}:
+              </Text>
+              <Text
+                marginLeft={5}
+                fontFamily="bold"
+                size={'h4'}
+                flex
+                lineHeight={18}
+              >
+                {item.synonyms.join(', ')}
+              </Text>
+            </Block>
+          )}
+
+          {item.antonyms.length > 0 && (
+            <Block marginTop={10} row>
+              <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
+                {t('antonyms')}:
+              </Text>
+              <Text
+                marginLeft={5}
+                fontFamily="bold"
+                size={'h4'}
+                flex
+                lineHeight={18}
+              >
+                {item.antonyms.join(', ')}
+              </Text>
+            </Block>
+          )}
         </Block>
       ))}
     </Block>

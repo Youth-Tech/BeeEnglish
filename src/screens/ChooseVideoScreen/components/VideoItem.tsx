@@ -29,9 +29,19 @@ const VideoItem: React.FC<VideoItemProps> = (props) => {
           style={styles.image}
         />
         <Block flex paddingTop={15} space={'between'}>
-          <Text size={'h2'} numberOfLines={3} fontFamily={'semiBold'}>
-            {data.title}
-          </Text>
+          <Block>
+            <Text size={'h2'} numberOfLines={3} fontFamily={'semiBold'}>
+              {data.title}
+            </Text>
+            <Text
+              size={'h3'}
+              numberOfLines={3}
+              fontFamily={'regular'}
+              marginTop={10}
+            >
+              {data.note}
+            </Text>
+          </Block>
           <Text size={'h3'} alignSelf={'flex-end'}>
             {duration()}
           </Text>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { StyleProp, ViewStyle } from 'react-native'
 export interface ModalProps {
   /**
    * Component that you wrap inside the Modal
@@ -22,6 +23,10 @@ export interface ModalProps {
    * type of the modal animation
    */
   animationType?: 'slide' | 'fade'
+  /*
+   * style of the backdrop modal
+   * */
+  backdropStyle?: StyleProp<ViewStyle>
 }
 
 export interface ModalFunction {

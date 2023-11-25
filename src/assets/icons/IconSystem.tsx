@@ -11,6 +11,8 @@ import Svg, {
   Circle,
   Ellipse,
   Mask,
+  Line,
+  Polygon,
 } from 'react-native-svg'
 import { colors } from '@themes'
 
@@ -1618,14 +1620,7 @@ const IconCheckpoint = (props: Props) => (
   </Svg>
 )
 const Ranking = (props: Props) => (
-  <Svg
-    width={40}
-    height={41}
-    viewBox="0 0 40 41"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <Svg width={40} height={41} viewBox="0 0 40 41" fill="none" {...props}>
     <G clipPath="url(#clip0_1108_3742)">
       <Path
         d="M28.2031 31.3105L25.8594 33.7129V38.5977L28.2031 41H40V31.3105H28.2031Z"
@@ -1679,6 +1674,141 @@ const Ranking = (props: Props) => (
         <Rect width={40} height={41} fill="white" />
       </ClipPath>
     </Defs>
+  </Svg>
+)
+const Clock = (props: SvgProps) => (
+  <Svg width="30px" height="30px" viewBox="-1.19 0 32.381 32.381" {...props}>
+    <G id="clock" transform="translate(-1057 -44.219)">
+      <G id="Group_35" data-name="Group 35">
+        <Circle
+          id="Ellipse_11"
+          data-name="Ellipse 11"
+          cx={14}
+          cy={14}
+          r={14}
+          transform="translate(1058 46)"
+          fill="#e8f7f9"
+          stroke="#333"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+        />
+        <Path
+          id="Path_36"
+          data-name="Path 36"
+          d="M1072,52.533v6.533l4.667,5.6"
+          fill="#e8f7f9"
+          stroke="#333"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+        />
+      </G>
+      <Line
+        id="Line_46"
+        data-name="Line 46"
+        y1={4}
+        x2={3}
+        transform="translate(1062 72)"
+        fill="none"
+        stroke="#333"
+        strokeMiterlimit={10}
+        strokeWidth={2}
+      />
+      <Line
+        id="Line_47"
+        data-name="Line 47"
+        y1={4}
+        x2={5}
+        transform="translate(1059 45)"
+        fill="none"
+        stroke="#333"
+        strokeMiterlimit={10}
+        strokeWidth={2}
+      />
+      <Line
+        id="Line_48"
+        data-name="Line 48"
+        x1={5}
+        y1={4}
+        transform="translate(1080 45)"
+        fill="none"
+        stroke="#333"
+        strokeMiterlimit={10}
+        strokeWidth={2}
+      />
+      <Line
+        id="Line_49"
+        data-name="Line 49"
+        x1={3}
+        y1={4}
+        transform="translate(1079 72)"
+        fill="none"
+        stroke="#333"
+        strokeMiterlimit={10}
+        strokeWidth={2}
+      />
+    </G>
+  </Svg>
+)
+const Firework = (props: SvgProps) => (
+  <Svg
+    height={30}
+    width={30}
+    id="Capa_1"
+    viewBox="0 0 466.078 466.078"
+    {...props}
+  >
+    <G>
+      <Path
+        fill={'#FFEBAF'}
+        d="M253.038,466.071c0-0.02,0-0.041,0-0.061c-0.045-3.903-2.553-194.286-61.342-298.615l-38.571-20.277 l-13.796,7.252c20.998,28.903,88.661,132.3,111.184,291.94c2.159,12.192,2.518,19.631,2.524,19.756L253.038,466.071z"
+      />
+      <Polygon
+        fill={'#FFEBAF'}
+        points="253.039,466.078 253.039,466.068 253.039,466.074  "
+      />
+      <Path
+        fill={'#FFEBAF'}
+        d="M348.877,251.534l-11.924-6.268l-41.929,22.043c-22.932,58.088-33.483,118.543-38.238,157.302 c-2.438,24.802-3.675,40.526-3.745,41.421c-0.001,0.017-0.002,0.047-0.002,0.047C265.244,347.032,338.056,263.379,348.877,251.534z "
+      />
+      <Path
+        fill={'#FFE696'}
+        d="M250.514,446.31c-6.758-38.154-31.209-122.855-117.977-175.805l-5.371,5.235l2.322,13.538 c39.679,24.478,108.482,79.968,123.55,176.801l-0.001-0.012C253.032,465.94,252.673,458.502,250.514,446.31z"
+      />
+      <Path
+        fill={'#FFE696'}
+        d="M321.448,88.994l-8.325-4.377l-20.167,10.602c-7.096,25.942-13.113,56.945-18.154,90.081 l17.522-2.548C300.655,145.148,310.351,111.785,321.448,88.994z"
+      />
+      <Path
+        fill={'#FFE696'}
+        d="M287.511,205.668l-13.749-13.403c-14.733,100.384-20.719,218.137-20.723,273.745 c0,0.02,0,0.041,0,0.061v0.007l0-0.004l0-0.005c0-0.004,0.001-0.016,0.003-0.037c0.07-0.895,1.307-16.619,3.745-41.421 C261.816,373.438,271.957,283.629,287.511,205.668z"
+      />
+      <Path
+        fill={'#FFE178'}
+        d="M191.696,167.395l19.074,10.027l-11.008-64.188l46.637-45.461l-64.449-9.367L153.125,0 l-28.824,58.406l-64.453,9.367l46.637,45.461l-11.008,64.188l43.853-23.053l13.796-7.252L191.696,167.395z M94.23,78.945 l40.695-5.914l18.199-36.875l18.199,36.875l40.691,5.914l-29.449,28.695l6.953,40.531l-36.395-19.133l-36.398,19.133l6.953-40.531 L94.23,78.945z"
+      />
+      <Path
+        fill={'#FFE178'}
+        d="M302.316,220.102l-8.176,47.672l0.884-0.465l41.929-22.043l11.924,6.268l30.892,16.24l-8.176-47.672 l34.637-33.766l-47.867-6.961L336.953,136l-21.406,43.375l-23.223,3.377l-17.522,2.548l-7.123,1.036l6.082,5.929l13.749,13.403 L302.316,220.102z M326.172,194l10.781-21.844L347.738,194l24.109,3.508l-17.449,17l4.121,24.016l-21.566-11.336l-21.563,11.336 l4.121-24.016l-17.449-17L326.172,194z"
+      />
+      <Polygon
+        fill={'#FFD237'}
+        points="132.537,270.504 149.208,254.254 118.746,249.827 105.124,222.224 91.501,249.827  61.039,254.254 83.081,275.74 77.878,306.078 105.124,291.754 132.369,306.078 129.488,289.277 127.166,275.74  "
+      />
+      <Polygon
+        fill={'#FFD237'}
+        points="321.448,88.994 345.314,101.54 339.166,65.696 365.208,40.311 329.219,35.082 313.124,2.47  297.029,35.082 261.039,40.311 287.081,65.696 280.934,101.54 292.957,95.219 313.124,84.617  "
+      />
+      <Polygon
+        fill={'#FFD237'}
+        points="251.488,128.593 244.3,114.029 237.112,128.593 221.039,130.929 232.67,142.266  229.924,158.274 244.3,150.716 258.676,158.274 255.931,142.266 267.561,130.929  "
+      />
+      <Polygon
+        fill={'#FFD237'}
+        points="366.157,322.319 358.969,307.755 351.781,322.319 335.708,324.655 347.339,335.992  344.593,352 358.969,344.442 373.346,352 370.6,335.992 382.23,324.655  "
+      />
+    </G>
   </Svg>
 )
 const Icons = {
@@ -1950,6 +2080,14 @@ const Icons = {
     state: 'Ranking',
     icon: Ranking,
   },
+  Clock: {
+    state: 'Clock',
+    icon: Clock,
+  },
+  Firework: {
+    state: 'Firework',
+    icon: Firework,
+  },
 }
 
 export type TIcon = keyof typeof Icons
@@ -2027,4 +2165,6 @@ export {
   IconCheckNormal,
   IconCheckpoint,
   Ranking,
+  Clock,
+  Firework,
 }

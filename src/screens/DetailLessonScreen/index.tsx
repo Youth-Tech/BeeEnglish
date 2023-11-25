@@ -21,7 +21,7 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
   route,
   navigation,
 }) => {
-  const { lessonId, chapterId, nextLessonId, checkpointLesson } = route.params
+  const { lessonId, chapterId, checkpointLesson } = route.params
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { colors, normalize } = useTheme()
@@ -54,7 +54,6 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
       navigation.navigate('GRAMMAR_SCREEN', {
         lessonId,
         chapterId,
-        nextLessonId,
         checkpointLesson,
       })
     }

@@ -50,7 +50,7 @@ export type RootStackParamList = {
   [AUTH_ROUTE.LEARNING_SCREEN]: undefined
   [AUTH_ROUTE.PROFILE_SCREEN]: undefined
   [AUTH_ROUTE.VERIFICATION_CODE_SCREEN]: {
-    type: "signUp" | 'forgotPassword',
+    type: 'signUp' | 'forgotPassword'
     email: string
   }
   [AUTH_ROUTE.EMAIL_REGISTRATION_SCREEN]: undefined
@@ -63,7 +63,6 @@ export type RootStackParamList = {
   [AUTH_ROUTE.SETTING_SCREEN]: undefined
   [AUTH_ROUTE.DETAIL_LESSON_SCREEN]: {
     lessonId: string
-    nextLessonId: string
     chapterId: string
     checkpointLesson?: Quiz[]
   }
@@ -84,7 +83,6 @@ export type RootStackParamList = {
   [AUTH_ROUTE.LEARNED_WORD_SCREEN]: undefined
   [AUTH_ROUTE.GRAMMAR_SCREEN]: {
     lessonId: string
-    nextLessonId: string
     chapterId: string
     checkpointLesson?: Quiz[]
   }

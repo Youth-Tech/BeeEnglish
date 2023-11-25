@@ -10,6 +10,7 @@ import { DetailPostReducer } from '@redux/reducers/detailPost.reducer'
 import { BookmarkReducer } from '@redux/reducers/bookmark.reducer'
 import { WordReviewReducer } from '@redux/reducers/wordReview.reducer'
 import { VideoReducer } from '@redux/reducers/video.reducer'
+import TaskReducer from '@redux/reducers/task.reducer'
 export const rootReducer = combineReducers({
   auth: AuthReducer,
   user: UserReducer,
@@ -21,6 +22,7 @@ export const rootReducer = combineReducers({
   bookmarkReducer: BookmarkReducer,
   wordReviewReducer: WordReviewReducer,
   videoReducer: VideoReducer,
+  taskReducer: TaskReducer,
   // ...other reducers here
   //   user: UserReducer,
 })

@@ -42,7 +42,7 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
     <BlockAnimated
       width={279}
       radius={10}
-      height={400}
+      height={350}
       overflow={'hidden'}
       paddingBottom={15}
       backgroundColor={colors.white}
