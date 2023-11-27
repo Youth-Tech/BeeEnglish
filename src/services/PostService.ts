@@ -5,6 +5,8 @@ export interface GetAllPostRequest {
   title: string
   creator: string
   type: 'video' | 'text'
+  read?: boolean
+  like?: boolean
 }
 
 export interface PostIdRequest {
@@ -19,9 +21,16 @@ export interface GetAllPostResponse extends DefaultResponse {
   }
 }
 
+export interface GetPostCommentRequest {
+  postId: string
+  limit?: number
+  page?: number
+}
+
 export interface GetPostCommentsResponse extends DefaultResponse {
   data: {
     comments: Array<Comment>
+    pagination: Pagination
   }
 }
 
@@ -78,9 +87,15 @@ export const PostServices = {
     )
   },
 
-  getPostComments(params: PostIdRequest) {
+  getPostComments(params: GetPostCommentRequest) {
     return ApiUtil.get<GetPostCommentsResponse>(
-      `/post/${params.postId}/comments?page=1&limit=15`,
+      `/post/${params.postId}/comments?timestamp${new Date().getTime()}`,
+      undefined,
+      {
+        params: {
+          ...params,
+        },
+      },
     )
   },
 
@@ -98,5 +113,9 @@ export const PostServices = {
         parent: params.parent,
       },
     )
+  },
+
+  markAsRead(postId: string) {
+    return ApiUtil.patch<DefaultResponse>(`/post/${postId}/mark-as-read`, {})
   },
 } as const

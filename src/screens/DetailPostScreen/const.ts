@@ -2,20 +2,21 @@ import { comment } from '@components/common/CommentComponent'
 
 export const post: string =
   'Le Monde met with rabbi Delphine Derailleur in her Paris synagogue after she celebrated two bar mitzvahs in a seemingly joyful atmosphere. "I didn\'t want to steal such an important moment in these teenagers\' lives. A bar mitzvah is a celebratory occasion, not a day for the dead," said Horvilleur, a leading figure in liberal Judaism in France. However, in the audience, tearful faces hinted at the dramatic context, a few days after Hamas\' deadly attack in Israel. In the face of tragedy, the rabbi called for us not to succumb "to an absolute dehumanization of the other side."'
-export const posts: PostResponse = {
-  id: '1',
-  english: [
-    'Two co-defendants of former President Donald Trump remain on track to begin trial Monday after a judge rejected a series of arguments for tossing out the Georgia election interference case against them.',
-    'Sidney Powell and Kenneth Chesebro, who are among the 19 individuals charged in the case, said the charges they face should be nixed on multiple grounds, including the fact that prosecutors have targeted an overly-broad range of conduct. The sweeping indictment states that various alleged acts by different defendants -- from urging legislators to reject lawful electoral votes to stealing voting equipment software -- were part of a criminal conspiracy to unlawfully change the outcome of the 2020 presidential election.',
-  ],
-  vietnamese: [post],
-  title: 'Luyện kỹ năng đọc hiểu',
-  attachment: {
-    src: 'https://www.usatoday.com/gcdn/authoring/authoring-images/2023/09/06/USAT/70779211007-xxx-motions-ba-040-4181316.JPG',
-  },
-  note: 'Luyện kỹ năng đọc hiểu',
-  type: 'Beginner',
-}
+//
+// export const posts: PostResponse = {
+//   id: '1',
+//   english: [
+//     'Two co-defendants of former President Donald Trump remain on track to begin trial Monday after a judge rejected a series of arguments for tossing out the Georgia election interference case against them.',
+//     'Sidney Powell and Kenneth Chesebro, who are among the 19 individuals charged in the case, said the charges they face should be nixed on multiple grounds, including the fact that prosecutors have targeted an overly-broad range of conduct. The sweeping indictment states that various alleged acts by different defendants -- from urging legislators to reject lawful electoral votes to stealing voting equipment software -- were part of a criminal conspiracy to unlawfully change the outcome of the 2020 presidential election.',
+//   ],
+//   vietnamese: [post],
+//   title: 'Luyện kỹ năng đọc hiểu',
+//   attachment: {
+//     src: 'https://www.usatoday.com/gcdn/authoring/authoring-images/2023/09/06/USAT/70779211007-xxx-motions-ba-040-4181316.JPG',
+//   },
+//   note: 'Luyện kỹ năng đọc hiểu',
+//   type: 'Beginner',
+// }
 
 export const newsData = [
   {
@@ -49,6 +50,7 @@ export const newsData = [
     progress: 50,
   },
 ]
+
 export const DataComment: comment[] = [
   {
     id: 1,

@@ -51,7 +51,7 @@ export type RootStackParamList = {
   [AUTH_ROUTE.LEARNING_SCREEN]: undefined
   [AUTH_ROUTE.PROFILE_SCREEN]: undefined
   [AUTH_ROUTE.VERIFICATION_CODE_SCREEN]: {
-    type: 'signUp' | 'forgotPassword'
+    type: 'signUp' | 'forgotPassword' | 'migrate'
     email: string
   }
   [AUTH_ROUTE.EMAIL_REGISTRATION_SCREEN]: undefined
@@ -93,6 +93,7 @@ export type RootStackParamList = {
   [AUTH_ROUTE.CONGRATULATION_SCREEN]: {
     status?: 'success' | 'failure'
     point: number
+    type: 'normal' | 'checkpoint'
   }
 }
 

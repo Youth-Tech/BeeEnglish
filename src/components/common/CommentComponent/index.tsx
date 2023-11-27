@@ -108,7 +108,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
                 styles.line,
                 { height: heightParent - heightChildren - 50 },
               ]}
-            ></Block>
+            />
           )}
         </Block>
         <Block style={styles.contentComment}>

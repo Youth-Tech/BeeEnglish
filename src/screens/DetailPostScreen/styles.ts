@@ -75,4 +75,11 @@ export const useStyles = makeStyles()(({ colors }) => ({
     marginVertical: normalize.m(10),
     alignItems: 'center',
   },
+  listContainer:{
+    minHeight: 10
+  },
+  imageNoData:{
+    width: normalize.m(50),
+    height: normalize.m(120)
+  }
 }))

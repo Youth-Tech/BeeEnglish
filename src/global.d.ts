@@ -97,5 +97,12 @@ interface Attachment {
   type?: import('@utils/enums').EAttachment
 }
 
+interface Pagination {
+  total: number,
+  page: number,
+  hasPrev: boolean,
+  hasNext: boolean
+}
+
 // Quiz Enum
 type QuizType = 'multipleWord' | 'multipleImage' | 'cloze' | 'matching'

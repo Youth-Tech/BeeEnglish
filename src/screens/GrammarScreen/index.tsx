@@ -241,8 +241,12 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
     try {
       await UserService.updateProgressLearning(body)
       navigation.navigate('CONGRATULATION_SCREEN', {
-        status: finalPoint >= 80 ? 'success' : 'failure',
+        status:
+          finalPoint >= (checkpointLesson !== undefined ? 80 : 60)
+            ? 'success'
+            : 'failure',
         point: finalPoint,
+        type: checkpointLesson !== undefined ? 'checkpoint' : 'normal',
       })
     } catch (error) {
       console.log(error)

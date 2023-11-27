@@ -16,10 +16,10 @@ import {
   changeBottomSheetState,
 } from '@redux/reducers'
 import { useStyles } from './styles'
+import { PostServices } from '@services'
 import { colorTopic, normalize } from '@themes'
 import { RootStackParamList } from '@navigation'
 import { parsePostData } from '@screens/HomeScreen'
-import { PostServices } from '@services/PostService'
 import { LoadingScreen } from '@screens/LoadingScreen'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { NewsItem } from '@screens/HomeScreen/components'
@@ -53,6 +53,29 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
     })[]
   >([])
 
+  React.useEffect(() => {
+    callPost()
+  }, [])
+
+  React.useEffect(() => {
+    const timeOutApi = setTimeout(() => {
+      markPostAsRead(currentPost._id)
+    }, 60 * 1000)
+    return () => clearTimeout(timeOutApi)
+  }, [currentPost._id])
+
+  React.useEffect(() => {
+    setIsLoading(false)
+  }, [currentPost])
+
+  const markPostAsRead = async (id: string) => {
+    try {
+      await PostServices.markAsRead(id)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const onCloseBottomSheet = () => {
     dispatch(changeBottomSheetState(false))
   }
@@ -69,6 +92,20 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
       animated: false,
       y: 0,
     })
+  }
+
+  const callPost = async () => {
+    try {
+      const res = await PostServices.getPostRecommend({
+        activePost: currentPost._id,
+        topic: currentPost.topic._id,
+        limit: 10,
+        page: 1,
+      })
+      setPostData(parsePostData(res.data.data.posts, colorTopic))
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const renderNewsItem = ({
@@ -101,27 +138,34 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
     )
   }
 
-  const callPost = async () => {
-    try {
-      const res = await PostServices.getPostRecommend({
-        activePost: currentPost._id,
-        topic: currentPost.topic._id,
-        limit: 10,
-        page: 1,
-      })
-      setPostData(parsePostData(res.data.data.posts, colorTopic))
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  React.useEffect(() => {
-    callPost()
-  }, [])
-
-  React.useEffect(() => {
-    setIsLoading(false)
+  const renderDetailPost = React.useMemo(() => {
+    return (
+      <FlatList
+        data={currentPost.english}
+        scrollEnabled={false}
+        style={styles.listParagraph}
+        keyExtractor={(_, index) => index.toString()}
+        renderItem={({ item, index }) => (
+          <ContentPost
+            english={item}
+            vietnamese={currentPost.vietnamese[index]}
+          />
+        )}
+      />
+    )
   }, [currentPost])
+
+  const renderListPostRecommend = React.useMemo(() => {
+    return (
+      <FlatList
+        data={postData}
+        scrollEnabled={false}
+        renderItem={renderNewsItem}
+        showsHorizontalScrollIndicator={false}
+        keyExtractor={(_, index) => `item-${index}`}
+      />
+    )
+  }, [postData])
 
   if (isLoading) {
     return <LoadingScreen />
@@ -153,18 +197,7 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
               </Text>
             </Block>
           </Block>
-          <FlatList
-            data={currentPost.english}
-            scrollEnabled={false}
-            style={styles.listParagraph}
-            keyExtractor={(_, index) => index.toString()}
-            renderItem={({ item, index }) => (
-              <ContentPost
-                english={item}
-                vietnamese={currentPost.vietnamese[index]}
-              />
-            )}
-          />
+          {renderDetailPost}
           <EmotionPost
             setCurrentPost={setCurrentPost}
             postId={currentPost._id}
@@ -177,13 +210,7 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
           <Text size={'h3'} fontFamily={'bold'} marginTop={10}>
             {t('news')}
           </Text>
-          <FlatList
-            data={postData}
-            scrollEnabled={false}
-            renderItem={renderNewsItem}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(_, index) => `item-${index}`}
-          />
+          {renderListPostRecommend}
         </ScrollView>
 
         {/*<BottomSheetComment />*/}

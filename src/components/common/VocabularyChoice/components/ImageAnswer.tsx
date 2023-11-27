@@ -1,24 +1,24 @@
 import React from 'react'
 import { Image, ShadowBlock } from '@components'
-import { makeStyles, useTheme } from '@themes'
+import { makeStyles } from '@themes'
 
 export interface ImageAnswerProps {
   isSelected: boolean
   answerImage: string
+  shadowColor: string
 }
 const ImageAnswer: React.FC<ImageAnswerProps> = (props) => {
-  const { isSelected, answerImage } = props
-  const { colors } = useTheme()
+  const { isSelected, answerImage ,shadowColor} = props
   const styles = useStyle()
   return (
     <ShadowBlock
+      alignCenter
+      radius={10}
       width={150}
       height={150}
       justifyCenter
-      alignCenter
-      radius={10}
+      shadowColor={shadowColor}
       shadowHeight={isSelected ? 1 : 5}
-      shadowColor={isSelected ? colors.orangePrimary : '#ccc'}
     >
       <Image
         source={{

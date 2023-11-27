@@ -106,7 +106,7 @@ export const KnowledgeService = {
 
   getQuizByLessonId: (lessonId: string) => {
     return ApiUtil.get<GetQuizByLessonIdRes>(
-      `/knowledge/quiz/${lessonId}/get-quizzes-by-lesson?page=1&limit=20`,
+      `/knowledge/quiz/${lessonId}/get-quizzes-by-lesson?page=1&limit=15&timestamp=${new Date().getTime()}`,
     )
   },
 

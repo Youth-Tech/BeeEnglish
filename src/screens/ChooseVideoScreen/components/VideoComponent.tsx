@@ -178,7 +178,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
     )
     handleSeek(Number(script[index].start))
   }
-  const scrollToIndex = (index: number) => {
+  const scrollToIndex = (_: number) => {
     subtitleListRef.current?.scrollToIndex({
       index: currentIndex.current,
       animated: true,

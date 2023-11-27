@@ -3,6 +3,7 @@ import { Circle, Polyline, Svg, Text } from 'react-native-svg'
 import { LineChartProps } from './type'
 import { fontFamily, useTheme } from '@themes'
 import { handleColor } from '@components/utils'
+
 export const LineChart: React.FC<LineChartProps> = React.memo((props) => {
   const { colors, font } = useTheme()
   const {
@@ -29,8 +30,20 @@ export const LineChart: React.FC<LineChartProps> = React.memo((props) => {
     onItemClick,
   } = props
   const FONT_SIZE = labelFontSize
-  const verticalGuides = data.length - 1
-  const horizontalGuides = data.length - 1
+
+  const verticalGuides = data
+    .reduce<Array<number>>((uniqueArr, currentValue) => {
+      const hasData = uniqueArr.some((value) => value === currentValue.y)
+      if (!hasData) {
+        uniqueArr.push(currentValue.y)
+      }
+      return uniqueArr
+    }, [])
+    .sort((a, b) => (a > b ? 1 : -1))
+
+  // const horizontalGuides = data.length - 1
+  // const horizontalGuides = verticalGuides
+
   const maximumXFromData = Math.max(...data.map((e) => e.x))
   const maximumYFromData = Math.max(...data.map((e) => e.y))
   const digits =
@@ -38,14 +51,16 @@ export const LineChart: React.FC<LineChartProps> = React.memo((props) => {
   const padding = (FONT_SIZE + digits) * 3
   const chartWidth = width - padding * 2
   const chartHeight = height - padding * 2
+
   const Axis = ({ points }: any) => (
     <Polyline
       fill={'none'}
+      points={points}
       stroke={axisStrokeColor}
       strokeWidth={axisStrokeWidth}
-      points={points}
     />
   )
+
   const XAxis = () => (
     <Axis
       points={`${padding},${height - padding} ${width - padding},${
@@ -53,6 +68,7 @@ export const LineChart: React.FC<LineChartProps> = React.memo((props) => {
       }`}
     />
   )
+
   const YAxis = () => (
     <Axis points={`${padding},${padding} ${padding},${height - padding}`} />
   )
@@ -62,18 +78,26 @@ export const LineChart: React.FC<LineChartProps> = React.memo((props) => {
       /**
        * map over each element in the data array and calculate where x and y values are for the SVG point
        */
-      const x = (element.x / maximumXFromData) * chartWidth + padding
+      const x =
+        (element.x !== 0 ? element.x / maximumXFromData : 0) * chartWidth +
+        padding
       const y =
-        chartHeight - (element.y / maximumYFromData) * chartHeight + padding
+        chartHeight -
+        (element.y !== 0 ? element.y / maximumYFromData : 0) * chartHeight +
+        padding
       return `${x},${y}`
     })
     .join(' ')
+
   const HorizontalGuides = () => {
     const startX = padding
     const endX = width - padding
-    return new Array(horizontalGuides).fill(0).map((_, index) => {
-      const ratio = (index + 1) / (horizontalGuides ?? 1)
+    // return new Array(verticalGuides.length).fill(0).map((_, index) => {
+    return new Array(maximumYFromData).fill(0).map((_, index) => {
+      // const ratio = (index + 1) / (horizontalGuides.length - 1 ?? 1)
+      const ratio = (index + 1) / (maximumYFromData ?? 1)
       const yCoordinate = chartHeight - chartHeight * ratio + padding
+
       return (
         <React.Fragment key={index}>
           <Polyline
@@ -86,11 +110,12 @@ export const LineChart: React.FC<LineChartProps> = React.memo((props) => {
       )
     })
   }
+
   const VerticalGuides = () => {
     const startY = padding
     const endY = height - padding
-    return new Array(verticalGuides).fill(0).map((_, index) => {
-      const ratio = (index + 1) / (verticalGuides ?? 1)
+    return new Array(verticalGuides.length - 1).fill(0).map((_, index) => {
+      const ratio = (index + 1) / (verticalGuides.length - 1 ?? 1)
       const xCoordinate = padding + ratio * (width - padding * 2)
       return (
         <React.Fragment key={index}>
@@ -109,9 +134,13 @@ export const LineChart: React.FC<LineChartProps> = React.memo((props) => {
       /**
        * map over each element in the data array and calculate where x and y values are for the SVG point
        */
-      const x = (element.x / maximumXFromData) * chartWidth + padding
+      const x =
+        (element.x !== 0 ? element.x / maximumXFromData : 0) * chartWidth +
+        padding
       const y =
-        chartHeight - (element.y / maximumYFromData) * chartHeight + padding
+        chartHeight -
+        (element.y !== 0 ? element.y / maximumYFromData : 0) * chartHeight +
+        padding
       return (
         <Circle
           key={element.id}
@@ -136,9 +165,9 @@ export const LineChart: React.FC<LineChartProps> = React.memo((props) => {
         (element.x / maximumXFromData) * chartWidth + padding - FONT_SIZE / 2
       return (
         <Text
-          key={index}
           x={x}
           y={y}
+          key={index}
           fill={labelColor}
           fontSize={FONT_SIZE}
           fontFamily={labelFontFamily}
@@ -149,21 +178,29 @@ export const LineChart: React.FC<LineChartProps> = React.memo((props) => {
     })
   }
   const LabelsYAxis = () => {
-    const PARTS = horizontalGuides ?? 0
-    return new Array(PARTS + 1).fill(0).map((_, index) => {
+    // const PARTS = verticalGuides.length ?? 0
+
+    return verticalGuides.map((item, index) => {
       const x = FONT_SIZE
-      const ratio = index / horizontalGuides
-      const y = chartHeight - chartHeight * ratio + padding + FONT_SIZE / 2
+      // const ratio = index / horizontalGuides.length
+      // const ratio = index / (horizontalGuides.length - 1 ?? 1) ?? 0
+
+      // const y = chartHeight - chartHeight * ratio + padding + FONT_SIZE / 2
+      const y =
+          chartHeight -
+          (index !== 0 ? item / maximumYFromData : 0) * chartHeight +
+          padding
       return (
         <Text
-          key={index}
           x={x}
           y={y}
+          key={index}
           fill={labelColor}
           fontSize={FONT_SIZE}
           fontFamily={labelFontFamily}
         >
-          {(maximumYFromData * (index / PARTS)).toFixed(precision)}
+          {/*{(maximumYFromData * (item / PARTS)).toFixed(precision)}*/}
+          {item}
         </Text>
       )
     })

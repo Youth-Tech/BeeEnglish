@@ -14,11 +14,11 @@ import {
 } from './components'
 import { Icon } from '@assets'
 import { navigate } from '@navigation'
+import { PostServices } from '@services'
 import { LoadingScreen } from '@screens'
 import { colorTopic, useTheme } from '@themes'
 import { getStreakThunk, getTaskThunk } from '@redux/actions'
 import { getDaySession } from '@utils/dateUtils'
-import { PostServices } from '@services/PostService'
 import { setIsAdjustPostData } from '@redux/reducers'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { getStreak, getTask, getUserData } from '@redux/selectors'
@@ -292,7 +292,7 @@ export const HomeScreen = () => {
                   radius={22.5}
                   resizeMode="cover"
                   source={{
-                    uri: userData.avatar.src,
+                    uri: userData?.avatar?.src ?? userData.avatar as string,
                   }}
                 />
                 <Block justifyCenter marginLeft={8}>

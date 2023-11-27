@@ -18,10 +18,10 @@ const StatisticalComponent: React.FC<ItemStatisticalProps> = ({
     <Block row style={styles.boxItemStatistical}>
       <IconStatistical state={state} />
       <Block marginLeft={5}>
-        <Text size={'h3'} fontFamily="bold">
+        <Text size={'h3'} fontFamily="bold" numberOfLines={1}>
           {value}
         </Text>
-        <Text size={'h4'} fontFamily="semiBold" color={colors.greyPrimary}>
+        <Text size={'h4'} fontFamily="semiBold" color={colors.greyPrimary} numberOfLines={1}>
           {t(label)}
         </Text>
       </Block>
