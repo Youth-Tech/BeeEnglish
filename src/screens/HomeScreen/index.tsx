@@ -167,7 +167,9 @@ export const HomeScreen = () => {
   const onPressVideo = () => {
     navigate('CHOOSE_VIDEO_SCREEN')
   }
-  const onPressRanking = () => {}
+  const onPressRanking = () => {
+    navigate('RANKING_SCREEN')
+  }
   const onLearningWatchMore = () => {
     navigate('LEARNING_SCREEN')
   }

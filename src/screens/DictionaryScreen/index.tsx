@@ -15,10 +15,12 @@ import { Icon, images } from '@assets'
 import { goBack, navigate } from '@navigation'
 import { DictionaryItem, VocabularyItem } from './components'
 import { FlatList, ListRenderItemInfo, ScrollView, View } from 'react-native'
+import { KnowledgeService } from '@services'
 
 export const DictionaryScreen = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
+  const [search, setSearch] = React.useState('')
   const data: dataProps[] = [
     {
       id: 1,
@@ -73,7 +75,19 @@ export const DictionaryScreen = () => {
       </View>
     )
   }
-
+  const searchWordAPI = async (searchText: string) => {
+    try {
+      const response = await KnowledgeService.getAllWord({ search: searchText })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  React.useEffect(() => {
+    const timeOutSearch = setTimeout(() => {
+      searchWordAPI(search)
+    }, 2000)
+    return () => clearTimeout(timeOutSearch)
+  }, [search])
   return (
     <Container hasScroll>
       <DismissKeyBoardBlock>
@@ -91,6 +105,8 @@ export const DictionaryScreen = () => {
               <TextInput
                 containerStyle={{ height: '100%', width: '100%' }}
                 placeholderTextColor={colors.greyPrimary}
+                value={search}
+                onChangeText={setSearch}
                 inputContainerStyle={{
                   height: '100%',
                   width: '100%',

@@ -31,7 +31,7 @@ export const StreakScreen = () => {
   const { t } = useTranslation()
   const taskData = useAppSelector(getTask)
   const { colors, normalize } = useTheme()
-
+  const userCoin = useAppSelector((state) => state.root.user.coin)
   const modalRef = React.useRef<ModalFunction>(null)
 
   const rotateModal = useSharedValue(0)
@@ -96,7 +96,7 @@ export const StreakScreen = () => {
           </Text>
           <Block row justifyCenter alignCenter>
             <Text size={'h5'} fontFamily={'bold'} lineHeight={18}>
-              200
+              {userCoin}
             </Text>
             <Icon state={'Honey'} />
           </Block>

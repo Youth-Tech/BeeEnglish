@@ -83,7 +83,11 @@ export interface GetWordByLessonIdRes extends DefaultResponse {
     words: Word[]
   }
 }
-
+export interface GetAllWordReq {
+  page: number
+  limit: number
+  search: string
+}
 export interface GetAllWordResponse extends DefaultResponse {
   data: {
     words: Word[]
@@ -112,11 +116,11 @@ export const KnowledgeService = {
     )
   },
 
-  getAllWord: (page: number, limit: number) => {
+  getAllWord: (params?: Partial<GetAllWordReq>) => {
     return ApiUtil.get<GetAllWordResponse>(
       `/knowledge/word/get-all`,
       undefined,
-      { params: { page, limit } },
+      { params },
     )
   },
   getWordById: (id: string) => {

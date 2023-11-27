@@ -63,7 +63,7 @@ export const SavedWordScreen = () => {
   }
   const callAPIGetAllWords = async () => {
     try {
-      const response = await KnowledgeService.getAllWord(1, 5)
+      const response = await KnowledgeService.getAllWord({ page: 1, limit: 5 })
       setSuggestionWord(response.data.data.words)
     } catch (e) {
       console.log(e)
