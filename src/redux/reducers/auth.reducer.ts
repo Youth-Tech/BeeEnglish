@@ -24,6 +24,10 @@ export type AuthState = {
   isSignedInOAuth?: boolean
   isLoginWithGuest?: boolean
   isSignUp?: boolean
+  tempLoginInfo?: {
+    email: string
+    password: string
+  }
 }
 
 export const defaultAuthState: AuthState = {
@@ -60,6 +64,15 @@ const authSlice = createSlice({
       return {
         ...state,
         email: action.payload,
+      }
+    },
+    setTempLoginInfo(
+      state: AuthState,
+      action: PayloadAction<AuthState['tempLoginInfo']>,
+    ) {
+      return {
+        ...state,
+        tempLoginInfo: action.payload,
       }
     },
   },
@@ -115,6 +128,6 @@ const authSlice = createSlice({
   },
 })
 
-export const { setAuthState, setEmailSignIn, setForgotPasswordToken } =
+export const { setAuthState, setEmailSignIn, setForgotPasswordToken, setTempLoginInfo } =
   authSlice.actions
 export const AuthReducer = authSlice.reducer

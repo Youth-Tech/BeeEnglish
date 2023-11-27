@@ -4,12 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import { animation } from '@assets'
-import {updateProfile} from "@redux/actions";
+import { updateProfile } from '@redux/actions'
 import { makeStyles, useTheme } from '@themes'
-import { navigateAndReset, pop, RootStackParamList } from '@navigation'
-import {useAppDispatch, useBackHandler} from '@hooks'
+import { useAppDispatch, useBackHandler } from '@hooks'
 import { Block, Container, ShadowButton, Text } from '@components'
-
+import { navigateAndReset, pop, RootStackParamList } from '@navigation'
 
 export type CongratulationScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -19,7 +18,7 @@ export type CongratulationScreenProps = NativeStackScreenProps<
 export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
   route,
 }) => {
-  const { status, point } = route.params
+  const { status, point, type } = route.params
 
   const dispatch = useAppDispatch()
   const styles = useStyle()
@@ -34,7 +33,7 @@ export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
   })
 
   const onContinuePress = () => {
-    if(status === "success"){
+    if (status === 'success') {
       dispatch(updateProfile())
       navigateAndReset(
         [
@@ -66,7 +65,7 @@ export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
             {status === 'success'
               ? t('congratulation_desc')
               : t('congratulation_desc_failure', {
-                  point: Math.floor(80 - point),
+                  point: Math.floor((type === 'checkpoint' ? 80 : 60) - point),
                 })}
           </Text>
         </Block>

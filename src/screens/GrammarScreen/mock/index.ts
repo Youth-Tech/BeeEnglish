@@ -5,7 +5,7 @@ export const QUESTION: Question[] = [
     id: '1',
     question: 'Tôi làm việc ở đây 1',
     answer: 'I go to school by bike1',
-    type: QuestionType.WORD_CHOICE,
+    type: QuestionType.cloze,
   },
   {
     id: '4',
@@ -28,7 +28,7 @@ export const QUESTION: Question[] = [
         option: 'three time for a days',
       },
     ],
-    type: QuestionType.OPTION,
+    type: QuestionType.cloze,
   },
   {
     id: '4',
@@ -51,19 +51,19 @@ export const QUESTION: Question[] = [
         option: 'three time for a days',
       },
     ],
-    type: QuestionType.OPTION,
+    type: QuestionType.multipleImage,
   },
   {
     id: '2',
     question: 'Tôi làm việc ở đây 2',
     answer: 'I go to school by bike2',
-    type: QuestionType.WORD_CHOICE,
+    type: QuestionType.multipleImage,
   },
   {
     id: '3',
     question: 'Tôi làm việc ở đây 3',
     answer: 'I go to school by bike3',
-    type: QuestionType.WORD_CHOICE,
+    type: QuestionType.cloze,
   },
   {
     id: '5',
@@ -86,7 +86,7 @@ export const QUESTION: Question[] = [
         isValid: false,
       },
     ],
-    type: QuestionType.VOCAB_CHOICE,
+    type: QuestionType.cloze,
   },
 
   {
@@ -110,7 +110,7 @@ export const QUESTION: Question[] = [
         isValid: true,
       },
     ],
-    type: QuestionType.VOCAB_CHOICE,
+    type: QuestionType.matching,
   },
   {
     id: '7',
@@ -133,7 +133,7 @@ export const QUESTION: Question[] = [
         isValid: false,
       },
     ],
-    type: QuestionType.VOCAB_CHOICE,
+    type: QuestionType.matching,
   },
   {
     id: '8',
@@ -150,7 +150,7 @@ export const QUESTION: Question[] = [
         isValid: true,
       },
     ],
-    type: QuestionType.VOCAB_OPTION,
+    type: QuestionType.multipleWord,
   },
   {
     id: '9',
@@ -167,6 +167,6 @@ export const QUESTION: Question[] = [
         isValid: false,
       },
     ],
-    type: QuestionType.VOCAB_OPTION,
+    type: QuestionType.multipleWord,
   },
 ]

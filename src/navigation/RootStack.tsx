@@ -71,6 +71,7 @@ const RootStack = () => {
         initialRouteName={
           isSignedIn || isSignedWithGuestRole ? 'BOTTOM_TAB' : 'NAVIGATE_SCREEN'
         }
+        // initialRouteName={'VERIFICATION_CODE_SCREEN'}
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>

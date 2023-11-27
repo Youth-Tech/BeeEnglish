@@ -8,6 +8,8 @@ import messaging, {
 
 import { ChannelId } from '@configs'
 import { PermissionsAndroid, Platform } from 'react-native'
+import { images } from '@assets'
+import { colors } from '@themes'
 
 export async function requestUserPermission(): Promise<boolean> {
   let enabled = false
@@ -92,7 +94,9 @@ export const displayDefaultNotify = async (
     body: notification?.body || 'Body notification',
     android: {
       channelId: ChannelId.Default,
-      // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
+      smallIcon: 'ic_noti', // optional, defaults to 'ic_launcher'.
+      color: colors['light'].orangePrimary,
+      largeIcon: images.BeeWithHoney,
       // pressAction is needed if you want the notification to open the app when pressed
       pressAction: {
         id: 'default',

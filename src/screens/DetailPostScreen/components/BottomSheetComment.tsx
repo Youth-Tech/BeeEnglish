@@ -1,20 +1,24 @@
-import React, { useState } from 'react'
-import { Icon } from '@assets'
-import { useStyles } from '../styles'
-import { Block, Text, TextInput } from '@components'
-import { useAppDispatch, useAppSelector } from '@hooks'
-import { useTranslation } from 'react-i18next'
-import { changeShowComment, setParentCommentId } from '@redux/reducers'
-import CommentComponent from '@components/common/CommentComponent'
 import {
-  DocumentSelectionState,
   Keyboard,
   TouchableOpacity,
+  ActivityIndicator,
+  DocumentSelectionState,
 } from 'react-native'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
-import SendMessenger from '@assets/icons/SendMessenger'
+import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
+
+import {Icon, images} from '@assets'
+import { useStyles } from '../styles'
+import { widthScreen } from '@utils/helpers'
 import { normalize, useTheme } from '@themes'
 import { PostServices } from '@services/PostService'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import SendMessenger from '@assets/icons/SendMessenger'
+import {Block, Image, Text, TextInput} from '@components'
+import CommentComponent from '@components/common/CommentComponent'
+import { changeShowComment, setParentCommentId } from '@redux/reducers'
 
 export interface BottomSheetCommentProps {
   postId: string
@@ -33,8 +37,16 @@ const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({ postId }) => {
   const styles = useStyles()
   const { t } = useTranslation()
 
-  const [valueComment, setValueComment] = useState('')
   const textInputRef = React.useRef<DocumentSelectionState>(null)
+  const pagination = React.useRef<Pagination>({
+    hasNext: false,
+    hasPrev: false,
+    page: 1,
+    total: 0,
+  })
+
+  const [valueComment, setValueComment] = useState('')
+  const [isFetchingComment, setIsFetchingComment] = React.useState(true)
   const [listComment, setListComment] = React.useState<Array<CommentNested>>([])
 
   React.useEffect(() => {
@@ -45,6 +57,8 @@ const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({ postId }) => {
     try {
       const res = await PostServices.getPostComments({
         postId,
+        limit: 7,
+        page: pagination.current.page,
       })
 
       if (res.status === 200) {
@@ -54,7 +68,9 @@ const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({ postId }) => {
             comments: [],
           }),
         )
-        setListComment(commentData)
+        setListComment((prevState) => [...prevState, ...commentData])
+        pagination.current = res.data.data.pagination
+        setIsFetchingComment(false)
       }
     } catch (e) {
       console.log(e)
@@ -118,12 +134,56 @@ const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({ postId }) => {
           })
           setListComment(newListComment)
         } else {
+          pagination.current = {
+            page: 1,
+            total: 0,
+            hasPrev: false,
+            hasNext: false,
+          }
           getListComment()
         }
       }
     } catch (e) {
       console.log(e)
     }
+  }
+
+  const renderComment = ({
+    item,
+    index,
+  }: ListRenderItemInfo<CommentNested>) => {
+    return (
+      <CommentComponent
+        level={1}
+        key={index}
+        comment={item}
+        postId={postId}
+        listComment={listComment}
+        parentCommentId={item._id}
+        parentCommentIndex={index}
+        textInputRef={textInputRef}
+        setCommentData={setListComment}
+      />
+    )
+  }
+
+  const onEndReached = () => {
+    if (pagination.current.hasNext && !isFetchingComment) {
+      pagination.current.page++
+      getListComment()
+    }
+  }
+
+  const renderFooterComponent = () => {
+    return (
+      <Block alignCenter justifyCenter>
+        {isFetchingComment ? (
+          <ActivityIndicator size={'large'} color={colors.orangePrimary} />
+        ) : (
+          <></>
+        )}
+      </Block>
+    )
   }
 
   return (
@@ -140,19 +200,36 @@ const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({ postId }) => {
         style={{ marginHorizontal: 20, marginTop: 20 }}
         showsVerticalScrollIndicator={false}
       >
-        {listComment.map((item, index) => (
-          <CommentComponent
-            level={1}
-            key={index}
-            comment={item}
-            postId={postId}
-            listComment={listComment}
-            parentCommentId={item._id}
-            parentCommentIndex={index}
-            textInputRef={textInputRef}
-            setCommentData={setListComment}
-          />
-        ))}
+        {/*{listComment.map((item, index) => (*/}
+        {/*  <CommentComponent*/}
+        {/*    level={1}*/}
+        {/*    key={index}*/}
+        {/*    comment={item}*/}
+        {/*    postId={postId}*/}
+        {/*    listComment={listComment}*/}
+        {/*    parentCommentId={item._id}*/}
+        {/*    parentCommentIndex={index}*/}
+        {/*    textInputRef={textInputRef}*/}
+        {/*    setCommentData={setListComment}*/}
+        {/*  />*/}
+        {/*))}*/}
+        <Block style={styles.listContainer}>
+          {listComment.length > 0 ? (
+            <FlashList
+              data={listComment}
+              renderItem={renderComment}
+              onEndReachedThreshold={0.2}
+              onEndReached={onEndReached}
+              estimatedItemSize={widthScreen}
+              ListFooterComponent={renderFooterComponent}
+            />
+          ) : (
+            <Block flex alignCenter justifyCenter>
+              <Image source={images.BeeDiscovery} style={styles.imageNoData} resizeMode={'contain'}/>
+              <Text>{t("no_comment")}</Text>
+            </Block>
+          )}
+        </Block>
       </BottomSheetScrollView>
       <Block style={styles.inputBoxSend}>
         <TextInput

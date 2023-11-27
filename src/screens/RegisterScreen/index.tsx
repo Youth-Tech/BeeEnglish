@@ -4,8 +4,9 @@ import {
   KeyboardAvoidingView,
   DocumentSelectionState,
 } from 'react-native'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { useEffect, useState } from 'react'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import {
   Text,
@@ -16,17 +17,33 @@ import {
   SocialLoginButton,
   DismissKeyBoardBlock,
 } from '@components'
+import {
+  goBack,
+  navigate,
+  navigateAndReset,
+  RootStackParamList,
+} from '@navigation'
+import {
+  setAuthState,
+  setTempLoginInfo,
+  setLoadingStatusAction,
+} from '@redux/reducers'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { Provider } from '@configs'
 import { AuthService } from '@services/AuthService'
 import { useValidateInput } from '@utils/validateInput'
 import { useAppDispatch, useAppSelector } from '@hooks'
-import { setLoadingStatusAction } from '@redux/reducers'
 import { loginOAuthThunk } from '@redux/actions/auth.action'
-import { goBack, navigate, navigateAndReset } from '@navigation'
 
-export const RegisterScreen = () => {
+export type RegisterScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'REGISTER_SCREEN'
+>
+
+export const RegisterScreen: React.FC<RegisterScreenProps> = ({ route }) => {
+  const isGuest = route.params?.isGuest
+
   const dispatch = useAppDispatch()
   const validate = useValidateInput()
 
@@ -47,12 +64,31 @@ export const RegisterScreen = () => {
   const [email, setEmail] = React.useState('')
   const [fullName, setFullName] = React.useState('')
   const [password, setPassword] = React.useState('')
-  const [checkMail, setCheckMail] = useState(true)
-  const [checkPass, setCheckPass] = useState(true)
-  const [checkFullName, setCheckFullName] = useState(true)
+  const [checkMail, setCheckMail] = React.useState(true)
+  const [checkPass, setCheckPass] = React.useState(true)
+  const [checkFullName, setCheckFullName] = React.useState(true)
   const [disabledLogin, setDisabledLogin] = React.useState(true)
   const [confirmPassword, setConfirmPassword] = React.useState('')
-  const [checkConfirmPass, setCheckConfirmPass] = useState(true)
+  const [checkConfirmPass, setCheckConfirmPass] = React.useState(true)
+
+  React.useEffect(() => {
+    email.length > 0 && password.length >= 6 && fullName.length >= 3
+      ? setDisabledLogin(false)
+      : setDisabledLogin(true)
+  }, [email, password, fullName])
+
+  React.useEffect(() => {
+    if (isSignedInOAuth) {
+      navigateAndReset(
+        [
+          {
+            name: 'BOTTOM_TAB',
+          },
+        ],
+        0,
+      )
+    }
+  }, [isSignedInOAuth])
 
   const handleLoginGoogle = () => {
     dispatch(loginOAuthThunk({ providerId: Provider.google }))
@@ -61,12 +97,6 @@ export const RegisterScreen = () => {
   const handleLoginFacebook = () => {
     dispatch(loginOAuthThunk({ providerId: Provider.facebook }))
   }
-
-  useEffect(() => {
-    email.length > 0 && password.length >= 6 && fullName.length >= 3
-      ? setDisabledLogin(false)
-      : setDisabledLogin(true)
-  }, [email, password, fullName])
 
   const onCheckEmail = (value: string) => {
     setCheckMail(validate.validateEmail(value))
@@ -120,9 +150,10 @@ export const RegisterScreen = () => {
     return 'hello'
   }
 
-  const goLogin = () => {
+  const goLoginPress = () => {
     navigate('LOGIN_SCREEN')
   }
+
   const isErrorBeforeSubmit = () => {
     if (!validate.validateFullName(fullName)) {
       fullNameInputRef.current?.focus()
@@ -154,26 +185,22 @@ export const RegisterScreen = () => {
         fullName,
       })
       if (res.status === 200) {
-        navigate('VERIFICATION_CODE_SCREEN', { type: 'signUp', email })
+        dispatch(
+          setAuthState({
+            email,
+          }),
+        )
+        !!isGuest && dispatch(setTempLoginInfo({ email, password }))
+        navigate('VERIFICATION_CODE_SCREEN', {
+          type: !!isGuest ? 'migrate' : 'signUp',
+          email,
+        })
       }
     } catch (e) {
       console.log(e)
     }
     dispatch(setLoadingStatusAction(false))
   }
-
-  React.useEffect(() => {
-    if (isSignedInOAuth) {
-      navigateAndReset(
-        [
-          {
-            name: 'BOTTOM_TAB',
-          },
-        ],
-        0,
-      )
-    }
-  }, [isSignedInOAuth])
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
@@ -328,7 +355,7 @@ export const RegisterScreen = () => {
                   {t('have_account')}?
                 </Text>
                 <Pressable
-                  onPress={goLogin}
+                  onPress={goLoginPress}
                   style={{ marginStart: normalize.h(3) }}
                 >
                   <Text size={'h4'} fontFamily="bold" color={colors.orangeDark}>

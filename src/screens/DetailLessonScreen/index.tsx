@@ -62,6 +62,7 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
     getWordBookmarksByLesson()
     getWordReviewsByLesson()
   })
+
   return (
     <Container>
       <ImageBackground

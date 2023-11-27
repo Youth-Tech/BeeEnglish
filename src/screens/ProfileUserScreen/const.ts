@@ -7,7 +7,7 @@ export interface ItemStatisticalProps {
   value?: string
 }
 
-export const statisticField = ['streak', 'score', 'lessonsCompletedCount']
+export const statisticField = ['streak', 'score', 'lessonsCompletedCount', 'level']
 export const getStatisticContent: Map<
     string,
     Omit<ItemStatisticalProps, 'id' | 'value'>
@@ -15,6 +15,7 @@ export const getStatisticContent: Map<
   [statisticField[0], { state: 'StreakIcon', label: 'attendance_series' }],
   [statisticField[1], { state: 'StartIcon', label: 'total_point' }],
   [statisticField[2], { state: 'AgreeIcon', label: 'lesson' }],
+  [statisticField[3], { state: 'CrownIcon', label: 'level' }],
 ])
 
 

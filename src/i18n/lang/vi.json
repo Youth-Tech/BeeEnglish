@@ -182,6 +182,9 @@
     "interjection": "Thán từ",
     "example": "Ví dụ",
     "meaning": "Nghĩa",
+    "no_comment": "Chưa có ai ở đây. Hãy trở thành người đầu tiên nào!",
+    "unknown_user": "Người dùng vô danh",
+    "want_to_migrate": "Bạn có muốn chuyển dữ liệu trước đó vào tài khoản mới không?"
     "register_success": "Đăng ký thành công!",
     "synonyms": "Từ đồng nghĩa",
     "antonyms": "Từ trái nghĩa",

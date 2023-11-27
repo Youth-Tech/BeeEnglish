@@ -15,6 +15,18 @@ const enum endPoints {
   getLearningStats = '/user/learning-stats',
   getPostBookmark = '/user/posts-bookmark',
   bookmarkPost = '/user/bookmark-post/',
+  migrateGuestAccount = '/user/restored-account',
+}
+
+export interface Level {
+  _id: string
+  attachment: Attachment
+  createdAt: string
+  description: string
+  name: string
+  score: number
+  type: string
+  updatedAt: string
 }
 
 export interface UserData {
@@ -28,7 +40,7 @@ export interface UserData {
   createdAt: string
   id: string
   isVerified: boolean
-  level: string
+  level: Level
   postBookmarks: string[]
   role: string
   score: number
@@ -107,9 +119,11 @@ export interface UpdateFCMTokenRequest {
 export interface UpdateFCMTokenResponse extends DefaultResponse {
   data: {}
 }
+
 export interface GetLearningStatsResponse extends DefaultResponse {
   data: Array<number>
 }
+
 export interface GetWordBookmarksReq {
   lessonId: string
   search: string
@@ -117,6 +131,15 @@ export interface GetWordBookmarksReq {
 export interface GetBoardResponse extends DefaultResponse {
   data: RankUser[]
 }
+
+export interface MigrateAccountRequest {
+  deviceId: string
+}
+
+interface MigrateAccountResponse extends DefaultResponse {
+  data: UserData
+}
+
 export const UserService = {
   getUserData() {
     return APIUtils.get<UserStateResponse>(endPoints.getUserData)
@@ -166,18 +189,29 @@ export const UserService = {
   updateFCMToken(body: UpdateFCMTokenRequest) {
     return APIUtils.patch<UpdateFCMTokenResponse>(endPoints.updateFCM, body)
   },
+
   getLearningStats() {
     return APIUtils.get<GetLearningStatsResponse>(endPoints.getLearningStats)
   },
+
   getPostBookmark() {
     return APIUtils.get<GetAllPostResponse>(endPoints.getPostBookmark)
   },
+
   bookmarkPost(postId: string) {
     return APIUtils.patch(`${endPoints.bookmarkPost}/${postId}`, {})
   },
+
   getBoard(levelId: string) {
     return APIUtils.get<GetBoardResponse>(
       `/user/${levelId}/board?timeStamp=${new Date()}`,
+    )
+  },
+
+  migrateWithGuestAccount(body: MigrateAccountRequest) {
+    return APIUtils.post<MigrateAccountResponse>(
+      endPoints.migrateGuestAccount,
+      body,
     )
   },
 } as const
