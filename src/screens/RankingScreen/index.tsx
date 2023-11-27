@@ -11,7 +11,7 @@ import RankItem from '@screens/RankingScreen/components/RankItem'
 export const RankingScreen: React.FC = () => {
   const { t } = useTranslation()
   const [board, setBoard] = React.useState<RankUser[]>([])
-  const userLevel = useAppSelector(getUserData).level
+  const userLevel = useAppSelector(getUserData).level._id
   const getBoard = async () => {
     try {
       const response = await UserService.getBoard(userLevel)

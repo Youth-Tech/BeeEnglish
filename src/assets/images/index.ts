@@ -28,4 +28,5 @@ export const images = {
   BeeSad: require('./BeeSad.png'),
   Checkpoint: require('./checkpoint.png'),
   HoneyBackground: require('./honeyBackground.png'),
+  ImagePlaceholder: require('./imagePlaceholder.jpeg'),
 }
