@@ -1,19 +1,29 @@
 import React from 'react'
-import { Icon } from '@assets'
+import { Icon, images } from '@assets'
 import { useTheme } from '@themes'
 import { useTranslation } from 'react-i18next'
 import { LearnedWordItem } from './components'
 import { ReviewService, WordReviews } from '@services'
-import { Block, Container, TextInput, VoiceDectectorModal } from '@components'
+import {
+  Block,
+  Container,
+  Image,
+  Text,
+  TextInput,
+  VoiceDectectorModal,
+} from '@components'
 import HeaderApp from '@components/common/HeaderComponent'
 import { MasonryFlashList, MasonryListRenderItem } from '@shopify/flash-list'
 import { ModalFunction } from '@components/bases/Modal/type'
 import { navigate } from '@navigation'
+import { ActivityIndicator } from 'react-native'
 
 export const LearnedWordScreen = () => {
   const { colors } = useTheme()
   const { t } = useTranslation()
   const modalRef = React.useRef<ModalFunction>(null)
+  const flag = React.useRef(0)
+  const [isLoading, setIsLoading] = React.useState(false)
   const [searchText, setSearchText] = React.useState('')
   const [learnedWordData, setLearnedWordData] = React.useState<WordReviews[]>(
     [],
@@ -32,29 +42,37 @@ export const LearnedWordScreen = () => {
     )
   }
   const callApi = async () => {
+    setIsLoading(true)
     try {
       const response = await ReviewService.getAllWordReviews()
       console.log(response.data.data)
       setLearnedWordData(response.data.data.wordsReview)
+      setIsLoading(false)
     } catch (e) {
       console.log(e)
     }
   }
   const searchApi = async (searchText: string) => {
+    setIsLoading(true)
     try {
       const response = await ReviewService.getAllWordReviews({
         search: searchText,
       })
       setLearnedWordData(response.data.data.wordsReview)
+      setIsLoading(false)
     } catch (e) {
       console.log(e)
     }
   }
   React.useEffect(() => {
-    const timeOutSearch = setTimeout(() => {
-      searchApi(searchText)
-    }, 2000)
-    return () => clearTimeout(timeOutSearch)
+    if (flag.current === 1) {
+      const timeOutSearch = setTimeout(() => {
+        searchApi(searchText)
+      }, 2000)
+      return () => clearTimeout(timeOutSearch)
+    }
+    flag.current = 1
+    return
   }, [searchText])
   React.useEffect(() => {
     callApi()
@@ -63,7 +81,7 @@ export const LearnedWordScreen = () => {
     <Container statusColor={colors.orangePrimary}>
       <Block
         width={'100%'}
-        height={200}
+        height={110}
         backgroundColor={colors.orangePrimary}
         borderBottomLeftRadius={50}
         borderBottomRightRadius={50}
@@ -74,7 +92,7 @@ export const LearnedWordScreen = () => {
       <HeaderApp
         title={t('vocabulary_learned')}
         style={{ backgroundColor: colors.transparent }}
-        color="white"
+        color="black"
       />
       <Block paddingHorizontal={20} backgroundColor="transparent" flex>
         <Block marginVertical={15} height={35} radius={30}>
@@ -100,16 +118,40 @@ export const LearnedWordScreen = () => {
           />
         </Block>
         <Block radius={15} flex overflow="scroll">
-          <MasonryFlashList
-            scrollEnabled={true}
-            data={learnedWordData}
-            keyExtractor={(_, index) => `item-learned-word-${index}`}
-            renderItem={renderLearnedWordItem}
-            showsVerticalScrollIndicator={false}
-            numColumns={2}
-            centerContent
-            estimatedItemSize={200}
-          />
+          {isLoading ? (
+            <Block height={200} justifyCenter>
+              <ActivityIndicator size={'large'} color={colors.orangePrimary} />
+            </Block>
+          ) : (
+            <MasonryFlashList
+              scrollEnabled={true}
+              data={learnedWordData}
+              keyExtractor={(_, index) => `item-learned-word-${index}`}
+              renderItem={renderLearnedWordItem}
+              showsVerticalScrollIndicator={false}
+              numColumns={2}
+              centerContent
+              estimatedItemSize={200}
+              ListEmptyComponent={
+                <Block alignCenter marginTop={20}>
+                  <Image
+                    source={images.BeeReading}
+                    width={150}
+                    height={150}
+                    resizeMode={'contain'}
+                  />
+                  <Text
+                    size={'h2'}
+                    fontFamily={'semiBold'}
+                    center
+                    marginTop={15}
+                  >
+                    {t('learn_a_word')}
+                  </Text>
+                </Block>
+              }
+            />
+          )}
         </Block>
       </Block>
       <VoiceDectectorModal

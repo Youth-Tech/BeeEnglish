@@ -31,6 +31,7 @@ export const AUTH_ROUTE = {
   CONGRATULATION_SCREEN: 'CONGRATULATION_SCREEN',
   VIDEO_SCREEN: 'VIDEO_SCREEN',
   CHOOSE_VIDEO_SCREEN: 'CHOOSE_VIDEO_SCREEN',
+  RANKING_SCREEN: 'RANKING_SCREEN',
 } as const
 
 export const PUBLIC_ROUTE = {
@@ -50,7 +51,7 @@ export type RootStackParamList = {
   [AUTH_ROUTE.LEARNING_SCREEN]: undefined
   [AUTH_ROUTE.PROFILE_SCREEN]: undefined
   [AUTH_ROUTE.VERIFICATION_CODE_SCREEN]: {
-    type: "signUp" | 'forgotPassword',
+    type: 'signUp' | 'forgotPassword'
     email: string
   }
   [AUTH_ROUTE.EMAIL_REGISTRATION_SCREEN]: undefined
@@ -63,7 +64,6 @@ export type RootStackParamList = {
   [AUTH_ROUTE.SETTING_SCREEN]: undefined
   [AUTH_ROUTE.DETAIL_LESSON_SCREEN]: {
     lessonId: string
-    nextLessonId: string
     chapterId: string
     checkpointLesson?: Quiz[]
   }
@@ -71,6 +71,7 @@ export type RootStackParamList = {
   [AUTH_ROUTE.DICTIONARY_SCREEN]: undefined
   [AUTH_ROUTE.LESSON_MAP_SCREEN]: undefined
   [AUTH_ROUTE.VIDEO_SCREEN]: undefined
+  [AUTH_ROUTE.RANKING_SCREEN]: undefined
 
   [PUBLIC_ROUTE.SPLASH_SCREEN]: undefined
   [PUBLIC_ROUTE.ABOUT_THE_TEST_SCREEN]: undefined
@@ -84,7 +85,6 @@ export type RootStackParamList = {
   [AUTH_ROUTE.LEARNED_WORD_SCREEN]: undefined
   [AUTH_ROUTE.GRAMMAR_SCREEN]: {
     lessonId: string
-    nextLessonId: string
     chapterId: string
     checkpointLesson?: Quiz[]
   }

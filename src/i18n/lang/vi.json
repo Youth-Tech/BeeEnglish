@@ -182,7 +182,13 @@
     "interjection": "Thán từ",
     "example": "Ví dụ",
     "meaning": "Nghĩa",
-
-    "register_success": "Đăng ký thành công!"
+    "register_success": "Đăng ký thành công!",
+    "synonyms": "Từ đồng nghĩa",
+    "antonyms": "Từ trái nghĩa",
+    "havent_saved_a_word":"Bạn chưa lưu từ vựng nào. \n Hãy lưu ngay nào!",
+    "learn_a_word": "Các từ vựng bạn học sẽ được lưu ở đây. \n Cùng học nào!",
+    "you_finished_all_tasks": "Bạn đã hoàn thành tất cả nhiệm vụ",
+    "score": "Điểm",
+    "leaderboard": "Xếp hạng"
   }
 }

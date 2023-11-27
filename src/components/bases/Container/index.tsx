@@ -30,6 +30,7 @@ export const Container: FC<ContainerProps> = (props) => {
         style={{ flex: 1, backgroundColor: colors.white }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
+        overScrollMode={'never'}
       >
         {children}
       </Wrapper>

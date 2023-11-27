@@ -28,6 +28,7 @@ import {
   CongratulationScreen,
   VerificationCodeScreen,
   EmailRegistrationScreen,
+  RankingScreen,
 } from '@screens'
 import { useAppSelector } from '@hooks'
 import { RootStackParamList } from './routes'
@@ -115,7 +116,7 @@ const RootStack = () => {
           />
           <Stack.Screen name="TEST_SCREEN" component={TestScreen} />
           <Stack.Screen name="STREAK_SCREEN" component={StreakScreen} />
-          <Stack.Screen name="SAVED_WORD_SCREEN" component={SavedWordScreen}/>
+          <Stack.Screen name="SAVED_WORD_SCREEN" component={SavedWordScreen} />
           <Stack.Screen
             name="LEARNED_WORD_SCREEN"
             component={LearnedWordScreen}
@@ -132,6 +133,7 @@ const RootStack = () => {
             name="CHOOSE_VIDEO_SCREEN"
             component={ChooseVideoScreen}
           />
+          <Stack.Screen name="RANKING_SCREEN" component={RankingScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

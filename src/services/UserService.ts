@@ -23,11 +23,12 @@ export interface UserData {
   fullName: string
   avatar: Attachment
   badges: []
+  coin: number
   courseCompleted: []
   createdAt: string
   id: string
   isVerified: boolean
-  level: number
+  level: string
   postBookmarks: string[]
   role: string
   score: number
@@ -65,7 +66,14 @@ export interface UpdateProgressLearningResponse extends DefaultResponse {
     updatedAt: string
   }
 }
-
+export interface RankUser {
+  streaks: string[]
+  _id: string
+  avatar: string
+  level: string
+  score: number
+  username: string
+}
 export interface GetProgressLearningResponse extends DefaultResponse {
   data: number[]
 }
@@ -105,6 +113,9 @@ export interface GetLearningStatsResponse extends DefaultResponse {
 export interface GetWordBookmarksReq {
   lessonId: string
   search: string
+}
+export interface GetBoardResponse extends DefaultResponse {
+  data: RankUser[]
 }
 export const UserService = {
   getUserData() {
@@ -161,8 +172,12 @@ export const UserService = {
   getPostBookmark() {
     return APIUtils.get<GetAllPostResponse>(endPoints.getPostBookmark)
   },
-
   bookmarkPost(postId: string) {
     return APIUtils.patch(`${endPoints.bookmarkPost}/${postId}`, {})
+  },
+  getBoard(levelId: string) {
+    return APIUtils.get<GetBoardResponse>(
+      `/user/${levelId}/board?timeStamp=${new Date()}`,
+    )
   },
 } as const

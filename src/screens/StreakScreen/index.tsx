@@ -1,9 +1,9 @@
 import Animated, {
-  withRepeat,
-  withTiming,
-  useSharedValue,
   cancelAnimation,
   useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
 } from 'react-native-reanimated'
 import { Pressable } from 'react-native'
 import React, { useCallback } from 'react'
@@ -11,68 +11,27 @@ import { useTranslation } from 'react-i18next'
 import FastImage from 'react-native-fast-image'
 
 import {
-  TaskItem,
   StreakDay,
-  TaskItemProps,
+  TaskItem,
   WeekCalendar,
 } from '@screens/StreakScreen/components'
 import { useTheme } from '@themes'
 import { Icon, images } from '@assets'
-import { getStreak } from '@redux/selectors'
+import { getStreak, getTask } from '@redux/selectors'
 import { updateStreakThunk } from '@redux/actions'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { ModalFunction } from '@components/bases/Modal/type'
 import { Block, Container, Modal, ShadowButton, Text } from '@components'
-
-const TaskData: TaskItemProps[] = [
-  {
-    taskType: 'money',
-    taskName: 'Nạp 1 triệu vô tài khoản',
-    honeyAmount: 100,
-  },
-  {
-    taskType: 'learning',
-    taskName: 'Học 2 bài học',
-    honeyAmount: 30,
-  },
-  {
-    taskType: 'game',
-    taskName: 'Nạp 1 triệu vô tài khoản',
-    honeyAmount: 10,
-  },
-  {
-    taskType: 'game',
-    taskName: 'Hạ 2 đối thủ',
-    honeyAmount: 30,
-  },
-  {
-    taskType: 'learning',
-    taskName: 'Học 5 từ vựng mới',
-    honeyAmount: 56,
-  },
-  {
-    taskType: 'learning',
-    taskName: 'Học 5 từ vựng mới',
-    honeyAmount: 56,
-  },
-  {
-    taskType: 'learning',
-    taskName: 'Học 5 từ vựng mới',
-    honeyAmount: 56,
-  },
-  {
-    taskType: 'learning',
-    taskName: 'Học 5 từ vựng mới',
-    honeyAmount: 56,
-  },
-]
+import { Task } from '@services/TaskService'
+import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
 
 const AnimatedBlock = Animated.createAnimatedComponent(Block)
 export const StreakScreen = () => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
+  const taskData = useAppSelector(getTask)
   const { colors, normalize } = useTheme()
-
+  const userCoin = useAppSelector((state) => state.root.user.coin)
   const modalRef = React.useRef<ModalFunction>(null)
 
   const rotateModal = useSharedValue(0)
@@ -80,8 +39,8 @@ export const StreakScreen = () => {
 
   const isPresent = !!streakDays.find(
     (item) =>
-      new Date(item.date).toLocaleDateString() === new Date().toLocaleDateString() &&
-      item.type === 'isAttendance',
+      new Date(item.date).toLocaleDateString() ===
+        new Date().toLocaleDateString() && item.type === 'isAttendance',
   )
 
   const handleOpenModal = useCallback(() => {
@@ -104,6 +63,13 @@ export const StreakScreen = () => {
     dispatch(updateStreakThunk())
   }
 
+  const renderTaskItem = ({ index, item }: ListRenderItemInfo<Task>) => {
+    return (
+      <Block marginTop={14} key={`item-task-${index}`}>
+        <TaskItem data={item} />
+      </Block>
+    )
+  }
 
   return (
     <Container hasScroll>
@@ -130,21 +96,18 @@ export const StreakScreen = () => {
           </Text>
           <Block row justifyCenter alignCenter>
             <Text size={'h5'} fontFamily={'bold'} lineHeight={18}>
-              200
+              {userCoin}
             </Text>
             <Icon state={'Honey'} />
           </Block>
         </Block>
-        <Block marginBottom={14}>
-          {TaskData.map((item, index) => (
-            <Block marginTop={14} key={`item-task-${index}`}>
-              <TaskItem
-                taskType={item.taskType}
-                taskName={item.taskName}
-                honeyAmount={item.honeyAmount}
-              />
-            </Block>
-          ))}
+        <Block marginBottom={14} style={{ minWidth: 5, minHeight: 5 }}>
+          <FlashList
+            data={taskData}
+            estimatedItemSize={69}
+            renderItem={renderTaskItem}
+            keyExtractor={(_, index) => `item-task-${index}`}
+          />
         </Block>
       </Block>
       <Modal ref={modalRef} position={'center'} onDismiss={onCloseModal}>

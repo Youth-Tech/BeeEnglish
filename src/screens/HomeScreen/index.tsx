@@ -5,23 +5,23 @@ import { useFocusEffect } from '@react-navigation/native'
 import { FlatList, ListRenderItemInfo, Pressable, View } from 'react-native'
 
 import {
-  NewsItem,
-  ToolItem,
   DailyTask,
-  NewsProgress,
   LessonProgressItem,
   LessonProgressItemProps,
+  NewsItem,
+  NewsProgress,
+  ToolItem,
 } from './components'
 import { Icon } from '@assets'
 import { navigate } from '@navigation'
 import { LoadingScreen } from '@screens'
 import { colorTopic, useTheme } from '@themes'
-import { getStreakThunk } from '@redux/actions'
+import { getStreakThunk, getTaskThunk } from '@redux/actions'
 import { getDaySession } from '@utils/dateUtils'
 import { PostServices } from '@services/PostService'
 import { setIsAdjustPostData } from '@redux/reducers'
 import { useAppDispatch, useAppSelector } from '@hooks'
-import { getStreak, getUserData } from '@redux/selectors'
+import { getStreak, getTask, getUserData } from '@redux/selectors'
 import { Block, BlockAnimated, Container, Image, Text } from '@components'
 
 const learningData = [
@@ -119,7 +119,7 @@ export const parsePostData = (
 export const HomeScreen = () => {
   const dispatch = useAppDispatch()
   const hasStreak = useAppSelector(getStreak).streakCount
-
+  const taskData = useAppSelector(getTask)
   const userData = useAppSelector(getUserData)
   const isAdjustPostData = useAppSelector(
     (state) => state.root.detailPost.isAdjustPostData,
@@ -135,7 +135,7 @@ export const HomeScreen = () => {
   const callPost = async () => {
     try {
       const res = await PostServices.getAllPost({
-        type: 'text'
+        type: 'text',
       })
       setPostData(parsePostData(res.data.data.posts, colorTopic))
     } catch (error) {
@@ -146,9 +146,8 @@ export const HomeScreen = () => {
   React.useEffect(() => {
     setIsLoading(false)
     callPost()
-
-    //get streak
     dispatch(getStreakThunk())
+    dispatch(getTaskThunk())
     console.log('useEffect')
   }, [])
 
@@ -168,7 +167,9 @@ export const HomeScreen = () => {
   const onPressVideo = () => {
     navigate('CHOOSE_VIDEO_SCREEN')
   }
-  const onPressRanking = () => {}
+  const onPressRanking = () => {
+    navigate('RANKING_SCREEN')
+  }
   const onLearningWatchMore = () => {
     navigate('LEARNING_SCREEN')
   }
@@ -319,10 +320,7 @@ export const HomeScreen = () => {
           </Block>
           <Block marginTop={10}>
             <DailyTask
-              icon="LearnBook"
-              taskName="Học bài 15 phút"
-              finishedTask={0}
-              totalTask={5}
+              data={taskData}
               onPress={() => navigate('STREAK_SCREEN')}
             />
           </Block>

@@ -178,6 +178,13 @@
     "interjection": "Interjection",
     "example": "Example",
     "meaning": "Meaning",
-    "register_success": "Register successfully!"
+    "register_success": "Register successfully!",
+    "synonyms": "Synonyms",
+    "antonyms": "Antonyms",
+    "havent_saved_a_word":"You haven't saved a word yet. \n Let's save one now!",
+    "learn_a_word": "All the vocabularies that you learned will be saved here. \n Let's learn!",
+    "you_finished_all_tasks": "You finished all tasks",
+    "score": "Score",
+    "leaderboard": "Leaderboard",
   }
 }

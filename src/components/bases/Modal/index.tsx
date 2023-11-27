@@ -21,6 +21,7 @@ export const Modal = React.forwardRef<ModalFunction, ModalProps>(
       onShow,
       onDismiss,
       animationType = 'slide',
+      backdropStyle,
     } = props
     const [visible, setVisible] = React.useState<boolean>(false)
     const STATUS_BAR_HEIGHT = getStatusBarHeight()
@@ -54,6 +55,7 @@ export const Modal = React.forwardRef<ModalFunction, ModalProps>(
               style={[
                 baseStyles.absoluteFill,
                 { backgroundColor: 'rgba(0,0,0,0.5)' },
+                backdropStyle,
               ]}
               entering={FadeIn}
               exiting={FadeOut}

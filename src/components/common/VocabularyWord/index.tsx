@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import i18next from 'i18next'
 import { Icon, images } from '@assets'
 import { normalize, useTheme } from '@themes'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet } from 'react-native'
+import { Pressable, ScrollView, StyleSheet } from 'react-native'
 import { ModalFunction } from '../../bases/Modal/type'
 import FlipVocabulary from './components/FlipVocabulary'
 import { Block, Image, Modal, Text } from '@components/bases'
@@ -14,6 +14,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated'
+import { heightScreen } from '@utils/helpers'
 
 export enum Difficulty {
   'easy' = 'easy',
@@ -28,6 +29,7 @@ export const VocabularyWord = React.forwardRef<
 >((props, ref) => {
   const { data, setData, onPressSoundProgress, onPressMoreExample } = props
   const { colors, normalize } = useTheme()
+  const exampleModalRef = React.useRef<ModalFunction>(null)
   const difficulties = {
     [Difficulty.easy]: {
       label: i18next.t('easy'),
@@ -91,7 +93,26 @@ export const VocabularyWord = React.forwardRef<
     setData(tempData)
     forceUpdate()
   }
-
+  const wordType = (type: string) => {
+    switch (type) {
+      case 'noun':
+        return i18next.t('noun') + ' (n)'
+      case 'verb':
+        return i18next.t('verb') + ' (v)'
+      case 'adjective':
+        return i18next.t('adjective') + ' (adj)'
+      case 'pronoun':
+        return i18next.t('pronoun') + ' (pron)'
+      case 'preposition':
+        return i18next.t('preposition') + ' (prep)'
+      case 'conjunction':
+        return i18next.t('conjunction') + ' (conj)'
+      case 'interjection':
+        return i18next.t('interjection') + ' (interj)'
+      default:
+        return ''
+    }
+  }
   return (
     <Block flex>
       <AnimatedBlock style={[rTranslate]}>
@@ -105,7 +126,9 @@ export const VocabularyWord = React.forwardRef<
               pronunciation={data.pronunciation}
               isBookmarked={data.isBookmarked}
               onPressBookmark={onPressBookmark}
-              onPressMoreExample={onPressMoreExample}
+              onPressMoreExample={() => {
+                exampleModalRef.current?.openModal()
+              }}
               onPressSoundProgress={onPressSoundProgress}
             />
           </Block>
@@ -247,6 +270,132 @@ export const VocabularyWord = React.forwardRef<
           </Block>
         </Modal>
       </AnimatedBlock>
+      <Modal
+        ref={exampleModalRef}
+        position={'bottom'}
+        backdropStyle={{ backgroundColor: 'transparent' }}
+      >
+        <Block
+          backgroundColor={'white'}
+          paddingHorizontal={20}
+          borderTopLeftRadius={20}
+          borderTopRightRadius={20}
+          paddingBottom={15}
+          height={heightScreen / 3}
+        >
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {data.senses.map((item, index) => {
+              return (
+                <Block marginTop={20} key={`item-sensen-${index}`}>
+                  <Text
+                    marginTop={10}
+                    color="red"
+                    fontFamily="bold"
+                    size={'h4'}
+                    lineHeight={18}
+                  >
+                    {wordType(item.type)}
+                  </Text>
+                  <Text
+                    marginTop={10}
+                    fontFamily="bold"
+                    size={'h4'}
+                    lineHeight={18}
+                  >
+                    {item.vietnamese}
+                  </Text>
+                  {item.exampleEnglish?.length > 0 && (
+                    <Block marginTop={10} row>
+                      <Text
+                        color="blue"
+                        fontFamily="bold"
+                        size={'h4'}
+                        lineHeight={18}
+                      >
+                        {t('example')}:
+                      </Text>
+                      <Text
+                        flex
+                        size={'h4'}
+                        marginLeft={5}
+                        fontFamily="bold"
+                        lineHeight={18}
+                      >
+                        {item.exampleEnglish}
+                      </Text>
+                    </Block>
+                  )}
+                  {item.exampleVietnamese?.length > 0 && (
+                    <Block marginTop={10} row>
+                      <Text
+                        color="blue"
+                        fontFamily="bold"
+                        size={'h4'}
+                        lineHeight={18}
+                      >
+                        {t('meaning')}:
+                      </Text>
+                      <Text
+                        marginLeft={5}
+                        fontFamily="bold"
+                        size={'h4'}
+                        flex
+                        lineHeight={18}
+                      >
+                        {item.exampleVietnamese}
+                      </Text>
+                    </Block>
+                  )}
+
+                  {item.synonyms.length > 0 && (
+                    <Block marginTop={10} row>
+                      <Text
+                        color="blue"
+                        fontFamily="bold"
+                        size={'h4'}
+                        lineHeight={18}
+                      >
+                        {t('synonyms')}:
+                      </Text>
+                      <Text
+                        marginLeft={5}
+                        fontFamily="bold"
+                        size={'h4'}
+                        flex
+                        lineHeight={18}
+                      >
+                        {item.synonyms.join(', ')}
+                      </Text>
+                    </Block>
+                  )}
+
+                  {item.antonyms.length > 0 && (
+                    <Block marginTop={10} row>
+                      <Text
+                        color="blue"
+                        fontFamily="bold"
+                        size={'h4'}
+                        lineHeight={18}
+                      >
+                        {t('antonyms')}:
+                      </Text>
+                      <Text
+                        marginLeft={5}
+                        fontFamily="bold"
+                        size={'h4'}
+                        flex
+                        lineHeight={18}
+                      >
+                        {item.antonyms.join(', ')}
+                      </Text>
+                    </Block>
+                  )}
+                </Block>
+              )
+            })}
+          </ScrollView>
+        </Block>
+      </Modal>
     </Block>
   )
 })
