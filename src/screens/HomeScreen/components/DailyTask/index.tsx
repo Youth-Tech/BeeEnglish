@@ -59,14 +59,14 @@ export const DailyTask = (props: Props) => {
         radius={10}
         backgroundColor="white"
       >
-        <Block flex row alignCenter paddingLeft={19}>
+        <Block flex row justifyCenter alignCenter paddingHorizontal={10}>
           <Icon state={renderCurrentTask().icon as TIcon} />
-          <Block flex>
+          <Block justifyCenter alignCenter>
             <Text
               size={'h3'}
               fontFamily="bold"
               color={colors.black}
-              numberOfLines={2}
+              numberOfLines={1}
               marginLeft={15}
             >
               {renderCurrentTask().title}

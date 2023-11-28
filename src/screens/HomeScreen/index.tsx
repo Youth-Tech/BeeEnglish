@@ -147,7 +147,7 @@ export const HomeScreen = () => {
     setIsLoading(false)
     callPost()
     dispatch(getStreakThunk())
-    dispatch(getTaskThunk())
+
     console.log('useEffect')
   }, [])
 
@@ -160,7 +160,11 @@ export const HomeScreen = () => {
       }
     }, [isAdjustPostData]),
   )
-
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(getTaskThunk())
+    }, []),
+  )
   const onPressDictionary = () => {
     navigate('DICTIONARY_SCREEN')
   }
@@ -292,7 +296,7 @@ export const HomeScreen = () => {
                   radius={22.5}
                   resizeMode="cover"
                   source={{
-                    uri: userData?.avatar?.src ?? userData.avatar as string,
+                    uri: userData?.avatar?.src ?? (userData.avatar as string),
                   }}
                 />
                 <Block justifyCenter marginLeft={8}>
