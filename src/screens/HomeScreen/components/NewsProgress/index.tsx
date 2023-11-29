@@ -20,6 +20,7 @@ export const NewsProgress: React.FC<NewsProgressProps> = (props) => {
 
   const { colors } = useTheme()
   const styles = useStyle(props)
+  // @ts-ignore
   const combinedText = `${progress}%`
   const [isBookmarked, setIsBookmarked] = useState(false)
 
@@ -89,7 +90,7 @@ export const NewsProgress: React.FC<NewsProgressProps> = (props) => {
             {topic}
           </Text>
           <Text fontFamily="bold" size={'h5'} color={colors.orangeDark}>
-            {combinedText}
+            {/*{combinedText}*/}
           </Text>
         </Block>
       </Block>

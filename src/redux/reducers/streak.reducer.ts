@@ -4,13 +4,13 @@ import { StreakDayProps } from '@screens/StreakScreen/components'
 import { getStreakThunk, updateStreakThunk } from '@redux/actions'
 
 export interface StreakReducerType {
-  streaks: StreakDayProps[]
-  streakCount: number
+  streaks?: StreakDayProps[]
+  streakCount?: number
 }
 
 const initialState: StreakReducerType = {
-  streaks: [],
-  streakCount: 0,
+  streaks: undefined,
+  streakCount: undefined,
 }
 
 const streakReducer = createSlice({

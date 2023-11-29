@@ -1895,6 +1895,33 @@ const Top3Badge = (props) => (
     />
   </Svg>
 )
+
+const StreakOff = (props: Props) => (
+  <Svg width={26} height={26} fill="none" {...props}>
+    <Path
+      fill="#C7C5C3"
+      d="M21.125 15.714c0 4.956-4.103 8.941-9.06 8.646-5.093-.304-8.58-5.203-7.923-10.323C4.54 10.923 6 8.252 7.59 6.18c.276-.362.56 2.548.843 2.228.284-.33 2.92-4.89 3.837-6.493a.564.564 0 0 1 .835-.173c1.841 1.39 8.02 6.608 8.02 13.972Z"
+    />
+    <Path
+      fill="#DADADA"
+      d="M18.687 17.754c0 3.284-2.859 5.924-6.336 5.804-3.754-.126-6.328-3.562-5.777-7.1.795-5.073 6.003-8.333 6.003-8.333s6.11 3.824 6.11 9.629Z"
+    />
+  </Svg>
+)
+
+const StreakOn = (props: SvgProps) => (
+  <Svg width={26} height={26} fill="none" {...props}>
+    <Path
+      fill="#FF6723"
+      d="M21.125 15.714c0 4.956-4.103 8.941-9.06 8.646-5.093-.304-8.58-5.203-7.923-10.323C4.54 10.923 6 8.252 7.59 6.18c.276-.362.56 2.548.843 2.228.284-.33 2.92-4.89 3.837-6.493a.564.564 0 0 1 .835-.173c1.841 1.39 8.02 6.608 8.02 13.972Z"
+    />
+    <Path
+      fill="#FFB02E"
+      d="M18.687 17.754c0 3.284-2.859 5.924-6.336 5.804-3.754-.126-6.328-3.562-5.777-7.1.795-5.073 6.003-8.333 6.003-8.333s6.11 3.824 6.11 9.629Z"
+    />
+  </Svg>
+)
+
 const Icons = {
   LeftArrow: {
     state: 'LeftArrow',
@@ -2184,6 +2211,14 @@ const Icons = {
     state: 'Top3Badge',
     icon: Top3Badge,
   },
+  StreakOff: {
+    state: 'StreakOff',
+    icon: StreakOff,
+  },
+  StreakOn: {
+    state: 'StreakOn',
+    icon: StreakOn,
+  },
 }
 
 export type TIcon = keyof typeof Icons
@@ -2266,4 +2301,6 @@ export {
   Top1Badge,
   Top2Badge,
   Top3Badge,
+  StreakOff,
+  StreakOn,
 }

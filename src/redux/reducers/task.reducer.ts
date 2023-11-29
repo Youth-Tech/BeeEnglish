@@ -3,11 +3,11 @@ import { getTaskThunk } from '@redux/actions'
 import { Task } from '@services/TaskService'
 
 export interface TaskReducerType {
-  tasks: Task[]
+  tasks?: Task[]
 }
 
 const initialState: TaskReducerType = {
-  tasks: [],
+  tasks: undefined,
 }
 
 const streakReducer = createSlice({

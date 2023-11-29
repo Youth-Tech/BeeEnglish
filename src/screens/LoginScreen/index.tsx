@@ -24,8 +24,10 @@ import {
 } from '@redux/actions/auth.action'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
+import { UserService } from '@services'
 import { navigate, replace } from '@navigation'
 import { DeviceInfoConfig, Provider } from '@configs'
+import { getFCMToken } from '@utils/notificationUtils'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { useValidateInput } from '@utils/validateInput'
 import { defaultUserState, setAuthState, setUserState } from '@redux/reducers'
@@ -59,6 +61,7 @@ export const LoginScreen = () => {
 
     return false
   }
+
   const onSubmit = () => {
     if (isErrorBeforeSubmit()) return
     dispatch(setUserState(defaultUserState))
@@ -80,8 +83,20 @@ export const LoginScreen = () => {
     navigate('SEND_PASSWORD_SCREEN')
   }
 
+  const updateFCMToken = async () => {
+    try {
+      const fcmToken = await getFCMToken()
+      await UserService.updateFCMToken({
+        fcmToken: fcmToken ?? '',
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   useEffect(() => {
     if (dataUser.email && dataUser.isVerified) {
+      updateFCMToken()
       replace('BOTTOM_TAB')
     }
     if (isResend && email) {

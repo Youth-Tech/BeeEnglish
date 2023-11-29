@@ -11,6 +11,7 @@ import {
   SplashScreen,
   StreakScreen,
   GrammarScreen,
+  RankingScreen,
   SettingScreen,
   RankingScreen,
   NavigateScreen,
