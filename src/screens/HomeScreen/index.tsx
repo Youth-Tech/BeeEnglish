@@ -177,6 +177,9 @@ export const HomeScreen = () => {
   const onLearningWatchMore = () => {
     navigate('LEARNING_SCREEN')
   }
+  const onReadMore = () => {
+    navigate('MORE_POST_SCREEN')
+  }
 
   const renderLessonProgressItem = ({
     index,
@@ -238,7 +241,7 @@ export const HomeScreen = () => {
           image={item.attachments?.[0]?.src ?? ''}
         />
         {index === newsData.length - 1 && (
-          <Pressable onPress={onLearningWatchMore}>
+          <Pressable onPress={onReadMore}>
             <Block
               padding={10}
               marginHorizontal={20}

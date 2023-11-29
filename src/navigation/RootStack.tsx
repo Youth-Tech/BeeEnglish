@@ -12,8 +12,10 @@ import {
   StreakScreen,
   GrammarScreen,
   SettingScreen,
+  RankingScreen,
   NavigateScreen,
   RegisterScreen,
+  MorePostScreen,
   ExamTestScreen,
   SavedWordScreen,
   DetailWordScreen,
@@ -28,7 +30,6 @@ import {
   CongratulationScreen,
   VerificationCodeScreen,
   EmailRegistrationScreen,
-  RankingScreen,
 } from '@screens'
 import { useAppSelector } from '@hooks'
 import { RootStackParamList } from './routes'
@@ -71,7 +72,6 @@ const RootStack = () => {
         initialRouteName={
           isSignedIn || isSignedWithGuestRole ? 'BOTTOM_TAB' : 'NAVIGATE_SCREEN'
         }
-        // initialRouteName={'VERIFICATION_CODE_SCREEN'}
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -135,6 +135,7 @@ const RootStack = () => {
             component={ChooseVideoScreen}
           />
           <Stack.Screen name="RANKING_SCREEN" component={RankingScreen} />
+          <Stack.Screen name="MORE_POST_SCREEN" component={MorePostScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

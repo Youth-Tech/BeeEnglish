@@ -7,6 +7,8 @@ export interface GetAllPostRequest {
   type: 'video' | 'text'
   read?: boolean
   like?: boolean
+  page: number
+  limit: number
 }
 
 export interface PostIdRequest {
@@ -18,6 +20,7 @@ export interface UpdateLikePostResponse extends DefaultResponse {}
 export interface GetAllPostResponse extends DefaultResponse {
   data: {
     posts: PostResponse[]
+    pagination: Pagination
   }
 }
 
