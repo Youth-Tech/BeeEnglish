@@ -21,7 +21,7 @@ const persistConfig = {
   timeout: 30000,
   storage: reduxStorage,
   stateReconciler: autoMergeLevel2,
-  whitelist: ['auth', 'themeApp', 'config', 'user'],
+  whitelist: ['auth', 'themeApp', 'config', 'user', 'historyReducer'],
 }
 
 const persistedReducer = persistReducer<RootState>(persistConfig, rootReducer)

@@ -14,7 +14,6 @@ export const RankingScreen: React.FC = () => {
   const dispatch = useAppDispatch()
   const [board, setBoard] = React.useState<RankUser[]>([])
   const userLevel = useAppSelector(getUserData).level._id
-
   const getBoard = async () => {
     dispatch(setLoadingStatusAction(true))
     try {

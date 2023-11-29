@@ -24,11 +24,9 @@ export const SavedWordItem: React.FC<SavedWordItemProps> = ({
       <Block
         row
         alignCenter
-        space="between"
         paddingLeft={30}
         paddingRight={10}
         paddingVertical={12}
-        backgroundColor={colors.white}
       >
         <Block style={styles.wordContainer}>
           <Block row alignCenter>

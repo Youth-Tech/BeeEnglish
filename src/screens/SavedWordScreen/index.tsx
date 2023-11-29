@@ -1,6 +1,11 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, StyleSheet } from 'react-native'
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  ListRenderItemInfo as RNListRenderItemInfo,
+} from 'react-native'
 
 import {
   Block,
@@ -30,7 +35,7 @@ export const SavedWordScreen = () => {
   const flag = React.useRef(0)
   const [savedWordData, setSavedWordData] = React.useState<Word[]>([])
   const [suggestionWord, setSuggestionWord] = React.useState<Word[]>([])
-  const renderSavedWordItem = ({ index, item }: ListRenderItemInfo<Word>) => {
+  const renderSavedWordItem = ({ index, item }: RNListRenderItemInfo<Word>) => {
     return (
       <SavedWordItem
         data={item}
@@ -178,7 +183,7 @@ export const SavedWordScreen = () => {
                     />
                   </Block>
                 ) : (
-                  <FlashList
+                  <FlatList
                     scrollEnabled={false}
                     data={savedWordData}
                     keyExtractor={(_, index) => `item-saved-word-${index}`}

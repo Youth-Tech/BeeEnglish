@@ -264,10 +264,10 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
       { key: 'right-spacer' },
     ])
   }, [])
-  // React.useEffect(() => {
-  //   setScript(videoData.attachments[0].script ?? [])
-  //   handleForceRender()
-  // }, [videoData])
+  React.useEffect(() => {
+    setScript(videoData.attachments[0].script ?? [])
+    handleForceRender()
+  }, [videoData])
   return (
     <Portal key={componentKey}>
       <BlockAnimated

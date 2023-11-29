@@ -166,7 +166,7 @@ export const HomeScreen = () => {
     // if (streak?.streaks?.length ?? 0 <= 0) {
     //   dispatch(getStreakThunk())
     // }
-    dispatch(getTaskThunk())
+    console.log('useEffect')
   }, [])
 
   useFocusEffect(
@@ -179,7 +179,11 @@ export const HomeScreen = () => {
       }
     }, [isAdjustPostData]),
   )
-
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(getTaskThunk())
+    }, []),
+  )
   const onPressDictionary = () => {
     navigate('DICTIONARY_SCREEN')
   }
