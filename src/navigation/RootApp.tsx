@@ -15,7 +15,7 @@ import RootStack from './RootStack'
 import { UserService } from '@services'
 import { Portal } from 'react-native-portalize'
 import { navigate } from '@navigation/NavigationServices'
-import { Block, Text } from '@components'
+import {Block, StreakBall, Text} from '@components'
 import { updateProfile } from '@redux/actions'
 import { getIsLoading } from '@redux/selectors'
 import { useAppDispatch, useAppSelector } from '@hooks'
@@ -103,24 +103,27 @@ export const RootApp = () => {
         </Block>
       )}
       {!netInfo.isConnected && (
-        <Block
-          absolute
-          left={0}
-          right={0}
-          top={0}
-          bottom={0}
-          alignCenter
-          justifyCenter
-          zIndex={10}
-        >
-          <Text color="red" size={'h1'} fontFamily="bold">
-            Network error
-          </Text>
-        </Block>
+        <Portal>
+          <Block
+            absolute
+            left={0}
+            right={0}
+            top={0}
+            bottom={0}
+            alignCenter
+            justifyCenter
+            zIndex={10}
+          >
+            <Text color="red" size={'h1'} fontFamily="bold">
+              Network error
+            </Text>
+          </Block>
+        </Portal>
       )}
       <RootStack />
       <Portal>
         <Toast position={'bottom'} bottomOffset={20} />
+        <StreakBall/>
       </Portal>
     </>
   )

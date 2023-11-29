@@ -13,7 +13,7 @@ import {
   ToolItem,
 } from './components'
 import { Icon } from '@assets'
-import { navigate } from '@navigation'
+import { AUTH_ROUTE, navigate } from '@navigation'
 import { PostServices } from '@services'
 import { LoadingScreen } from '@screens'
 import { colorTopic, useTheme } from '@themes'
@@ -23,6 +23,7 @@ import { setIsAdjustPostData } from '@redux/reducers'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { getStreak, getTask, getUserData } from '@redux/selectors'
 import { Block, BlockAnimated, Container, Image, Text } from '@components'
+import streakReducer from '@redux/reducers/streak.reducer'
 
 const learningData = [
   {
@@ -118,7 +119,7 @@ export const parsePostData = (
 
 export const HomeScreen = () => {
   const dispatch = useAppDispatch()
-  const hasStreak = useAppSelector(getStreak).streakCount
+  // const streak = useAppSelector(getStreak)
   const taskData = useAppSelector(getTask)
   const userData = useAppSelector(getUserData)
   const isAdjustPostData = useAppSelector(
@@ -129,6 +130,9 @@ export const HomeScreen = () => {
 
   const [isLoading, setIsLoading] = React.useState(true)
   const [postData, setPostData] = React.useState<
+    (PostResponse & { textColor: string })[]
+  >([])
+  const [postDataRead, setPostDataRead] = React.useState<
     (PostResponse & { textColor: string })[]
   >([])
 
@@ -143,18 +147,33 @@ export const HomeScreen = () => {
     }
   }
 
+  const callPostRead = async () => {
+    try {
+      const res = await PostServices.getAllPost({
+        type: 'text',
+        read: true,
+      })
+      setPostDataRead(parsePostData(res.data.data.posts, colorTopic))
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   React.useEffect(() => {
     setIsLoading(false)
     callPost()
-    dispatch(getStreakThunk())
+    callPostRead()
+    // if (streak?.streaks?.length ?? 0 <= 0) {
+    //   dispatch(getStreakThunk())
+    // }
     dispatch(getTaskThunk())
-    console.log('useEffect')
   }, [])
 
   useFocusEffect(
     React.useCallback(() => {
       if (isAdjustPostData) {
         callPost()
+        callPostRead()
         console.log('useFocusEffect')
         dispatch(setIsAdjustPostData(false))
       }
@@ -224,7 +243,6 @@ export const HomeScreen = () => {
             : { marginStart: normalize.h(10) },
           { flexDirection: 'row', alignItems: 'center' },
         ]}
-        key={`item-${index}`}
       >
         <NewsProgress
           progress={50}
@@ -232,6 +250,7 @@ export const HomeScreen = () => {
           topic={item.topic.name}
           topicColor={item.textColor}
           image={item.attachments?.[0]?.src ?? ''}
+          onPress={() => navigate('DETAIL_POST_SCREEN', { post: item })}
         />
         {index === newsData.length - 1 && (
           <Pressable onPress={onLearningWatchMore}>
@@ -255,7 +274,6 @@ export const HomeScreen = () => {
   }: ListRenderItemInfo<PostResponse & { textColor: string }>) => {
     return (
       <Pressable
-        key={`item-${index}`}
         onPress={() => navigate('DETAIL_POST_SCREEN', { post: item })}
         style={[
           { marginHorizontal: normalize.h(20) },
@@ -292,7 +310,7 @@ export const HomeScreen = () => {
                   radius={22.5}
                   resizeMode="cover"
                   source={{
-                    uri: userData?.avatar?.src ?? userData.avatar as string,
+                    uri: userData?.avatar?.src ?? (userData.avatar as string),
                   }}
                 />
                 <Block justifyCenter marginLeft={8}>
@@ -312,15 +330,15 @@ export const HomeScreen = () => {
                 </Block>
               </Block>
             </Block>
-            {hasStreak > 3 && (
-              <BlockAnimated entering={FadeIn} exiting={FadeOut}>
-                <Icon state="Fire" />
-              </BlockAnimated>
-            )}
+            {/*{(hasStreak ?? 0) > 3 && (*/}
+            {/*  <BlockAnimated entering={FadeIn} exiting={FadeOut}>*/}
+            {/*    <Icon state="Fire" />*/}
+            {/*  </BlockAnimated>*/}
+            {/*)}*/}
           </Block>
           <Block marginTop={10}>
             <DailyTask
-              data={taskData}
+              data={taskData ?? []}
               onPress={() => navigate('STREAK_SCREEN')}
             />
           </Block>
@@ -376,7 +394,7 @@ export const HomeScreen = () => {
           </Text>
           <FlatList
             horizontal
-            data={postData}
+            data={postDataRead}
             renderItem={renderNewsProgressItem}
             showsHorizontalScrollIndicator={false}
             style={{ marginTop: normalize.v(10) }}
@@ -384,15 +402,20 @@ export const HomeScreen = () => {
           />
         </Block>
         <Block marginTop={17}>
-          <Text
-            size={'h2'}
-            marginLeft={20}
-            fontFamily="bold"
-            marginBottom={-10}
-            color={colors.black}
-          >
-            {t('news')}
-          </Text>
+          <Block row space={'between'} paddingHorizontal={20}>
+            <Text
+              size={'h2'}
+              fontFamily="bold"
+              marginBottom={-10}
+              color={colors.black}
+            >
+              {t('news')}
+            </Text>
+            <Icon
+              state={'RightArrow'}
+              onPress={() => navigate('MORE_POST_SCREEN')}
+            />
+          </Block>
           <FlatList
             data={postData}
             renderItem={renderNewsItem}

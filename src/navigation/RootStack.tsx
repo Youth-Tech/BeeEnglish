@@ -11,6 +11,7 @@ import {
   SplashScreen,
   StreakScreen,
   GrammarScreen,
+  RankingScreen,
   SettingScreen,
   NavigateScreen,
   RegisterScreen,
@@ -28,7 +29,6 @@ import {
   CongratulationScreen,
   VerificationCodeScreen,
   EmailRegistrationScreen,
-  RankingScreen,
 } from '@screens'
 import { useAppSelector } from '@hooks'
 import { RootStackParamList } from './routes'
@@ -71,7 +71,6 @@ const RootStack = () => {
         initialRouteName={
           isSignedIn || isSignedWithGuestRole ? 'BOTTOM_TAB' : 'NAVIGATE_SCREEN'
         }
-        // initialRouteName={'VERIFICATION_CODE_SCREEN'}
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>

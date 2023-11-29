@@ -12,6 +12,7 @@ export interface RankItemProps {
 const RankItem: React.FC<RankItemProps> = (props) => {
   const { t } = useTranslation()
   const { index, data } = props
+
   const renderBadge = (index: number): TIcon => {
     if (index === 0) {
       return 'Top1Badge'
@@ -21,10 +22,11 @@ const RankItem: React.FC<RankItemProps> = (props) => {
       return 'Top3Badge'
     }
   }
+
   return (
     <Block
-      height={86}
       row
+      height={86}
       alignCenter
       borderBottomWidth={1}
       borderColor={'#F3F3F3'}

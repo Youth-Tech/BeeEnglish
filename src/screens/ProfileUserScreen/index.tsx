@@ -86,7 +86,7 @@ export const ProfileUserScreen: React.FC = () => {
         ? value.length
         : typeof value === 'object'
         ? value?.['name'] ?? '_'
-        : value
+        : value ?? 0
 
       return {
         id: index,
@@ -99,7 +99,7 @@ export const ProfileUserScreen: React.FC = () => {
 
   React.useEffect(() => {
     getUserLearningStats()
-  }, [])
+  }, [userProfile])
 
   React.useEffect(() => {
     setStatsData((prev) => {
