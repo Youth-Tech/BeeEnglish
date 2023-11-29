@@ -191,7 +191,10 @@
     "havent_saved_a_word":"Bạn chưa lưu từ vựng nào. \n Hãy lưu ngay nào!",
     "learn_a_word": "Các từ vựng bạn học sẽ được lưu ở đây. \n Cùng học nào!",
     "you_finished_all_tasks": "Bạn đã hoàn thành tất cả nhiệm vụ",
-    "score": "điểm",
-    "leaderboard": "Xếp hạng"
+    "score": "Điểm",
+    "leaderboard": "Xếp hạng",
+    "post": "Bài viết",
+    "reply": "Trả lời",
+    "more_comment": "xem thêm"
   }
 }

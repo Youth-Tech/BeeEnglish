@@ -15,6 +15,7 @@ import {
   SettingScreen,
   NavigateScreen,
   RegisterScreen,
+  MorePostScreen,
   ExamTestScreen,
   SavedWordScreen,
   DetailWordScreen,
@@ -134,6 +135,7 @@ const RootStack = () => {
             component={ChooseVideoScreen}
           />
           <Stack.Screen name="RANKING_SCREEN" component={RankingScreen} />
+          <Stack.Screen name="MORE_POST_SCREEN" component={MorePostScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

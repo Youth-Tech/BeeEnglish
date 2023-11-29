@@ -9,6 +9,7 @@ import { PostServices } from '@services/PostService'
 import { CommentNested } from '@screens/DetailPostScreen/components/BottomSheetComment'
 import { useAppDispatch } from '@hooks'
 import { setParentCommentId } from '@redux/reducers'
+import { useTranslation } from 'react-i18next'
 
 export interface comment {
   id: number
@@ -38,6 +39,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
   parentCommentId,
 }) => {
   const { colors } = useTheme()
+  const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const styles = useStyles()
   const refComment = useRef<View | null>(null)
@@ -129,7 +131,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
                 fontFamily={'semiBold'}
                 color={colors.greyPrimary}
               >
-                more
+                {t('more_comment')}
               </Text>
             </TouchableOpacity>
           )}
@@ -154,7 +156,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
                   onLayout={handlerReplyComment}
                 >
                   <CommentComponent
-                    level={1}
+                    level={level + 1}
                     key={index}
                     comment={item}
                     postId={postId}

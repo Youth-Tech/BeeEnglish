@@ -40,6 +40,7 @@ import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_heigh
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes'
 import { NativeScrollEvent } from 'react-native/Libraries/Components/ScrollView/ScrollView'
 import VideoListItem from '@screens/ChooseVideoScreen/components/VideoListItem'
+import { PostServices } from '@services'
 
 export interface VideoComponentProps {
   data: PostResponse
@@ -61,9 +62,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
   const [visibleName, setVisibleName] = React.useState(false)
   const [videoData, setVideoData] = React.useState<PostResponse>(data)
   const [componentKey, setComponentKey] = React.useState(0)
-  const [script, setScript] = React.useState(
-    videoData.attachments[0].script ?? [],
-  )
+
   const videos = useAppSelector((state) => state.root.videoReducer.videos)
   const [recommendData, setRecommendData] =
     React.useState<PostResponse[]>(videos)
@@ -150,8 +149,8 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
   })
 
   const handleClickNext = (index: number) => {
-    if (index === script.length - 1) return
-    handleSeek(Number(script[index + 1].start))
+    if (index === videoData.attachments[0].script.length - 1) return
+    handleSeek(Number(videoData.attachments[0].script[index + 1].start))
     subtitleListRef.current?.scrollToIndex({
       index: index + 1,
       animated: true,
@@ -159,7 +158,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
   }
   const handleClickPrevious = (index: number) => {
     if (index === 0) return
-    handleSeek(Number(script[index - 1].start))
+    handleSeek(Number(videoData.attachments[0].script[index - 1].start))
     subtitleListRef.current?.scrollToIndex({
       index: index - 1,
       animated: true,
@@ -176,7 +175,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
     const index = Math.round(
       event.nativeEvent.contentOffset.x / normalize.h(340),
     )
-    handleSeek(Number(script[index].start))
+    handleSeek(Number(videoData.attachments[0].script[index].start))
   }
   const scrollToIndex = (_: number) => {
     subtitleListRef.current?.scrollToIndex({
@@ -184,9 +183,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
       animated: true,
     })
   }
-  React.useEffect(() => {
-    console.log(videoData)
-  }, [videoData])
+
   const VideoProgress = () => {
     return (
       <Block width={'100%'} height={_strokeHeight} alignCenter justifyCenter>
@@ -222,21 +219,17 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
     index,
     item,
   }: ListRenderItemInfo<PostResponse>) => {
-    if (!item._id) {
-      return (
-        <View
-          key={`item-spacer-${index}`}
-          style={{
-            width: SPACER_ITEM_SIZE,
-            height: 100,
-          }}
-        />
-      )
-    }
     return (
       <Block
         key={`item-video-${index}`}
-        marginRight={index >= recommendData.length - 2 ? 0 : 10}
+        marginRight={index === recommendData.length - 1 ? SPACER_ITEM_SIZE : 10}
+        marginLeft={index === 0 ? SPACER_ITEM_SIZE : 0}
+        style={[
+          index === recommendData.length - 1
+            ? { marginEnd: SPACER_ITEM_SIZE }
+            : { marginEnd: normalize.v(10) },
+          index === 0 ? { marginStart: SPACER_ITEM_SIZE } : {},
+        ]}
       >
         <VideoListItem
           id={item._id}
@@ -244,8 +237,15 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
           src={item.attachments[0].thumbnail}
           description={item.note}
           onPress={() => {
-            const newVideo = { ...item }
-            setVideoData(newVideo)
+            setIsPaused(true)
+            setVideoData(item)
+            videoRef.current?.seek(0)
+            currentIndex.current = 0
+            subtitleListRef.current?.scrollToIndex({
+              index: 0,
+              animated: true,
+            })
+            // setIsPaused(false)
           }}
           index={index}
           scrollX={scrollX}
@@ -253,23 +253,19 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
       </Block>
     )
   }
-  const handleForceRender = () => {
-    // Update the component key to force re-render
-    setComponentKey((prevKey) => prevKey + 1)
+  const callAPIMarkAsRead = async (postId: string) => {
+    try {
+      const response = await PostServices.markAsRead(postId)
+      console.log(response.data.message)
+    } catch (e) {
+      console.log(e)
+    }
   }
   React.useEffect(() => {
-    setRecommendData([
-      { key: 'left-spacer' },
-      ...recommendData,
-      { key: 'right-spacer' },
-    ])
-  }, [])
-  React.useEffect(() => {
-    setScript(videoData.attachments[0].script ?? [])
-    handleForceRender()
+    // callAPIMarkAsRead(videoData._id)
   }, [videoData])
   return (
-    <Portal key={componentKey}>
+    <Portal>
       <BlockAnimated
         entering={SlideInDown}
         exiting={SlideOutDown}
@@ -298,6 +294,11 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
                     </BlockAnimated>
                   )}
                 </Block>
+                <Block
+                  style={baseStyles.absoluteFill}
+                  backgroundColor={colors.black}
+                  padding={10}
+                />
                 <Video
                   onLoad={(data) => {
                     setDuration(data.duration)
@@ -310,7 +311,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
                   onBuffer={onBuffer}
                   onError={onError}
                   style={[styles.video]}
-                  resizeMode={'cover'}
+                  resizeMode={'contain'}
                   paused={isPaused}
                   onEnd={() => {
                     currentIndex.current = 0
@@ -323,8 +324,13 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
                         data.currentTime * (100 / data.playableDuration)
                       if (
                         data.currentTime >=
-                          Number(script[currentIndex.current].end) &&
-                        currentIndex.current < script.length - 1
+                          Number(
+                            videoData.attachments[0].script[
+                              currentIndex.current
+                            ].end,
+                          ) &&
+                        currentIndex.current <
+                          videoData.attachments[0].script.length - 1
                       ) {
                         currentIndex.current++
                         scrollToIndex(currentIndex.current)
@@ -370,14 +376,16 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
             ref={subtitleListRef}
             keyExtractor={(_, index) => `item-subtitle-${index}`}
             horizontal
-            data={script}
+            data={videoData.attachments[0].script}
             pagingEnabled
             renderItem={({ item, index }) => {
               return (
                 <Block marginHorizontal={5} key={`item-${index}`}>
                   <SubtitleItem
                     subtitle={item.content}
-                    positionText={`${index + 1}/${script.length}`}
+                    positionText={`${index + 1}/${
+                      videoData.attachments[0].script.length
+                    }`}
                     onPressNext={() => {
                       handleClickNext(index)
                     }}
@@ -385,7 +393,9 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
                       handleClickPrevious(index)
                     }}
                     onPressRewind={() => {
-                      const seconds = Number(script[index].start)
+                      const seconds = Number(
+                        videoData.attachments[0].script[index].start,
+                      )
                       videoRef.current?.seek(seconds)
                       progressStepValue.value = seconds * (100 / duration)
                     }}
