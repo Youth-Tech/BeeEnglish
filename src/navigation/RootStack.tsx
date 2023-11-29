@@ -13,7 +13,6 @@ import {
   GrammarScreen,
   RankingScreen,
   SettingScreen,
-  RankingScreen,
   NavigateScreen,
   RegisterScreen,
   MorePostScreen,

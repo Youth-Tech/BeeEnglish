@@ -27,9 +27,9 @@ const VideoListItem: React.FC<VideoListItemProps> = (props) => {
     const translateY = interpolate(
       scrollX!.value,
       [
-        (index! - 2) * WIDTH_ITEM,
         (index! - 1) * WIDTH_ITEM,
         index! * WIDTH_ITEM,
+        (index! + 1) * WIDTH_ITEM,
       ],
       [0, -50, 0],
       Extrapolation.CLAMP,
