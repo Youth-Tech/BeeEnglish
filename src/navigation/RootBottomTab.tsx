@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 import { RootStackParamList } from './routes'
 import { CustomBottomNavigation } from '@components'
-import { HomeScreen, LessonMap, ProfileUserScreen, TestScreen } from '@screens'
+import { HomeScreen, LessonMap, ProfileUserScreen } from '@screens'
 
 const Tab = createBottomTabNavigator<RootStackParamList>()
 
@@ -16,7 +16,7 @@ export function RootBottomTab() {
   return (
     <Tab.Navigator
       screenOptions={screenOptions}
-      initialRouteName={'LEARNING_SCREEN'}
+      initialRouteName={'HOME_SCREEN'}
       tabBar={(props) => <CustomBottomNavigation {...props} />}
     >
       <Tab.Screen name="HOME_SCREEN" component={HomeScreen} />

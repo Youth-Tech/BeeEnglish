@@ -9,14 +9,14 @@ import { useTranslation } from 'react-i18next'
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
 
-import {Icon, images} from '@assets'
+import { Icon, images } from '@assets'
 import { useStyles } from '../styles'
 import { widthScreen } from '@utils/helpers'
 import { normalize, useTheme } from '@themes'
 import { PostServices } from '@services/PostService'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import SendMessenger from '@assets/icons/SendMessenger'
-import {Block, Image, Text, TextInput} from '@components'
+import { Block, Image, Text, TextInput } from '@components'
 import CommentComponent from '@components/common/CommentComponent'
 import { changeShowComment, setParentCommentId } from '@redux/reducers'
 
@@ -54,6 +54,7 @@ const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({ postId }) => {
   }, [])
 
   const getListComment = async () => {
+    setIsFetchingComment(true)
     try {
       const res = await PostServices.getPostComments({
         postId,
@@ -225,8 +226,12 @@ const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({ postId }) => {
             />
           ) : (
             <Block flex alignCenter justifyCenter>
-              <Image source={images.BeeDiscovery} style={styles.imageNoData} resizeMode={'contain'}/>
-              <Text>{t("no_comment")}</Text>
+              <Image
+                source={images.BeeDiscovery}
+                style={styles.imageNoData}
+                resizeMode={'contain'}
+              />
+              <Text>{t('no_comment')}</Text>
             </Block>
           )}
         </Block>

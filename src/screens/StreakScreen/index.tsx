@@ -1,4 +1,4 @@
-import Animated, {
+import {
   cancelAnimation,
   useAnimatedStyle,
   useSharedValue,
@@ -18,14 +18,20 @@ import {
 import { useTheme } from '@themes'
 import { Icon, images } from '@assets'
 import { getStreak, getTask } from '@redux/selectors'
-import { updateStreakThunk } from '@redux/actions'
+import { getTaskThunk, updateStreakThunk } from '@redux/actions'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { ModalFunction } from '@components/bases/Modal/type'
-import { Block, Container, Modal, ShadowButton, Text } from '@components'
+import {
+  Block,
+  BlockAnimated,
+  Container,
+  Modal,
+  ShadowButton,
+  Text,
+} from '@components'
 import { Task } from '@services/TaskService'
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
 
-const AnimatedBlock = Animated.createAnimatedComponent(Block)
 export const StreakScreen = () => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
@@ -37,11 +43,17 @@ export const StreakScreen = () => {
   const rotateModal = useSharedValue(0)
   const streakDays = useAppSelector(getStreak).streaks
 
-  const isPresent = !!streakDays.find(
+  const isPresent = !!streakDays?.find(
     (item) =>
       new Date(item.date).toLocaleDateString() ===
         new Date().toLocaleDateString() && item.type === 'isAttendance',
   )
+
+  React.useEffect(() => {
+    if (taskData === undefined) {
+      dispatch(getTaskThunk())
+    }
+  }, [taskData])
 
   const handleOpenModal = useCallback(() => {
     rotateModal.value = withRepeat(withTiming(180, { duration: 1000 }), -1)
@@ -87,7 +99,7 @@ export const StreakScreen = () => {
         </Block>
         <Pressable onPress={handleOpenModal}>
           <Block marginTop={15}>
-            <WeekCalendar data={streakDays} />
+            <WeekCalendar data={streakDays ?? []} />
           </Block>
         </Pressable>
         <Block marginTop={20} row space={'between'}>
@@ -126,7 +138,7 @@ export const StreakScreen = () => {
             borderColor={colors.orangeDark}
           >
             <Block marginTop={29} row>
-              {streakDays.map((item, index) => (
+              {streakDays?.map((item, index) => (
                 <Block
                   key={`item-date-${index}`}
                   marginLeft={index > 0 ? 10 : 0}
@@ -136,7 +148,7 @@ export const StreakScreen = () => {
               ))}
             </Block>
             <Block justifyCenter alignCenter>
-              <AnimatedBlock style={rStyle}>
+              <BlockAnimated style={rStyle}>
                 <FastImage
                   source={images.Light}
                   style={{
@@ -145,7 +157,7 @@ export const StreakScreen = () => {
                   }}
                   resizeMode={FastImage.resizeMode.contain}
                 />
-              </AnimatedBlock>
+              </BlockAnimated>
               <FastImage
                 source={images.ChestBox}
                 style={{
