@@ -3,14 +3,16 @@
  */
 
 import { AppRegistry } from 'react-native'
-import App from './src/App'
-import { name as appName } from './app.json'
-
+import DeviceInfo from 'react-native-device-info'
 import messaging from '@react-native-firebase/messaging'
 import notifee, { EventType } from '@notifee/react-native'
-import DeviceInfo from 'react-native-device-info'
+
+import App from './src/App'
+import { initRun } from '@utils/authUtils'
 import { DeviceInfoConfig } from '@configs'
-import {notificationListener} from "@utils/notificationUtils";
+import { name as appName } from './app.json'
+import { notificationListener } from '@utils/notificationUtils'
+
 
 notifee.onBackgroundEvent(async ({ type, detail }) => {
   const { notification, pressAction } = detail
@@ -27,16 +29,9 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
 })
 
 notificationListener()
-
 messaging().setBackgroundMessageHandler(async (remoteMessage) => {
   console.log('notification on background state', remoteMessage.notification)
 })
-
-//get init device info
-const initRun = (async function () {
-  DeviceInfoConfig.deviceName = DeviceInfo.getDeviceNameSync()
-  const deviceId = await DeviceInfo.getUniqueId()
-  DeviceInfoConfig.deviceId = deviceId.concat(new Date().getTime().toString())
-})()
+initRun()
 
 AppRegistry.registerComponent(appName, () => App)

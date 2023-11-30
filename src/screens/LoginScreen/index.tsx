@@ -97,7 +97,11 @@ export const LoginScreen = () => {
   useEffect(() => {
     if (dataUser.email && dataUser.isVerified) {
       updateFCMToken()
-      replace('BOTTOM_TAB')
+      if (dataUser.pretest) {
+        replace('BOTTOM_TAB')
+      } else {
+        replace('EXAM_TEST_SCREEN')
+      }
     }
     if (isResend && email) {
       dispatch(resendVerifyEmail(email))

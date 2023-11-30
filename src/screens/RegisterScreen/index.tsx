@@ -31,6 +31,7 @@ import {
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { Provider } from '@configs'
+import { getIsLoginOAuth } from '@redux/selectors'
 import { AuthService } from '@services/AuthService'
 import { useValidateInput } from '@utils/validateInput'
 import { useAppDispatch, useAppSelector } from '@hooks'
@@ -52,9 +53,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ route }) => {
 
   // const isSignedIn = useAppSelector((state) => state.root.auth.isSignedIn)
   // const isSignUp = useAppSelector((state) => state.root.auth.isSignUp)
-  const isSignedInOAuth = useAppSelector(
-    (state) => state.root.auth.isSignedInOAuth,
-  )
+  const isSignedInOAuth = useAppSelector(getIsLoginOAuth)
 
   const fullNameInputRef = React.useRef<DocumentSelectionState>()
   const emailInputRef = React.useRef<DocumentSelectionState>()

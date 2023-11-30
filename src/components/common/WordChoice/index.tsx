@@ -4,8 +4,8 @@ import { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
 import { images } from '@assets'
 import { useTheme } from '@themes'
 import { WordList } from '../WordList'
-import { widthScreen } from '@utils/helpers'
 import { Block, BlockAnimated, Image, Text } from '@components/bases'
+import {useTranslation} from "react-i18next";
 
 export interface WordChoiceProps {
   data: Question
@@ -13,7 +13,8 @@ export interface WordChoiceProps {
 
 export const WordChoice = React.forwardRef<WordListRefFunc, WordChoiceProps>(
   ({ data }, ref) => {
-    const { colors, normalize } = useTheme()
+      const {t} = useTranslation()
+    const { colors } = useTheme()
     const [visible, setVisible] = React.useState(true)
     const wordListRef = React.useRef<WordListRefFunc>(null)
 
@@ -36,7 +37,7 @@ export const WordChoice = React.forwardRef<WordListRefFunc, WordChoiceProps>(
             entering={FadeInRight.duration(500)}
           >
             <Text size={'h1'} fontFamily="bold" marginTop={40}>
-              Viết lại câu bằng tiếng Anh
+                {t('remake_sentence')}
             </Text>
 
             <Block row justifyStart alignCenter marginTop={30}>
@@ -47,32 +48,32 @@ export const WordChoice = React.forwardRef<WordListRefFunc, WordChoiceProps>(
                 source={images.BeeTeacher}
               />
               <Block
+                flex
                 radius={10}
-                alignCenter
                 justifyCenter
                 borderWidth={1}
                 marginLeft={16}
                 borderColor={colors.greyLight}
-                style={{
-                  maxWidth:
-                    widthScreen -
-                    normalize.h(15) -
-                    normalize.h(60) -
-                    normalize.h(20),
-                }}
+                // style={{
+                //   maxWidth:
+                //     widthScreen -
+                //     normalize.h(15) -
+                //     normalize.h(60) -
+                //     normalize.h(20),
+                // }}
               >
                 <Text
                   size={'h4'}
                   paddingVertical={14}
                   fontFamily="semiBold"
-                  paddingHorizontal={20}
+                  paddingHorizontal={15}
                 >
                   {data.question}
                 </Text>
               </Block>
             </Block>
 
-            <Block flex justifyCenter marginTop={20}>
+            <Block flex marginTop={10}>
               <WordList
                 key={data.id}
                 ref={wordListRef}

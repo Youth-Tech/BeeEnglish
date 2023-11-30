@@ -12,8 +12,8 @@ import {
 import { Icon } from '@assets'
 import { TokenService } from '@services'
 import { LangType } from '@utils/helpers'
-import { oAuthSignOut } from '@utils/authUtils'
 import { useAppDispatch, useAppSelector } from '@hooks'
+import { initRun, oAuthSignOut } from '@utils/authUtils'
 import { makeStyles, normalize, useTheme } from '@themes'
 import { Block, Container, Modal, Text } from '@components'
 import { ModalFunction } from '@components/bases/Modal/type'
@@ -53,7 +53,10 @@ export const SettingScreen = () => {
         console.log('signOut success')
       })
     }
-    navigateAndReset([{ name: 'LOGIN_SCREEN' }], 0)
+    navigateAndReset([{ name: 'NAVIGATE_SCREEN' }], 0)
+
+    //re-gen deviceId
+    initRun()
   }
 
   const onPressRate = () => {}

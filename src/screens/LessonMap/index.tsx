@@ -1,21 +1,25 @@
 import {
   Pressable,
-  StyleSheet,
   SectionList,
   SectionListData,
   SectionListRenderItem,
+  StyleSheet,
 } from 'react-native'
 import React from 'react'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 
 import { Icon } from '@assets'
-import { navigate } from '@navigation'
+import { navigate, RootStackParamList } from '@navigation'
 import { LoadingScreen } from '@screens'
 import { normalize, useTheme } from '@themes'
 import { ItemLesson, ItemLessonProps } from './components'
 import { Chapter, KnowledgeService, Lesson, Quiz } from '@services'
 import { Block, BlockAnimated, Container, Text } from '@components'
 import { defaultCheckPointLessonData } from '@screens/LessonMap/mock'
+import { useAppSelector } from '@hooks'
+import { getIsPreTest } from '@redux/selectors'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { StackActions } from '@react-navigation/native'
 
 export type SectionData = {
   lessonComplete: number
@@ -79,9 +83,23 @@ const parseDataToSectionData = (data: Chapter[]): SectionData[] => {
   })
 }
 
-export const LessonMap = () => {
+export type LessonMapScreen = NativeStackScreenProps<
+  RootStackParamList,
+  'LEARNING_SCREEN'
+>
+
+export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
+  const isPreTest = useAppSelector(getIsPreTest)
+
   const { colors } = useTheme()
   const [data, setData] = React.useState<SectionData[]>([])
+
+  React.useEffect(() => {
+    if (!isPreTest) {
+      console.log('to pre test')
+      navigation.dispatch(StackActions.replace('EXAM_TEST_SCREEN'))
+    }
+  }, [isPreTest])
 
   const onStartExaminationPress = ({
     chapterId,

@@ -32,6 +32,8 @@ export const AUTH_ROUTE = {
   VIDEO_SCREEN: 'VIDEO_SCREEN',
   CHOOSE_VIDEO_SCREEN: 'CHOOSE_VIDEO_SCREEN',
   RANKING_SCREEN: 'RANKING_SCREEN',
+
+  PRE_TEST_SCREEN: 'PRE_TEST_SCREEN',
 } as const
 
 export const PUBLIC_ROUTE = {
@@ -95,6 +97,7 @@ export type RootStackParamList = {
     point: number
     type: 'normal' | 'checkpoint'
   }
+  [AUTH_ROUTE.PRE_TEST_SCREEN]: undefined
 }
 
 export type RouteKeys = keyof typeof AUTH_ROUTE | keyof typeof PUBLIC_ROUTE

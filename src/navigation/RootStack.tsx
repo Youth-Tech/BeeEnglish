@@ -2,33 +2,33 @@ import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import {
-  LessonMap,
-  TestScreen,
+  AboutTheTestScreen,
+  ChangePasswordScreen,
+  ChooseVideoScreen,
+  CongratulationScreen,
+  DetailLessonScreen,
   DetailPost,
-  VocabScreen,
-  LoginScreen,
-  VideoScreen,
-  SplashScreen,
-  StreakScreen,
-  GrammarScreen,
-  RankingScreen,
-  SettingScreen,
-  NavigateScreen,
-  RegisterScreen,
-  ExamTestScreen,
-  SavedWordScreen,
   DetailWordScreen,
   DictionaryScreen,
-  LearnedWordScreen,
-  ChooseVideoScreen,
-  SendPasswordScreen,
-  DetailLessonScreen,
-  AboutTheTestScreen,
-  PasswordResetScreen,
-  ChangePasswordScreen,
-  CongratulationScreen,
-  VerificationCodeScreen,
   EmailRegistrationScreen,
+  ExamTestScreen,
+  GrammarScreen,
+  LearnedWordScreen,
+  LoginScreen,
+  NavigateScreen,
+  PasswordResetScreen,
+  PreTestScreen,
+  RankingScreen,
+  RegisterScreen,
+  SavedWordScreen,
+  SendPasswordScreen,
+  SettingScreen,
+  SplashScreen,
+  StreakScreen,
+  TestScreen,
+  VerificationCodeScreen,
+  VideoScreen,
+  VocabScreen,
 } from '@screens'
 import { useAppSelector } from '@hooks'
 import { RootStackParamList } from './routes'
@@ -125,7 +125,7 @@ const RootStack = () => {
             name="DETAIL_LESSON_SCREEN"
             component={DetailLessonScreen}
           />
-          <Stack.Screen name="LESSON_MAP_SCREEN" component={LessonMap} />
+          {/*<Stack.Screen name="LESSON_MAP_SCREEN" component={LessonMap} />*/}
           <Stack.Screen name="VIDEO_SCREEN" component={VideoScreen} />
           <Stack.Screen name="SETTING_SCREEN" component={SettingScreen} />
           <Stack.Screen name="GRAMMAR_SCREEN" component={GrammarScreen} />
@@ -134,6 +134,7 @@ const RootStack = () => {
             component={ChooseVideoScreen}
           />
           <Stack.Screen name="RANKING_SCREEN" component={RankingScreen} />
+          <Stack.Screen name="PRE_TEST_SCREEN" component={PreTestScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

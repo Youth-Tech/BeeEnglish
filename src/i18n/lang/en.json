@@ -188,6 +188,7 @@
     "leaderboard": "Leaderboard",
     "no_comment": "Oh, nobody. You can be then first one to join!",
     "unknown_user": "Unknown user",
-    "want_to_migrate": "Would you like to transfer your old data to the new account?"
+    "want_to_migrate": "Would you like to transfer your old data to the new account?",
+    "remake_sentence": "Rewrite sentence"
   }
 }
