@@ -389,24 +389,28 @@ export const HomeScreen = () => {
             keyExtractor={(_, index) => `item-${index}`}
           />
         </Block>
-        <Block marginTop={17}>
-          <Text
-            size={'h2'}
-            fontFamily="bold"
-            color={colors.black}
-            marginLeft={20}
-          >
-            {t('watched')}
-          </Text>
-          <FlatList
-            horizontal
-            data={postDataRead}
-            renderItem={renderNewsProgressItem}
-            showsHorizontalScrollIndicator={false}
-            style={{ marginTop: normalize.v(10) }}
-            keyExtractor={(_, index) => `item-${index}`}
-          />
-        </Block>
+        {postDataRead.length > 0 ? (
+          <Block marginTop={17}>
+            <Text
+              size={'h2'}
+              fontFamily="bold"
+              color={colors.black}
+              marginLeft={20}
+            >
+              {t('watched')}
+            </Text>
+            <FlatList
+              horizontal
+              data={postDataRead}
+              renderItem={renderNewsProgressItem}
+              showsHorizontalScrollIndicator={false}
+              style={{ marginTop: normalize.v(10) }}
+              keyExtractor={(_, index) => `item-${index}`}
+            />
+          </Block>
+        ) : (
+          <></>
+        )}
         <Block marginTop={17}>
           <Block row space={'between'} paddingHorizontal={20}>
             <Text
