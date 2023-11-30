@@ -157,7 +157,11 @@ export const LoginScreen = () => {
               <Icon
                 state="Back"
                 onPress={() => {
-                  navigation.canGoBack() && navigation.goBack()
+                  if (navigation.canGoBack()) {
+                    navigation.goBack()
+                  } else {
+                    replace('NAVIGATE_SCREEN')
+                  }
                 }}
               />
               <Text

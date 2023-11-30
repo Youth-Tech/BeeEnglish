@@ -9,7 +9,7 @@ import { ImageBackground, Pressable } from 'react-native'
 import { Block, Container, Image, Text } from '@components'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { ReviewService, UserService } from '@services'
-import { useAppDispatch } from '@hooks'
+import { useAppDispatch, useAppSelector } from '@hooks'
 import { updateBookmarkWords, updateReviewWords } from '@redux/reducers'
 
 export type DetailLessonScreenProps = NativeStackScreenProps<
@@ -26,6 +26,9 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
   const dispatch = useAppDispatch()
   const { colors, normalize } = useTheme()
   const [activeBlock, setActiveBlock] = useState(0)
+  const isLoginWithGuest = useAppSelector(
+    (state) => state.root.auth.isLoginWithGuest,
+  )
   const getWordBookmarksByLesson = async () => {
     try {
       const response = await UserService.getWordsBookmark({ lessonId })
@@ -59,9 +62,11 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
     }
   }
   React.useEffect(() => {
-    getWordBookmarksByLesson()
-    getWordReviewsByLesson()
-  })
+    if (!isLoginWithGuest) {
+      getWordBookmarksByLesson()
+      getWordReviewsByLesson()
+    }
+  }, [])
 
   return (
     <Container>

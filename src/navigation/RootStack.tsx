@@ -2,33 +2,34 @@ import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import {
-  AboutTheTestScreen,
-  ChangePasswordScreen,
-  ChooseVideoScreen,
-  CongratulationScreen,
-  DetailLessonScreen,
-  DetailPost,
-  DetailWordScreen,
-  DictionaryScreen,
-  EmailRegistrationScreen,
-  ExamTestScreen,
-  GrammarScreen,
-  LearnedWordScreen,
-  LoginScreen,
-  NavigateScreen,
-  PasswordResetScreen,
-  PreTestScreen,
-  RankingScreen,
-  RegisterScreen,
-  SavedWordScreen,
-  SendPasswordScreen,
-  SettingScreen,
-  SplashScreen,
-  StreakScreen,
   TestScreen,
-  VerificationCodeScreen,
+  DetailPost,
   VideoScreen,
   VocabScreen,
+  LoginScreen,
+  SplashScreen,
+  StreakScreen,
+  GrammarScreen,
+  PreTestScreen,
+  RankingScreen,
+  SettingScreen,
+  NavigateScreen,
+  ExamTestScreen,
+  RegisterScreen,
+  MorePostScreen,
+  SavedWordScreen,
+  DetailWordScreen,
+  DictionaryScreen,
+  LearnedWordScreen,
+  ChooseVideoScreen,
+  SendPasswordScreen,
+  AboutTheTestScreen,
+  DetailLessonScreen,
+  PasswordResetScreen,
+  ChangePasswordScreen,
+  CongratulationScreen,
+  VerificationCodeScreen,
+  EmailRegistrationScreen,
 } from '@screens'
 import { useAppSelector } from '@hooks'
 import { RootStackParamList } from './routes'
@@ -135,6 +136,7 @@ const RootStack = () => {
           />
           <Stack.Screen name="RANKING_SCREEN" component={RankingScreen} />
           <Stack.Screen name="PRE_TEST_SCREEN" component={PreTestScreen} />
+          <Stack.Screen name="MORE_POST_SCREEN" component={MorePostScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
