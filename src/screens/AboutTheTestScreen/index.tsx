@@ -1,13 +1,18 @@
 import React from 'react'
-import { Text, Block, Container, ShadowButton, Image } from '@components'
+import { Block, Container, Image, ShadowButton, Text } from '@components'
 import { Icon, images } from '@assets'
 import { useTheme } from '@themes'
-import { goBack } from '@navigation'
+import { goBack, replace } from '@navigation'
 import { useTranslation } from 'react-i18next'
 
 export const AboutTheTestScreen = () => {
   const { colors } = useTheme()
   const { t } = useTranslation()
+
+  const onContinuePress = () => {
+    replace('PRE_TEST_SCREEN')
+  }
+
   return (
     <Container>
       <Block flex>
@@ -39,16 +44,14 @@ export const AboutTheTestScreen = () => {
       </Block>
       <Block marginBottom={40} paddingHorizontal={20}>
         <ShadowButton
+          buttonRadius={8}
+          shadowHeight={6}
           buttonHeight={40}
           buttonBorderSize={2}
-          buttonBorderColor={colors.orangeLight}
-          shadowHeight={6}
-          buttonRadius={8}
-          shadowButtonColor={colors.orangePrimary}
+          onPress={onContinuePress}
           buttonColor={colors.orangeLight}
-          onPress={() => {
-            console.log('press')
-          }}
+          buttonBorderColor={colors.orangeLight}
+          shadowButtonColor={colors.orangePrimary}
         >
           <Text size={'h3'} fontFamily="semiBold" color={colors.black}>
             {t('continue_button')}

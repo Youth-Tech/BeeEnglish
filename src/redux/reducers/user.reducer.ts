@@ -1,6 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-import { EAttachment } from '@utils/enums'
 import { UserData } from '@services/UserService'
 import {
   loginForGuest,
@@ -14,10 +12,13 @@ export const defaultUserState: UserData = {
   _id: '',
   email: '',
   fullName: '',
-  avatar: {
-    id: '',
-    src: '',
-    type: EAttachment.Image,
+  avatar: {},
+  level: {
+    _id: '6543e7c8498409ce5385e015',
+    name: 'C1',
+    description: '',
+    score: 0,
+    attachment: {},
   },
   badges: [],
   coin: 0,
@@ -25,7 +26,6 @@ export const defaultUserState: UserData = {
   createdAt: '',
   id: '',
   isVerified: false,
-  level: '',
   postBookmarks: [],
   role: '',
   score: 0,
@@ -36,6 +36,7 @@ export const defaultUserState: UserData = {
   refreshToken: '',
   deviceId: '',
   deviceName: '',
+  pretest: false,
 }
 
 const userSlice = createSlice({

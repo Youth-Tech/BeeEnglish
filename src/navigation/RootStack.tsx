@@ -2,29 +2,29 @@ import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import {
-  LessonMap,
   TestScreen,
   DetailPost,
+  VideoScreen,
   VocabScreen,
   LoginScreen,
-  VideoScreen,
   SplashScreen,
   StreakScreen,
   GrammarScreen,
+  PreTestScreen,
   RankingScreen,
   SettingScreen,
   NavigateScreen,
+  ExamTestScreen,
   RegisterScreen,
   MorePostScreen,
-  ExamTestScreen,
   SavedWordScreen,
   DetailWordScreen,
   DictionaryScreen,
   LearnedWordScreen,
   ChooseVideoScreen,
   SendPasswordScreen,
-  DetailLessonScreen,
   AboutTheTestScreen,
+  DetailLessonScreen,
   PasswordResetScreen,
   ChangePasswordScreen,
   CongratulationScreen,
@@ -126,7 +126,7 @@ const RootStack = () => {
             name="DETAIL_LESSON_SCREEN"
             component={DetailLessonScreen}
           />
-          <Stack.Screen name="LESSON_MAP_SCREEN" component={LessonMap} />
+          {/*<Stack.Screen name="LESSON_MAP_SCREEN" component={LessonMap} />*/}
           <Stack.Screen name="VIDEO_SCREEN" component={VideoScreen} />
           <Stack.Screen name="SETTING_SCREEN" component={SettingScreen} />
           <Stack.Screen name="GRAMMAR_SCREEN" component={GrammarScreen} />
@@ -135,6 +135,7 @@ const RootStack = () => {
             component={ChooseVideoScreen}
           />
           <Stack.Screen name="RANKING_SCREEN" component={RankingScreen} />
+          <Stack.Screen name="PRE_TEST_SCREEN" component={PreTestScreen} />
           <Stack.Screen name="MORE_POST_SCREEN" component={MorePostScreen} />
         </Stack.Group>
       </Stack.Navigator>

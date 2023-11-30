@@ -6,8 +6,9 @@ import { useTheme } from '@themes'
 import { navigate } from '@navigation'
 import { getStreakThunk } from '@redux/actions'
 import { BlockAnimated, Text } from '@components'
-import {useAppDispatch, useAppSelector} from '@hooks'
+import { useAppDispatch, useAppSelector } from '@hooks'
 import { SlideInRight, SlideOutRight } from 'react-native-reanimated'
+import {getIsLogin, getIsLoginWithGuest} from '@redux/selectors'
 
 export const StreakBall = () => {
   const dispatch = useAppDispatch()
@@ -16,10 +17,18 @@ export const StreakBall = () => {
   const streakCount = useAppSelector(
     (state) => state.root.streakReducer.streakCount,
   )
+  const isLogin = useAppSelector(getIsLogin)
+  const isLoginWithGuest = useAppSelector(getIsLoginWithGuest)
 
   React.useEffect(() => {
-    dispatch(getStreakThunk())
-  }, [])
+    if (isLogin || isLoginWithGuest) {
+      dispatch(getStreakThunk())
+    }
+  }, [isLogin, isLoginWithGuest])
+
+  if (!isLogin && !isLoginWithGuest) {
+    return <></>
+  }
 
   return (
     <BlockAnimated

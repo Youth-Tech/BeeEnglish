@@ -29,10 +29,10 @@ export const NavigateScreen = () => {
 
   React.useEffect(() => {
     if (isLoginWithGuest) {
-      console.log('red')
-      replace('BOTTOM_TAB')
+      replace('EXAM_TEST_SCREEN')
     }
   }, [isLoginWithGuest])
+
 
   return (
     <Container>

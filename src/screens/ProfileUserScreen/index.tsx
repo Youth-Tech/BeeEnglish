@@ -60,7 +60,7 @@ const parseStatsData = (
     label: getDateName(new Date(currentWeek[index]), lang, 'short').split(
       ',',
     )[0],
-    id: new Date().getTime().toString(),
+    id: (new Date().getTime() * index).toString(),
   }))
 }
 

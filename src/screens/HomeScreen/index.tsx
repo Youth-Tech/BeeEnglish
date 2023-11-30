@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { FadeIn, FadeOut } from 'react-native-reanimated'
+import { FadeIn } from 'react-native-reanimated'
 import { useFocusEffect } from '@react-navigation/native'
 import { FlatList, ListRenderItemInfo, Pressable, View } from 'react-native'
 
@@ -13,17 +13,16 @@ import {
   ToolItem,
 } from './components'
 import { Icon } from '@assets'
-import { AUTH_ROUTE, navigate } from '@navigation'
+import { navigate } from '@navigation'
 import { PostServices } from '@services'
 import { LoadingScreen } from '@screens'
 import { colorTopic, useTheme } from '@themes'
-import { getStreakThunk, getTaskThunk } from '@redux/actions'
+import { getTaskThunk } from '@redux/actions'
 import { getDaySession } from '@utils/dateUtils'
 import { setIsAdjustPostData } from '@redux/reducers'
 import { useAppDispatch, useAppSelector } from '@hooks'
-import { getStreak, getTask, getUserData } from '@redux/selectors'
+import { getTask, getUserData } from '@redux/selectors'
 import { Block, BlockAnimated, Container, Image, Text } from '@components'
-import streakReducer from '@redux/reducers/streak.reducer'
 
 const learningData = [
   {
