@@ -1,5 +1,5 @@
 import ApiUtil from '@utils/AxiosInstance'
-import { DefaultResponse } from '@services'
+import { DefaultResponse, UserData } from '@services'
 
 export interface Lesson {
   _id: string
@@ -83,18 +83,34 @@ export interface GetWordByLessonIdRes extends DefaultResponse {
     words: Word[]
   }
 }
+
 export interface GetAllWordReq {
   page: number
   limit: number
   search: string
 }
+
 export interface GetAllWordResponse extends DefaultResponse {
   data: {
     words: Word[]
   }
 }
+
 export interface GetWordByIdResponse extends DefaultResponse {
   data: Word
+}
+
+export interface GetPreTestResponse extends DefaultResponse {
+  data: Array<Quiz>
+}
+
+export interface SendPreTestResultRequest {
+  score: number
+}
+
+export interface SendPreTestResultResponse
+  extends DefaultResponse {
+  data: UserData
 }
 
 export const KnowledgeService = {
@@ -123,7 +139,19 @@ export const KnowledgeService = {
       { params },
     )
   },
+
   getWordById: (id: string) => {
     return ApiUtil.get<GetWordByIdResponse>(`/knowledge/word/${id}`)
+  },
+
+  getPreTest: () => {
+    return ApiUtil.get<GetPreTestResponse>('/knowledge/quiz/pretest/generate')
+  },
+
+  sendResultPreTest: (body: SendPreTestResultRequest) => {
+    return ApiUtil.post<SendPreTestResultResponse>(
+      '/knowledge/quiz/pretest/send-result',
+      body,
+    )
   },
 } as const

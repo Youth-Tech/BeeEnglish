@@ -17,7 +17,7 @@ const StatisticalComponent: React.FC<ItemStatisticalProps> = ({
   return (
     <Block row style={styles.boxItemStatistical}>
       <IconStatistical state={state} />
-      <Block marginLeft={5}>
+      <Block marginLeft={5} flex>
         <Text size={'h3'} fontFamily="bold" numberOfLines={1}>
           {value}
         </Text>

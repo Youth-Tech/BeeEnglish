@@ -1,7 +1,8 @@
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
 import { GoogleSignin as GoogleSignIn } from '@react-native-google-signin/google-signin'
 
-import { Provider } from '@configs'
+import { DeviceInfoConfig, Provider } from '@configs'
+import DeviceInfo from 'react-native-device-info'
 
 export const signingWithGoogle = async () => {
   try {
@@ -54,9 +55,16 @@ export const oAuthSignOut = (
     }
 
     onSignOutComplete()
-
   } catch (error) {
     console.log('Error signing with google', error)
     // return Error('Error signing with google: ' + error)
   }
 }
+
+//get init device info
+export const initRun = async function () {
+  DeviceInfoConfig.deviceName = DeviceInfo.getDeviceNameSync()
+  const deviceId = await DeviceInfo.getUniqueId()
+  DeviceInfoConfig.deviceId = deviceId.concat(new Date().getTime().toString())
+}
+

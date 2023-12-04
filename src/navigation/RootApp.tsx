@@ -1,6 +1,7 @@
 import React from 'react'
-import { ActivityIndicator, LogBox } from 'react-native'
 import Toast from 'react-native-toast-message'
+import { Portal } from 'react-native-portalize'
+import { ActivityIndicator, LogBox } from 'react-native'
 import notifee, { EventType } from '@notifee/react-native'
 import { addEventListener } from '@react-native-community/netinfo'
 import * as Types from '@react-native-community/netinfo/src/internal/types'
@@ -13,19 +14,19 @@ import {
 import { useTheme } from '@themes'
 import RootStack from './RootStack'
 import { UserService } from '@services'
-import { Portal } from 'react-native-portalize'
-import { navigate } from '@navigation/NavigationServices'
-import { Block, StreakBall, Text } from '@components'
 import { updateProfile } from '@redux/actions'
-import { getIsLoading, getIsLoginWithGuest } from '@redux/selectors'
+import {Block, StreakBall, Text} from '@components'
 import { useAppDispatch, useAppSelector } from '@hooks'
+import { navigate } from '@navigation/NavigationServices'
+import {getIsLoading, getIsLogin, getIsLoginWithGuest} from '@redux/selectors'
 
 export const RootApp = () => {
   const dispatch = useAppDispatch()
   const { colors } = useTheme()
   const isLoading = useAppSelector(getIsLoading)
-  const isLogin = useAppSelector((state) => state.root.auth.isSignedIn)
+  const isLogin = useAppSelector(getIsLogin)
   const isLoginWithGuest = useAppSelector(getIsLoginWithGuest)
+
   const [netInfo, setNetInfo] = React.useState<Types.NetInfoState>({
     details: null,
     isConnected: true,
@@ -49,7 +50,7 @@ export const RootApp = () => {
       let fcmToken = await getFCMToken()
       console.log(fcmToken)
 
-      if (isLogin) {
+      if (isLogin || isLoginWithGuest) {
         updateFCMToken(fcmToken || '')
         dispatch(updateProfile())
       }

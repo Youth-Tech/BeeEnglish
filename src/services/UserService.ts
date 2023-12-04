@@ -21,12 +21,9 @@ const enum endPoints {
 export interface Level {
   _id: string
   attachment: Attachment
-  createdAt: string
   description: string
   name: string
   score: number
-  type: string
-  updatedAt: string
 }
 
 export interface UserData {
@@ -51,6 +48,7 @@ export interface UserData {
   refreshToken: string
   deviceId: string
   deviceName?: string
+  pretest: boolean
 }
 
 export interface UserStateResponse extends DefaultResponse {
@@ -78,6 +76,7 @@ export interface UpdateProgressLearningResponse extends DefaultResponse {
     updatedAt: string
   }
 }
+
 export interface RankUser {
   streaks: string[]
   _id: string
@@ -86,6 +85,7 @@ export interface RankUser {
   score: number
   username: string
 }
+
 export interface GetProgressLearningResponse extends DefaultResponse {
   data: number[]
 }
@@ -128,6 +128,7 @@ export interface GetWordBookmarksReq {
   lessonId: string
   search: string
 }
+
 export interface GetBoardResponse extends DefaultResponse {
   data: RankUser[]
 }
@@ -142,7 +143,9 @@ interface MigrateAccountResponse extends DefaultResponse {
 
 export const UserService = {
   getUserData() {
-    return APIUtils.get<UserStateResponse>(endPoints.getUserData)
+    return APIUtils.get<UserStateResponse>(
+      endPoints.getUserData.concat(`?timestamp=${new Date().getTime()}`),
+    )
   },
 
   updateUserAvatar(body: UpdateUserAvatarRequest) {

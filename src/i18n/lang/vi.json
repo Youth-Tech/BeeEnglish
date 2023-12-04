@@ -191,8 +191,6 @@
     "havent_saved_a_word":"Bạn chưa lưu từ vựng nào. \n Hãy lưu ngay nào!",
     "learn_a_word": "Các từ vựng bạn học sẽ được lưu ở đây. \n Cùng học nào!",
     "you_finished_all_tasks": "Bạn đã hoàn thành tất cả nhiệm vụ",
-    "score": "Điểm",
-    "leaderboard": "Xếp hạng",
     "post": "Bài viết",
     "reply": "Trả lời",
     "more_comment": "xem thêm",
@@ -201,6 +199,9 @@
     "pay_for": "Mua với",
     "month_plan": "Gói tháng",
     "year_plan": "Gói năm",
-    "life_time_plan": "Gói trọn đời"
+    "life_time_plan": "Gói trọn đời",
+    "score": "điểm",
+    "leaderboard": "Xếp hạng",
+    "remake_sentence": "Viết lại câu cho phù hợp"
   }
 }
