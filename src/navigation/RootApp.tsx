@@ -15,9 +15,9 @@ import RootStack from './RootStack'
 import { UserService } from '@services'
 import { Portal } from 'react-native-portalize'
 import { navigate } from '@navigation/NavigationServices'
-import {Block, StreakBall, Text} from '@components'
+import { Block, StreakBall, Text } from '@components'
 import { updateProfile } from '@redux/actions'
-import { getIsLoading } from '@redux/selectors'
+import { getIsLoading, getIsLoginWithGuest } from '@redux/selectors'
 import { useAppDispatch, useAppSelector } from '@hooks'
 
 export const RootApp = () => {
@@ -25,7 +25,7 @@ export const RootApp = () => {
   const { colors } = useTheme()
   const isLoading = useAppSelector(getIsLoading)
   const isLogin = useAppSelector((state) => state.root.auth.isSignedIn)
-
+  const isLoginWithGuest = useAppSelector(getIsLoginWithGuest)
   const [netInfo, setNetInfo] = React.useState<Types.NetInfoState>({
     details: null,
     isConnected: true,
@@ -123,7 +123,7 @@ export const RootApp = () => {
       <RootStack />
       <Portal>
         <Toast position={'bottom'} bottomOffset={20} />
-        <StreakBall/>
+        {!isLoginWithGuest && <StreakBall />}
       </Portal>
     </>
   )

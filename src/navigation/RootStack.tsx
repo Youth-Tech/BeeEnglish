@@ -30,6 +30,9 @@ import {
   CongratulationScreen,
   VerificationCodeScreen,
   EmailRegistrationScreen,
+  SubcriptionPlanScreen,
+  PaymentScreen,
+  InvoiceScreen,
 } from '@screens'
 import { useAppSelector } from '@hooks'
 import { RootStackParamList } from './routes'
@@ -72,6 +75,7 @@ const RootStack = () => {
         initialRouteName={
           isSignedIn || isSignedWithGuestRole ? 'BOTTOM_TAB' : 'NAVIGATE_SCREEN'
         }
+        // initialRouteName={'INVOICE_SCREEN'}
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -136,6 +140,12 @@ const RootStack = () => {
           />
           <Stack.Screen name="RANKING_SCREEN" component={RankingScreen} />
           <Stack.Screen name="MORE_POST_SCREEN" component={MorePostScreen} />
+          <Stack.Screen
+            name="SUBSCRIPTION_SCREEN"
+            component={SubcriptionPlanScreen}
+          />
+          <Stack.Screen name="PAYMENT_SCREEN" component={PaymentScreen} />
+          <Stack.Screen name="INVOICE_SCREEN" component={InvoiceScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

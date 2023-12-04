@@ -191,6 +191,12 @@
     "want_to_migrate": "Would you like to transfer your old data to the new account?",
     "post": "Post",
     "reply": "Reply",
-    "more_comment": "more"
+    "more_comment": "more",
+    "join_premium_plan": "Join Premium Plan",
+    "pay_now": "Pay now",
+    "pay_for": "Pay for",
+    "month_plan": "Month Plan",
+    "year_plan": "Year Plan",
+    "life_time_plan": "Life time"
   }
 }

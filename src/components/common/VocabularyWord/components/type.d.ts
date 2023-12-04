@@ -10,7 +10,6 @@ export interface FlipVocabularyProps extends Word {
   difficulty?: Difficulty
   setData?: React.Dispatch<React.SetStateAction<FlipVocabularyProps>>
   isBookmarked?: boolean
-  onPressSoundProgress?: () => void
   onPressBookmark?: () => void
   onPressMoreExample?: () => void
 }

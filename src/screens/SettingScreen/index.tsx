@@ -15,9 +15,13 @@ import { LangType } from '@utils/helpers'
 import { oAuthSignOut } from '@utils/authUtils'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { makeStyles, normalize, useTheme } from '@themes'
-import { Block, Container, Modal, Text } from '@components'
+import { Block, Container, GuestModal, Modal, Text } from '@components'
 import { ModalFunction } from '@components/bases/Modal/type'
-import { getLangConfig, getUserData } from '@redux/selectors'
+import {
+  getIsLoginWithGuest,
+  getLangConfig,
+  getUserData,
+} from '@redux/selectors'
 import { goBack, navigate, navigateAndReset } from '@navigation'
 
 export const SettingScreen = () => {
@@ -30,16 +34,26 @@ export const SettingScreen = () => {
   const isSignedInOAuth = useAppSelector(
     (state) => state.root.auth.isSignedInOAuth,
   )
+  const isLoginWithGuest = useAppSelector(getIsLoginWithGuest)
   const userData = useAppSelector(getUserData)
-
+  const guestModalRef = React.useRef<ModalFunction>(null)
   const onPressPremiumUser = () => {
-    ToastAndroid.show(t('function_in_develop'), ToastAndroid.SHORT)
+    // ToastAndroid.show(t('function_in_develop'), ToastAndroid.SHORT)
+    if (isLoginWithGuest) {
+      guestModalRef.current?.openModal()
+    } else {
+      navigate('SUBSCRIPTION_SCREEN')
+    }
   }
 
   const onPressProfile = () => {}
 
   const onPressPassword = () => {
-    navigate('CHANGE_PASSWORD_SCREEN')
+    if (isLoginWithGuest) {
+      guestModalRef.current?.openModal()
+    } else {
+      navigate('CHANGE_PASSWORD_SCREEN')
+    }
   }
 
   const onPressNotification = () => {}
@@ -230,6 +244,14 @@ export const SettingScreen = () => {
           </Pressable>
         </Block>
       </Modal>
+      <GuestModal
+        ref={guestModalRef}
+        position={'center'}
+        onButtonPress={() => {
+          navigate('REGISTER_SCREEN', { isGuest: true })
+          guestModalRef?.current?.dismissModal()
+        }}
+      />
     </Container>
   )
 }

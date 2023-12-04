@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { FadeIn, FadeOut } from 'react-native-reanimated'
+import { FadeIn } from 'react-native-reanimated'
 import { useFocusEffect } from '@react-navigation/native'
 import { FlatList, ListRenderItemInfo, Pressable, View } from 'react-native'
 
@@ -13,17 +13,24 @@ import {
   ToolItem,
 } from './components'
 import { Icon } from '@assets'
-import { AUTH_ROUTE, navigate } from '@navigation'
+import { navigate } from '@navigation'
 import { PostServices } from '@services'
 import { LoadingScreen } from '@screens'
 import { colorTopic, useTheme } from '@themes'
-import { getStreakThunk, getTaskThunk } from '@redux/actions'
+import { getTaskThunk } from '@redux/actions'
 import { getDaySession } from '@utils/dateUtils'
 import { setIsAdjustPostData } from '@redux/reducers'
 import { useAppDispatch, useAppSelector } from '@hooks'
-import { getStreak, getTask, getUserData } from '@redux/selectors'
-import { Block, BlockAnimated, Container, Image, Text } from '@components'
-import streakReducer from '@redux/reducers/streak.reducer'
+import { getTask, getUserData } from '@redux/selectors'
+import {
+  Block,
+  BlockAnimated,
+  Container,
+  GuestModal,
+  Image,
+  Text,
+} from '@components'
+import { ModalFunction } from '@components/bases/Modal/type'
 
 const learningData = [
   {
@@ -125,9 +132,12 @@ export const HomeScreen = () => {
   const isAdjustPostData = useAppSelector(
     (state) => state.root.detailPost.isAdjustPostData,
   )
+  const isLoginWithGuest = useAppSelector(
+    (state) => state.root.auth.isLoginWithGuest,
+  )
   const [t] = useTranslation()
   const { colors, normalize } = useTheme()
-
+  const guestModalRef = React.useRef<ModalFunction>(null)
   const [isLoading, setIsLoading] = React.useState(true)
   const [postData, setPostData] = React.useState<
     (PostResponse & { textColor: string })[]
@@ -346,7 +356,13 @@ export const HomeScreen = () => {
           <Block marginTop={10}>
             <DailyTask
               data={taskData ?? []}
-              onPress={() => navigate('STREAK_SCREEN')}
+              onPress={() => {
+                if (isLoginWithGuest) {
+                  guestModalRef.current?.openModal()
+                } else {
+                  navigate('STREAK_SCREEN')
+                }
+              }}
             />
           </Block>
           <Block marginTop={17}>
@@ -433,6 +449,14 @@ export const HomeScreen = () => {
           />
         </Block>
       </BlockAnimated>
+      <GuestModal
+        ref={guestModalRef}
+        position={'center'}
+        onButtonPress={() => {
+          navigate('REGISTER_SCREEN', { isGuest: true })
+          guestModalRef?.current?.dismissModal()
+        }}
+      />
     </Container>
   )
 }
