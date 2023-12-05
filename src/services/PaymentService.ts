@@ -13,22 +13,22 @@ export interface Plan {
   currency: string
   interval: string
 }
-
+export interface Invoice {
+  paymentIntentId: string
+  total: number
+  currency: string
+  status: string
+  periodStart: string
+  periodEnd: string
+}
 export interface GetPricesRes extends DefaultResponse {
   data: Plan[]
 }
 export interface GetPaymentIntentRes extends DefaultResponse {
-  data: {
-    paymentIntentId: string
-    total: number
-    currency: string
-    status: string
-    periodStart: string
-    periodEnd: string
-  }
+  data: Invoice
 }
 export interface CardInformation {
-  number: number
+  number: string
   exp_month: number
   exp_year: number
   cvc: string

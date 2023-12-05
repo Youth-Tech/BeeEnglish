@@ -1,11 +1,11 @@
 import React from 'react'
-import { Block, ShadowButton, Text, TextInput } from '@components'
+import { Block, BottomSheetTextInput, ShadowButton, Text } from '@components'
 import PlanPackageItem, {
   TPlan,
 } from '@screens/SubcriptionPlanScreen/components/PlanPackageItem'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
-import { ScrollView } from 'react-native'
+import { ScrollView, TextInput } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import {
   BottomSheetBackdrop,
@@ -14,12 +14,14 @@ import {
 } from '@gorhom/bottom-sheet'
 import Card from '@screens/SubcriptionPlanScreen/components/Card'
 import {
+  CardInformation,
   PaymentService,
   Plan,
   SubscribePremiumReq,
 } from '@services/PaymentService'
 import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
-import { goBack } from '@navigation'
+import { goBack, replace } from '@navigation'
+import { handleErrorMessage } from '@utils/errorUtils'
 
 export const SubcriptionPlanScreen: React.FC = () => {
   const [currentPlan, setCurrentPlan] = React.useState<Plan>()
@@ -28,9 +30,14 @@ export const SubcriptionPlanScreen: React.FC = () => {
   const [packagePlans, setPackagePlans] = React.useState<Plan[]>([])
   const [selectedNumber, setSelectedNumber] = React.useState<number>(-1)
   const bottomSheetModalRef = React.useRef<BottomSheetModal>(null)
-
+  const [cardNumber, setCardNumber] = React.useState('')
+  const [expiryDate, setExpiryDate] = React.useState('')
+  const [cvc, setCvc] = React.useState('')
+  const [disabledPayButton, setDisabledPayButton] = React.useState(false)
+  const expiryDateRef = React.useRef<TextInput>(null)
+  const cvcRef = React.useRef<TextInput>(null)
   // variables
-  const snapPoints = React.useMemo(() => ['25%', '50%'], [])
+  const snapPoints = React.useMemo(() => ['1%', '50%'], [])
 
   // callbacks
   const handlePresentModalPress = React.useCallback(() => {
@@ -60,7 +67,8 @@ export const SubcriptionPlanScreen: React.FC = () => {
   const callAPIGetPrices = async () => {
     try {
       const response = await PaymentService.getPrices()
-      setPackagePlans(response.data.data)
+      const pricesData = response.data.data.sort(() => -1)
+      setPackagePlans(pricesData)
     } catch (e) {
       console.log(e)
     }
@@ -69,13 +77,43 @@ export const SubcriptionPlanScreen: React.FC = () => {
     try {
       const response = await PaymentService.subcribePremium(subcribeInfo)
       console.log(response.data.message)
+      replace('INVOICE_SCREEN')
     } catch (e) {
       console.log(e)
     }
   }
+  const handleSubmitPayment = () => {
+    console.log('hey')
+    const expiredMonth = Number(expiryDate.split(' / ')[0])
+    if (expiredMonth > 12) {
+      expiryDateRef.current?.focus()
+      handleErrorMessage('Error', 'Invalid month')
+      return
+    }
+    const expiredYear = Number(expiryDate.split(' / ')[1])
+    const cardInfo: CardInformation = {
+      number: cardNumber,
+      exp_month: expiredMonth,
+      exp_year: expiredYear,
+      cvc: cvc,
+    }
+    subcribePremium({ priceId: currentPlan?.id!, card: cardInfo })
+  }
+
   React.useEffect(() => {
     callAPIGetPrices()
   }, [])
+  React.useEffect(() => {
+    if (
+      cardNumber.length === 0 ||
+      expiryDate.length === 0 ||
+      cvc.length === 0
+    ) {
+      setDisabledPayButton(true)
+    } else {
+      setDisabledPayButton(false)
+    }
+  }, [cardNumber, expiryDate, cvc])
   return (
     <BottomSheetModalProvider>
       <Block flex>
@@ -89,21 +127,19 @@ export const SubcriptionPlanScreen: React.FC = () => {
             </Text>
 
             <Block style={{ minHeight: 5 }}>
-              {packagePlans
-                .sort(() => -1)
-                .map((item, index) => (
-                  <Block key={item.id} marginTop={20}>
-                    <PlanPackageItem
-                      data={item}
-                      isChecked={selectedNumber === index}
-                      type={renderByType(item.interval) as TPlan}
-                      onPress={() => {
-                        handleSelectedItem(index)
-                        setCurrentPlan(item)
-                      }}
-                    />
-                  </Block>
-                ))}
+              {packagePlans.map((item, index) => (
+                <Block key={item.id} marginTop={20}>
+                  <PlanPackageItem
+                    data={item}
+                    isChecked={selectedNumber === index}
+                    type={renderByType(item.interval) as TPlan}
+                    onPress={() => {
+                      handleSelectedItem(index)
+                      setCurrentPlan(item)
+                    }}
+                  />
+                </Block>
+              ))}
             </Block>
           </Block>
         </ScrollView>
@@ -146,7 +182,7 @@ export const SubcriptionPlanScreen: React.FC = () => {
         <Block flex paddingHorizontal={20} marginTop={15} space={'between'}>
           <Block>
             <Text size={'h1'} fontFamily={'bold'}>
-              Checkout
+              {t('checkout')}
             </Text>
             <Block
               borderWidth={1}
@@ -162,27 +198,65 @@ export const SubcriptionPlanScreen: React.FC = () => {
             >
               <Card />
               <Text size={'h3'} fontFamily={'semiBold'}>
-                Pay with credit card
+                {t('pay_with_credit_card')}
               </Text>
             </Block>
             <Block marginTop={10}>
-              <Text>Card Information</Text>
-              <TextInput
+              <Text>{t('card_information')}</Text>
+              <BottomSheetTextInput
+                value={cardNumber}
+                keyboardType={'numeric'}
                 placeholder={'Card number'}
                 containerStyle={{ marginTop: 10 }}
-                keyboardType={'numeric'}
+                onChangeText={(text: string) => {
+                  const cardNumberText = text
+                    .replace(/[^\dA-Z]/g, '')
+                    .replace(/(.{4})/g, '$1 ')
+                    .trim()
+                  setCardNumber(cardNumberText)
+                }}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  expiryDateRef.current?.focus()
+                }}
+                blurOnSubmit={false}
               />
             </Block>
             <Block row>
-              <TextInput
+              <BottomSheetTextInput
+                ref={expiryDateRef}
                 placeholder={'MM / YY'}
                 containerStyle={{ flex: 1 }}
                 keyboardType={'numeric'}
+                value={expiryDate}
+                onChangeText={(text) => {
+                  const expiryText = text
+                    .replace(/[^\dA-Z]/g, '')
+                    .replace(/(.{2})/g, '$1 / ')
+                  setExpiryDate(expiryText)
+                  if (expiryText.length > 7) {
+                    setExpiryDate(expiryText.substring(0, 7))
+                  }
+                }}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  cvcRef.current?.focus()
+                }}
+                blurOnSubmit={false}
               />
-              <TextInput
+              <BottomSheetTextInput
+                ref={cvcRef}
                 placeholder={'CVC'}
                 containerStyle={{ flex: 1 }}
                 keyboardType={'numeric'}
+                value={cvc}
+                onChangeText={(text) => {
+                  const cvcText = text.replace(/[^\dA-Z]/g, '').trim()
+                  setCvc(cvcText)
+                  if (text.length > 3) {
+                    setCvc(text.substring(0, 3))
+                  }
+                }}
               />
             </Block>
           </Block>
@@ -195,12 +269,16 @@ export const SubcriptionPlanScreen: React.FC = () => {
             containerStyle={{
               marginBottom: normalize.v(20),
             }}
-            onPress={handlePresentModalPress}
+            onPress={handleSubmitPayment}
+            disabled={disabledPayButton}
           >
             <Text size={'h3'} fontFamily="bold" color="black">
               {t('pay_for')}
               {' ' +
-                currencyFormat(currentPlan?.unitAmount, currentPlan?.currency)}
+                currencyFormat(
+                  currentPlan?.unitAmount ?? 0,
+                  currentPlan?.currency ?? 'VND',
+                )}
             </Text>
           </ShadowButton>
         </Block>

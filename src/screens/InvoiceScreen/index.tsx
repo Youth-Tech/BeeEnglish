@@ -4,9 +4,35 @@ import { Icon, images } from '@assets'
 import { goBack } from '@navigation'
 import { heightScreen } from '@utils/helpers'
 import { useTheme } from '@themes'
+import { Invoice, PaymentService } from '@services/PaymentService'
+import { useTranslation } from 'react-i18next'
 
 export const InvoiceScreen: React.FC = () => {
+  const { t } = useTranslation()
   const { colors } = useTheme()
+  const [invoiceData, setInvoiceData] = React.useState<Invoice>({
+    paymentIntentId: '0',
+    total: 0,
+    currency: 'vnd',
+    status: 'paid',
+    periodStart: '00/00/0000',
+    periodEnd: '00/00/0000',
+  })
+  const currencyFormat = (moneyAmount: number, unit: string) => {
+    return new Intl.NumberFormat().format(moneyAmount) + ` ${unit}`
+  }
+  const getPaymentIntent = async () => {
+    try {
+      const response = await PaymentService.getPaymentIntent()
+      console.log(response.data.data)
+      setInvoiceData(response.data.data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  React.useEffect(() => {
+    getPaymentIntent()
+  }, [])
   return (
     <Container>
       <Block flex>
@@ -25,7 +51,7 @@ export const InvoiceScreen: React.FC = () => {
           <Block row alignCenter space={'between'} marginTop={10}>
             <Icon state={'Back'} onPress={goBack} />
             <Text size={'h2'} fontFamily={'bold'}>
-              Invoice
+              {t('invoice')}
             </Text>
             <Block width={24} height={24} />
           </Block>
@@ -46,9 +72,7 @@ export const InvoiceScreen: React.FC = () => {
               height={50}
               resizeMode={'contain'}
             />
-            <Text size={'h2'} fontFamily={'bold'} marginTop={15}>
-              Thanh toán thành công
-            </Text>
+            <Text size={'h2'} fontFamily={'bold'} marginTop={15}></Text>
             <Block
               row
               width={'100%'}
@@ -57,7 +81,7 @@ export const InvoiceScreen: React.FC = () => {
               marginTop={20}
             >
               <Text size={'h3'} fontFamily={'semiBold'}>
-                Tên gói:
+                {t('plan_name')}:
               </Text>
               <Text size={'h3'} fontFamily={'semiBold'}>
                 Premium Plan
@@ -71,24 +95,10 @@ export const InvoiceScreen: React.FC = () => {
               marginTop={20}
             >
               <Text size={'h3'} fontFamily={'semiBold'}>
-                Giá tiền:
+                {t('price')}:
               </Text>
               <Text size={'h3'} fontFamily={'semiBold'}>
-                75.000 vnd
-              </Text>
-            </Block>
-            <Block
-              row
-              width={'100%'}
-              space={'between'}
-              paddingHorizontal={30}
-              marginTop={20}
-            >
-              <Text size={'h3'} fontFamily={'semiBold'}>
-                Ngày bắt đầu gói:
-              </Text>
-              <Text size={'h3'} fontFamily={'semiBold'}>
-                1/12/2023
+                {currencyFormat(invoiceData.total, invoiceData.currency)}
               </Text>
             </Block>
             <Block
@@ -99,10 +109,24 @@ export const InvoiceScreen: React.FC = () => {
               marginTop={20}
             >
               <Text size={'h3'} fontFamily={'semiBold'}>
-                Ngày kết thúc gói:
+                {t('period_start_date')}:
               </Text>
               <Text size={'h3'} fontFamily={'semiBold'}>
-                1/12/2024
+                {invoiceData.periodStart}
+              </Text>
+            </Block>
+            <Block
+              row
+              width={'100%'}
+              space={'between'}
+              paddingHorizontal={30}
+              marginTop={20}
+            >
+              <Text size={'h3'} fontFamily={'semiBold'}>
+                {t('period_end_date')}:
+              </Text>
+              <Text size={'h3'} fontFamily={'semiBold'}>
+                {invoiceData.periodEnd}
               </Text>
             </Block>
           </Block>

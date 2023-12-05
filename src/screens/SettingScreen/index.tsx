@@ -1,12 +1,12 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ToastAndroid } from 'react-native'
+import { Pressable } from 'react-native'
 
 import {
-  setAuthState,
-  setUserState,
   defaultAuthState,
   defaultUserState,
+  setAuthState,
+  setUserState,
   updateConfigAction,
 } from '@redux/reducers'
 import { Icon } from '@assets'
@@ -23,6 +23,8 @@ import {
   getUserData,
 } from '@redux/selectors'
 import { goBack, navigate, navigateAndReset } from '@navigation'
+import Toast from 'react-native-toast-message'
+import { AuthService } from '@services/AuthService'
 
 export const SettingScreen = () => {
   const styles = useStyle()
@@ -55,17 +57,37 @@ export const SettingScreen = () => {
       navigate('CHANGE_PASSWORD_SCREEN')
     }
   }
+  const clearUserData = () => {
+    dispatch(setAuthState(defaultAuthState))
+    dispatch(setUserState(defaultUserState))
+    TokenService.clearToken()
+    Toast.show({
+      type: 'success',
+      text1: t('success'),
+      text2: t('logout_successfully'),
+      position: 'bottom',
+    })
+  }
+  const logOutAPI = async () => {
+    try {
+      const response = await AuthService.logOut()
+      clearUserData()
+      console.log(response.data.message)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   const onPressNotification = () => {}
 
   const onPressLogout = () => {
-    dispatch(setAuthState(defaultAuthState))
-    dispatch(setUserState(defaultUserState))
-    TokenService.clearToken()
     if (isSignedInOAuth && userData.provider !== null) {
       oAuthSignOut(userData.provider, () => {
+        clearUserData()
         console.log('signOut success')
       })
+    } else {
+      logOutAPI()
     }
     navigateAndReset([{ name: 'NAVIGATE_SCREEN' }], 0)
 

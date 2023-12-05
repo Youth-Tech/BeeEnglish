@@ -1,7 +1,8 @@
-import { DefaultResponse, Word } from '@services'
+import { DefaultResponse, TokenService, Word } from '@services'
 import APIUtils from '@utils/AxiosInstance'
 import { Provider } from '@configs'
 import { GetAllPostResponse } from '@services/PostService'
+import { getRefreshToken } from '@redux/selectors'
 
 const enum endPoints {
   getUserData = 'user/me',

@@ -34,6 +34,7 @@ import { useAppDispatch, useBackHandler } from '@hooks'
 import { RootStackParamList, goBack } from '@navigation'
 import { setLoadingStatusAction } from '@redux/reducers'
 import { ModalFunction } from '@components/bases/Modal/type'
+import { TaskService } from '@services/TaskService'
 
 export type GrammarScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -83,6 +84,22 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
       data: null,
     },
   )
+  const startCountingTime = async () => {
+    try {
+      const response = await TaskService.startTime()
+      console.log(response.data.message)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const stopCountingTime = async () => {
+    try {
+      const response = await TaskService.stopTime()
+      console.log(response.data.message)
+    } catch (e) {
+      console.log(e)
+    }
+  }
   const checkpointScore =
     result?.reduce((total, current) => {
       if (current.result === 'correct') {
@@ -197,6 +214,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
     if (nextQuestion == -1) {
       console.log('complete quiz')
+      stopCountingTime()
       updateLessonComplete()
       setStep(100)
     } else {
@@ -282,7 +300,10 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   if (questions.length <= 0 && currentQuestion.data === null) {
     return <LoadingScreen />
   }
-
+  React.useEffect(() => {
+    //##Count time for task##
+    startCountingTime()
+  }, [])
   return (
     <Container>
       <Block flex paddingHorizontal={15} paddingTop={10}>

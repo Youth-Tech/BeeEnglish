@@ -1,5 +1,5 @@
 import APIUtils from '@utils/AxiosInstance'
-import { DefaultResponse } from '@services'
+import { DefaultResponse, TokenService } from '@services'
 import { LoginResponse } from '@redux/actions/auth.action'
 
 export interface SignUpResponse extends DefaultResponse {
@@ -122,5 +122,10 @@ export const AuthService = {
 
   changePassword(body: ChangePasswordParams) {
     return APIUtils.post<ChangePasswordRes>('/auth/change-password', body)
+  },
+  logOut() {
+    return APIUtils.post<DefaultResponse>('/auth/logout', {
+      refreshToken: TokenService.getRefreshToken(),
+    })
   },
 } as const
