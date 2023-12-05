@@ -23,6 +23,7 @@ export interface ItemLessonProps {
   chapterStatus: 'lock' | 'unlock'
   status: 'completed' | 'lock' | 'current'
   onUnlockPress?: (item: Partial<ItemLessonProps>) => void
+  onTogglePopOver?: () => void
   onStartExaminationPress?: (item: Partial<ItemLessonProps>) => void
   onStartLessonPress?: (
     item: Partial<ItemLessonProps & { isRestart: boolean }>,
@@ -50,6 +51,7 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = (props) => {
     lessonTitle,
     onUnlockPress,
     chapterStatus,
+    onTogglePopOver,
     lessonDescription,
     onStartLessonPress,
     onStartExaminationPress,
@@ -111,12 +113,13 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = (props) => {
               buttonColor={colors.yellowDark}
               buttonBorderColor={colors.orangePrimary}
               shadowButtonColor={colors.orangePrimary}
-              onPress={() =>
+              onPress={() => {
                 onStartLessonPress?.({
                   ...props,
                   isRestart: false,
                 })
-              }
+                onTogglePopOver?.()
+              }}
             >
               <Text size={'h4'} fontFamily="bold" paddingHorizontal={10}>
                 {t('continue_learn')}
@@ -130,12 +133,13 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = (props) => {
               buttonColor={colors.white}
               buttonBorderColor={colors.orangePrimary}
               shadowButtonColor={colors.orangePrimary}
-              onPress={() =>
+              onPress={() => {
                 onStartLessonPress?.({
                   ...props,
                   isRestart: true,
                 })
-              }
+                onTogglePopOver?.()
+              }}
             >
               <Text size={'h4'} fontFamily="bold" paddingHorizontal={10}>
                 {t('learn_again')}
@@ -151,13 +155,15 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = (props) => {
             buttonBorderSize={0.5}
             buttonColor={colors.yellowDark}
             containerStyle={styles.buttonStart}
-            onPress={() =>
+            onPress={() => {
               type === 'checkpoint' && chapterStatus === 'unlock'
                 ? onStartExaminationPress?.(props)
                 : status === 'lock' || chapterStatus === 'lock'
                 ? onUnlockPress?.(props)
                 : onStartLessonPress?.(props)
-            }
+
+              onTogglePopOver?.()
+            }}
             buttonBorderColor={colors.orangePrimary}
             shadowButtonColor={colors.orangePrimary}
           >
@@ -198,6 +204,10 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
   const { colors } = useTheme()
   const ref = React.useMemo(() => React.createRef<Tooltip>(), [])
 
+  const onTogglePopOver = () => {
+    ref.current?.toggleTooltip()
+  }
+
   return (
     <Pressable
       onPress={() => {
@@ -225,6 +235,7 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
                 nextLessonId={nextLessonId}
                 chapterStatus={chapterStatus}
                 onUnlockPress={onUnlockPress}
+                onTogglePopOver={onTogglePopOver}
                 lessonDescription={lessonDescription}
                 onStartLessonPress={onStartLessonPress}
                 onStartExaminationPress={onStartExaminationPress}

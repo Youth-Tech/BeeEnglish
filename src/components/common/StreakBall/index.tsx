@@ -41,9 +41,9 @@ export const StreakBall = () => {
       bottom={100}
       justifyCenter
       borderWidth={4}
-      exiting={SlideOutRight}
       backgroundColor={'#fff'}
       borderColor={streakCount ?? 0 > 0 ? colors.orangeThick : '#efefef'}
+      exiting={SlideOutRight.delay(500).springify().damping(100)}
       entering={SlideInRight.delay(1000).springify().damping(100)}
     >
       <Pressable onPress={() => navigate('STREAK_SCREEN')}>

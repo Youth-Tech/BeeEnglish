@@ -1,25 +1,26 @@
 import {
   Pressable,
+  StyleSheet,
   SectionList,
+  RefreshControl,
   SectionListData,
   SectionListRenderItem,
-  StyleSheet,
 } from 'react-native'
 import React from 'react'
+import { StackActions } from '@react-navigation/native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import { Icon } from '@assets'
-import { navigate, RootStackParamList } from '@navigation'
+import { useAppSelector } from '@hooks'
 import { LoadingScreen } from '@screens'
 import { normalize, useTheme } from '@themes'
+import { getIsPreTest } from '@redux/selectors'
+import { navigate, RootStackParamList } from '@navigation'
 import { ItemLesson, ItemLessonProps } from './components'
 import { Chapter, KnowledgeService, Lesson, Quiz } from '@services'
 import { Block, BlockAnimated, Container, Text } from '@components'
 import { defaultCheckPointLessonData } from '@screens/LessonMap/mock'
-import { useAppSelector } from '@hooks'
-import { getIsPreTest } from '@redux/selectors'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { StackActions } from '@react-navigation/native'
 
 export type SectionData = {
   lessonComplete: number
@@ -93,6 +94,7 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
 
   const { colors } = useTheme()
   const [data, setData] = React.useState<SectionData[]>([])
+  const [isRefresh, setIsRefresh] = React.useState(false)
 
   React.useEffect(() => {
     if (!isPreTest) {
@@ -128,8 +130,10 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
 
   const callApi = async () => {
     try {
+      setIsRefresh(true)
       const res = await KnowledgeService.getChapterAndLesson()
       setData(parseDataToSectionData(res.data.data.chapters))
+      setIsRefresh(false)
     } catch (error) {
       console.log(error)
     }
@@ -234,7 +238,7 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
     )
   }
 
-  if (data?.length <= 0) {
+  if (data?.length <= 0 || isRefresh) {
     return <LoadingScreen />
   }
 
@@ -243,6 +247,9 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
       <BlockAnimated entering={FadeIn} style={styles.listContainer}>
         <Animated.View entering={FadeIn} exiting={FadeOut}>
           <SectionList
+            refreshControl={
+              <RefreshControl refreshing={isRefresh} onRefresh={callApi} />
+            }
             sections={data}
             removeClippedSubviews
             renderItem={renderMapItem}

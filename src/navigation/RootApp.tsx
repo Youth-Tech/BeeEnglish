@@ -1,30 +1,36 @@
 import React from 'react'
 import Toast from 'react-native-toast-message'
 import { Portal } from 'react-native-portalize'
-import { ActivityIndicator, LogBox } from 'react-native'
+import { ActivityIndicator, Linking, LogBox } from 'react-native'
 import notifee, { EventType } from '@notifee/react-native'
 import { addEventListener } from '@react-native-community/netinfo'
 import * as Types from '@react-native-community/netinfo/src/internal/types'
 
 import {
-  getFCMToken,
   createChannelId,
+  getFCMToken,
+  notificationListener,
   requestUserPermission,
 } from '@utils/notificationUtils'
 import { useTheme } from '@themes'
 import RootStack from './RootStack'
 import { UserService } from '@services'
 import { updateProfile } from '@redux/actions'
-import {Block, StreakBall, Text} from '@components'
+import { Block, StreakBall, Text } from '@components'
 import { useAppDispatch, useAppSelector } from '@hooks'
-import { navigate } from '@navigation/NavigationServices'
-import {getIsLoading, getIsLogin, getIsLoginWithGuest} from '@redux/selectors'
+import {
+  getIsLoading,
+  getIsLogin,
+  getIsLoginWithGuest,
+  getStreakBallState,
+} from '@redux/selectors'
 
 export const RootApp = () => {
   const dispatch = useAppDispatch()
   const { colors } = useTheme()
   const isLoading = useAppSelector(getIsLoading)
   const isLogin = useAppSelector(getIsLogin)
+  const isShowStreakBall = useAppSelector(getStreakBallState)
   const isLoginWithGuest = useAppSelector(getIsLoginWithGuest)
 
   const [netInfo, setNetInfo] = React.useState<Types.NetInfoState>({
@@ -44,7 +50,7 @@ export const RootApp = () => {
     }
   }
 
-  const handleRequestPostNotification = async () => {
+  const handleRequestPushNotification = async () => {
     const isGranted = await requestUserPermission()
     if (isGranted) {
       let fcmToken = await getFCMToken()
@@ -61,29 +67,34 @@ export const RootApp = () => {
   }
 
   React.useEffect(() => {
+    //sub notification listener
+    const unSubNotification = notificationListener()
+    const unSubNetInfo = addEventListener(setNetInfo)
+
     //sub - unSubscribeNetInfo
-    return addEventListener(setNetInfo)
+    return () => {
+      unSubNetInfo()
+      unSubNotification()
+    }
   }, [])
 
   React.useEffect(() => {
-    handleRequestPostNotification()
+    handleRequestPushNotification()
     return notifee.onForegroundEvent(({ type, detail }) => {
-      console.log('User press notifee notification in foreground!')
+      console.log('Notifee notification in foreground!', detail.notification)
 
-      switch (type) {
-        case EventType.DISMISSED:
-          console.log('User dismissed notification', detail.notification)
-          break
-        case EventType.PRESS:
-          console.log('User pressed notification', detail.notification)
-          navigate('DETAIL_WORD_SCREEN', {
-            wordId: detail.notification?.data?.id,
-          })
-          break
+      if (type === EventType.PRESS) {
+        detail?.notification?.data &&
+          Linking.openURL(
+            (detail.notification?.data?.action as string) ?? 'word-review/123',
+          )
+        console.log('User pressed notification', detail.notification)
       }
     })
   }, [])
+
   LogBox.ignoreLogs(['new NativeEventEmitter'])
+
   return (
     <>
       {/*<StatusBar />*/}
@@ -124,7 +135,7 @@ export const RootApp = () => {
       <RootStack />
       <Portal>
         <Toast position={'bottom'} bottomOffset={20} />
-        {!isLoginWithGuest && <StreakBall />}
+        {isShowStreakBall && <StreakBall />}
       </Portal>
     </>
   )

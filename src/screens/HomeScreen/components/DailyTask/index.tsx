@@ -54,24 +54,24 @@ export const DailyTask = (props: Props) => {
     <Pressable onPress={onPress}>
       <Block
         height={90}
-        borderColor={colors.red}
-        borderWidth={1}
         radius={10}
+        borderWidth={1}
         backgroundColor="white"
+        paddingHorizontal={10}
+        borderColor={colors.red}
       >
-        <Block flex row justifyCenter alignCenter paddingHorizontal={10}>
+        <Block flex row alignCenter space={'between'}>
           <Icon state={renderCurrentTask().icon as TIcon} />
-          <Block justifyCenter alignCenter>
-            <Text
-              size={'h3'}
-              fontFamily="bold"
-              color={colors.black}
-              numberOfLines={1}
-              marginLeft={15}
-            >
-              {renderCurrentTask().title}
-            </Text>
-          </Block>
+          <Text
+            flex
+            size={'h3'}
+            marginLeft={15}
+            fontFamily="bold"
+            numberOfLines={2}
+            color={colors.black}
+          >
+            {renderCurrentTask().title}
+          </Text>
         </Block>
         <Block
           width={24}
