@@ -42,6 +42,7 @@ export const SubcriptionPlanScreen: React.FC = () => {
   // callbacks
   const handlePresentModalPress = React.useCallback(() => {
     bottomSheetModalRef.current?.present()
+    bottomSheetModalRef.current?.snapToIndex(1)
   }, [])
   const handleSheetChanges = React.useCallback((index: number) => {
     console.log('handleSheetChanges', index)
@@ -64,6 +65,7 @@ export const SubcriptionPlanScreen: React.FC = () => {
         return ''
     }
   }
+
   const callAPIGetPrices = async () => {
     try {
       const response = await PaymentService.getPrices()
@@ -73,6 +75,7 @@ export const SubcriptionPlanScreen: React.FC = () => {
       console.log(e)
     }
   }
+
   const subcribePremium = async (subcribeInfo: SubscribePremiumReq) => {
     try {
       const response = await PaymentService.subcribePremium(subcribeInfo)
@@ -82,6 +85,7 @@ export const SubcriptionPlanScreen: React.FC = () => {
       console.log(e)
     }
   }
+
   const handleSubmitPayment = () => {
     console.log('hey')
     const expiredMonth = Number(expiryDate.split(' / ')[0])
@@ -103,6 +107,7 @@ export const SubcriptionPlanScreen: React.FC = () => {
   React.useEffect(() => {
     callAPIGetPrices()
   }, [])
+
   React.useEffect(() => {
     if (
       cardNumber.length === 0 ||
@@ -114,6 +119,7 @@ export const SubcriptionPlanScreen: React.FC = () => {
       setDisabledPayButton(false)
     }
   }, [cardNumber, expiryDate, cvc])
+
   return (
     <BottomSheetModalProvider>
       <Block flex>
@@ -173,9 +179,10 @@ export const SubcriptionPlanScreen: React.FC = () => {
         </Block>
       </Block>
       <BottomSheetModal
-        ref={bottomSheetModalRef}
         index={1}
+        enablePanDownToClose
         snapPoints={snapPoints}
+        ref={bottomSheetModalRef}
         onChange={handleSheetChanges}
         backdropComponent={BottomSheetBackdrop}
       >

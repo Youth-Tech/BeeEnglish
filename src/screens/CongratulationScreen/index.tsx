@@ -6,7 +6,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { animation } from '@assets'
 import { updateProfile } from '@redux/actions'
 import { makeStyles, useTheme } from '@themes'
-import { useAppDispatch, useBackHandler } from '@hooks'
+import { useAppDispatch } from '@hooks'
 import { Block, Container, ShadowButton, Text } from '@components'
 import { navigateAndReset, pop, RootStackParamList } from '@navigation'
 
@@ -24,14 +24,7 @@ export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
   const styles = useStyle()
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
-
-  useBackHandler({
-    enabled: true,
-    callback() {
-      //TODO: handle backPress
-    },
-  })
-
+ 
   const onContinuePress = () => {
     if (status === 'success') {
       dispatch(updateProfile())
@@ -44,7 +37,7 @@ export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
         0,
       )
     } else {
-      pop(2)
+      pop(1)
     }
   }
 

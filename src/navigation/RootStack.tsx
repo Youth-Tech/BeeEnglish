@@ -1,45 +1,50 @@
 import React from 'react'
+import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { LinkingOptions } from '@react-navigation/native/lib/typescript/src/types'
 
 import {
-  AboutTheTestScreen,
-  ChangePasswordScreen,
-  ChooseVideoScreen,
-  CongratulationScreen,
-  DetailLessonScreen,
   DetailPost,
-  DetailWordScreen,
-  DictionaryScreen,
-  EmailRegistrationScreen,
-  ExamTestScreen,
-  GrammarScreen,
-  InvoiceScreen,
-  LearnedWordScreen,
-  LoginScreen,
-  MorePostScreen,
-  NavigateScreen,
-  PasswordResetScreen,
-  PreTestScreen,
-  RankingScreen,
-  RegisterScreen,
-  SavedWordScreen,
-  SendPasswordScreen,
-  SettingScreen,
-  SplashScreen,
-  StreakScreen,
-  SubcriptionPlanScreen,
   TestScreen,
-  VerificationCodeScreen,
   VideoScreen,
   VocabScreen,
+  LoginScreen,
+  StreakScreen,
+  SplashScreen,
+  GrammarScreen,
+  LoadingScreen,
+  PreTestScreen,
+  SettingScreen,
+  InvoiceScreen,
+  RankingScreen,
+  ExamTestScreen,
+  RegisterScreen,
+  MorePostScreen,
+  NavigateScreen,
+  SavedWordScreen,
+  DictionaryScreen,
+  DetailWordScreen,
+  LearnedWordScreen,
+  ChooseVideoScreen,
+  AboutTheTestScreen,
+  SendPasswordScreen,
+  DetailLessonScreen,
+  PasswordResetScreen,
+  ChangePasswordScreen,
+  CongratulationScreen,
+  SubcriptionPlanScreen,
+  VerificationCodeScreen,
+  EmailRegistrationScreen,
 } from '@screens'
-import { useAppSelector } from '@hooks'
+import {
+  updateStateStreakBall,
+  streakBallBlackListRoute,
+} from '@redux/reducers'
 import { RootStackParamList } from './routes'
 import { RootBottomTab } from './RootBottomTab'
 import { navigationRef } from './NavigationServices'
-import { NavigationContainer } from '@react-navigation/native'
+import { useAppDispatch, useAppSelector } from '@hooks'
 import { getIsLogin, getIsLoginWithGuest } from '@redux/selectors'
-import { LinkingOptions } from '@react-navigation/native/lib/typescript/src/types'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -52,23 +57,42 @@ const screenOptions = {
 const linking: LinkingOptions<RootStackParamList> | undefined = {
   prefixes: ['beeenglish://app'],
   config: {
+    initialRouteName: 'BOTTOM_TAB',
     screens: {
-      SAVED_WORD_SCREEN: {
-        path: 'word-review/:id',
-        parse: {
-          id: (id) => id,
-        },
+      DETAIL_WORD_SCREEN: {
+        path: 'word/:wordId',
+      },
+      STREAK_SCREEN: {
+        path: 'task/get-daily-task',
       },
     },
   },
 }
 
 const RootStack = () => {
-  const isSignedWithGuestRole = useAppSelector(getIsLoginWithGuest)
+  const dispatch = useAppDispatch()
   const isSignedIn = useAppSelector(getIsLogin)
+  const isSignedWithGuestRole = useAppSelector(getIsLoginWithGuest)
+
+  const handleStateChange = () => {
+    // console.log(navigationRef?.current?.getCurrentRoute()?.name)
+    dispatch(
+      updateStateStreakBall(
+        !streakBallBlackListRoute.includes(
+          (navigationRef?.current?.getCurrentRoute()
+            ?.name as keyof RootStackParamList) ?? 'BOTTOM_TAB',
+        ),
+      ),
+    )
+  }
 
   return (
-    <NavigationContainer ref={navigationRef} linking={linking}>
+    <NavigationContainer
+      linking={linking}
+      ref={navigationRef}
+      fallback={<LoadingScreen />}
+      onStateChange={handleStateChange}
+    >
       <Stack.Navigator
         screenOptions={screenOptions}
         initialRouteName={

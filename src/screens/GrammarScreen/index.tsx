@@ -29,12 +29,12 @@ import {
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { QuestionType } from './constants'
+import { TaskService } from '@services/TaskService'
+import {useAppDispatch, useBackHandler} from '@hooks'
 import { LoadingScreen } from '@screens/LoadingScreen'
-import { useAppDispatch, useBackHandler } from '@hooks'
 import { RootStackParamList, goBack } from '@navigation'
 import { setLoadingStatusAction } from '@redux/reducers'
 import { ModalFunction } from '@components/bases/Modal/type'
-import { TaskService } from '@services/TaskService'
 
 export type GrammarScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -258,7 +258,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
     try {
       await UserService.updateProgressLearning(body)
-      navigation.navigate('CONGRATULATION_SCREEN', {
+      navigation.replace('CONGRATULATION_SCREEN', {
         status:
           finalPoint >= (checkpointLesson !== undefined ? 80 : 60)
             ? 'success'

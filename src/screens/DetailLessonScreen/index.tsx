@@ -1,15 +1,15 @@
 import { useTranslation } from 'react-i18next'
 import FastImage from 'react-native-fast-image'
+import { ImageBackground, Pressable } from 'react-native'
 
 import { useTheme } from '@themes'
 import { Icon, images } from '@assets'
 import React, { useState } from 'react'
+import {useAppDispatch, useAppSelector} from '@hooks'
+import { ReviewService, UserService } from '@services'
 import { goBack, RootStackParamList } from '@navigation'
-import { ImageBackground, Pressable } from 'react-native'
 import { Block, Container, Image, Text } from '@components'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { ReviewService, UserService } from '@services'
-import { useAppDispatch, useAppSelector } from '@hooks'
 import { updateBookmarkWords, updateReviewWords } from '@redux/reducers'
 
 export type DetailLessonScreenProps = NativeStackScreenProps<
