@@ -1,17 +1,15 @@
 import React from 'react'
-import { Block, Container, Image, Text } from '@components'
+import { Block, Container, Image, ShadowButton, Text } from '@components'
 import { Icon, images } from '@assets'
 import { goBack, navigateAndReset } from '@navigation'
 import { heightScreen } from '@utils/helpers'
-import { makeStyles, useTheme } from '@themes'
+import { useTheme } from '@themes'
 import { Invoice, PaymentService } from '@services/PaymentService'
 import { useTranslation } from 'react-i18next'
-import { TouchableOpacity } from 'react-native'
 
 export const InvoiceScreen: React.FC = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
-  const styles = useStyles()
   const [invoiceData, setInvoiceData] = React.useState<Invoice>({
     paymentIntentId: '0',
     total: 0,
@@ -82,7 +80,7 @@ export const InvoiceScreen: React.FC = () => {
               paddingHorizontal={30}
               marginTop={10}
             >
-              <Text size={'h3'} fontFamily={'semiBold'}>
+              <Text size={'h3'} fontFamily={'regular'}>
                 {t('plan_name')}:
               </Text>
               <Text size={'h3'} fontFamily={'semiBold'}>
@@ -96,7 +94,7 @@ export const InvoiceScreen: React.FC = () => {
               paddingHorizontal={30}
               marginTop={20}
             >
-              <Text size={'h3'} fontFamily={'semiBold'}>
+              <Text size={'h3'} fontFamily={'regular'}>
                 {t('price')}:
               </Text>
               <Text size={'h3'} fontFamily={'semiBold'}>
@@ -110,7 +108,7 @@ export const InvoiceScreen: React.FC = () => {
               paddingHorizontal={30}
               marginTop={20}
             >
-              <Text size={'h3'} fontFamily={'semiBold'}>
+              <Text size={'h3'} fontFamily={'regular'}>
                 {t('period_start_date')}:
               </Text>
               <Text size={'h3'} fontFamily={'semiBold'}>
@@ -124,34 +122,42 @@ export const InvoiceScreen: React.FC = () => {
               paddingHorizontal={30}
               marginTop={20}
             >
-              <Text size={'h3'} fontFamily={'semiBold'}>
+              <Text size={'h3'} fontFamily={'regular'}>
                 {t('period_end_date')}:
               </Text>
               <Text size={'h3'} fontFamily={'semiBold'}>
                 {invoiceData.periodEnd}
               </Text>
             </Block>
-            <Block paddingHorizontal={20} marginTop={20} alignCenter>
-              <Text size={'h3'} fontFamily={'semiBold'} center>
-                Lưu ý: Bạn sẽ nhận được tất cả các quyền lợi từ gói Premium
-              </Text>
-              <TouchableOpacity
-                style={[styles.button, { backgroundColor: colors.orangeLight }]}
+            <Block flex />
+            <Block
+              paddingHorizontal={20}
+              marginTop={20}
+              alignCenter
+              marginBottom={20}
+            >
+              <ShadowButton
                 onPress={() => {
                   navigateAndReset(
                     [
                       {
-                        name: 'HOME_SCREEN',
+                        name: 'BOTTOM_TAB',
                       },
                     ],
                     0,
                   )
                 }}
+                buttonHeight={35}
+                buttonWidth={194}
+                buttonRadius={10}
+                shadowButtonColor={colors.orangeLighter}
+                buttonColor={colors.orangePrimary}
+                shadowHeight={7}
               >
-                <Text size={'h2'} fontFamily={'semiBold'} color={colors.black}>
+                <Text color="white" fontFamily="bold" size={'h3'}>
                   {t('back_to_home')}
                 </Text>
-              </TouchableOpacity>
+              </ShadowButton>
             </Block>
           </Block>
         </Block>
@@ -159,19 +165,3 @@ export const InvoiceScreen: React.FC = () => {
     </Container>
   )
 }
-const useStyles = makeStyles()(({ colors, normalize }) => ({
-  image: {
-    width: normalize.h(89),
-    height: normalize.h(98),
-  },
-  button: {
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: colors.greyLight,
-    width: normalize.h(200),
-    height: normalize.h(41.8),
-    borderRadius: normalize.m(10),
-    marginTop: normalize.v(40),
-  },
-}))

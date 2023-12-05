@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
+import { Pressable, TouchableOpacity } from 'react-native'
 
 import {
   defaultAuthState,
@@ -14,7 +14,7 @@ import { TokenService } from '@services'
 import { LangType } from '@utils/helpers'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { initRun, oAuthSignOut } from '@utils/authUtils'
-import { makeStyles, normalize, useTheme } from '@themes'
+import { makeStyles, useTheme } from '@themes'
 import { Block, Container, GuestModal, Modal, Text } from '@components'
 import { ModalFunction } from '@components/bases/Modal/type'
 import {
@@ -45,11 +45,11 @@ export const SettingScreen = () => {
     if (isLoginWithGuest) {
       guestModalRef.current?.openModal()
     } else {
-      navigate('SUBSCRIPTION_SCREEN')
+      if (role !== 'premium') {
+        navigate('SUBSCRIPTION_SCREEN')
+      }
     }
   }
-
-  const onPressProfile = () => {}
 
   const onPressPassword = () => {
     if (isLoginWithGuest) {
@@ -79,8 +79,6 @@ export const SettingScreen = () => {
     }
   }
 
-  const onPressNotification = () => {}
-
   const onPressLogout = () => {
     if (isSignedInOAuth && userData.provider !== null) {
       oAuthSignOut(userData.provider, () => {
@@ -96,10 +94,6 @@ export const SettingScreen = () => {
     initRun()
   }
 
-  const onPressRate = () => {}
-
-  const onPressHelp = () => {}
-
   const onPressLanguage = () => {
     modalLanguageRef.current?.openModal()
   }
@@ -108,7 +102,7 @@ export const SettingScreen = () => {
     dispatch(updateConfigAction({ lang }))
     modalLanguageRef.current?.dismissModal()
   }
-
+  const handleUnsubcribe = () => {}
   return (
     <Container hasScroll>
       <Block flex>
@@ -129,38 +123,62 @@ export const SettingScreen = () => {
           <Block width={24} height={24} />
         </Block>
         <Block marginHorizontal={20}>
-          <Block
-            backgroundColor={colors.orangePrimary}
-            radius={10}
-            marginTop={15}
+          <Pressable
+            onPress={onPressPremiumUser}
+            style={styles.premiumUserSection}
+            android_ripple={{ color: colors.orangeLighter }}
           >
-            <Pressable
-              onPress={onPressPremiumUser}
-              style={styles.premiumUserSection}
-              android_ripple={{ color: colors.orangeLighter }}
-            >
-              <Block row alignCenter gap={10}>
-                <Text color={colors.white} fontFamily="bold" size={'h2'}>
-                  {role === 'premium'
-                    ? t('you_are_premium')
-                    : t('premium_membership')}
-                </Text>
-                <Block>
-                  <Icon state="Crown" fill={colors.white} />
-                </Block>
-              </Block>
-              <Text
-                color={colors.white}
-                fontFamily="semiBold"
-                size={'h5'}
-                lineHeight={20}
-              >
+            <Block row alignCenter gap={10}>
+              <Text color={colors.white} fontFamily="bold" size={'h2'}>
                 {role === 'premium'
-                  ? t('you_receive_all_benefits')
-                  : t('upgrade_for_more_features')}
+                  ? t('you_are_premium')
+                  : t('premium_membership')}
               </Text>
-            </Pressable>
-          </Block>
+              <Block>
+                <Icon state="Crown" fill={colors.white} />
+              </Block>
+            </Block>
+            <Text
+              color={colors.white}
+              fontFamily="semiBold"
+              size={'h5'}
+              lineHeight={20}
+            >
+              {role === 'premium'
+                ? t('you_receive_all_benefits')
+                : t('upgrade_for_more_features')}
+            </Text>
+            {role === 'premium' && (
+              <Block alignSelf={'flex-end'} row gap={5} marginTop={10}>
+                <TouchableOpacity
+                  style={styles.unsubButton}
+                  onPress={() => {
+                    navigate('INVOICE_SCREEN')
+                  }}
+                >
+                  <Text
+                    size={'h5'}
+                    fontFamily={'semiBold'}
+                    color={colors.white}
+                  >
+                    Invoice
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.unsubButton}
+                  onPress={handleUnsubcribe}
+                >
+                  <Text
+                    size={'h5'}
+                    fontFamily={'semiBold'}
+                    color={colors.white}
+                  >
+                    Unsubcribe
+                  </Text>
+                </TouchableOpacity>
+              </Block>
+            )}
+          </Pressable>
           <Text fontFamily="bold" size={'h2'} marginTop={32}>
             {t('account')}
           </Text>
@@ -286,15 +304,25 @@ export const SettingScreen = () => {
   )
 }
 
-const useStyle = makeStyles()(({}) => ({
+const useStyle = makeStyles()(({ colors, normalize }) => ({
   premiumUserSection: {
-    paddingVertical: normalize.v(18),
+    paddingVertical: normalize.v(15),
     paddingHorizontal: normalize.h(20),
+    backgroundColor: colors.orangePrimary,
+    borderRadius: 15,
   },
   options: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: normalize.v(24),
     justifyContent: 'space-between',
+  },
+  unsubButton: {
+    borderWidth: 1,
+    borderRadius: 5,
+    alignSelf: 'baseline',
+    borderColor: colors.white,
+    paddingHorizontal: normalize.h(5),
+    paddingVertical: normalize.v(3),
   },
 }))
