@@ -2,37 +2,36 @@ import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import {
-  TestScreen,
+  AboutTheTestScreen,
+  ChangePasswordScreen,
+  ChooseVideoScreen,
+  CongratulationScreen,
+  DetailLessonScreen,
   DetailPost,
-  VideoScreen,
-  VocabScreen,
-  LoginScreen,
-  SplashScreen,
-  StreakScreen,
-  GrammarScreen,
-  PreTestScreen,
-  RankingScreen,
-  SettingScreen,
-  NavigateScreen,
-  ExamTestScreen,
-  RegisterScreen,
-  MorePostScreen,
-  SavedWordScreen,
   DetailWordScreen,
   DictionaryScreen,
-  LearnedWordScreen,
-  ChooseVideoScreen,
-  SendPasswordScreen,
-  AboutTheTestScreen,
-  DetailLessonScreen,
-  PasswordResetScreen,
-  ChangePasswordScreen,
-  CongratulationScreen,
-  VerificationCodeScreen,
   EmailRegistrationScreen,
-  SubcriptionPlanScreen,
-  PaymentScreen,
+  ExamTestScreen,
+  GrammarScreen,
   InvoiceScreen,
+  LearnedWordScreen,
+  LoginScreen,
+  MorePostScreen,
+  NavigateScreen,
+  PasswordResetScreen,
+  PreTestScreen,
+  RankingScreen,
+  RegisterScreen,
+  SavedWordScreen,
+  SendPasswordScreen,
+  SettingScreen,
+  SplashScreen,
+  StreakScreen,
+  SubcriptionPlanScreen,
+  TestScreen,
+  VerificationCodeScreen,
+  VideoScreen,
+  VocabScreen,
 } from '@screens'
 import { useAppSelector } from '@hooks'
 import { RootStackParamList } from './routes'
@@ -145,7 +144,6 @@ const RootStack = () => {
             name="SUBSCRIPTION_SCREEN"
             component={SubcriptionPlanScreen}
           />
-          <Stack.Screen name="PAYMENT_SCREEN" component={PaymentScreen} />
           <Stack.Screen name="INVOICE_SCREEN" component={InvoiceScreen} />
         </Stack.Group>
       </Stack.Navigator>
