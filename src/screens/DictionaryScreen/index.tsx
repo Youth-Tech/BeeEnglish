@@ -5,6 +5,7 @@ import {
   Block,
   Container,
   DismissKeyBoardBlock,
+  GuestModal,
   Image,
   Text,
   TextInput,
@@ -27,12 +28,21 @@ export const DictionaryScreen = () => {
   const dispatch = useAppDispatch()
   const modalRef = React.useRef<ModalFunction>(null)
   const [search, setSearch] = React.useState('')
+  const isLoginWithGuest = useAppSelector(
+    (state) => state.root.auth.isLoginWithGuest,
+  )
   const [searchList, setSearchList] = React.useState<Word[]>([])
   const history = useAppSelector((state) => state.root.historyReducer.history)
+  const guestModalRef = React.useRef<ModalFunction>(null)
   const renderDictionaryItem = ({ index, item }: ListRenderItemInfo<Word>) => {
     return (
       <View key={`item-${index}`}>
-        <DictionaryItem data={item} />
+        <DictionaryItem
+          data={item}
+          onPress={() => {
+            navigate('DETAIL_WORD_SCREEN', { wordId: item._id })
+          }}
+        />
       </View>
     )
   }
@@ -172,14 +182,22 @@ export const DictionaryScreen = () => {
                   name={t('vocabulary_learned')}
                   image={images.BeeReading}
                   onPress={() => {
-                    navigate('LEARNED_WORD_SCREEN')
+                    if (isLoginWithGuest) {
+                      guestModalRef.current?.openModal()
+                    } else {
+                      navigate('LEARNED_WORD_SCREEN')
+                    }
                   }}
                 />
                 <VocabularyItem
                   name={t('saved_vocabulary')}
                   image={images.BeePencil}
                   onPress={() => {
-                    navigate('SAVED_WORD_SCREEN')
+                    if (isLoginWithGuest) {
+                      guestModalRef.current?.openModal()
+                    } else {
+                      navigate('SAVED_WORD_SCREEN')
+                    }
                   }}
                 />
               </Block>
@@ -193,6 +211,14 @@ export const DictionaryScreen = () => {
         onFinishRecord={() => {
           console.log('finished')
           modalRef.current?.dismissModal()
+        }}
+      />
+      <GuestModal
+        ref={guestModalRef}
+        position={'center'}
+        onButtonPress={() => {
+          navigate('REGISTER_SCREEN', { isGuest: true })
+          guestModalRef?.current?.dismissModal()
         }}
       />
     </Container>

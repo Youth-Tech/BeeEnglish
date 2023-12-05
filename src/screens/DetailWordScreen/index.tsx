@@ -1,40 +1,61 @@
 import React from 'react'
+import Content from './components/Content'
+import { heightScreen } from '@utils/helpers'
 import { useTranslation } from 'react-i18next'
-import { Pressable, TouchableOpacity } from 'react-native'
-
+import { KnowledgeService, Word } from '@services'
+import { goBack, RootStackParamList } from '@navigation'
+import {
+  Pressable,
+  ScrollView,
+  ToastAndroid,
+  TouchableOpacity,
+} from 'react-native'
+import { Block, Image, Text } from '@components'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import {
   CopyIcon,
   Icon,
   images,
   RightArrowIcon,
-  StarIcon,
+  SoundProgressFcRef,
   VolumeIcon,
 } from '@assets'
-import { goBack, RootStackParamList } from '@navigation'
-import Content from './components/Content'
-import { heightScreen } from '@utils/helpers'
-import { Block, Container, Image, Text } from '@components'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { KnowledgeService, Word } from '@services'
-import { data } from '@screens/LearnedWordScreen/const'
-import { colors, useTheme } from '@themes'
-
+import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
+import Sound from 'react-native-sound'
+import Clipboard from '@react-native-clipboard/clipboard'
 type Props = NativeStackScreenProps<RootStackParamList, 'DETAIL_WORD_SCREEN'>
 export const DetailWordScreen = ({ route }: Props) => {
   const { wordId } = route.params
   const { t } = useTranslation()
-  const { colors } = useTheme()
   const [wordData, setWordData] = React.useState<Word>()
+  const soundUrl = wordData?.attachments.find((o) => o.type === 'audio')
+  console.log(soundUrl?.src)
+  const sound = new Sound(
+    soundUrl?.src ??
+      'https://api.dictionaryapi.dev/media/pronunciations/en/default-uk.mp3',
+    '',
+    (error) => {
+      if (error) console.log('Fail to load sound')
+    },
+  )
+  const soundProgressRef = React.useRef<SoundProgressFcRef>(null)
   const onCopyPress = () => {
     console.log('onCopyPress')
-  }
-
-  const onBookmarkPress = () => {
-    console.log('onBookmarkPress')
+    Clipboard.setString(wordData?.english ?? '')
+    ToastAndroid.show('Copied the word into your clipboard', ToastAndroid.SHORT)
   }
 
   const onPronunciationPress = () => {
     console.log('onPronunciationPress')
+    soundProgressRef.current?.start()
+    sound.play((success) => {
+      if (success) {
+        console.log('successfully finished playing')
+        soundProgressRef.current?.pause()
+      } else {
+        console.log('playback failed due to audio decoding errors')
+      }
+    })
   }
   const callGetWordByIdAPI = async () => {
     try {
@@ -48,7 +69,7 @@ export const DetailWordScreen = ({ route }: Props) => {
     callGetWordByIdAPI()
   }, [])
   return (
-    <Container hasScroll>
+    <Block flex>
       <Image
         width={'100%'}
         resizeMode="contain"
@@ -60,85 +81,93 @@ export const DetailWordScreen = ({ route }: Props) => {
           bottom: 0,
         }}
       />
-
-      <Block paddingVertical={20}>
-        <Block row alignCenter space="between" marginHorizontal={24}>
-          <Icon state="Back" onPress={goBack} />
-          <Text color="black" size={'h3'} fontFamily="bold" center>
-            {t('dictionary')}
-          </Text>
-          <Block width={24} />
-        </Block>
-
-        <Block
-          shadow
-          margin={20}
-          radius={15}
-          elevation={3}
-          backgroundColor="white"
-        >
-          <Block column alignCenter justifyCenter>
-            <Text
-              size={'h2'}
-              color="black"
-              marginTop={15}
-              lineHeight={18}
-              fontFamily="bold"
-            >
-              {wordData?.english}
+      <ScrollView>
+        <Block>
+          <Block
+            row
+            alignCenter
+            space="between"
+            marginHorizontal={24}
+            marginTop={20 + getStatusBarHeight()}
+          >
+            <Icon state="Back" onPress={goBack} />
+            <Text color="black" size={'h3'} fontFamily="bold" center>
+              {t('dictionary')}
             </Text>
-            <Text
-              size={'h3'}
-              marginTop={15}
-              lineHeight={18}
-              fontFamily="regular"
-            >
-              /{wordData?.pronunciation}/
-            </Text>
+            <Block width={24} />
           </Block>
 
-          <Block marginTop={15} row justifyCenter gap={20}>
-            <Pressable onPress={onPronunciationPress}>
-              <Block
-                shadow
-                width={50}
-                height={50}
-                alignCenter
-                radius={10}
-                justifyCenter
-                backgroundColor="white"
+          <Block
+            shadow
+            margin={20}
+            radius={15}
+            elevation={3}
+            backgroundColor="white"
+            style={{ minHeight: heightScreen - 200 }}
+          >
+            <Block column alignCenter justifyCenter>
+              <Text
+                size={'h2'}
+                color="black"
+                marginTop={15}
+                lineHeight={18}
+                fontFamily="bold"
               >
-                <VolumeIcon />
-              </Block>
-            </Pressable>
-
-            <Pressable onPress={onCopyPress}>
-              <Block
-                shadow
-                width={50}
-                height={50}
-                alignCenter
-                radius={10}
-                justifyCenter
-                backgroundColor="white"
+                {wordData?.english}
+              </Text>
+              <Text
+                size={'h3'}
+                marginTop={15}
+                lineHeight={18}
+                fontFamily="regular"
               >
-                <CopyIcon />
-              </Block>
-            </Pressable>
-          </Block>
+                /{wordData?.pronunciation}/
+              </Text>
+            </Block>
 
-          <Content data={wordData?.senses ?? []} />
+            <Block marginTop={15} row justifyCenter gap={20}>
+              <Pressable onPress={onPronunciationPress}>
+                <Block
+                  shadow
+                  width={50}
+                  height={50}
+                  alignCenter
+                  radius={10}
+                  justifyCenter
+                  backgroundColor="white"
+                >
+                  <VolumeIcon />
+                </Block>
+              </Pressable>
 
-          <Block row alignCenter justifyCenter marginBottom={70}>
-            <Text color="black" size={12} fontFamily="bold" margin={5}>
-              {t('video')}
-            </Text>
-            <TouchableOpacity>
-              <RightArrowIcon />
-            </TouchableOpacity>
+              <Pressable onPress={onCopyPress}>
+                <Block
+                  shadow
+                  width={50}
+                  height={50}
+                  alignCenter
+                  radius={10}
+                  justifyCenter
+                  backgroundColor="white"
+                >
+                  <CopyIcon />
+                </Block>
+              </Pressable>
+            </Block>
+
+            <Content data={wordData?.senses ?? []} />
+
+            <Block row alignCenter justifyCenter marginBottom={70}>
+              <Text color="black" size={12} fontFamily="bold" margin={5}>
+                {t('video')}
+              </Text>
+              <TouchableOpacity>
+                <RightArrowIcon />
+              </TouchableOpacity>
+            </Block>
           </Block>
         </Block>
-      </Block>
-    </Container>
+      </ScrollView>
+    </Block>
   )
 }

@@ -30,7 +30,6 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
     attachments,
     pronunciation,
     isBookmarked,
-    onPressSoundProgress,
     onPressBookmark,
     onPressMoreExample,
   } = props

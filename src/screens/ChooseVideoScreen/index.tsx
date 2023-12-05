@@ -1,16 +1,17 @@
 import React from 'react'
 import { normalize } from '@themes'
-import { useAppDispatch } from '@hooks'
+import { useAppDispatch, useAppSelector } from '@hooks'
 import { ScrollView } from 'react-native'
 import { updateVideos } from '@redux/reducers'
 import { useTranslation } from 'react-i18next'
-import { RootStackParamList } from '@navigation'
+import { navigate, RootStackParamList } from '@navigation'
 import { PostServices } from '@services/PostService'
-import { Block, Container, Text } from '@components'
+import { Block, Container, GuestModal, Text } from '@components'
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
 import VideoItem from '@screens/ChooseVideoScreen/components/VideoItem'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import VideoComponent from '@screens/ChooseVideoScreen/components/VideoComponent'
+import { ModalFunction } from '@components/bases/Modal/type'
 
 type ChooseVideoScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -23,13 +24,21 @@ export const ChooseVideoScreen: React.FC<ChooseVideoScreenProps> = (props) => {
   const [visible, setVisible] = React.useState(false)
   const [videoData, setVideoData] = React.useState<PostResponse[]>([])
   const [video, setVideo] = React.useState<PostResponse>()
+  const isLoginWithGuest = useAppSelector(
+    (state) => state.root.auth.isLoginWithGuest,
+  )
+  const guestModalRef = React.useRef<ModalFunction>(null)
   const handleCloseVideo = () => {
     setVisible(false)
   }
   const handleClickItem = (index: number) => {
-    setVisible(false)
-    setVideo(videoData[index])
-    setVisible(true)
+    if (isLoginWithGuest) {
+      guestModalRef.current?.openModal()
+    } else {
+      setVisible(false)
+      setVideo(videoData[index])
+      setVisible(true)
+    }
   }
   const renderVideoItem = ({
     index,
@@ -88,6 +97,14 @@ export const ChooseVideoScreen: React.FC<ChooseVideoScreenProps> = (props) => {
           />
         )}
       </Block>
+      <GuestModal
+        ref={guestModalRef}
+        position={'center'}
+        onButtonPress={() => {
+          navigate('REGISTER_SCREEN', { isGuest: true })
+          guestModalRef?.current?.dismissModal()
+        }}
+      />
     </Container>
   )
 }

@@ -194,8 +194,25 @@
     "post": "Bài viết",
     "reply": "Trả lời",
     "more_comment": "xem thêm",
+    "join_premium_plan": "Tham gia gói premium",
+    "pay_now": "Mua ngay",
+    "pay_for": "Mua với",
+    "month_plan": "Gói tháng",
+    "year_plan": "Gói năm",
+    "life_time_plan": "Gói trọn đời",
     "score": "điểm",
     "leaderboard": "Xếp hạng",
-    "remake_sentence": "Viết lại câu cho phù hợp"
+    "remake_sentence": "Viết lại câu cho phù hợp",
+    "logout_successfully": "Đăng xuất thành công",
+    "success": "Thành công!",
+    "checkout": "Thủ tục thanh toán",
+    "pay_with_credit_card": "Thanh toán bằng thẻ tín dụng",
+    "card_information": "Thông tin thẻ",
+    "invoice": "Hóa đơn",
+    "payment_successful": "Thanh toán thành công",
+    "plan_name": "Tên gói",
+    "price": "Giá gói",
+    "period_start_date": "Ngày bắt đầu gói",
+    "period_end_date": "Ngày kết thúc gói"
   }
 }

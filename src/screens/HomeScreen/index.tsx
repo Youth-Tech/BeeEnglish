@@ -22,7 +22,15 @@ import { getDaySession } from '@utils/dateUtils'
 import { setIsAdjustPostData } from '@redux/reducers'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { getTask, getUserData } from '@redux/selectors'
-import { Block, BlockAnimated, Container, Image, Text } from '@components'
+import {
+  Block,
+  BlockAnimated,
+  Container,
+  GuestModal,
+  Image,
+  Text,
+} from '@components'
+import { ModalFunction } from '@components/bases/Modal/type'
 
 const learningData = [
   {
@@ -124,9 +132,12 @@ export const HomeScreen = () => {
   const isAdjustPostData = useAppSelector(
     (state) => state.root.detailPost.isAdjustPostData,
   )
+  const isLoginWithGuest = useAppSelector(
+    (state) => state.root.auth.isLoginWithGuest,
+  )
   const [t] = useTranslation()
   const { colors, normalize } = useTheme()
-
+  const guestModalRef = React.useRef<ModalFunction>(null)
   const [isLoading, setIsLoading] = React.useState(true)
   const [postData, setPostData] = React.useState<
     (PostResponse & { textColor: string })[]
@@ -345,7 +356,13 @@ export const HomeScreen = () => {
           <Block marginTop={10}>
             <DailyTask
               data={taskData ?? []}
-              onPress={() => navigate('STREAK_SCREEN')}
+              onPress={() => {
+                if (isLoginWithGuest) {
+                  guestModalRef.current?.openModal()
+                } else {
+                  navigate('STREAK_SCREEN')
+                }
+              }}
             />
           </Block>
           <Block marginTop={17}>
@@ -436,6 +453,14 @@ export const HomeScreen = () => {
           />
         </Block>
       </BlockAnimated>
+      <GuestModal
+        ref={guestModalRef}
+        position={'center'}
+        onButtonPress={() => {
+          navigate('REGISTER_SCREEN', { isGuest: true })
+          guestModalRef?.current?.dismissModal()
+        }}
+      />
     </Container>
   )
 }

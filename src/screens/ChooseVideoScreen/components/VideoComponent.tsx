@@ -61,7 +61,6 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
   const [duration, setDuration] = React.useState<number>(0)
   const [visibleName, setVisibleName] = React.useState(false)
   const [videoData, setVideoData] = React.useState<PostResponse>(data)
-  const [componentKey, setComponentKey] = React.useState(0)
 
   const videos = useAppSelector((state) => state.root.videoReducer.videos)
   const [recommendData, setRecommendData] =
@@ -262,7 +261,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
     }
   }
   React.useEffect(() => {
-    // callAPIMarkAsRead(videoData._id)
+    callAPIMarkAsRead(videoData._id)
   }, [videoData])
   return (
     <Portal>

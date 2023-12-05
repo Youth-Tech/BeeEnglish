@@ -1,12 +1,12 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ToastAndroid } from 'react-native'
+import { Pressable } from 'react-native'
 
 import {
-  setAuthState,
-  setUserState,
   defaultAuthState,
   defaultUserState,
+  setAuthState,
+  setUserState,
   updateConfigAction,
 } from '@redux/reducers'
 import { Icon } from '@assets'
@@ -15,10 +15,16 @@ import { LangType } from '@utils/helpers'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { initRun, oAuthSignOut } from '@utils/authUtils'
 import { makeStyles, normalize, useTheme } from '@themes'
-import { Block, Container, Modal, Text } from '@components'
+import { Block, Container, GuestModal, Modal, Text } from '@components'
 import { ModalFunction } from '@components/bases/Modal/type'
-import { getLangConfig, getUserData } from '@redux/selectors'
+import {
+  getIsLoginWithGuest,
+  getLangConfig,
+  getUserData,
+} from '@redux/selectors'
 import { goBack, navigate, navigateAndReset } from '@navigation'
+import Toast from 'react-native-toast-message'
+import { AuthService } from '@services/AuthService'
 
 export const SettingScreen = () => {
   const styles = useStyle()
@@ -30,28 +36,58 @@ export const SettingScreen = () => {
   const isSignedInOAuth = useAppSelector(
     (state) => state.root.auth.isSignedInOAuth,
   )
+  const isLoginWithGuest = useAppSelector(getIsLoginWithGuest)
   const userData = useAppSelector(getUserData)
-
+  const guestModalRef = React.useRef<ModalFunction>(null)
   const onPressPremiumUser = () => {
-    ToastAndroid.show(t('function_in_develop'), ToastAndroid.SHORT)
+    // ToastAndroid.show(t('function_in_develop'), ToastAndroid.SHORT)
+    if (isLoginWithGuest) {
+      guestModalRef.current?.openModal()
+    } else {
+      navigate('SUBSCRIPTION_SCREEN')
+    }
   }
 
   const onPressProfile = () => {}
 
   const onPressPassword = () => {
-    navigate('CHANGE_PASSWORD_SCREEN')
+    if (isLoginWithGuest) {
+      guestModalRef.current?.openModal()
+    } else {
+      navigate('CHANGE_PASSWORD_SCREEN')
+    }
+  }
+  const clearUserData = () => {
+    dispatch(setAuthState(defaultAuthState))
+    dispatch(setUserState(defaultUserState))
+    TokenService.clearToken()
+    Toast.show({
+      type: 'success',
+      text1: t('success'),
+      text2: t('logout_successfully'),
+      position: 'bottom',
+    })
+  }
+  const logOutAPI = async () => {
+    try {
+      const response = await AuthService.logOut()
+      clearUserData()
+      console.log(response.data.message)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const onPressNotification = () => {}
 
   const onPressLogout = () => {
-    dispatch(setAuthState(defaultAuthState))
-    dispatch(setUserState(defaultUserState))
-    TokenService.clearToken()
     if (isSignedInOAuth && userData.provider !== null) {
       oAuthSignOut(userData.provider, () => {
+        clearUserData()
         console.log('signOut success')
       })
+    } else {
+      logOutAPI()
     }
     navigateAndReset([{ name: 'NAVIGATE_SCREEN' }], 0)
 
@@ -233,6 +269,14 @@ export const SettingScreen = () => {
           </Pressable>
         </Block>
       </Modal>
+      <GuestModal
+        ref={guestModalRef}
+        position={'center'}
+        onButtonPress={() => {
+          navigate('REGISTER_SCREEN', { isGuest: true })
+          guestModalRef?.current?.dismissModal()
+        }}
+      />
     </Container>
   )
 }

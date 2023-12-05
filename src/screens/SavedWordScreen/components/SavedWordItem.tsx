@@ -24,9 +24,9 @@ export const SavedWordItem: React.FC<SavedWordItemProps> = ({
       <Block
         row
         alignCenter
-        paddingLeft={30}
-        paddingRight={10}
         paddingVertical={12}
+        paddingHorizontal={20}
+        space={'between'}
       >
         <Block style={styles.wordContainer}>
           <Block row alignCenter>
@@ -61,7 +61,6 @@ export const SavedWordItem: React.FC<SavedWordItemProps> = ({
           </Text>
         </ShadowButton>
       </Block>
-      <Block backgroundColor={colors.greyLight} height={1} width="100%" />
     </Pressable>
   )
 }

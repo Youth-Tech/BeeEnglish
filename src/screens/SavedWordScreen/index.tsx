@@ -5,6 +5,7 @@ import {
   FlatList,
   StyleSheet,
   ListRenderItemInfo as RNListRenderItemInfo,
+  ScrollView,
 } from 'react-native'
 
 import {
@@ -18,7 +19,7 @@ import {
 } from '@components'
 import { Icon, images } from '@assets'
 import { useTheme } from '@themes'
-import { goBack } from '@navigation'
+import { goBack, navigate } from '@navigation'
 import { LearnWordItem } from './components/LearnWordItem'
 import { SavedWordItem } from './components/SavedWordItem'
 import { KnowledgeService, UserService, Word } from '@services'
@@ -37,13 +38,15 @@ export const SavedWordScreen = () => {
   const [suggestionWord, setSuggestionWord] = React.useState<Word[]>([])
   const renderSavedWordItem = ({ index, item }: RNListRenderItemInfo<Word>) => {
     return (
-      <SavedWordItem
-        data={item}
-        key={index}
-        onDeletePress={() => {
-          callAPIDeleteSavedWord(item._id)
-        }}
-      />
+      <Block key={`item-saved-word-${index}`}>
+        <SavedWordItem
+          data={item}
+          onDeletePress={() => {
+            callAPIDeleteSavedWord(item._id)
+          }}
+        />
+        <Block backgroundColor={colors.greyLight} height={1} width="100%" />
+      </Block>
     )
   }
   const callAPI = async () => {
@@ -77,7 +80,12 @@ export const SavedWordScreen = () => {
   const renderLearnItem = ({ index, item }: ListRenderItemInfo<Word>) => {
     return (
       <Block key={`item-learned-${index}`} marginTop={10}>
-        <LearnWordItem data={item} />
+        <LearnWordItem
+          data={item}
+          onPress={() => {
+            navigate('DETAIL_WORD_SCREEN', { wordId: item._id })
+          }}
+        />
       </Block>
     )
   }
@@ -112,13 +120,13 @@ export const SavedWordScreen = () => {
     callAPIGetAllWords()
   }, [])
   return (
-    <Container hasScroll statusColor={colors.orangePrimary}>
+    <ScrollView style={{ backgroundColor: '#FFFFFF' }}>
       <DismissKeyBoardBlock>
         <Block flex>
           <Block
             left={0}
             right={0}
-            height={110}
+            height={130}
             borderBottomLeftRadius={50}
             borderBottomRightRadius={50}
             backgroundColor={colors.orangePrimary}
@@ -129,7 +137,7 @@ export const SavedWordScreen = () => {
             paddingHorizontal={20}
             backgroundColor="transparent"
           >
-            <Block row alignCenter>
+            <Block row alignCenter marginTop={20}>
               <Icon state="Back" onPress={goBack} stroke={colors.black}></Icon>
               <Text
                 center
@@ -166,17 +174,15 @@ export const SavedWordScreen = () => {
               />
             </Block>
 
-            <Block marginTop={20}>
+            <Block marginTop={30}>
               <Block
                 borderWidth={savedWordData.length === 0 ? 0 : 1}
                 borderColor={colors.borderColor}
                 radius={15}
                 overflow="hidden"
-                alignCenter
-                style={{ minWidth: 5, minHeight: 5 }}
               >
                 {isLoading ? (
-                  <Block height={200} justifyCenter>
+                  <Block height={200} justifyCenter alignCenter>
                     <ActivityIndicator
                       size={'large'}
                       color={colors.orangePrimary}
@@ -188,7 +194,6 @@ export const SavedWordScreen = () => {
                     data={savedWordData}
                     keyExtractor={(_, index) => `item-saved-word-${index}`}
                     renderItem={renderSavedWordItem}
-                    estimatedItemSize={30}
                     ListEmptyComponent={
                       <Block alignCenter marginTop={20}>
                         <Image
@@ -238,7 +243,7 @@ export const SavedWordScreen = () => {
           />
         </Block>
       </DismissKeyBoardBlock>
-    </Container>
+    </ScrollView>
   )
 }
 

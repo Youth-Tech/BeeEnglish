@@ -29,4 +29,5 @@ export const images = {
   Checkpoint: require('./checkpoint.png'),
   HoneyBackground: require('./honeyBackground.png'),
   ImagePlaceholder: require('./imagePlaceholder.jpeg'),
+  Check: require('./Check.png'),
 }

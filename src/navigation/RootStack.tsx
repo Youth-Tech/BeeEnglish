@@ -1,43 +1,50 @@
 import React from 'react'
+import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { LinkingOptions } from '@react-navigation/native/lib/typescript/src/types'
 
 import {
-  TestScreen,
   DetailPost,
+  TestScreen,
   VideoScreen,
   VocabScreen,
   LoginScreen,
-  SplashScreen,
   StreakScreen,
+  SplashScreen,
   GrammarScreen,
+  LoadingScreen,
   PreTestScreen,
-  RankingScreen,
   SettingScreen,
-  NavigateScreen,
+  InvoiceScreen,
+  RankingScreen,
   ExamTestScreen,
   RegisterScreen,
   MorePostScreen,
+  NavigateScreen,
   SavedWordScreen,
-  DetailWordScreen,
   DictionaryScreen,
+  DetailWordScreen,
   LearnedWordScreen,
   ChooseVideoScreen,
-  SendPasswordScreen,
   AboutTheTestScreen,
+  SendPasswordScreen,
   DetailLessonScreen,
   PasswordResetScreen,
   ChangePasswordScreen,
   CongratulationScreen,
+  SubcriptionPlanScreen,
   VerificationCodeScreen,
   EmailRegistrationScreen,
 } from '@screens'
-import { useAppSelector } from '@hooks'
+import {
+  updateStateStreakBall,
+  streakBallBlackListRoute,
+} from '@redux/reducers'
 import { RootStackParamList } from './routes'
 import { RootBottomTab } from './RootBottomTab'
 import { navigationRef } from './NavigationServices'
-import { NavigationContainer } from '@react-navigation/native'
+import { useAppDispatch, useAppSelector } from '@hooks'
 import { getIsLogin, getIsLoginWithGuest } from '@redux/selectors'
-import { LinkingOptions } from '@react-navigation/native/lib/typescript/src/types'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -50,28 +57,48 @@ const screenOptions = {
 const linking: LinkingOptions<RootStackParamList> | undefined = {
   prefixes: ['beeenglish://app'],
   config: {
+    initialRouteName: 'BOTTOM_TAB',
     screens: {
-      SAVED_WORD_SCREEN: {
-        path: 'word-review/:id',
-        parse: {
-          id: (id) => id,
-        },
+      DETAIL_WORD_SCREEN: {
+        path: 'word/:wordId',
+      },
+      STREAK_SCREEN: {
+        path: 'task/get-daily-task',
       },
     },
   },
 }
 
 const RootStack = () => {
-  const isSignedWithGuestRole = useAppSelector(getIsLoginWithGuest)
+  const dispatch = useAppDispatch()
   const isSignedIn = useAppSelector(getIsLogin)
+  const isSignedWithGuestRole = useAppSelector(getIsLoginWithGuest)
+
+  const handleStateChange = () => {
+    // console.log(navigationRef?.current?.getCurrentRoute()?.name)
+    dispatch(
+      updateStateStreakBall(
+        !streakBallBlackListRoute.includes(
+          (navigationRef?.current?.getCurrentRoute()
+            ?.name as keyof RootStackParamList) ?? 'BOTTOM_TAB',
+        ),
+      ),
+    )
+  }
 
   return (
-    <NavigationContainer ref={navigationRef} linking={linking}>
+    <NavigationContainer
+      linking={linking}
+      ref={navigationRef}
+      fallback={<LoadingScreen />}
+      onStateChange={handleStateChange}
+    >
       <Stack.Navigator
         screenOptions={screenOptions}
         initialRouteName={
           isSignedIn || isSignedWithGuestRole ? 'BOTTOM_TAB' : 'NAVIGATE_SCREEN'
         }
+        // initialRouteName={'INVOICE_SCREEN'}
       >
         <Stack.Screen name="BOTTOM_TAB" component={RootBottomTab} />
         <Stack.Group>
@@ -137,6 +164,11 @@ const RootStack = () => {
           <Stack.Screen name="RANKING_SCREEN" component={RankingScreen} />
           <Stack.Screen name="PRE_TEST_SCREEN" component={PreTestScreen} />
           <Stack.Screen name="MORE_POST_SCREEN" component={MorePostScreen} />
+          <Stack.Screen
+            name="SUBSCRIPTION_SCREEN"
+            component={SubcriptionPlanScreen}
+          />
+          <Stack.Screen name="INVOICE_SCREEN" component={InvoiceScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

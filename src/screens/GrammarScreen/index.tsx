@@ -29,8 +29,9 @@ import {
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { QuestionType } from './constants'
+import { TaskService } from '@services/TaskService'
+import {useAppDispatch, useBackHandler} from '@hooks'
 import { LoadingScreen } from '@screens/LoadingScreen'
-import { useAppDispatch, useBackHandler } from '@hooks'
 import { RootStackParamList, goBack } from '@navigation'
 import { setLoadingStatusAction } from '@redux/reducers'
 import { ModalFunction } from '@components/bases/Modal/type'
@@ -83,6 +84,22 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
       data: null,
     },
   )
+  const startCountingTime = async () => {
+    try {
+      const response = await TaskService.startTime()
+      console.log(response.data.message)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const stopCountingTime = async () => {
+    try {
+      const response = await TaskService.stopTime()
+      console.log(response.data.message)
+    } catch (e) {
+      console.log(e)
+    }
+  }
   const checkpointScore =
     result?.reduce((total, current) => {
       if (current.result === 'correct') {
@@ -197,6 +214,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
     if (nextQuestion == -1) {
       console.log('complete quiz')
+      stopCountingTime()
       updateLessonComplete()
       setStep(100)
     } else {
@@ -240,7 +258,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
     try {
       await UserService.updateProgressLearning(body)
-      navigation.navigate('CONGRATULATION_SCREEN', {
+      navigation.replace('CONGRATULATION_SCREEN', {
         status:
           finalPoint >= (checkpointLesson !== undefined ? 80 : 60)
             ? 'success'
@@ -282,7 +300,10 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   if (questions.length <= 0 && currentQuestion.data === null) {
     return <LoadingScreen />
   }
-
+  React.useEffect(() => {
+    //##Count time for task##
+    startCountingTime()
+  }, [])
   return (
     <Container>
       <Block flex paddingHorizontal={15} paddingTop={10}>

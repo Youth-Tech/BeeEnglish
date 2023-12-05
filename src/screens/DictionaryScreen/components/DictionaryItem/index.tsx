@@ -7,21 +7,21 @@ import { Word } from '@services'
 
 export interface DictonaryItemProps {
   data: Word
-  onPressBookMark?: () => void
+  // onPressBookMark?: () => void
   onPress?: () => void
 }
 
 export const DictionaryItem: React.FC<DictonaryItemProps> = ({
   data,
-  onPressBookMark,
+  // onPressBookMark,
   onPress,
 }) => {
   const { colors } = useTheme()
-  const [isBookmarked, setIsBookmarked] = useState(false)
-  const toggleBookmark = () => {
-    setIsBookmarked(!isBookmarked)
-    onPressBookMark && onPressBookMark()
-  }
+  // const [isBookmarked, setIsBookmarked] = useState(false)
+  // const toggleBookmark = () => {
+  //   setIsBookmarked(!isBookmarked)
+  //   onPressBookMark && onPressBookMark()
+  // }
   return (
     <Pressable onPress={onPress}>
       <Block>
@@ -39,27 +39,27 @@ export const DictionaryItem: React.FC<DictonaryItemProps> = ({
             >
               ({data.attachments[0].type})
             </Text>
-            <Pressable
-              onPress={toggleBookmark}
-              style={{ position: 'absolute', right: 29, top: 0 }}
-            >
-              <Block
-                width={26}
-                height={30}
-                backgroundColor={colors.white}
-                alignCenter
-                justifyCenter
-                borderBottomLeftRadius={10}
-                borderBottomRightRadius={10}
-                shadow
-              >
-                <Icon
-                  state="Bookmark"
-                  stroke={colors.orangeDark}
-                  fill={isBookmarked ? colors.orangeDark : 'transparent'}
-                />
-              </Block>
-            </Pressable>
+            {/*<Pressable*/}
+            {/*  onPress={toggleBookmark}*/}
+            {/*  style={{ position: 'absolute', right: 29, top: 0 }}*/}
+            {/*>*/}
+            {/*  <Block*/}
+            {/*    width={26}*/}
+            {/*    height={30}*/}
+            {/*    backgroundColor={colors.white}*/}
+            {/*    alignCenter*/}
+            {/*    justifyCenter*/}
+            {/*    borderBottomLeftRadius={10}*/}
+            {/*    borderBottomRightRadius={10}*/}
+            {/*    shadow*/}
+            {/*  >*/}
+            {/*    <Icon*/}
+            {/*      state="Bookmark"*/}
+            {/*      stroke={colors.orangeDark}*/}
+            {/*      fill={isBookmarked ? colors.orangeDark : 'transparent'}*/}
+            {/*    />*/}
+            {/*  </Block>*/}
+            {/*</Pressable>*/}
           </Block>
           <Text size={'h5'} fontFamily="regular" color={colors.greyDark}>
             /{data.pronunciation}/

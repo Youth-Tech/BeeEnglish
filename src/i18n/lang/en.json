@@ -192,6 +192,23 @@
     "remake_sentence": "Rewrite sentence",
     "post": "Post",
     "reply": "Reply",
-    "more_comment": "more"
+    "more_comment": "more",
+    "join_premium_plan": "Join Premium Plan",
+    "pay_now": "Pay now",
+    "pay_for": "Pay for",
+    "month_plan": "Month Plan",
+    "year_plan": "Year Plan",
+    "life_time_plan": "Life time",
+    "logout_successfully": "Log out successfully",
+    "success": "Success!",
+    "checkout": "Checkout",
+    "pay_with_credit_card": "Pay with credit card",
+    "card_information": "Card information",
+    "invoice": "Invoice",
+    "payment_successful": "Payment successful",
+    "plan_name": "Plan name",
+    "price": "Price",
+    "period_start_date": "Period start date",
+    "period_end_date": "Period end date"
   }
 }

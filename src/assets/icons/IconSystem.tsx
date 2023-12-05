@@ -502,6 +502,7 @@ const Crown = ({
   <Svg
     width={props.size || props.width || 21}
     height={props.size || props.height || 14}
+    viewBox="0 0 21 14"
     fill="none"
     {...props}
   >
