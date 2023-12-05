@@ -1,15 +1,17 @@
 import React from 'react'
 import { Block, Container, Image, Text } from '@components'
 import { Icon, images } from '@assets'
-import { goBack } from '@navigation'
+import { goBack, navigateAndReset } from '@navigation'
 import { heightScreen } from '@utils/helpers'
-import { useTheme } from '@themes'
+import { makeStyles, useTheme } from '@themes'
 import { Invoice, PaymentService } from '@services/PaymentService'
 import { useTranslation } from 'react-i18next'
+import { TouchableOpacity } from 'react-native'
 
 export const InvoiceScreen: React.FC = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
+  const styles = useStyles()
   const [invoiceData, setInvoiceData] = React.useState<Invoice>({
     paymentIntentId: '0',
     total: 0,
@@ -78,7 +80,7 @@ export const InvoiceScreen: React.FC = () => {
               width={'100%'}
               space={'between'}
               paddingHorizontal={30}
-              marginTop={20}
+              marginTop={10}
             >
               <Text size={'h3'} fontFamily={'semiBold'}>
                 {t('plan_name')}:
@@ -129,9 +131,47 @@ export const InvoiceScreen: React.FC = () => {
                 {invoiceData.periodEnd}
               </Text>
             </Block>
+            <Block paddingHorizontal={20} marginTop={20} alignCenter>
+              <Text size={'h3'} fontFamily={'semiBold'} center>
+                Lưu ý: Bạn sẽ nhận được tất cả các quyền lợi từ gói Premium
+              </Text>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: colors.orangeLight }]}
+                onPress={() => {
+                  navigateAndReset(
+                    [
+                      {
+                        name: 'HOME_SCREEN',
+                      },
+                    ],
+                    0,
+                  )
+                }}
+              >
+                <Text size={'h2'} fontFamily={'semiBold'} color={colors.black}>
+                  {t('back_to_home')}
+                </Text>
+              </TouchableOpacity>
+            </Block>
           </Block>
         </Block>
       </Block>
     </Container>
   )
 }
+const useStyles = makeStyles()(({ colors, normalize }) => ({
+  image: {
+    width: normalize.h(89),
+    height: normalize.h(98),
+  },
+  button: {
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: colors.greyLight,
+    width: normalize.h(200),
+    height: normalize.h(41.8),
+    borderRadius: normalize.m(10),
+    marginTop: normalize.v(40),
+  },
+}))

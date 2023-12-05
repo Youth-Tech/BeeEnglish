@@ -39,6 +39,7 @@ export const SettingScreen = () => {
   const isLoginWithGuest = useAppSelector(getIsLoginWithGuest)
   const userData = useAppSelector(getUserData)
   const guestModalRef = React.useRef<ModalFunction>(null)
+  const role = useAppSelector((state) => state.root.user.role)
   const onPressPremiumUser = () => {
     // ToastAndroid.show(t('function_in_develop'), ToastAndroid.SHORT)
     if (isLoginWithGuest) {
@@ -138,11 +139,13 @@ export const SettingScreen = () => {
               style={styles.premiumUserSection}
               android_ripple={{ color: colors.orangeLighter }}
             >
-              <Block row>
+              <Block row alignCenter gap={10}>
                 <Text color={colors.white} fontFamily="bold" size={'h2'}>
-                  {t('premium_membership')}
+                  {role === 'premium'
+                    ? t('you_are_premium')
+                    : t('premium_membership')}
                 </Text>
-                <Block marginLeft={12}>
+                <Block>
                   <Icon state="Crown" fill={colors.white} />
                 </Block>
               </Block>
@@ -152,7 +155,9 @@ export const SettingScreen = () => {
                 size={'h5'}
                 lineHeight={20}
               >
-                {t('upgrade_for_more_features')}
+                {role === 'premium'
+                  ? t('you_receive_all_benefits')
+                  : t('upgrade_for_more_features')}
               </Text>
             </Pressable>
           </Block>

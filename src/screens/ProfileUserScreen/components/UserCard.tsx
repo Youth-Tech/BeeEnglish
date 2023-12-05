@@ -20,7 +20,7 @@ const UserCard: React.FC = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const userData = useAppSelector(getUserData)
-
+  const role = useAppSelector((state) => state.root.user.role)
   const onUpdateImagePress = async () => {
     let options: ImageLibraryOptions = {
       mediaType: 'photo',
@@ -48,9 +48,21 @@ const UserCard: React.FC = () => {
           </TouchableOpacity>
         </Block>
       </Block>
-      <Text size={'h1'} fontFamily={'bold'} marginTop={20}>
-        {userData.fullName}
-      </Text>
+      <Block
+        row
+        justifyCenter
+        alignCenter
+        marginTop={20}
+        gap={5}
+        width={'100%'}
+      >
+        <Text size={'h1'} fontFamily={'bold'}>
+          {userData.fullName}
+        </Text>
+        {role === 'premium' && (
+          <Icon state={'Crown'} fill={colors.orangePrimary} />
+        )}
+      </Block>
       <Text size={'h3'} color={colors.greyDark}>
         {t('joined_on')} {new Date(userData.createdAt).toLocaleDateString()}
       </Text>

@@ -209,6 +209,9 @@
     "plan_name": "Plan name",
     "price": "Price",
     "period_start_date": "Period start date",
-    "period_end_date": "Period end date"
+    "period_end_date": "Period end date",
+    "back_to_home": "Back to homepage",
+    "you_are_premium": "You are a premium user",
+    "you_receive_all_benefits": "You receive all the benefits from the Premium"
   }
 }
