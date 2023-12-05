@@ -36,15 +36,15 @@ import {
   VerificationCodeScreen,
   EmailRegistrationScreen,
 } from '@screens'
+import {
+  updateStateStreakBall,
+  streakBallBlackListRoute,
+} from '@redux/reducers'
 import { RootStackParamList } from './routes'
 import { RootBottomTab } from './RootBottomTab'
 import { navigationRef } from './NavigationServices'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { getIsLogin, getIsLoginWithGuest } from '@redux/selectors'
-import {
-  streakBallBlackListRoute,
-  updateStateStreakBall,
-} from '@redux/reducers'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 

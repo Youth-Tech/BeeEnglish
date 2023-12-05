@@ -1,29 +1,29 @@
 import React from 'react'
 import Toast from 'react-native-toast-message'
 import { Portal } from 'react-native-portalize'
-import { ActivityIndicator, Linking, LogBox } from 'react-native'
 import notifee, { EventType } from '@notifee/react-native'
+import { ActivityIndicator, Linking, LogBox } from 'react-native'
 import { addEventListener } from '@react-native-community/netinfo'
 import * as Types from '@react-native-community/netinfo/src/internal/types'
 
 import {
-  createChannelId,
   getFCMToken,
+  createChannelId,
   notificationListener,
   requestUserPermission,
 } from '@utils/notificationUtils'
+import {
+  getIsLogin,
+  getIsLoading,
+  getStreakBallState,
+  getIsLoginWithGuest,
+} from '@redux/selectors'
 import { useTheme } from '@themes'
 import RootStack from './RootStack'
 import { UserService } from '@services'
 import { updateProfile } from '@redux/actions'
 import { Block, StreakBall, Text } from '@components'
 import { useAppDispatch, useAppSelector } from '@hooks'
-import {
-  getIsLoading,
-  getIsLogin,
-  getIsLoginWithGuest,
-  getStreakBallState,
-} from '@redux/selectors'
 
 export const RootApp = () => {
   const dispatch = useAppDispatch()

@@ -1,10 +1,11 @@
 import { Pressable } from 'react-native'
-import React from 'react'
-import { Block, Image, LinearGradient, Text } from '@components'
-import { baseStyles, useTheme } from '@themes'
-import { Icon, TIcon, images } from '@assets'
 import { useTranslation } from 'react-i18next'
+
+import React from 'react'
 import { Task } from '@services/TaskService'
+import { Icon, TIcon, images } from '@assets'
+import { baseStyles, useTheme } from '@themes'
+import { Block, Image, LinearGradient, Text } from '@components'
 
 interface Props {
   data: Task[]
