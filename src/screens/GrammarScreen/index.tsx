@@ -21,7 +21,6 @@ import {
   VocabularyOptionsFunc,
 } from '@components'
 import {
-  Quiz,
   UserService,
   KnowledgeService,
   UpdateProgressLearningRequest,
@@ -29,8 +28,9 @@ import {
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { QuestionType } from './constants'
+import { parseQuizDataToQuestion } from './utils'
 import { TaskService } from '@services/TaskService'
-import {useAppDispatch, useBackHandler} from '@hooks'
+import { useAppDispatch, useBackHandler } from '@hooks'
 import { LoadingScreen } from '@screens/LoadingScreen'
 import { RootStackParamList, goBack } from '@navigation'
 import { setLoadingStatusAction } from '@redux/reducers'
@@ -40,20 +40,6 @@ export type GrammarScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'GRAMMAR_SCREEN'
 >
-
-const parseQuizDataToQuestion = (quizzes: Quiz[]): Question[] => {
-  return quizzes.map((item) => {
-    return {
-      id: item._id,
-      answer: item.answer,
-      question: item.question,
-      type: QuestionType[item.type],
-      attachment: item.attachments,
-      wordImage: item.attachments?.[0]?.src || '',
-      correctAnswer: item.correctAnswer,
-    }
-  })
-}
 
 export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   route,
@@ -84,22 +70,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
       data: null,
     },
   )
-  const startCountingTime = async () => {
-    try {
-      const response = await TaskService.startTime()
-      console.log(response.data.message)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-  const stopCountingTime = async () => {
-    try {
-      const response = await TaskService.stopTime()
-      console.log(response.data.message)
-    } catch (e) {
-      console.log(e)
-    }
-  }
+
   const checkpointScore =
     result?.reduce((total, current) => {
       if (current.result === 'correct') {
@@ -125,12 +96,35 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
     console.log(result)
   }, [result])
 
+  React.useEffect(() => {
+    //##Count time for task##
+    startCountingTime()
+  }, [])
+
   useBackHandler({
     enabled: true,
     callback() {
       onClosePress()
     },
   })
+
+  const startCountingTime = async () => {
+    try {
+      const response = await TaskService.startTime()
+      console.log(response.data.message)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const stopCountingTime = async () => {
+    try {
+      const response = await TaskService.stopTime()
+      console.log(response.data.message)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   const onClosePress = () => {
     leaveModalRef.current?.openModal()
@@ -300,10 +294,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
   if (questions.length <= 0 && currentQuestion.data === null) {
     return <LoadingScreen />
   }
-  React.useEffect(() => {
-    //##Count time for task##
-    startCountingTime()
-  }, [])
+
   return (
     <Container>
       <Block flex paddingHorizontal={15} paddingTop={10}>

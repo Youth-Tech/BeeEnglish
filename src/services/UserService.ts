@@ -1,23 +1,25 @@
-import { DefaultResponse, TokenService, Word } from '@services'
-import APIUtils from '@utils/AxiosInstance'
 import { Provider } from '@configs'
+import APIUtils from '@utils/AxiosInstance'
+import { DefaultResponse, Word } from '@services'
 import { GetAllPostResponse } from '@services/PostService'
-import { getRefreshToken } from '@redux/selectors'
 
-const enum endPoints {
-  getUserData = 'user/me',
-  updateUserAvatar = '/user/me',
-  updateProgressLearning = '/user/update-progress-learning',
-  getProgressLearning = '/user/learning-stats',
-  getStreak = '/user/get-streaks',
-  updateStreak = '/user/update-streak',
-  getWordsBookmark = '/user/words-bookmark',
-  updateFCM = '/user/update-fcm-token',
-  getLearningStats = '/user/learning-stats',
-  getPostBookmark = '/user/posts-bookmark',
-  bookmarkPost = '/user/bookmark-post/',
-  migrateGuestAccount = '/user/restored-account',
-}
+const UserEndPoint = {
+  getUserData: 'user/me',
+  updateUserAvatar: '/user/me',
+  getStreak: '/user/get-streaks',
+  updateStreak: '/user/update-streak',
+  updateFCM: '/user/update-fcm-token',
+  bookmarkPost: '/user/bookmark-post/',
+  getPostBookmark: '/user/posts-bookmark',
+  getLearningStats: '/user/learning-stats',
+  getWordsBookmark: '/user/words-bookmark',
+  getProgressLearning: '/user/learning-stats',
+  migrateGuestAccount: '/user/restored-account',
+  updateProgressLearning: '/user/update-progress-learning',
+  bookmarkWord: (wordId: string) => `/user/bookmark-word/${wordId}`,
+  getBoard: (levelId: string) =>
+    `/user/${levelId}/board?timeStamp=${new Date()}`,
+} as const
 
 export interface Level {
   _id: string
@@ -145,76 +147,77 @@ interface MigrateAccountResponse extends DefaultResponse {
 export const UserService = {
   getUserData() {
     return APIUtils.get<UserStateResponse>(
-      endPoints.getUserData.concat(`?timestamp=${new Date().getTime()}`),
+      UserEndPoint.getUserData.concat(`?timestamp=${new Date().getTime()}`),
     )
   },
 
   updateUserAvatar(body: UpdateUserAvatarRequest) {
-    return APIUtils.patch<UserStateResponse>(endPoints.updateUserAvatar, body)
+    return APIUtils.patch<UserStateResponse>(
+      UserEndPoint.updateUserAvatar,
+      body,
+    )
   },
 
   getProgressLearning() {
     return APIUtils.get<GetProgressLearningResponse>(
-      endPoints.getProgressLearning,
+      UserEndPoint.getProgressLearning,
     )
   },
 
   updateProgressLearning(body: UpdateProgressLearningRequest) {
     return APIUtils.patch<UpdateProgressLearningResponse>(
-      endPoints.updateProgressLearning,
+      UserEndPoint.updateProgressLearning,
       body,
     )
   },
 
   bookmarkWord(wordId: string) {
     return APIUtils.patch<BookmarkWordResponse>(
-      `/user/bookmark-word/${wordId}`,
+      UserEndPoint.bookmarkWord(wordId),
       {},
     )
   },
   getStreak(params: GetStreakRequest) {
-    return APIUtils.get<GetStreakResponse>(endPoints.getStreak, undefined, {
+    return APIUtils.get<GetStreakResponse>(UserEndPoint.getStreak, undefined, {
       params,
     })
   },
 
   updateStreak() {
-    return APIUtils.patch<GetStreakResponse>(endPoints.updateStreak, {})
+    return APIUtils.patch<GetStreakResponse>(UserEndPoint.updateStreak, {})
   },
 
   getWordsBookmark(params?: Partial<GetWordBookmarksReq>) {
     return APIUtils.get<GetWordsBookmarkResponse>(
-      endPoints.getWordsBookmark,
+      UserEndPoint.getWordsBookmark,
       undefined,
       { params },
     )
   },
 
   updateFCMToken(body: UpdateFCMTokenRequest) {
-    return APIUtils.patch<UpdateFCMTokenResponse>(endPoints.updateFCM, body)
+    return APIUtils.patch<UpdateFCMTokenResponse>(UserEndPoint.updateFCM, body)
   },
 
   getLearningStats() {
-    return APIUtils.get<GetLearningStatsResponse>(endPoints.getLearningStats)
+    return APIUtils.get<GetLearningStatsResponse>(UserEndPoint.getLearningStats)
   },
 
   getPostBookmark() {
-    return APIUtils.get<GetAllPostResponse>(endPoints.getPostBookmark)
+    return APIUtils.get<GetAllPostResponse>(UserEndPoint.getPostBookmark)
   },
 
   bookmarkPost(postId: string) {
-    return APIUtils.patch(`${endPoints.bookmarkPost}/${postId}`, {})
+    return APIUtils.patch(`${UserEndPoint.bookmarkPost}/${postId}`, {})
   },
 
   getBoard(levelId: string) {
-    return APIUtils.get<GetBoardResponse>(
-      `/user/${levelId}/board?timeStamp=${new Date()}`,
-    )
+    return APIUtils.get<GetBoardResponse>(UserEndPoint.getBoard(levelId))
   },
 
   migrateWithGuestAccount(body: MigrateAccountRequest) {
     return APIUtils.post<MigrateAccountResponse>(
-      endPoints.migrateGuestAccount,
+      UserEndPoint.migrateGuestAccount,
       body,
     )
   },

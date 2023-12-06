@@ -23,6 +23,7 @@ export const streakBallBlackListRoute: Array<keyof RootStackParamList> = [
   'LOGIN_SCREEN',
   'STREAK_SCREEN',
   'REGISTER_SCREEN',
+  'EXAM_TEST_SCREEN',
   'SEND_PASSWORD_SCREEN',
   'RESET_PASSWORD_SCREEN',
   'VERIFICATION_CODE_SCREEN',

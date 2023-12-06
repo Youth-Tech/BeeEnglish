@@ -19,6 +19,11 @@ export const MorePostScreen: React.FC = () => {
     page: 1,
     total: 0,
   })
+
+  React.useEffect(() => {
+    callAPIPost()
+  }, [])
+
   const renderPostItem = ({
     index,
     item,
@@ -34,6 +39,7 @@ export const MorePostScreen: React.FC = () => {
       </Block>
     )
   }
+
   const callAPIPost = async () => {
     setIsFetchingPosts(true)
     try {
@@ -49,12 +55,14 @@ export const MorePostScreen: React.FC = () => {
       console.log(e)
     }
   }
+
   const onEndReached = () => {
     if (pagination.current.hasNext && !isFetchingPosts) {
       pagination.current.page++
       callAPIPost()
     }
   }
+
   const renderFooterComponent = () => {
     return (
       <Block alignCenter justifyCenter>
@@ -66,9 +74,7 @@ export const MorePostScreen: React.FC = () => {
       </Block>
     )
   }
-  React.useEffect(() => {
-    callAPIPost()
-  }, [])
+
   return (
     <Container>
       <Block>

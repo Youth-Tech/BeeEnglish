@@ -1,5 +1,4 @@
 import {
-  Pressable,
   StyleSheet,
   SectionList,
   RefreshControl,
@@ -8,19 +7,24 @@ import {
 } from 'react-native'
 import React from 'react'
 import { StackActions } from '@react-navigation/native'
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
+import { FadeIn, FadeOut } from 'react-native-reanimated'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
-import { Icon } from '@assets'
-import { useAppSelector } from '@hooks'
+import {
+  ItemLesson,
+  ChooseCourse,
+  SectionHeader,
+  ItemLessonProps,
+} from './components'
+import { images } from '@assets'
+import { normalize } from '@themes'
+import {useAppSelector} from '@hooks'
 import { LoadingScreen } from '@screens'
-import { normalize, useTheme } from '@themes'
-import { getIsPreTest } from '@redux/selectors'
+import { parseDataToSectionData } from './utils'
+import { KnowledgeService, Quiz } from '@services'
 import { navigate, RootStackParamList } from '@navigation'
-import { ItemLesson, ItemLessonProps } from './components'
-import { Chapter, KnowledgeService, Lesson, Quiz } from '@services'
-import { Block, BlockAnimated, Container, Text } from '@components'
-import { defaultCheckPointLessonData } from '@screens/LessonMap/mock'
+import { getCurrentCourse, getIsPreTest } from '@redux/selectors'
+import { Block, BlockAnimated, Container, Image } from '@components'
 
 export type SectionData = {
   lessonComplete: number
@@ -32,58 +36,6 @@ export type SectionData = {
   checkpoint?: Quiz[]
 }
 
-const parseDataToLessonData = (
-  data: Lesson[],
-  chapterStatus?: 'lock' | 'unlock',
-): ItemLessonProps[] => {
-  return data.map((item, index, arr) => {
-    const nextLesson = arr[index + 1] || item
-
-    return {
-      id: item._id,
-      lessonDescription: item.description,
-      lessonTitle: item.name,
-      status:
-        item.status && item.completed
-          ? 'completed'
-          : item.status
-          ? 'current'
-          : 'lock',
-      thumbnail: item.attachment?.src || '',
-      type: 'normal',
-      chapterStatus: chapterStatus || 'lock',
-      nextLessonId: nextLesson._id,
-    }
-  })
-}
-
-const parseDataToSectionData = (data: Chapter[]): SectionData[] => {
-  return data.map((item) => {
-    let lessonComplete = item.lessons.filter((item) => item.status).length
-    const data = parseDataToLessonData(
-      item.lessons,
-      item.status ? 'unlock' : 'lock',
-    )
-
-    data.push({
-      ...defaultCheckPointLessonData,
-      checkpoint: item.checkpoint?.questions ?? [],
-      chapterStatus: item.status ? 'unlock' : 'lock',
-      status: (item.checkpoint?.score ?? 0) > 80 ? 'completed' : 'current',
-    })
-
-    return {
-      data,
-      lessonComplete,
-      index: item.order,
-      title: item.name,
-      status: item.status ? 'unlock' : 'lock',
-      chapterId: item._id,
-      checkpoint: item?.checkpoint?.questions || [],
-    }
-  })
-}
-
 export type LessonMapScreen = NativeStackScreenProps<
   RootStackParamList,
   'LEARNING_SCREEN'
@@ -91,8 +43,8 @@ export type LessonMapScreen = NativeStackScreenProps<
 
 export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
   const isPreTest = useAppSelector(getIsPreTest)
+  const currentCourse = useAppSelector(getCurrentCourse)
 
-  const { colors } = useTheme()
   const [data, setData] = React.useState<SectionData[]>([])
   const [isRefresh, setIsRefresh] = React.useState(false)
 
@@ -102,6 +54,12 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
       navigation.dispatch(StackActions.replace('EXAM_TEST_SCREEN'))
     }
   }, [isPreTest])
+
+  React.useEffect(() => {
+    if (currentCourse !== undefined && currentCourse._id !== '') {
+      callApi()
+    }
+  }, [currentCourse])
 
   const onStartExaminationPress = ({
     chapterId,
@@ -131,17 +89,13 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
   const callApi = async () => {
     try {
       setIsRefresh(true)
-      const res = await KnowledgeService.getChapterAndLesson()
+      const res = await KnowledgeService.getChapterAndLesson(currentCourse!._id)
       setData(parseDataToSectionData(res.data.data.chapters))
-      setIsRefresh(false)
     } catch (error) {
       console.log(error)
     }
+    setIsRefresh(false)
   }
-
-  React.useEffect(() => {
-    callApi()
-  }, [])
 
   const renderMapItem: SectionListRenderItem<ItemLessonProps, SectionData> = ({
     item,
@@ -166,100 +120,60 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
   const renderSectionHeader = (item: {
     section: SectionListData<ItemLessonProps, SectionData>
   }) => {
-    return (
-      <Pressable key={item.section.title}>
-        <Block
-          row
-          radius={8}
-          height={68}
-          alignCenter
-          style={styles.header}
-          paddingHorizontal={25}
-          backgroundColor={
-            item.section.status === 'lock' ? '#F3F8F3' : '#70773A'
-          }
-        >
-          <Text
-            size={64}
-            lineHeight={64}
-            fontFamily="cutie"
-            color={
-              item.section.status === 'unlock'
-                ? colors.white
-                : colors.greyPrimary
-            }
-          >
-            {item.section.index!}
-          </Text>
-          <Block style={styles.headerLabelBlock}>
-            <Text
-              size={'h3'}
-              fontFamily="bold"
-              color={
-                item.section.status === 'unlock'
-                  ? colors.white
-                  : colors.greyPrimary
-              }
-            >
-              {item.section.title}
-            </Text>
-
-            <Text
-              size={'h3'}
-              fontFamily="bold"
-              color={
-                item.section.status === 'unlock'
-                  ? colors.white
-                  : colors.greyPrimary
-              }
-            >
-              Lessons completed:{' '}
-              {
-                item.section.data.filter(
-                  (item) =>
-                    item.status === 'completed' && item.type !== 'checkpoint',
-                ).length
-              }
-              /
-              {
-                item.section.data.filter((item) => item.type !== 'checkpoint')
-                  .length
-              }
-            </Text>
-          </Block>
-
-          {item.section.status === 'lock' && (
-            <Block absolute alignSelf="center" right={25}>
-              <Icon state="Lock" fill={colors.greyPrimary} />
-            </Block>
-          )}
-        </Block>
-      </Pressable>
-    )
+    return <SectionHeader item={item} />
   }
 
-  if (data?.length <= 0 || isRefresh) {
-    return <LoadingScreen />
+  const onRefresh = () => {
+    if (currentCourse !== undefined && currentCourse._id !== '') {
+      callApi()
+    }
+  }
+
+  const renderListChapter = () => {
+    if (isRefresh) {
+      return <LoadingScreen />
+    }
+
+    if (data?.length <= 0) {
+      return (
+        <Image
+          width={200}
+          height={200}
+          alignSelf={'center'}
+          resizeMode={'contain'}
+          source={images.BeeDiscovery}
+        />
+      )
+    }
+
+    return (
+      <SectionList
+        refreshControl={
+          <RefreshControl refreshing={isRefresh} onRefresh={onRefresh} />
+        }
+        sections={data}
+        removeClippedSubviews
+        renderItem={renderMapItem}
+        stickySectionHeadersEnabled={true}
+        showsVerticalScrollIndicator={false}
+        renderSectionHeader={renderSectionHeader}
+        SectionSeparatorComponent={() => <Block height={10} />}
+        keyExtractor={(item, index) => item.lessonTitle + index}
+      />
+    )
   }
 
   return (
     <Container>
-      <BlockAnimated entering={FadeIn} style={styles.listContainer}>
-        <Animated.View entering={FadeIn} exiting={FadeOut}>
-          <SectionList
-            refreshControl={
-              <RefreshControl refreshing={isRefresh} onRefresh={callApi} />
-            }
-            sections={data}
-            removeClippedSubviews
-            renderItem={renderMapItem}
-            stickySectionHeadersEnabled={true}
-            showsVerticalScrollIndicator={false}
-            renderSectionHeader={renderSectionHeader}
-            SectionSeparatorComponent={() => <Block height={10} />}
-            keyExtractor={(item, index) => item.lessonTitle + index}
-          />
-        </Animated.View>
+      <BlockAnimated
+        entering={FadeIn}
+        exiting={FadeOut}
+        style={styles.listContainer}
+      >
+        <ChooseCourse />
+        {/*<Animated.View entering={FadeIn} exiting={FadeOut}>*/}
+        {renderListChapter()}
+        {/*</Animated.View>*/}
       </BlockAnimated>
     </Container>
   )
