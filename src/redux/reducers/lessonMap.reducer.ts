@@ -20,6 +20,8 @@ const initialState: LessonMapReducer = {
     chapters: 0,
     status: false,
     description: '',
+    completed: 0,
+    progress: 0
   },
 }
 
