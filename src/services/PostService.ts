@@ -1,6 +1,17 @@
 import { DefaultResponse } from '@services'
 import ApiUtil from '@utils/AxiosInstance'
 
+const PostEndPoint = {
+  getAllPost: '/post/get-all',
+  getPostRecommend: '/post/get-all?type=text',
+  getPostComments: (postId: string) => `/post/${postId}/comments`,
+  updateLikePost: (postId: string) => `/post/${postId}/toggle-like`,
+  getRepliesPostComment: (params: GetRepliesPostCommentRequest) =>
+    `/post/${params.postId}/comment/${params.commentId}/replies`,
+  createComment: (postId: string) => `/post/${postId}/comment`,
+  markAsRead: (postId: string) => `/post/${postId}/mark-as-read`,
+} as const
+
 export interface GetAllPostRequest {
   title: string
   creator: string
@@ -67,14 +78,14 @@ export interface GetRecommendPostRequest {
 
 export const PostServices = {
   getAllPost(params?: Partial<GetAllPostRequest>) {
-    return ApiUtil.get<GetAllPostResponse>(`/post/get-all`, undefined, {
+    return ApiUtil.get<GetAllPostResponse>(PostEndPoint.getAllPost, undefined, {
       params,
     })
   },
 
   getPostRecommend(query: GetRecommendPostRequest) {
     return ApiUtil.get<GetAllPostResponse>(
-      `/post/get-all?type=text`,
+      PostEndPoint.getPostRecommend,
       undefined,
       {
         params: query,
@@ -84,7 +95,7 @@ export const PostServices = {
 
   updateLikePost(params: PostIdRequest) {
     return ApiUtil.patch<UpdateLikePostResponse>(
-      `/post/${params.postId}/toggle-like`,
+      PostEndPoint.updateLikePost(params.postId),
       {},
       undefined,
     )
@@ -92,11 +103,12 @@ export const PostServices = {
 
   getPostComments(params: GetPostCommentRequest) {
     return ApiUtil.get<GetPostCommentsResponse>(
-      `/post/${params.postId}/comments?timestamp${new Date().getTime()}`,
+      PostEndPoint.getPostComments(params.postId),
       undefined,
       {
         params: {
           ...params,
+          timestamp: new Date().getTime(),
         },
       },
     )
@@ -104,13 +116,13 @@ export const PostServices = {
 
   getRepliesPostComment(params: GetRepliesPostCommentRequest) {
     return ApiUtil.get<GetRepliesPostCommentResponse>(
-      `/post/${params.postId}/comment/${params.commentId}/replies`,
+      PostEndPoint.getRepliesPostComment(params),
     )
   },
 
   createComment(params: CreateCommentRequest) {
     return ApiUtil.post<CreateCommentResponse>(
-      `/post/${params.postId}/comment`,
+      PostEndPoint.createComment(params.postId),
       {
         content: params.content,
         parent: params.parent,
@@ -119,6 +131,6 @@ export const PostServices = {
   },
 
   markAsRead(postId: string) {
-    return ApiUtil.patch<DefaultResponse>(`/post/${postId}/mark-as-read`, {})
+    return ApiUtil.patch<DefaultResponse>(PostEndPoint.markAsRead(postId), {})
   },
 } as const

@@ -108,9 +108,9 @@ export function getDeviceLanguage(): LangType {
 }
 
 export function timeSince(date: Date) {
-  var seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000)
+  const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000)
 
-  var interval = seconds / 31536000
+  let interval = seconds / 31536000
 
   if (interval > 1) {
     return Math.floor(interval) + ' '.concat(t('year').concat(' ' + t('ago')))

@@ -12,7 +12,6 @@ import {
   StreakScreen,
   SplashScreen,
   GrammarScreen,
-  LoadingScreen,
   PreTestScreen,
   SettingScreen,
   InvoiceScreen,
@@ -90,7 +89,7 @@ const RootStack = () => {
     <NavigationContainer
       linking={linking}
       ref={navigationRef}
-      fallback={<LoadingScreen />}
+      fallback={<SplashScreen />}
       onStateChange={handleStateChange}
     >
       <Stack.Navigator

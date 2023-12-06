@@ -4,8 +4,8 @@ import {
   KeyboardAvoidingView,
   DocumentSelectionState,
 } from 'react-native'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 import {
@@ -38,8 +38,8 @@ export const LoginScreen = () => {
   const navigation = useNavigation()
   const { colors, normalize } = useTheme()
   const [email, setEmail] = React.useState('')
-  const [checkMail, setCheckMail] = useState(true)
-  const [checkPass, setCheckPass] = useState(true)
+  const [checkMail, setCheckMail] = React.useState(true)
+  const [checkPass, setCheckPass] = React.useState(true)
   const [password, setPassword] = React.useState('')
   const dataUser = useAppSelector((state) => state.root.user)
   const isResend = useAppSelector(
@@ -49,6 +49,30 @@ export const LoginScreen = () => {
   const [disabledLogin, setDisabledLogin] = React.useState(true)
   const emailInputRef = React.useRef<DocumentSelectionState>()
   const passwordInputRef = React.useRef<DocumentSelectionState>()
+
+  React.useEffect(() => {
+    email.length > 0 && password.length > 0
+        ? setDisabledLogin(false)
+        : setDisabledLogin(true)
+  }, [email, password])
+
+  React.useEffect(() => {
+    if (dataUser.email && dataUser.isVerified) {
+      updateFCMToken()
+      if (dataUser.pretest) {
+        replace('BOTTOM_TAB')
+      } else {
+        replace('EXAM_TEST_SCREEN')
+      }
+    }
+    if (isResend && email) {
+      dispatch(resendVerifyEmail(email))
+      navigate('VERIFICATION_CODE_SCREEN', { type: 'signUp', email })
+    }
+  }, [dataUser, isResend])
+
+  const validate = useValidateInput()
+
   const isErrorBeforeSubmit = () => {
     if (!validate.validateEmail(email)) {
       emailInputRef.current?.focus()
@@ -94,31 +118,10 @@ export const LoginScreen = () => {
     }
   }
 
-  useEffect(() => {
-    if (dataUser.email && dataUser.isVerified) {
-      updateFCMToken()
-      if (dataUser.pretest) {
-        replace('BOTTOM_TAB')
-      } else {
-        replace('EXAM_TEST_SCREEN')
-      }
-    }
-    if (isResend && email) {
-      dispatch(resendVerifyEmail(email))
-      navigate('VERIFICATION_CODE_SCREEN', { type: 'signUp', email })
-    }
-  }, [dataUser, isResend])
-
   const handleLoginOAuth = async (providerId: Provider) => {
     dispatch(loginOAuthThunk({ providerId }))
   }
 
-  React.useEffect(() => {
-    email.length > 0 && password.length > 0
-      ? setDisabledLogin(false)
-      : setDisabledLogin(true)
-  }, [email, password])
-  const validate = useValidateInput()
   const onCheckEmail = (value: string) => {
     setCheckMail(validate.validateEmail(value))
     return

@@ -144,7 +144,7 @@ const EmotionPost: React.FC<IEmotionPost> = ({
         <Text>
           {like
             ? t('post_emotion_status_user', {
-                user: user.username,
+                user: user.fullName,
                 amount: likeCount,
               })
             : t('post_emotion_status', { amount: likeCount })}
