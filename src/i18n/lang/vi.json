@@ -216,6 +216,13 @@
     "period_end_date": "Ngày kết thúc gói",
     "back_to_home": "Về trang chủ",
     "you_are_premium": "Bạn là người dùng Premium",
-    "you_receive_all_benefits": "Bạn nhận được tất cả các tính năng từ Premium"
+    "you_receive_all_benefits": "Bạn nhận được tất cả các tính năng từ Premium",
+    "unsubscribe_premium": "Hủy đăng ký gói premium",
+    "unsubscribe_note": "Tất cả các đặc quyền sẽ vẫn được giữ cho đến khi hết hạn và sẽ không tự động gia hạn gói",
+    "you_need_at_least_honey": "Bạn cần ít nhất {{val}} điểm mật ong để xem video",
+    "subscribe_to_premium_for_more_perks": "Đăng ký gói premium để nhận những đặc quyền",
+    "subscribe": "Đăng ký",
+    "unsubscribe": "Hủy đăng ký",
+    "later": "Để sau"
   }
 }

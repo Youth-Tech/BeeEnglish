@@ -1,13 +1,23 @@
 import React from 'react'
-import { Block, Container, Image, ShadowButton, Text } from '@components'
-import { Icon, images } from '@assets'
-import { goBack, navigateAndReset } from '@navigation'
-import { heightScreen } from '@utils/helpers'
 import { useTheme } from '@themes'
-import { Invoice, PaymentService } from '@services/PaymentService'
+import { Icon, images } from '@assets'
+import { useAppDispatch } from '@hooks'
+import { heightScreen } from '@utils/helpers'
+import { setRoleUser } from '@redux/reducers'
 import { useTranslation } from 'react-i18next'
+import { useRoute } from '@react-navigation/native'
+import { Invoice, PaymentService } from '@services/PaymentService'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { Block, Container, Image, ShadowButton, Text } from '@components'
+import { goBack, navigateAndReset, RootStackParamList } from '@navigation'
 
 export const InvoiceScreen: React.FC = () => {
+  const dispatch = useAppDispatch()
+  const { params } =
+    useRoute<
+      NativeStackScreenProps<RootStackParamList, 'INVOICE_SCREEN'>['route']
+    >()
+  const getMe = params.getMe
   const { t } = useTranslation()
   const { colors } = useTheme()
   const [invoiceData, setInvoiceData] = React.useState<Invoice>({
@@ -26,11 +36,13 @@ export const InvoiceScreen: React.FC = () => {
       const response = await PaymentService.getPaymentIntent()
       console.log(response.data.data)
       setInvoiceData(response.data.data)
+      dispatch(setRoleUser({ role: 'premium' }))
     } catch (e) {
       console.log(e)
     }
   }
   React.useEffect(() => {
+    console.log('get me', getMe)
     getPaymentIntent()
   }, [])
   return (

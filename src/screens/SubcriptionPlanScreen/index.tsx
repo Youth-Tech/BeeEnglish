@@ -22,6 +22,7 @@ import {
 import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
 import { goBack, replace } from '@navigation'
 import { handleErrorMessage } from '@utils/errorUtils'
+import { useAppDispatch } from '@hooks'
 
 export const SubcriptionPlanScreen: React.FC = () => {
   const [currentPlan, setCurrentPlan] = React.useState<Plan>()
@@ -69,7 +70,9 @@ export const SubcriptionPlanScreen: React.FC = () => {
   const callAPIGetPrices = async () => {
     try {
       const response = await PaymentService.getPrices()
-      const pricesData = response.data.data.sort(() => -1)
+      const pricesData = response.data.data.sort(
+        (a, b) => a.unitAmount - b.unitAmount,
+      )
       setPackagePlans(pricesData)
     } catch (e) {
       console.log(e)
@@ -80,7 +83,7 @@ export const SubcriptionPlanScreen: React.FC = () => {
     try {
       const response = await PaymentService.subcribePremium(subcribeInfo)
       console.log(response.data.message)
-      replace('INVOICE_SCREEN')
+      replace('INVOICE_SCREEN', { getMe: true })
     } catch (e) {
       console.log(e)
     }
@@ -229,7 +232,7 @@ export const SubcriptionPlanScreen: React.FC = () => {
                 blurOnSubmit={false}
               />
             </Block>
-            <Block row>
+            <Block row gap={5}>
               <BottomSheetTextInput
                 ref={expiryDateRef}
                 placeholder={'MM / YY'}

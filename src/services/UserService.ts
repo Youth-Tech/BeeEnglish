@@ -1,8 +1,7 @@
-import { DefaultResponse, TokenService, Word } from '@services'
+import { DefaultResponse, Word } from '@services'
 import APIUtils from '@utils/AxiosInstance'
 import { Provider } from '@configs'
 import { GetAllPostResponse } from '@services/PostService'
-import { getRefreshToken } from '@redux/selectors'
 
 const enum endPoints {
   getUserData = 'user/me',
@@ -17,6 +16,7 @@ const enum endPoints {
   getPostBookmark = '/user/posts-bookmark',
   bookmarkPost = '/user/bookmark-post/',
   migrateGuestAccount = '/user/restored-account',
+  getCoins = '/user/coins',
 }
 
 export interface Level {
@@ -141,7 +141,9 @@ export interface MigrateAccountRequest {
 interface MigrateAccountResponse extends DefaultResponse {
   data: UserData
 }
-
+export interface GetCoinsResponse extends DefaultResponse {
+  data: Pick<UserData, '_id' | 'coin'>
+}
 export const UserService = {
   getUserData() {
     return APIUtils.get<UserStateResponse>(
@@ -217,5 +219,8 @@ export const UserService = {
       endPoints.migrateGuestAccount,
       body,
     )
+  },
+  getCoins() {
+    return APIUtils.get<GetCoinsResponse>(endPoints.getCoins)
   },
 } as const

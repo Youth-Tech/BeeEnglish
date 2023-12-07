@@ -79,7 +79,7 @@ export type RootStackParamList = {
   [AUTH_ROUTE.RANKING_SCREEN]: undefined
   [AUTH_ROUTE.MORE_POST_SCREEN]: undefined
   [AUTH_ROUTE.SUBSCRIPTION_SCREEN]: undefined
-  [AUTH_ROUTE.INVOICE_SCREEN]: undefined
+  [AUTH_ROUTE.INVOICE_SCREEN]: { getMe: boolean }
 
   [PUBLIC_ROUTE.SPLASH_SCREEN]: undefined
   [PUBLIC_ROUTE.ABOUT_THE_TEST_SCREEN]: undefined

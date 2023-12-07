@@ -31,13 +31,14 @@ import {
 } from '@components'
 import { Task } from '@services/TaskService'
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
+import { UserService } from '@services'
 
 export const StreakScreen = () => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const taskData = useAppSelector(getTask)
   const { colors, normalize } = useTheme()
-  const userCoin = useAppSelector((state) => state.root.user.coin)
+  const [userCoins, setUserCoins] = React.useState(0)
   const modalRef = React.useRef<ModalFunction>(null)
 
   const rotateModal = useSharedValue(0)
@@ -82,7 +83,17 @@ export const StreakScreen = () => {
       </Block>
     )
   }
-
+  const getCoins = async () => {
+    try {
+      const response = await UserService.getCoins()
+      setUserCoins(response.data.data.coin)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  React.useEffect(() => {
+    getCoins()
+  }, [])
   return (
     <Container hasScroll>
       <Block paddingHorizontal={20} paddingTop={15}>
@@ -108,7 +119,7 @@ export const StreakScreen = () => {
           </Text>
           <Block row justifyCenter alignCenter>
             <Text size={'h5'} fontFamily={'bold'} lineHeight={18}>
-              {userCoin}
+              {userCoins}
             </Text>
             <Icon state={'Honey'} />
           </Block>

@@ -31,17 +31,17 @@ const PlanPackageItem: React.FC<PlanPackageItemProps> = (props) => {
       case 'month':
         return {
           primaryColor: '#d896ff',
-          secondaryColor: '#efbbff',
+          secondaryColor: '#d896ff' + 30,
         }
       case 'year':
         return {
           primaryColor: '#00d2ff',
-          secondaryColor: '#9bedff',
+          secondaryColor: '#00d2ff' + 30,
         }
       case 'lifetime':
         return {
           primaryColor: '#ff5252',
-          secondaryColor: '#ffbaba',
+          secondaryColor: '#ff5252' + 30,
         }
     }
   }

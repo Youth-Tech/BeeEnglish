@@ -1,29 +1,35 @@
 import React from 'react'
-import { normalize } from '@themes'
-import { useAppDispatch, useAppSelector } from '@hooks'
-import { ScrollView } from 'react-native'
-import { updateVideos } from '@redux/reducers'
+import { images } from '@assets'
+import { UserService } from '@services'
 import { useTranslation } from 'react-i18next'
-import { navigate, RootStackParamList } from '@navigation'
+import { updateVideos } from '@redux/reducers'
 import { PostServices } from '@services/PostService'
-import { Block, Container, GuestModal, Text } from '@components'
-import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
-import VideoItem from '@screens/ChooseVideoScreen/components/VideoItem'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import VideoComponent from '@screens/ChooseVideoScreen/components/VideoComponent'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { makeStyles, normalize, useTheme } from '@themes'
+import { navigate, RootStackParamList } from '@navigation'
+import { ScrollView, TouchableOpacity } from 'react-native'
 import { ModalFunction } from '@components/bases/Modal/type'
+import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import VideoItem from '@screens/ChooseVideoScreen/components/VideoItem'
+import { Block, Container, GuestModal, Image, Modal, Text } from '@components'
+import VideoComponent from '@screens/ChooseVideoScreen/components/VideoComponent'
 
 type ChooseVideoScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'CHOOSE_VIDEO_SCREEN'
 >
 
-export const ChooseVideoScreen: React.FC<ChooseVideoScreenProps> = (props) => {
+export const ChooseVideoScreen: React.FC<ChooseVideoScreenProps> = () => {
+  const { colors } = useTheme()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const styles = useStyle()
+  const modalRef = React.useRef<ModalFunction>(null)
   const [visible, setVisible] = React.useState(false)
   const [videoData, setVideoData] = React.useState<PostResponse[]>([])
   const [video, setVideo] = React.useState<PostResponse>()
+  const [userCoins, setUserCoins] = React.useState<number>(0)
   const isLoginWithGuest = useAppSelector(
     (state) => state.root.auth.isLoginWithGuest,
   )
@@ -35,6 +41,14 @@ export const ChooseVideoScreen: React.FC<ChooseVideoScreenProps> = (props) => {
     if (isLoginWithGuest) {
       guestModalRef.current?.openModal()
     } else {
+      // if (userCoins < 20) {
+      //   modalRef.current?.openModal()
+      // } else {
+      //   setVisible(false)
+      //   setVideo(videoData[index])
+      //   setVisible(true)
+      //   getCoins()
+      // }
       setVisible(false)
       setVideo(videoData[index])
       setVisible(true)
@@ -63,9 +77,17 @@ export const ChooseVideoScreen: React.FC<ChooseVideoScreenProps> = (props) => {
       console.log(e)
     }
   }
-
+  const getCoins = async () => {
+    try {
+      const response = await UserService.getCoins()
+      setUserCoins(response.data.data.coin)
+    } catch (e) {
+      console.log(e)
+    }
+  }
   React.useEffect(() => {
     callGetAllVideoAPI()
+    getCoins()
   }, [])
 
   return (
@@ -105,6 +127,75 @@ export const ChooseVideoScreen: React.FC<ChooseVideoScreenProps> = (props) => {
           guestModalRef?.current?.dismissModal()
         }}
       />
+      <Modal ref={modalRef} position={'center'}>
+        <Block
+          radius={15}
+          height={300}
+          paddingTop={41}
+          marginBottom={30}
+          marginHorizontal={20}
+          backgroundColor={colors.white}
+        >
+          <Block alignCenter>
+            <Image
+              style={styles.image}
+              source={images.BeeSad}
+              resizeMode={'contain'}
+            />
+            <Text
+              size={'h2'}
+              fontFamily={'semiBold'}
+              color={colors.black}
+              marginTop={15}
+              center
+            >
+              {t('you_need_at_least_honey', { val: 20 })}
+            </Text>
+            <Text size={'h5'} fontFamily={'bold'} marginTop={12.77} center>
+              {t('subscribe_to_premium_for_more_perks')}
+            </Text>
+          </Block>
+
+          <Block row space={'between'} paddingHorizontal={20} marginTop={15}>
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: colors.orangePrimary }]}
+              onPress={() => {
+                navigate('SUBSCRIPTION_SCREEN')
+                modalRef.current?.dismissModal()
+              }}
+            >
+              <Text size={'h2'} fontFamily={'semiBold'} color={colors.white}>
+                {t('subscribe')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button]}
+              onPress={() => {
+                modalRef.current?.dismissModal()
+              }}
+            >
+              <Text size={'h2'} fontFamily={'semiBold'} color={colors.greyDark}>
+                {t('later')}
+              </Text>
+            </TouchableOpacity>
+          </Block>
+        </Block>
+      </Modal>
     </Container>
   )
 }
+const useStyle = makeStyles()(({ colors, normalize }) => ({
+  image: {
+    width: normalize.h(89),
+    height: normalize.h(98),
+  },
+  button: {
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: colors.greyLight,
+    width: normalize.h(128.7),
+    height: normalize.h(41.8),
+    borderRadius: normalize.m(10),
+  },
+}))

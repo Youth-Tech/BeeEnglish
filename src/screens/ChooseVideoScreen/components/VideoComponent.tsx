@@ -1,17 +1,12 @@
 import React from 'react'
 import Video from 'react-native-video'
 import {
+  ActivityIndicator,
   FlatList,
   ListRenderItemInfo,
   Pressable,
-  StyleSheet,
-  View,
+  TouchableOpacity,
 } from 'react-native'
-import PlayIcon from '@assets/icons/PlayIcon'
-import { baseStyles, useTheme } from '@themes'
-import { Block, BlockAnimated, Text } from '@components'
-import { heightWindow, widthScreen } from '@utils/helpers'
-import BackButton from '@screens/ChooseVideoScreen/components/BackButton'
 import Animated, {
   Extrapolation,
   FadeIn,
@@ -26,21 +21,27 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated'
-import { Icon } from '@assets'
+import { Icon, images } from '@assets'
 import memoizeOne from 'memoize-one'
 import { useAppSelector } from '@hooks'
+import { navigate } from '@navigation'
 import FilmIcon from '@assets/icons/FilmIcon'
+import PlayIcon from '@assets/icons/PlayIcon'
 import { useTranslation } from 'react-i18next'
 import { handleColor } from '@components/utils'
-import { G, Rect, Svg } from 'react-native-svg'
 import { Portal } from 'react-native-portalize'
+import { G, Rect, Svg } from 'react-native-svg'
+import { PostServices, UserService } from '@services'
+import { baseStyles, makeStyles, useTheme } from '@themes'
+import { heightWindow, widthScreen } from '@utils/helpers'
+import { ModalFunction } from '@components/bases/Modal/type'
+import { Block, BlockAnimated, Image, Modal, Text } from '@components'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import SubtitleItem from '@screens/ChooseVideoScreen/components/SubtitleItem'
+import VideoListItem from '@screens/ChooseVideoScreen/components/VideoListItem'
 import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes'
 import { NativeScrollEvent } from 'react-native/Libraries/Components/ScrollView/ScrollView'
-import VideoListItem from '@screens/ChooseVideoScreen/components/VideoListItem'
-import { PostServices } from '@services'
 
 export interface VideoComponentProps {
   data: PostResponse
@@ -52,19 +53,20 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
   const { data, onPressClose } = props
   const { colors, normalize } = useTheme()
   const _strokeHeight = normalize.v(5)
+  const styles = useStyle()
+  const modalRef = React.useRef<ModalFunction>(null)
   const scrollX = useSharedValue(0)
   const { t } = useTranslation()
   const progressStepValue = useSharedValue(0)
   const currentIndex = React.useRef<number>(0)
   const subtitleListRef = React.useRef<FlatList>(null)
+  const [userCoins, setUserCoins] = React.useState(0)
   const [widthSvg, setWidthSvg] = React.useState<number>(0)
   const [duration, setDuration] = React.useState<number>(0)
   const [visibleName, setVisibleName] = React.useState(false)
   const [videoData, setVideoData] = React.useState<PostResponse>(data)
-
   const videos = useAppSelector((state) => state.root.videoReducer.videos)
-  const [recommendData, setRecommendData] =
-    React.useState<PostResponse[]>(videos)
+  const [visibleVideo, setVisibleVideo] = React.useState(false)
   const ITEM_SIZE = normalize.h(279)
   const SPACER_ITEM_SIZE = (widthScreen - ITEM_SIZE) / 2
   const scrollHandler = useAnimatedScrollHandler((event) => {
@@ -110,12 +112,10 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
         offset.value = 0
       }
     })
-    .onEnd((event) => {
+    .onEnd(() => {
       if (offset.value < height / 2) {
-        console.log('to 0')
         runOnJS(handleVisibleName)(false)
       } else if (offset.value > height / 2) {
-        console.log('to height')
         runOnJS(handleVisibleName)(true)
       }
     })
@@ -148,8 +148,8 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
   })
 
   const handleClickNext = (index: number) => {
-    if (index === videoData.attachments[0].script.length - 1) return
-    handleSeek(Number(videoData.attachments[0].script[index + 1].start))
+    if (index === videoData.attachments[0].script!.length - 1) return
+    handleSeek(Number(videoData.attachments[0].script![index + 1].start))
     subtitleListRef.current?.scrollToIndex({
       index: index + 1,
       animated: true,
@@ -157,7 +157,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
   }
   const handleClickPrevious = (index: number) => {
     if (index === 0) return
-    handleSeek(Number(videoData.attachments[0].script[index - 1].start))
+    handleSeek(Number(videoData.attachments[0].script![index - 1].start))
     subtitleListRef.current?.scrollToIndex({
       index: index - 1,
       animated: true,
@@ -174,7 +174,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
     const index = Math.round(
       event.nativeEvent.contentOffset.x / normalize.h(340),
     )
-    handleSeek(Number(videoData.attachments[0].script[index].start))
+    handleSeek(Number(videoData.attachments[0].script![index].start))
   }
   const scrollToIndex = (_: number) => {
     subtitleListRef.current?.scrollToIndex({
@@ -194,14 +194,12 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
         >
           <Svg height={_strokeHeight} width={widthSvg}>
             <G>
-              {/* Background Line */}
               <Rect
                 width={'100%'}
                 height={_strokeHeight}
                 fill={handleColor(colors, 'greyLight')}
               />
 
-              {/* Progress Line */}
               <AnimatedLineSvg
                 animatedProps={animatedProps}
                 height={_strokeHeight}
@@ -221,10 +219,10 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
     return (
       <Block
         key={`item-video-${index}`}
-        marginRight={index === recommendData.length - 1 ? SPACER_ITEM_SIZE : 10}
+        marginRight={index === videos.length - 1 ? SPACER_ITEM_SIZE : 10}
         marginLeft={index === 0 ? SPACER_ITEM_SIZE : 0}
         style={[
-          index === recommendData.length - 1
+          index === videos.length - 1
             ? { marginEnd: SPACER_ITEM_SIZE }
             : { marginEnd: normalize.v(10) },
           index === 0 ? { marginStart: SPACER_ITEM_SIZE } : {},
@@ -236,7 +234,11 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
           src={item.attachments[0].thumbnail}
           description={item.note}
           onPress={() => {
+            // if (userCoins < 20) {
+            //   modalRef.current?.openModal()
+            // } else {
             setIsPaused(true)
+            setVisibleVideo(false)
             setVideoData(item)
             videoRef.current?.seek(0)
             currentIndex.current = 0
@@ -244,13 +246,25 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
               index: 0,
               animated: true,
             })
-            // setIsPaused(false)
+            setTimeout(() => {
+              setVisibleVideo(true)
+              setIsPaused(false)
+            }, 1000)
+            //}
           }}
           index={index}
           scrollX={scrollX}
         />
       </Block>
     )
+  }
+  const getCoins = async () => {
+    try {
+      const response = await UserService.getCoins()
+      setUserCoins(response.data.data.coin)
+    } catch (e) {
+      console.log(e)
+    }
   }
   const callAPIMarkAsRead = async (postId: string) => {
     try {
@@ -260,84 +274,106 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
       console.log(e)
     }
   }
+  const handleVisibleVideo = (finished: boolean) => {
+    'worklet'
+    if (finished) {
+      runOnJS(setVisibleVideo)(true)
+    }
+  }
   React.useEffect(() => {
     callAPIMarkAsRead(videoData._id)
+    getCoins()
   }, [videoData])
   return (
     <Portal>
       <BlockAnimated
-        entering={SlideInDown}
+        entering={SlideInDown.withCallback(handleVisibleVideo)}
         exiting={SlideOutDown}
         style={[{ paddingTop: getStatusBarHeight() }, translateY]}
       >
         <Block>
           <GestureDetector gesture={panGesture}>
             <Block row>
-              <AnimatedPressable onPress={handlePause} style={[widthAnimate]}>
-                <Block
-                  style={baseStyles.absoluteFill}
-                  backgroundColor={isPaused ? 'rgba(0,0,0,0.5)' : 'transparent'}
-                  zIndex={1}
-                  padding={10}
-                >
-                  {isPaused && (
-                    <BlockAnimated flex entering={FadeIn} exiting={FadeOut}>
-                      <BackButton onPress={() => {}} />
-                      <Block
-                        style={baseStyles.absoluteFill}
-                        justifyCenter
-                        alignCenter
-                      >
-                        <PlayIcon />
-                      </Block>
-                    </BlockAnimated>
-                  )}
-                </Block>
-                <Block
-                  style={baseStyles.absoluteFill}
-                  backgroundColor={colors.black}
-                  padding={10}
-                />
-                <Video
-                  onLoad={(data) => {
-                    setDuration(data.duration)
-                  }}
-                  source={{
-                    uri: videoData.attachments[0].src,
-                    type: 'm3u8',
-                  }}
-                  ref={videoRef}
-                  onBuffer={onBuffer}
-                  onError={onError}
-                  style={[styles.video]}
-                  resizeMode={'contain'}
-                  paused={isPaused}
-                  onEnd={() => {
-                    currentIndex.current = 0
-                    scrollToIndex(currentIndex.current)
-                    videoRef.current?.seek(0)
-                  }}
-                  onProgress={(data) => {
-                    if (isPaused === false) {
-                      progressStepValue.value =
-                        data.currentTime * (100 / data.playableDuration)
-                      if (
-                        data.currentTime >=
-                          Number(
-                            videoData.attachments[0].script[
-                              currentIndex.current
-                            ].end,
-                          ) &&
-                        currentIndex.current <
-                          videoData.attachments[0].script.length - 1
-                      ) {
-                        currentIndex.current++
-                        scrollToIndex(currentIndex.current)
-                      }
+              {visibleVideo ? (
+                <AnimatedPressable onPress={handlePause} style={[widthAnimate]}>
+                  <Block
+                    style={baseStyles.absoluteFill}
+                    backgroundColor={
+                      isPaused ? 'rgba(0,0,0,0.5)' : 'transparent'
                     }
-                  }}
-                />
-              </AnimatedPressable>
+                    zIndex={1}
+                    padding={10}
+                  >
+                    {isPaused && (
+                      <BlockAnimated flex entering={FadeIn} exiting={FadeOut}>
+                        <Block
+                          style={baseStyles.absoluteFill}
+                          justifyCenter
+                          alignCenter
+                        >
+                          <PlayIcon />
+                        </Block>
+                      </BlockAnimated>
+                    )}
+                  </Block>
+                  <Block
+                    style={baseStyles.absoluteFill}
+                    backgroundColor={colors.black}
+                    padding={10}
+                  />
+                  <Video
+                    onLoad={(data) => {
+                      console.log('called')
+                      setDuration(data.duration)
+                      // setVisibleVideo(true)
+                    }}
+                    source={{
+                      uri: videoData.attachments[0].src,
+                      type: 'm3u8',
+                    }}
+                    ref={videoRef}
+                    onBuffer={onBuffer}
+                    onError={onError}
+                    style={[styles.video]}
+                    resizeMode={'contain'}
+                    paused={isPaused}
+                    onEnd={() => {
+                      currentIndex.current = 0
+                      scrollToIndex(currentIndex.current)
+                      videoRef.current?.seek(0)
+                    }}
+                    onProgress={(data) => {
+                      if (isPaused === false) {
+                        progressStepValue.value =
+                          data.currentTime * (100 / data.playableDuration)
+                        if (
+                          data.currentTime >=
+                            Number(
+                              videoData.attachments[0].script![
+                                currentIndex.current
+                              ].end,
+                            ) &&
+                          currentIndex.current <
+                            videoData.attachments[0].script!.length - 1
+                        ) {
+                          currentIndex.current++
+                          scrollToIndex(currentIndex.current)
+                        }
+                      }
+                    }}
+                  />
+                </AnimatedPressable>
+              ) : (
+                <BlockAnimated
+                  style={[styles.video, widthAnimate]}
+                  alignCenter
+                  justifyCenter
+                  backgroundColor={colors.black}
+                >
+                  <ActivityIndicator size={'large'} color={colors.white} />
+                </BlockAnimated>
+              )}
+
               <Block
                 flex
                 row
@@ -371,40 +407,46 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
             backgroundColor: 'white',
           }}
         >
-          <FlatList
-            ref={subtitleListRef}
-            keyExtractor={(_, index) => `item-subtitle-${index}`}
-            horizontal
-            data={videoData.attachments[0].script}
-            pagingEnabled
-            renderItem={({ item, index }) => {
-              return (
-                <Block marginHorizontal={5} key={`item-${index}`}>
-                  <SubtitleItem
-                    subtitle={item.content}
-                    positionText={`${index + 1}/${
-                      videoData.attachments[0].script.length
-                    }`}
-                    onPressNext={() => {
-                      handleClickNext(index)
-                    }}
-                    onPressPrevious={() => {
-                      handleClickPrevious(index)
-                    }}
-                    onPressRewind={() => {
-                      const seconds = Number(
-                        videoData.attachments[0].script[index].start,
-                      )
-                      videoRef.current?.seek(seconds)
-                      progressStepValue.value = seconds * (100 / duration)
-                    }}
-                  />
-                </Block>
-              )
-            }}
-            scrollEventThrottle={16}
-            onMomentumScrollEnd={onMomentumEndDrag}
-          />
+          {visibleVideo ? (
+            <FlatList
+              ref={subtitleListRef}
+              keyExtractor={(_, index) => `item-subtitle-${index}`}
+              horizontal
+              data={videoData.attachments[0].script}
+              pagingEnabled
+              renderItem={({ item, index }) => {
+                return (
+                  <Block marginHorizontal={5} key={`item-${index}`}>
+                    <SubtitleItem
+                      subtitle={item.content}
+                      positionText={`${index + 1}/${
+                        videoData.attachments[0].script!.length
+                      }`}
+                      onPressNext={() => {
+                        handleClickNext(index)
+                      }}
+                      onPressPrevious={() => {
+                        handleClickPrevious(index)
+                      }}
+                      onPressRewind={() => {
+                        const seconds = Number(
+                          videoData.attachments[0].script![index].start,
+                        )
+                        videoRef.current?.seek(seconds)
+                        progressStepValue.value = seconds * (100 / duration)
+                      }}
+                    />
+                  </Block>
+                )
+              }}
+              scrollEventThrottle={16}
+              onMomentumScrollEnd={onMomentumEndDrag}
+            />
+          ) : (
+            <Block height={240} alignCenter justifyCenter>
+              <ActivityIndicator size={'large'} color={colors.black} />
+            </Block>
+          )}
           <Block row alignCenter paddingHorizontal={20} marginTop={10}>
             <FilmIcon />
             <Text size={'h3'} fontFamily={'bold'} marginLeft={10}>
@@ -414,7 +456,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
           <Animated.FlatList
             horizontal
             keyExtractor={(_, index) => index.toString()}
-            data={recommendData}
+            data={videos}
             onScroll={scrollHandler}
             renderItem={renderVideoItemList}
             showsHorizontalScrollIndicator={false}
@@ -432,12 +474,80 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
           <Block height={200}></Block>
         </Animated.ScrollView>
       </BlockAnimated>
+      <Modal ref={modalRef} position={'center'}>
+        <Block
+          radius={15}
+          height={300}
+          paddingTop={41}
+          marginBottom={30}
+          marginHorizontal={20}
+          backgroundColor={colors.white}
+        >
+          <Block alignCenter>
+            <Image
+              style={styles.image}
+              source={images.BeeSad}
+              resizeMode={'contain'}
+            />
+            <Text
+              size={'h2'}
+              fontFamily={'semiBold'}
+              color={colors.black}
+              marginTop={15}
+              center
+            >
+              {t('you_need_at_least_honey', { val: 20 })}
+            </Text>
+            <Text size={'h5'} fontFamily={'bold'} marginTop={12.77} center>
+              {t('subscribe_to_premium_for_more_perks')}
+            </Text>
+          </Block>
+
+          <Block row space={'between'} paddingHorizontal={20} marginTop={15}>
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: colors.orangePrimary }]}
+              onPress={() => {
+                navigate('SUBSCRIPTION_SCREEN')
+                modalRef.current?.dismissModal()
+              }}
+            >
+              <Text size={'h2'} fontFamily={'semiBold'} color={colors.white}>
+                {t('subscribe')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button]}
+              onPress={() => {
+                modalRef.current?.dismissModal()
+              }}
+            >
+              <Text size={'h2'} fontFamily={'semiBold'} color={colors.greyDark}>
+                {t('later')}
+              </Text>
+            </TouchableOpacity>
+          </Block>
+        </Block>
+      </Modal>
     </Portal>
   )
 }
 export default React.memo(VideoComponent)
-const styles = StyleSheet.create({
+
+const useStyle = makeStyles()(({ colors, normalize }) => ({
   video: {
     aspectRatio: 1920 / 1080,
   },
-})
+  image: {
+    width: normalize.h(89),
+    height: normalize.h(98),
+  },
+  button: {
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: colors.greyLight,
+    width: normalize.h(128.7),
+    height: normalize.h(41.8),
+    borderRadius: normalize.m(10),
+  },
+}))
