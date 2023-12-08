@@ -101,10 +101,8 @@
     "more_example": "Xem thêm ví dụ",
     "word_difficulty": "Cấp độ từ",
     "choose_word_difficulty": "Bạn hãy chọn cấp độ từ phù hợp với trình độ của bạn.",
-    "hard": "Khó",
     "normal": "Bình thường",
     "simple": "Đơn giản",
-    "easy": "Dễ",
     "review_after_minutes": "Ôn tập lại sau {{val}} phút",
     "review_after_day": "Ôn tập lại sau {{val}} ngày",
     "review_after_week": "Ôn tập lại sau {{val}} tuần",
@@ -188,7 +186,7 @@
     "register_success": "Đăng ký thành công!",
     "synonyms": "Từ đồng nghĩa",
     "antonyms": "Từ trái nghĩa",
-    "havent_saved_a_word":"Bạn chưa lưu từ vựng nào. \n Hãy lưu ngay nào!",
+    "havent_saved_a_word": "Bạn chưa lưu từ vựng nào. \n Hãy lưu ngay nào!",
     "learn_a_word": "Các từ vựng bạn học sẽ được lưu ở đây. \n Cùng học nào!",
     "you_finished_all_tasks": "Bạn đã hoàn thành tất cả nhiệm vụ",
     "post": "Bài viết",
@@ -226,6 +224,8 @@
     "later": "Để sau",
     "status": "Trạng thái",
     "customerId": "Mã khách hàng",
-    "you_no_longer_subscribe_to_premium": "Bạn đã không còn đăng ký gói premium, sẽ không tự động chi trả gói"
+    "you_no_longer_subscribe_to_premium": "Bạn đã không còn đăng ký gói premium, sẽ không tự động chi trả gói",
+    "detail_post_title": "Luyện kỹ năng đọc hiểu",
+    "chapter": "Chương"
   }
 }

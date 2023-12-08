@@ -2,6 +2,20 @@ import APIUtils from '@utils/AxiosInstance'
 import { DefaultResponse, TokenService } from '@services'
 import { LoginResponse } from '@redux/actions/auth.action'
 
+const AuthEndPoint = {
+  login: 'auth/login',
+  signUp: 'auth/signup',
+  logOut: 'auth/logout',
+  oAuthLogin: 'auth/oauth/login',
+  loginForGuest: 'auth/login/guest',
+  verifyAccount: 'auth/verify-user',
+  resetPassword: 'auth/reset-password',
+  changePassword: 'auth/change-password',
+  forgotPassword: 'auth/forgot-password',
+  verifyForgotPassword: 'auth/verify-forgot-password',
+  resendVerifyEmail: 'auth/resend-verified-code-email',
+} as const
+
 export interface SignUpResponse extends DefaultResponse {
   data: {
     message: string
@@ -54,7 +68,7 @@ export interface LoginForGuestRequest {
 
 export const AuthService = {
   oAuthLogin({ accessToken, deviceId, deviceName, provider }: OAuthParams) {
-    return APIUtils.post<OAuthRes>('auth/oauth/login', {
+    return APIUtils.post<OAuthRes>(AuthEndPoint.oAuthLogin, {
       provider,
       accessToken,
       deviceId,
@@ -63,7 +77,7 @@ export const AuthService = {
   },
 
   signUp({ email, fullName, password, confirmPassword }: SignUpParams) {
-    return APIUtils.post<SignUpResponse>('auth/signup', {
+    return APIUtils.post<SignUpResponse>(AuthEndPoint.signUp, {
       email,
       fullName,
       password,
@@ -72,13 +86,13 @@ export const AuthService = {
   },
 
   verifyAccount({ code }: { code: string }) {
-    return APIUtils.post('auth/verify-user', {
+    return APIUtils.post(AuthEndPoint.verifyAccount, {
       code,
     })
   },
 
   login({ email, password, deviceName, deviceId }: LoginParams) {
-    return APIUtils.post<LoginResponse>('auth/login', {
+    return APIUtils.post<LoginResponse>(AuthEndPoint.login, {
       email,
       password,
       deviceId,
@@ -87,23 +101,23 @@ export const AuthService = {
   },
 
   loginForGuest(body: LoginForGuestRequest) {
-    return APIUtils.post<LoginResponse>('auth/login/guest', body)
+    return APIUtils.post<LoginResponse>(AuthEndPoint.loginForGuest, body)
   },
 
   resendVerifyEmail({ email }: { email: string }) {
-    return APIUtils.post('auth/resend-verified-code-email', {
+    return APIUtils.post(AuthEndPoint.resendVerifyEmail, {
       email,
     })
   },
 
   forgotPassword({ email }: { email: string }) {
-    return APIUtils.post('auth/forgot-password', {
+    return APIUtils.post(AuthEndPoint.forgotPassword, {
       email,
     })
   },
 
   verifyForgotPassword({ code }: { code: string }) {
-    return APIUtils.post<{ data: string }>('auth/verify-forgot-password', {
+    return APIUtils.post<{ data: string }>(AuthEndPoint.verifyForgotPassword, {
       code,
     })
   },
@@ -113,7 +127,7 @@ export const AuthService = {
     newPassword,
     confirmPassword,
   }: ResetPasswordParams) {
-    return APIUtils.post('auth/reset-password', {
+    return APIUtils.post(AuthEndPoint.resetPassword, {
       forgotPasswordToken,
       newPassword,
       confirmPassword,
@@ -121,10 +135,11 @@ export const AuthService = {
   },
 
   changePassword(body: ChangePasswordParams) {
-    return APIUtils.post<ChangePasswordRes>('/auth/change-password', body)
+    return APIUtils.post<ChangePasswordRes>(AuthEndPoint.changePassword, body)
   },
+
   logOut() {
-    return APIUtils.post<DefaultResponse>('/auth/logout', {
+    return APIUtils.post<DefaultResponse>(AuthEndPoint.logOut, {
       refreshToken: TokenService.getRefreshToken(),
     })
   },

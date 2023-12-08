@@ -181,7 +181,7 @@
     "register_success": "Register successfully!",
     "synonyms": "Synonyms",
     "antonyms": "Antonyms",
-    "havent_saved_a_word":"You haven't saved a word yet. \n Let's save one now!",
+    "havent_saved_a_word": "You haven't saved a word yet. \n Let's save one now!",
     "learn_a_word": "All the vocabularies that you learned will be saved here. \n Let's learn!",
     "you_finished_all_tasks": "You finished all tasks",
     "score": "score",
@@ -222,6 +222,8 @@
     "later": "Later",
     "status": "Status",
     "customerId": "Customer ID",
-  "you_no_longer_subscribe_to_premium": "You are no longer subscribed to the premium plan, no automatically recharge"
+  "you_no_longer_subscribe_to_premium": "You are no longer subscribed to the premium plan, no automatically recharge",
+    "detail_post_title": "Reading practice",
+    "chapter": "Chapter"
   }
 }

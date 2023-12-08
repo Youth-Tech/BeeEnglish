@@ -1,9 +1,10 @@
 import React from 'react'
-import { Block, Container, Image, ShadowButton, Text } from '@components'
-import { Icon, images } from '@assets'
-import { useTheme } from '@themes'
-import { goBack, replace } from '@navigation'
 import { useTranslation } from 'react-i18next'
+
+import { useTheme } from '@themes'
+import { Icon, images } from '@assets'
+import { goBack, replace } from '@navigation'
+import { Block, Container, Image, ShadowButton, Text } from '@components'
 
 export const AboutTheTestScreen = () => {
   const { colors } = useTheme()

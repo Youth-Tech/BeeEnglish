@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet } from 'react-native'
 import React from 'react'
-import { Block, CircleProgress, Image, ShadowBlock, Text } from '@components'
+import { Block, Image, ShadowBlock, Text } from '@components'
 import { colors, normalize, useTheme } from '@themes'
 import { Circle, Svg } from 'react-native-svg'
 
@@ -30,16 +30,17 @@ const COLORS: Array<TThemeColor> = [
 ]
 
 export interface LessonProgressItemProps {
+  lessonId: string
+  chapterId: string
   index?: number
   topicName: string
   topicImage: string
   lessonLabel: string
-  progress: number
   onPress?: () => void
 }
 
 export const LessonProgressItem = (props: LessonProgressItemProps) => {
-  const { index, topicImage, topicName, lessonLabel, progress, onPress } = props
+  const { index, topicImage, topicName, lessonLabel, onPress } = props
   const { colors } = useTheme()
   const [theme, setTheme] = React.useState<TThemeColor>()
   const getRandomColor = React.useCallback(() => {
@@ -89,34 +90,34 @@ export const LessonProgressItem = (props: LessonProgressItemProps) => {
               </Text>
             </Block>
           </Block>
-          <Block
-            alignSelf="flex-start"
-            row
-            alignCenter
-            justifyCenter
-            marginTop={10}
-          >
-            <Text
-              size={'h5'}
-              fontFamily="bold"
-              color={theme?.primary}
-              marginRight={3}
-            >
-              {progress}%
-            </Text>
+          {/*<Block*/}
+          {/*  alignSelf="flex-start"*/}
+          {/*  row*/}
+          {/*  alignCenter*/}
+          {/*  justifyCenter*/}
+          {/*  marginTop={10}*/}
+          {/*>*/}
+          {/*  <Text*/}
+          {/*    size={'h5'}*/}
+          {/*    fontFamily="bold"*/}
+          {/*    color={theme?.primary}*/}
+          {/*    marginRight={3}*/}
+          {/*  >*/}
+          {/*    {progress}%*/}
+          {/*  </Text>*/}
 
-            <CircleProgress
-              size={25}
-              step={progress}
-              totalSteps={100}
-              strokeWidth={3}
-              stepColor={theme?.primary}
-              progressValueProps={{
-                color: 'transparent',
-                size: 0,
-              }}
-            />
-          </Block>
+          {/*  <CircleProgress*/}
+          {/*    size={25}*/}
+          {/*    step={progress}*/}
+          {/*    totalSteps={100}*/}
+          {/*    strokeWidth={3}*/}
+          {/*    stepColor={theme?.primary}*/}
+          {/*    progressValueProps={{*/}
+          {/*      color: 'transparent',*/}
+          {/*      size: 0,*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*</Block>*/}
         </Block>
         <Block
           backgroundColor={colors.white}

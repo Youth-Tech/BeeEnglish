@@ -1,6 +1,12 @@
 import { DefaultResponse } from '@services/index'
 import ApiUtil from '@utils/AxiosInstance'
 
+export const TaskEndPoint = {
+  stopTime: `/task/stop-time`,
+  startTime: `/task/start-time`,
+  getDailyTasks: `/task/get-daily-task`,
+} as const
+
 export interface Task {
   _id: string
   title: string
@@ -12,22 +18,18 @@ export interface Task {
   target: string
   type: string
 }
-const endpoints = {
-  getDailyTasks: `/task/get-daily-task`,
-  startTime: `/task/start-time`,
-  stopTime: `/task/stop-time`,
-}
+
 export interface GetTasksRes extends DefaultResponse {
   data: Task[]
 }
 export const TaskService = {
   getDailyTasks() {
-    return ApiUtil.get<GetTasksRes>(endpoints.getDailyTasks)
+    return ApiUtil.get<GetTasksRes>(TaskEndPoint.getDailyTasks)
   },
   startTime() {
-    return ApiUtil.post<DefaultResponse>(endpoints.startTime, {})
+    return ApiUtil.post<DefaultResponse>(TaskEndPoint.startTime, {})
   },
   stopTime() {
-    return ApiUtil.post<DefaultResponse>(endpoints.stopTime, {})
+    return ApiUtil.post<DefaultResponse>(TaskEndPoint.stopTime, {})
   },
 }

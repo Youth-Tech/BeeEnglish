@@ -1,52 +1,40 @@
 import React from 'react'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { goBack, navigateAndReset, RootStackParamList } from '@navigation'
-import {
-  Block,
-  BlockAnimated,
-  Container,
-  GrammarOptions,
-  LeaveProcessModal,
-  Progress,
-  QuestionRefFunction,
-  ShadowButton,
-  Text,
-  VocabularyChoice,
-  VocabularyChoiceFunc,
-  VocabularyOptions,
-  VocabularyOptionsFunc,
-  WordChoice,
-} from '@components'
-import { KnowledgeService, Quiz } from '@services'
-import { QuestionType } from '@screens/GrammarScreen/constants'
-import { ModalFunction } from '@components/bases/Modal/type'
 import { useTranslation } from 'react-i18next'
-import { useAppDispatch, useBackHandler } from '@hooks'
-import { useTheme } from '@themes'
-import { setLoadingStatusAction, setUserState } from '@redux/reducers'
-import { LoadingScreen } from '@screens/LoadingScreen'
-import { Icon } from '@assets'
 import { Portal } from 'react-native-portalize'
 import { SlideInDown, SlideOutDown } from 'react-native-reanimated'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+
+import {
+  Text,
+  Block,
+  Progress,
+  Container,
+  WordChoice,
+  ShadowButton,
+  BlockAnimated,
+  GrammarOptions,
+  VocabularyChoice,
+  LeaveProcessModal,
+  VocabularyOptions,
+  QuestionRefFunction,
+  VocabularyChoiceFunc,
+  VocabularyOptionsFunc,
+} from '@components'
+import { Icon } from '@assets'
+import { useTheme } from '@themes'
+import { KnowledgeService } from '@services'
+import { LoadingScreen } from '@screens/LoadingScreen'
+import { useAppDispatch, useBackHandler } from '@hooks'
+import { ModalFunction } from '@components/bases/Modal/type'
+import { QuestionType } from '@screens/GrammarScreen/constants'
+import {parseQuizDataToQuestion} from "@screens/GrammarScreen/utils";
+import { setLoadingStatusAction, setUserState } from '@redux/reducers'
+import { goBack, navigateAndReset, RootStackParamList } from '@navigation'
 
 export type PreTestScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'PRE_TEST_SCREEN'
 >
-
-const parseQuizDataToQuestion = (quizzes: Quiz[]): Question[] => {
-  return quizzes.map((item) => {
-    return {
-      id: item._id,
-      answer: item.answer,
-      question: item.question,
-      type: QuestionType[item.type],
-      attachment: item.attachments,
-      wordImage: item.attachments?.[0]?.src || '',
-      correctAnswer: item.correctAnswer,
-    }
-  })
-}
 
 export const PreTestScreen: React.FC<PreTestScreenProps> = () => {
   const leaveModalRef = React.useRef<ModalFunction>(null)

@@ -1,6 +1,20 @@
 import ApiUtil from '@utils/AxiosInstance'
 import { DefaultResponse, UserData } from '@services'
 
+const KnowledgeEndPoint = {
+  getAllWord: '/knowledge/word/get-all',
+  getAllCourse: '/knowledge/course/get-all',
+  getPreTest: '/knowledge/quiz/pretest/generate',
+  sendResultPreTest: '/knowledge/quiz/pretest/send-result',
+
+  getChapterAndLesson: (courseId: string) => `/knowledge/chapter/${courseId}/get-chapters-and-lessons`,
+  getQuizByLessonId: (lessonId: string) =>
+    `/knowledge/quiz/${lessonId}/get-quizzes-by-lesson`,
+  getWordByLessonId: (lessonId: string) =>
+    `/knowledge/word/${lessonId}/get-words-by-lesson`,
+  getWordById: (wordId: string) => `/knowledge/word/${wordId}`,
+} as const
+
 export interface Lesson {
   _id: string
   name: string
@@ -72,6 +86,18 @@ export interface Word {
   senses: Array<Senses>
 }
 
+export interface Course {
+  _id: string
+  name: string
+  description: string
+  level: Level
+  attachment: Attachment
+  chapters: number
+  status: boolean
+  progress: number | null
+  completed: number
+}
+
 export interface GetQuizByLessonIdRes extends DefaultResponse {
   data: {
     quizzes: Quiz[]
@@ -108,50 +134,83 @@ export interface SendPreTestResultRequest {
   score: number
 }
 
-export interface SendPreTestResultResponse
-  extends DefaultResponse {
+export interface SendPreTestResultResponse extends DefaultResponse {
   data: UserData
 }
 
+export interface GetAllCourseResponse extends DefaultResponse {
+  data: {
+    courses: Array<Course>
+  }
+}
+
 export const KnowledgeService = {
-  getChapterAndLesson: () => {
+  getChapterAndLesson: (courseId: string) => {
     return ApiUtil.get<GetChapterAndLessonRes>(
-      `/knowledge/chapter/get-chapters-and-lessons?timestamp=${new Date().getTime()}`,
+      KnowledgeEndPoint.getChapterAndLesson(courseId),
+      undefined,
+      {
+        params: {
+          timestamp: new Date().getTime(),
+        },
+      },
     )
   },
 
   getQuizByLessonId: (lessonId: string) => {
     return ApiUtil.get<GetQuizByLessonIdRes>(
-      `/knowledge/quiz/${lessonId}/get-quizzes-by-lesson?page=1&limit=15&timestamp=${new Date().getTime()}`,
+      KnowledgeEndPoint.getQuizByLessonId(lessonId),
+      undefined,
+      {
+        params: {
+          page: 1,
+          limit: 15,
+          timestamp: new Date().getTime(),
+        },
+      },
     )
   },
 
   getWordByLessonId: (lessonId: string) => {
     return ApiUtil.get<GetWordByLessonIdRes>(
-      `/knowledge/word/${lessonId}/get-words-by-lesson?timestamp=${new Date().getTime()}`,
+      KnowledgeEndPoint.getWordByLessonId(lessonId),
+      undefined,
+      {
+        params: {
+          timestamp: new Date().getTime(),
+        },
+      },
     )
   },
 
   getAllWord: (params?: Partial<GetAllWordReq>) => {
     return ApiUtil.get<GetAllWordResponse>(
-      `/knowledge/word/get-all`,
+      KnowledgeEndPoint.getAllWord,
       undefined,
       { params },
     )
   },
 
   getWordById: (id: string) => {
-    return ApiUtil.get<GetWordByIdResponse>(`/knowledge/word/${id}`)
+    return ApiUtil.get<GetWordByIdResponse>(KnowledgeEndPoint.getWordById(id))
   },
 
   getPreTest: () => {
-    return ApiUtil.get<GetPreTestResponse>('/knowledge/quiz/pretest/generate')
+    return ApiUtil.get<GetPreTestResponse>(KnowledgeEndPoint.getPreTest)
   },
 
   sendResultPreTest: (body: SendPreTestResultRequest) => {
     return ApiUtil.post<SendPreTestResultResponse>(
-      '/knowledge/quiz/pretest/send-result',
+      KnowledgeEndPoint.sendResultPreTest,
       body,
     )
+  },
+
+  getAlCourse: () => {
+    return ApiUtil.get<GetAllCourseResponse>(KnowledgeEndPoint.getAllCourse, undefined, {
+      params: {
+        timestamp: new Date().getTime()
+      }
+    })
   },
 } as const

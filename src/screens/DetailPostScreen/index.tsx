@@ -193,15 +193,15 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
             />
             <Block style={styles.boxTitle}>
               <Text style={styles.title} size={'h3'} fontFamily={'bold'}>
-                Luyện kỹ năng đọc hiểu
+                {t('detail_post_title')}
               </Text>
             </Block>
           </Block>
           {renderDetailPost}
           <EmotionPost
-            setCurrentPost={setCurrentPost}
             postId={currentPost._id}
             liked={currentPost.liked}
+            setCurrentPost={setCurrentPost}
             likeCount={currentPost.likeCount}
             userLiked={currentPost.usersLiked}
             commentCount={currentPost.commentCount}

@@ -7,14 +7,15 @@
 3. [Alias](#alias)
 4. [Core Component](#core-component)
 5. [Custom Component](#custom-component)
-6. [🚀 Getting Started](#🚀-getting-started)
-7. [How to create new Service](#how-to-create-new-api-service)
+6. [🚀 Getting Started](#-getting-started)
+7. [How to create new Service](#how-to-create-new-service)
 8. [How to create new Flow](#how-to-create-new-flow)
-9. [How to use Rive Animation](#how-to-use-rive-animation)
+9. [How to use Lottie Animation](#how-to-use-lottie-animation-)
 
 ## Technical
 
-- Package Management: [Yarn](https://yarnpkg.com/)
+- Package Management
+  - [Yarn](https://yarnpkg.com/)
 - State Management
   - [Redux](https://redux-toolkit.js.org/introduction/getting-started)
 - Routing and Navigation
@@ -26,9 +27,9 @@
   - [Redux Persist](https://github.com/rt2zz/redux-persist)
 - Animation Handler
   - [Reanimated3](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/)
-  - [React Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/docs/)
+  - [React Native Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/docs/)
   - [React Native Animated API](https://reactnative.dev/docs/animated)
-  - [Rive](https://help.rive.app/runtimes/overview/react-native) for React Native
+  - [Lottie](https://airbnb.io/lottie/#/react-native) for React Native
 
 ## Project Scaffolding
 
@@ -385,6 +386,10 @@ yarn android
 ```bash
 yarn ios
 ```
+## How to create new Service
+
+1. Go to `sevice` folder and define new Service
+2. To export all services from new services, use exported values in the `index` file. 
 
 ## How to create new `Flow`
 
@@ -392,8 +397,8 @@ yarn ios
 2. Config the `screen` name route at `src/navigation/routes`
 3. Config the new screen route at `src/navigation/RootStack`
 
-## How to use Rive Animation ?
+## How to use Lottie Animation ?
 
-- Official [document](https://help.rive.app/runtimes/overview/react-native) from Rive
+- Official [document](https://airbnb.io/lottie/#/react-native) from Lottie
 
 **From [Youth-Tech](https://github.com/Youth-Tech) with 💖**
