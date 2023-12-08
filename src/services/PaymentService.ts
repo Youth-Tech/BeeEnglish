@@ -18,8 +18,9 @@ export interface Invoice {
   total: number
   currency: string
   status: string
-  periodStart: string
-  periodEnd: string
+  createdAt: string
+  expiredAt: string
+  stripeCustomerId: string
 }
 export interface GetPricesRes extends DefaultResponse {
   data: Plan[]

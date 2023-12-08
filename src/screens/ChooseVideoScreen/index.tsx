@@ -41,17 +41,14 @@ export const ChooseVideoScreen: React.FC<ChooseVideoScreenProps> = () => {
     if (isLoginWithGuest) {
       guestModalRef.current?.openModal()
     } else {
-      // if (userCoins < 20) {
-      //   modalRef.current?.openModal()
-      // } else {
-      //   setVisible(false)
-      //   setVideo(videoData[index])
-      //   setVisible(true)
-      //   getCoins()
-      // }
-      setVisible(false)
-      setVideo(videoData[index])
-      setVisible(true)
+      if (userCoins < 20) {
+        modalRef.current?.openModal()
+      } else {
+        setVisible(false)
+        setVideo(videoData[index])
+        setVisible(true)
+        getCoins()
+      }
     }
   }
   const renderVideoItem = ({

@@ -219,7 +219,9 @@
     "subscribe_to_premium_for_more_perks": "Subscribe to the premium plan for more perks",
     "subscribe": "Subscribe",
     "unsubscribe": "Unsubscribe",
-    "later": "Later"
-
+    "later": "Later",
+    "status": "Status",
+    "customerId": "Customer ID",
+  "you_no_longer_subscribe_to_premium": "You are no longer subscribed to the premium plan, no automatically recharge"
   }
 }

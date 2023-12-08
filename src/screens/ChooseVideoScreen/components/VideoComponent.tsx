@@ -234,23 +234,23 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
           src={item.attachments[0].thumbnail}
           description={item.note}
           onPress={() => {
-            // if (userCoins < 20) {
-            //   modalRef.current?.openModal()
-            // } else {
-            setIsPaused(true)
-            setVisibleVideo(false)
-            setVideoData(item)
-            videoRef.current?.seek(0)
-            currentIndex.current = 0
-            subtitleListRef.current?.scrollToIndex({
-              index: 0,
-              animated: true,
-            })
-            setTimeout(() => {
-              setVisibleVideo(true)
-              setIsPaused(false)
-            }, 1000)
-            //}
+            if (userCoins < 20) {
+              modalRef.current?.openModal()
+            } else {
+              setIsPaused(true)
+              setVisibleVideo(false)
+              setVideoData(item)
+              videoRef.current?.seek(0)
+              currentIndex.current = 0
+              subtitleListRef.current?.scrollToIndex({
+                index: 0,
+                animated: true,
+              })
+              setTimeout(() => {
+                setVisibleVideo(true)
+                setIsPaused(false)
+              }, 1000)
+            }
           }}
           index={index}
           scrollX={scrollX}

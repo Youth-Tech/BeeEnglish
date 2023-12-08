@@ -38,6 +38,9 @@ export const SettingScreen = () => {
   const isSignedInOAuth = useAppSelector(
     (state) => state.root.auth.isSignedInOAuth,
   )
+  const paymentStatus = useAppSelector(
+    (state) => state.root.paymentReducer.status,
+  )
   const userData = useAppSelector(getUserData)
   const isLoginWithGuest = useAppSelector(getIsLoginWithGuest)
   const role = useAppSelector((state) => state.root.user.role)
@@ -162,6 +165,16 @@ export const SettingScreen = () => {
                 ? t('you_receive_all_benefits')
                 : t('upgrade_for_more_features')}
             </Text>
+            <Text
+              color={colors.white}
+              fontFamily="semiBold"
+              size={'h5'}
+              lineHeight={20}
+            >
+              {role === 'premium' && paymentStatus === 'inactive'
+                ? t('you_no_longer_subscribe_to_premium')
+                : ''}
+            </Text>
             {role === 'premium' && (
               <Block alignSelf={'flex-end'} row gap={5} marginTop={10}>
                 <TouchableOpacity
@@ -175,21 +188,23 @@ export const SettingScreen = () => {
                     fontFamily={'semiBold'}
                     color={colors.white}
                   >
-                    Invoice
+                    {t('invoice')}
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.unsubButton}
-                  onPress={handleUnsubcribe}
-                >
-                  <Text
-                    size={'h5'}
-                    fontFamily={'semiBold'}
-                    color={colors.white}
+                {paymentStatus === 'active' && (
+                  <TouchableOpacity
+                    style={styles.unsubButton}
+                    onPress={handleUnsubcribe}
                   >
-                    Unsubcribe
-                  </Text>
-                </TouchableOpacity>
+                    <Text
+                      size={'h5'}
+                      fontFamily={'semiBold'}
+                      color={colors.white}
+                    >
+                      {t('unsubscribe')}
+                    </Text>
+                  </TouchableOpacity>
+                )}
               </Block>
             )}
           </Pressable>
