@@ -18,7 +18,7 @@ import {
 } from './components'
 import { images } from '@assets'
 import { normalize } from '@themes'
-import {useAppSelector} from '@hooks'
+import { useAppSelector } from '@hooks'
 import { LoadingScreen } from '@screens'
 import { parseDataToSectionData } from './utils'
 import { KnowledgeService, Quiz } from '@services'
@@ -50,7 +50,7 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
 
   React.useEffect(() => {
     if (!isPreTest) {
-      console.log('to pre test')
+      // console.log('to pre test')
       navigation.dispatch(StackActions.replace('EXAM_TEST_SCREEN'))
     }
   }, [isPreTest])
@@ -66,19 +66,17 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
     id: lessonId,
     checkpoint: checkpointLesson,
   }: Partial<ItemLessonProps>) => {
-    console.log('onStartExamination', lessonId)
+    // console.log('onStartExamination', lessonId)
     navigate('GRAMMAR_SCREEN', { lessonId, checkpointLesson, chapterId })
   }
 
   const onStartLessonPress = ({
     id: lessonId,
     chapterId,
-    nextLessonId,
   }: Partial<ItemLessonProps>) => {
     navigate('DETAIL_LESSON_SCREEN', {
       lessonId,
       chapterId,
-      nextLessonId,
     })
   }
 

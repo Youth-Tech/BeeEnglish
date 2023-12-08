@@ -1,5 +1,6 @@
 import React from 'react'
 import { Pressable } from 'react-native'
+import { SlideInRight, SlideOutRight } from 'react-native-reanimated'
 
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
@@ -7,8 +8,7 @@ import { navigate } from '@navigation'
 import { getStreakThunk } from '@redux/actions'
 import { BlockAnimated, Text } from '@components'
 import { useAppDispatch, useAppSelector } from '@hooks'
-import { SlideInRight, SlideOutRight } from 'react-native-reanimated'
-import {getIsLogin, getIsLoginWithGuest} from '@redux/selectors'
+import { getIsLogin, getIsLoginWithGuest } from '@redux/selectors'
 
 export const StreakBall = () => {
   const dispatch = useAppDispatch()
@@ -21,7 +21,8 @@ export const StreakBall = () => {
   const isLoginWithGuest = useAppSelector(getIsLoginWithGuest)
 
   React.useEffect(() => {
-    if (isLogin || isLoginWithGuest) {
+    if ((isLogin || isLoginWithGuest) && streakCount === -1) {
+      console.log('aaa')
       dispatch(getStreakThunk())
     }
   }, [isLogin, isLoginWithGuest])

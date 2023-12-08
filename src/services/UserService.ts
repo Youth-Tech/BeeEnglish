@@ -13,6 +13,7 @@ const UserEndPoint = {
   getPostBookmark: '/user/posts-bookmark',
   getLearningStats: '/user/learning-stats',
   getWordsBookmark: '/user/words-bookmark',
+  getCurrentLesson: '/user/current-lessons',
   getProgressLearning: '/user/learning-stats',
   migrateGuestAccount: '/user/restored-account',
   updateProgressLearning: '/user/update-progress-learning',
@@ -144,6 +145,29 @@ interface MigrateAccountResponse extends DefaultResponse {
   data: UserData
 }
 
+export interface CurrentLesson {
+  lesson: {
+    _id: string
+    name: string
+    description: string
+    chapter: {
+      _id: string
+      topic: {
+        _id: string
+        name: string
+        attachment: Attachment
+      }
+    }
+    order: 3
+    attachment: Attachment
+  }
+  completedAt: string
+}
+
+export interface GetCurrentLessonResponse extends DefaultResponse {
+  data: Array<CurrentLesson>
+}
+
 export const UserService = {
   getUserData() {
     return APIUtils.get<UserStateResponse>(
@@ -220,5 +244,9 @@ export const UserService = {
       UserEndPoint.migrateGuestAccount,
       body,
     )
+  },
+
+  getCurrentLesson() {
+    return APIUtils.get<GetCurrentLessonResponse>(UserEndPoint.getCurrentLesson)
   },
 } as const

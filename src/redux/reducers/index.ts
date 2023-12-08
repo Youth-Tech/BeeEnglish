@@ -27,8 +27,6 @@ export const rootReducer = combineReducers({
   taskReducer: TaskReducer,
   historyReducer: HistoryReducer,
   lessonMap: LessonMapReducer
-  // ...other reducers here
-  //   user: UserReducer,
 })
 
 export * from './auth.reducer'
