@@ -12,6 +12,7 @@ import { WordReviewReducer } from '@redux/reducers/wordReview.reducer'
 import { VideoReducer } from '@redux/reducers/video.reducer'
 import TaskReducer from '@redux/reducers/task.reducer'
 import { HistoryReducer } from '@redux/reducers/historyWord.reducer'
+import { PaymentReducer } from '@redux/reducers/payment.reducer'
 import {LessonMapReducer} from "@redux/reducers/lessonMap.reducer";
 export const rootReducer = combineReducers({
   auth: AuthReducer,
@@ -26,6 +27,9 @@ export const rootReducer = combineReducers({
   videoReducer: VideoReducer,
   taskReducer: TaskReducer,
   historyReducer: HistoryReducer,
+  paymentReducer: PaymentReducer,
+  // ...other reducers here
+  //   user: UserReducer,
   lessonMap: LessonMapReducer
 })
 
@@ -40,4 +44,5 @@ export * from './bookmark.reducer'
 export * from './wordReview.reducer'
 export * from './video.reducer'
 export * from './historyWord.reducer'
+export * from './payment.reducer'
 export * from './lessonMap.reducer'

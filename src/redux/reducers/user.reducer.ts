@@ -58,6 +58,15 @@ const userSlice = createSlice({
         postBookmarks: action.payload.postBookmarks,
       }
     },
+    setRoleUser(
+      state: UserData,
+      action: PayloadAction<Pick<UserData, 'role'>>,
+    ) {
+      return {
+        ...state,
+        role: action.payload.role,
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -111,5 +120,5 @@ const userSlice = createSlice({
   },
 })
 
-export const { setUserState, setPostBookmark } = userSlice.actions
+export const { setUserState, setPostBookmark, setRoleUser } = userSlice.actions
 export const UserReducer = userSlice.reducer

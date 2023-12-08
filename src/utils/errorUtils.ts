@@ -38,12 +38,14 @@ type TErrorStatus =
   | 'RESEND_LIMIT_403'
   | 'USER_NOT_FOUND_400'
 
+const exceptionErrors = ['READ POST_ALREADY_EXIST_400']
 export const handleErrorMessage = (
   subMessage: string | TErrorStatus,
   messageFromServer: string,
 ) => {
   console.log('submessage' + subMessage)
   console.log('message' + messageFromServer)
+  if (exceptionErrors.includes(subMessage)) return
   const message = ERRORS.get(subMessage)
   if (message) {
     showErrorMessage(message)
