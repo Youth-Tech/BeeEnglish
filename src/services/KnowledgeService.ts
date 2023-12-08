@@ -3,9 +3,9 @@ import { DefaultResponse, UserData } from '@services'
 
 const KnowledgeEndPoint = {
   getAllWord: '/knowledge/word/get-all',
+  getAllCourse: '/knowledge/course/get-all',
   getPreTest: '/knowledge/quiz/pretest/generate',
   sendResultPreTest: '/knowledge/quiz/pretest/send-result',
-  getAllCourse: '/knowledge/course/get-all',
 
   getChapterAndLesson: (courseId: string) => `/knowledge/chapter/${courseId}/get-chapters-and-lessons`,
   getQuizByLessonId: (lessonId: string) =>

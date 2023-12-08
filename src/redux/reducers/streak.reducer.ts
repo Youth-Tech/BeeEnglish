@@ -38,7 +38,7 @@ export const streakBallBlackListRoute: Array<keyof RootStackParamList> = [
 
 const initialState: StreakReducerType = {
   streaks: undefined,
-  streakCount: undefined,
+  streakCount: -1,
   isShowStreakBall: true,
 }
 

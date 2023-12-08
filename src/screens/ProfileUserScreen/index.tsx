@@ -60,7 +60,7 @@ const parseStatsData = (
     label: getDateName(new Date(currentWeek[index]), lang, 'short').split(
       ',',
     )[0],
-    id: (new Date().getTime() * index).toString(),
+    id: index.toString(),
   }))
 }
 
@@ -113,7 +113,6 @@ export const ProfileUserScreen: React.FC = () => {
   const getUserLearningStats = async () => {
     try {
       const response = await UserService.getLearningStats()
-      // console.log(parseStatsData(response.data.data, lang))
       setStatsData(parseStatsData(response.data.data, lang))
     } catch (e) {
       console.log(e)
