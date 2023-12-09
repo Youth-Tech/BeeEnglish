@@ -1,5 +1,5 @@
 import React from 'react'
-import Video from 'react-native-video'
+import Video, { LoadError } from 'react-native-video'
 import {
   ActivityIndicator,
   FlatList,
@@ -47,6 +47,7 @@ export interface VideoComponentProps {
   data: PostResponse
   onPressClose?: () => void
 }
+
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 const AnimatedLineSvg = Animated.createAnimatedComponent(Rect)
 const VideoComponent: React.FC<VideoComponentProps> = (props) => {
@@ -85,7 +86,7 @@ const VideoComponent: React.FC<VideoComponentProps> = (props) => {
   const onBuffer = () => {
     console.log('Buffered')
   }
-  const onError = (e) => {
+  const onError = (e: LoadError) => {
     console.log('Error' + JSON.stringify(e))
   }
   const handlePause = () => {

@@ -1,3 +1,4 @@
+import React from 'react'
 import { FlipVocabularyProps } from '@components/common/VocabularyWord/components/type'
 
 export interface VocabularyWordProps {

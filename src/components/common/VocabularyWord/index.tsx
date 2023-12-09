@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import i18next from 'i18next'
 import { Icon, images } from '@assets'
 import { normalize, useTheme } from '@themes'
@@ -27,7 +27,7 @@ export const VocabularyWord = React.forwardRef<
   VocabularyFunc,
   VocabularyWordProps
 >((props, ref) => {
-  const { data, setData, onPressSoundProgress, onPressMoreExample } = props
+  const { data, setData, onPressSoundProgress } = props
   const { colors, normalize } = useTheme()
   const exampleModalRef = React.useRef<ModalFunction>(null)
   const difficulties = {
@@ -66,7 +66,7 @@ export const VocabularyWord = React.forwardRef<
   const handleSelectDifficulty = () => {
     selectModalRef.current?.openModal()
   }
-  const [, updateState] = React.useState()
+  const [, updateState] = React.useState<{}>()
   const forceUpdate = React.useCallback(() => updateState({}), [])
   React.useImperativeHandle(ref!, () => {
     return {

@@ -18,7 +18,7 @@ export const data: dataProps[] = [
     word: 'Dog',
     wordType: 'noun',
     translation: 'Con chó',
-    difficulty: 'normal',
+    difficulty: 'hard',
   },
   {
     id: 3,

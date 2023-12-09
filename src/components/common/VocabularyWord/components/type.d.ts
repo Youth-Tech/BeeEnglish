@@ -1,5 +1,6 @@
 import { Difficulty } from '@components'
 import { Word } from '@services'
+import React from 'react'
 
 // export interface WordAttachment {
 //   image?: string

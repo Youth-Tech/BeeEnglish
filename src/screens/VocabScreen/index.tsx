@@ -1,14 +1,14 @@
 import React, { useRef } from 'react'
 
 import {
-  Text,
   Block,
-  Progress,
   Container,
   Difficulty,
-  ShadowButton,
-  VocabularyWord,
   LeaveProcessModal,
+  Progress,
+  ShadowButton,
+  Text,
+  VocabularyWord,
 } from '@components'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
@@ -19,9 +19,16 @@ import { navigate, RootStackParamList } from '@navigation'
 import { ModalFunction } from '@components/bases/Modal/type'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { VocabularyFunc } from '@components/common/VocabularyWord/type'
-import { KnowledgeService, ReviewService, UserService, Word } from '@services'
+import {
+  EWord,
+  KnowledgeService,
+  ReviewService,
+  UserService,
+  Word,
+} from '@services'
 import { FlipVocabularyProps } from '@components/common/VocabularyWord/components/type'
 import { TaskService } from '@services/TaskService'
+import { EAttachment } from '@utils/enums'
 
 type VocabScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -36,14 +43,14 @@ const initialVocabulary: FlipVocabularyProps = {
     {
       id: '',
       src: '',
-      type: '',
+      type: EAttachment.Audio,
     },
   ],
 
   senses: [
     {
       _id: '',
-      type: '',
+      type: EWord.Adjective,
       vietnamese: 'ví dụ như',
       exampleEnglish: '',
       exampleVietnamese: '',

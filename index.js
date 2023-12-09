@@ -17,7 +17,7 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
   if (type === EventType.PRESS) {
     console.log('User pressed notification', detail.notification)
     detail?.notification?.data &&
-      Linking.openURL(detail.notification?.data?.action ?? 'word-review/123')
+      Linking.openURL(detail.notification?.data?.action ?? '')
   }
   await notifee.cancelNotification(notification.id)
 })

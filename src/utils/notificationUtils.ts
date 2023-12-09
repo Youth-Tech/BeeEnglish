@@ -61,8 +61,7 @@ export function notificationListener() {
         )
         remoteMessage?.data?.action &&
           Linking.openURL(
-            `beeenglish://app/${remoteMessage?.data?.action as string}` ??
-              'word-review/123',
+            `beeenglish://app/${remoteMessage?.data?.action as string}` ?? '',
           )
         console.log(remoteMessage?.data)
       }
@@ -88,7 +87,7 @@ export function notificationListener() {
             remoteMessage?.data?.action &&
               Linking.openURL(
                 `beeenglish://app/${remoteMessage?.data?.action as string}` ??
-                  'word-review/123',
+                  '',
               )
             console.log(remoteMessage?.data)
           }

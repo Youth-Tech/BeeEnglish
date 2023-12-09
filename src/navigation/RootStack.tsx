@@ -6,7 +6,6 @@ import { LinkingOptions } from '@react-navigation/native/lib/typescript/src/type
 import {
   DetailPost,
   TestScreen,
-  VideoScreen,
   VocabScreen,
   LoginScreen,
   StreakScreen,
@@ -152,7 +151,7 @@ const RootStack = () => {
             component={DetailLessonScreen}
           />
           {/*<Stack.Screen name="LESSON_MAP_SCREEN" component={LessonMap} />*/}
-          <Stack.Screen name="VIDEO_SCREEN" component={VideoScreen} />
+          {/*<Stack.Screen name="VIDEO_SCREEN" component={VideoScreen} />*/}
           <Stack.Screen name="SETTING_SCREEN" component={SettingScreen} />
           <Stack.Screen name="GRAMMAR_SCREEN" component={GrammarScreen} />
           <Stack.Screen

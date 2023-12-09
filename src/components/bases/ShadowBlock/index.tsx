@@ -4,7 +4,6 @@ import { useTheme } from '@themes'
 import { ShadowBlockProps } from './type'
 import { handleColor } from '@components/utils'
 import { Text } from '../Text'
-import Animated from 'react-native-reanimated'
 
 /**
  * Create a block with awesome shadow

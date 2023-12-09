@@ -14,6 +14,7 @@ const StatisticalComponent: React.FC<ItemStatisticalProps> = ({
   const styles = useStyles()
   const { colors } = useTheme()
   const { t } = useTranslation()
+
   return (
     <Block row style={styles.boxItemStatistical}>
       <IconStatistical state={state} />
@@ -21,8 +22,16 @@ const StatisticalComponent: React.FC<ItemStatisticalProps> = ({
         <Text size={'h3'} fontFamily="bold" numberOfLines={1}>
           {value}
         </Text>
-        <Text size={'h4'} fontFamily="semiBold" color={colors.greyPrimary} numberOfLines={1}>
-          {t(label)}
+        <Text
+          size={'h4'}
+          fontFamily="semiBold"
+          color={colors.greyPrimary}
+          numberOfLines={1}
+        >
+          {
+            //@ts-ignore
+            t(label)
+          }
         </Text>
       </Block>
     </Block>
