@@ -1,14 +1,16 @@
 import notifee, {
-  AndroidBadgeIconType,
   AndroidImportance,
+  AndroidBadgeIconType,
 } from '@notifee/react-native'
 import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging'
+import { Linking, PermissionsAndroid, Platform } from 'react-native'
 
+import { images } from '@assets'
+import { colors } from '@themes'
 import { ChannelId } from '@configs'
-import { Platform } from 'react-native'
-import { PermissionsAndroid } from 'react-native'
+import { MMKVStore } from '@redux/store'
 
 export async function requestUserPermission(): Promise<boolean> {
   let enabled = false
@@ -49,14 +51,20 @@ export async function getFCMToken() {
   }
 }
 
-export async function notificationListener() {
+export function notificationListener() {
   try {
     messaging().onNotificationOpenedApp(async (remoteMessage) => {
-      console.log(
-        'Notification caused app to open from background state:',
-        remoteMessage.notification,
-      )
-      displayDefaultNotify(remoteMessage.notification)
+      if (remoteMessage) {
+        console.log(
+          'Notification caused app to open from background state:',
+          remoteMessage.notification,
+        )
+        remoteMessage?.data?.action &&
+          Linking.openURL(
+            `beeenglish://app/${remoteMessage?.data?.action as string}` ?? '',
+          )
+        console.log(remoteMessage?.data)
+      }
     })
 
     // Check whether an initial notification is available
@@ -68,35 +76,64 @@ export async function notificationListener() {
             'Notification caused app to open from quit state:',
             remoteMessage.notification,
           )
-          displayDefaultNotify(remoteMessage.notification)
+          if (
+            MMKVStore.getString('NOTIFICATION_QUIT_STATE_ID') !==
+            remoteMessage.messageId
+          ) {
+            MMKVStore.set(
+              'NOTIFICATION_QUIT_STATE_ID',
+              remoteMessage?.messageId ?? '',
+            )
+            remoteMessage?.data?.action &&
+              Linking.openURL(
+                `beeenglish://app/${remoteMessage?.data?.action as string}` ??
+                  '',
+              )
+            console.log(remoteMessage?.data)
+          }
         }
       })
 
-    messaging().onMessage(async (remoteMessage) => {
+    const subOnMessage = messaging().onMessage(async (remoteMessage) => {
       console.log(
         'notification on foreground state',
         remoteMessage.notification,
       )
-      displayDefaultNotify(remoteMessage.notification)
+      displayDefaultNotify(remoteMessage.notification, remoteMessage.data)
     })
+
+    return () => {
+      subOnMessage()
+    }
   } catch (error) {
     console.log('Error listener notification', error)
   }
+
+  return () => {}
 }
 
 export const displayDefaultNotify = async (
   notification?: FirebaseMessagingTypes.NotificationPayload,
+  data?: { [key: string]: string | object },
 ) => {
   // Display a notification
+
   await notifee.displayNotification({
     title: notification?.title || 'Title notification',
     body: notification?.body || 'Body notification',
+    data: {
+      ...data,
+      action: 'beeenglish://app/'.concat((data?.action as string) ?? ''),
+    },
     android: {
       channelId: ChannelId.Default,
-      // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
+      smallIcon: 'ic_noti', // optional, defaults to 'ic_launcher'.
+      color: colors['light'].orangePrimary,
+      largeIcon: images.BeeWithHoney,
       // pressAction is needed if you want the notification to open the app when pressed
       pressAction: {
         id: 'default',
+        launchActivity: 'BeeEnglish',
       },
       badgeIconType: AndroidBadgeIconType.SMALL,
       importance: AndroidImportance.HIGH,

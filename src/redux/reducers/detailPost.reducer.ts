@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface DetailPostState {
   data?: PostResponse
@@ -6,13 +6,17 @@ export interface DetailPostState {
   isShowBottomSheet: boolean
   isShowComment: boolean
   word: string
+  isAdjustPostData: boolean
+  parentCommentId: string
 }
 
 const initialState: DetailPostState = {
-  isLoading: false,
-  isShowBottomSheet: false,
-  isShowComment: false,
   word: '',
+  isLoading: false,
+  parentCommentId: '',
+  isShowComment: false,
+  isShowBottomSheet: false,
+  isAdjustPostData: false,
 }
 
 const detailPostReducer = createSlice({
@@ -32,13 +36,24 @@ const detailPostReducer = createSlice({
     changeShowComment: (state, action) => {
       state.isShowComment = action.payload
     },
+    setIsAdjustPostData: (state, action: PayloadAction<boolean>) => {
+      state.isAdjustPostData = action.payload
+    },
+    setParentCommentId: (state, action: PayloadAction<string>) => {
+      return {
+        ...state,
+        parentCommentId: action.payload,
+      }
+    },
   },
 })
 
 export const {
-  setLoading,
   setWord,
-  changeBottomSheetState,
+  setLoading,
   changeShowComment,
+  setIsAdjustPostData,
+  setParentCommentId,
+  changeBottomSheetState,
 } = detailPostReducer.actions
 export const DetailPostReducer = detailPostReducer.reducer

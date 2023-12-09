@@ -14,7 +14,7 @@ const TranslateVi: React.FC<TranslateViProps> = ({ value }) => {
   const styles = useStyles()
   const { colors } = useTheme()
   return (
-    <Block alignCenter paddingTop={10}>
+    <Block paddingTop={10}>
       <TouchableOpacity
         style={{ alignSelf: 'flex-start' }}
         onPress={() => setIsShow(!isShow)}

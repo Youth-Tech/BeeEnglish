@@ -1,41 +1,77 @@
 import { Pressable } from 'react-native'
-import React from 'react'
-import { Block, Image, LinearGradient, Text } from '@components'
-import { baseStyles, useTheme } from '@themes'
-import { Icon, TIcon, images } from '@assets'
 import { useTranslation } from 'react-i18next'
 
+import React from 'react'
+import { Task } from '@services/TaskService'
+import { Icon, TIcon, images } from '@assets'
+import { baseStyles, useTheme } from '@themes'
+import { Block, Image, LinearGradient, Text } from '@components'
+
 interface Props {
-  icon: TIcon
-  taskName: string
-  finishedTask: number
-  totalTask: number
+  data: Task[]
   onPress: () => void
 }
 
 export const DailyTask = (props: Props) => {
-  const { icon, taskName, finishedTask, totalTask, onPress } = props
+  const { data, onPress } = props
   const { colors } = useTheme()
   const { t } = useTranslation()
+  const finishedTaskNumber = () => {
+    let finishedNumber = 0
+    data.forEach((e) => {
+      if (e.status === 'done') {
+        finishedNumber++
+      }
+    })
+    return finishedNumber
+  }
+  const currentIcon = (type: string) => {
+    switch (type) {
+      case 'learn':
+        return 'LearnBook'
+      case 'read':
+        return 'LearnBook'
+      case 'time':
+        return 'Clock'
+
+      default:
+        return 'LearnBook'
+    }
+  }
+  const renderCurrentTask = () => {
+    const currentTask = { title: t('you_finished_all_tasks'), icon: 'Firework' }
+
+    data.find((e) => {
+      if (e.status === 'pending') {
+        currentTask.title = e.title
+        currentTask.icon = currentIcon(e.type)
+        return true
+      }
+      return false
+    })
+    return currentTask
+  }
   return (
     <Pressable onPress={onPress}>
       <Block
-        height={71}
-        borderColor={colors.red}
-        borderWidth={1}
+        height={90}
         radius={10}
+        borderWidth={1}
         backgroundColor="white"
+        paddingHorizontal={10}
+        borderColor={colors.red}
       >
-        <Block flex row alignCenter paddingLeft={19}>
-          <Icon state={icon} />
+        <Block flex row alignCenter space={'between'}>
+          <Icon state={renderCurrentTask().icon as TIcon} />
           <Text
+            flex
             size={'h3'}
-            fontFamily="bold"
-            color={colors.black}
             marginLeft={15}
-            lineHeight={80}
+            fontFamily="bold"
+            numberOfLines={2}
+            color={colors.black}
           >
-            {taskName}
+            {renderCurrentTask().title}
           </Text>
         </Block>
         <Block
@@ -53,7 +89,7 @@ export const DailyTask = (props: Props) => {
             alignCenter
           >
             <Text size={'h5'} fontFamily="bold" color={colors.white}>
-              {finishedTask}/{totalTask}
+              {finishedTaskNumber()}/{data.length}
             </Text>
           </Block>
 

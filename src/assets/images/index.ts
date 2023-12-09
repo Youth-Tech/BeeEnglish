@@ -21,5 +21,13 @@ export const images = {
   StreakBox: require('./StreakBox.png'),
   ChestBox: require('./ChestBox.png'),
   Light: require('./Light.png'),
+  ProfileBackground: require('./BackgroundProfile.png'),
+  AccountBee: require('./AccountProfileBee.jpeg'),
   BeeWithHoney: require('./BeeWithHoney.png'),
+  QuestionBubble: require('./QuestionBubble.png'),
+  BeeSad: require('./BeeSad.png'),
+  Checkpoint: require('./checkpoint.png'),
+  HoneyBackground: require('./honeyBackground.png'),
+  ImagePlaceholder: require('./imagePlaceholder.jpeg'),
+  Check: require('./Check.png'),
 }

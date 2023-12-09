@@ -1,10 +1,13 @@
 import {
   Keyboard,
   Pressable,
-  DocumentSelectionState,
   KeyboardAvoidingView,
+  DocumentSelectionState,
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+
 import {
   Text,
   Block,
@@ -14,40 +17,85 @@ import {
   SocialLoginButton,
   DismissKeyBoardBlock,
 } from '@components'
+import {
+  goBack,
+  navigate,
+  navigateAndReset,
+  RootStackParamList,
+} from '@navigation'
+import {
+  setAuthState,
+  setTempLoginInfo,
+  setLoadingStatusAction,
+} from '@redux/reducers'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
-import { goBack, navigate } from '@navigation'
-import { useTranslation } from 'react-i18next'
-import { setEmailSignIn } from '@redux/reducers'
-import { signIn } from '@redux/actions/auth.action'
-import { useAppDispatch, useAppSelector } from '@hooks'
+import { Provider } from '@configs'
+import { getIsLoginOAuth } from '@redux/selectors'
+import { AuthService } from '@services/AuthService'
 import { useValidateInput } from '@utils/validateInput'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { loginOAuthThunk } from '@redux/actions/auth.action'
 
-export const RegisterScreen = () => {
+export type RegisterScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'REGISTER_SCREEN'
+>
+
+export const RegisterScreen: React.FC<RegisterScreenProps> = ({ route }) => {
+  const isGuest = route.params?.isGuest
+
   const dispatch = useAppDispatch()
   const validate = useValidateInput()
+
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
-  const [email, setEmail] = React.useState('')
-  const [fullName, setFullName] = React.useState('')
-  const [password, setPassword] = React.useState('')
-  const [checkMail, setCheckMail] = useState(true)
-  const [checkPass, setCheckPass] = useState(true)
-  const [checkFullName, setCheckFullName] = useState(true)
-  const [disabledLogin, setDisabledLogin] = React.useState(true)
-  const [confirmPassword, setConfirmPassword] = React.useState('')
-  const [checkConfirmPass, setCheckConfirmPass] = useState(true)
+
+  // const isSignedIn = useAppSelector((state) => state.root.auth.isSignedIn)
+  // const isSignUp = useAppSelector((state) => state.root.auth.isSignUp)
+  const isSignedInOAuth = useAppSelector(getIsLoginOAuth)
+
+  const fullNameInputRef = React.useRef<DocumentSelectionState>()
   const emailInputRef = React.useRef<DocumentSelectionState>()
   const passwordInputRef = React.useRef<DocumentSelectionState>()
   const confirmPasswordInputRef = React.useRef<DocumentSelectionState>()
-  const store = useAppSelector((state) => state.root.user)
-  const handleLoginGoogle = () => {}
-  const handleLoginFacebook = () => {}
-  useEffect(() => {
+
+  const [email, setEmail] = React.useState('')
+  const [fullName, setFullName] = React.useState('')
+  const [password, setPassword] = React.useState('')
+  const [checkMail, setCheckMail] = React.useState(true)
+  const [checkPass, setCheckPass] = React.useState(true)
+  const [checkFullName, setCheckFullName] = React.useState(true)
+  const [disabledLogin, setDisabledLogin] = React.useState(true)
+  const [confirmPassword, setConfirmPassword] = React.useState('')
+  const [checkConfirmPass, setCheckConfirmPass] = React.useState(true)
+
+  React.useEffect(() => {
     email.length > 0 && password.length >= 6 && fullName.length >= 3
       ? setDisabledLogin(false)
       : setDisabledLogin(true)
   }, [email, password, fullName])
+
+  React.useEffect(() => {
+    if (isSignedInOAuth) {
+      navigateAndReset(
+        [
+          {
+            name: 'BOTTOM_TAB',
+          },
+        ],
+        0,
+      )
+    }
+  }, [isSignedInOAuth])
+
+  const handleLoginGoogle = () => {
+    dispatch(loginOAuthThunk({ providerId: Provider.google }))
+  }
+
+  const handleLoginFacebook = () => {
+    dispatch(loginOAuthThunk({ providerId: Provider.facebook }))
+  }
 
   const onCheckEmail = (value: string) => {
     setCheckMail(validate.validateEmail(value))
@@ -77,7 +125,8 @@ export const RegisterScreen = () => {
       case 'password':
         if (password.length === 0) return `${t('password')}${t('is_required')}`
         if (password.length < 8) return `${t('password')}${t('is_too_short')}`
-        if (!checkPass) return `${t('password')}${t('is_invalid')}`
+        if (!checkPass)
+          return `${t('password')}${t('password_need_1_capital_normal_number')}`
         break
       case 'confirmPassword':
         if (confirmPassword.length === 0)
@@ -100,22 +149,57 @@ export const RegisterScreen = () => {
     return 'hello'
   }
 
-  const goLogin = () => {
+  const goLoginPress = () => {
     navigate('LOGIN_SCREEN')
   }
-  const onSubmit = async () => {
-    dispatch(signIn({ email, password, confirmPassword, fullName }))
-    dispatch(setEmailSignIn(email))
+
+  const isErrorBeforeSubmit = () => {
+    if (!validate.validateFullName(fullName)) {
+      fullNameInputRef.current?.focus()
+      return true
+    }
+    if (!validate.validateEmail(email)) {
+      emailInputRef.current?.focus()
+      return true
+    }
+    if (!validate.validatePassword(password)) {
+      passwordInputRef.current?.focus()
+      return true
+    }
+    if (!validate.validateConfirmPassword(confirmPassword, password)) {
+      confirmPasswordInputRef.current?.focus()
+      return true
+    }
+    return false
   }
 
-  const emailUser = store.email
-  const isVerified = store.isVerified
-  useEffect(() => {
-    // console.log("Email: ", emailUser, "isVerified: ", isVerified)
-    if (emailUser && !isVerified) {
-      navigate('VERIFICATION_CODE_SCREEN')
+  const onSubmit = async () => {
+    if (isErrorBeforeSubmit()) return
+    dispatch(setLoadingStatusAction(true))
+    try {
+      const res = await AuthService.signUp({
+        email,
+        password,
+        confirmPassword,
+        fullName,
+      })
+      if (res.status === 200) {
+        dispatch(
+          setAuthState({
+            email,
+          }),
+        )
+        !!isGuest && dispatch(setTempLoginInfo({ email, password }))
+        navigate('VERIFICATION_CODE_SCREEN', {
+          type: !!isGuest ? 'migrate' : 'signUp',
+          email,
+        })
+      }
+    } catch (e) {
+      console.log(e)
     }
-  }, [emailUser, isVerified])
+    dispatch(setLoadingStatusAction(false))
+  }
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
@@ -144,7 +228,7 @@ export const RegisterScreen = () => {
                   placeholder={t('full_name_placeholder')}
                   onChangeText={(value) => {
                     setFullName(value)
-                    useValidateInput().checkError(checkFullName, ()=>{
+                    useValidateInput().checkError(checkFullName, () => {
                       onCheckFullName(value)
                     })
                   }}
@@ -195,13 +279,13 @@ export const RegisterScreen = () => {
                     useValidateInput().checkError(checkPass, () => {
                       onCheckPass(value, 'password')
                     })
-                    if(value.length > 8 && confirmPassword.length > 8) {
-                      onCheckPass(confirmPassword, "confirmPassword")
+                    if (value.length > 8 && confirmPassword.length > 8) {
+                      onCheckPass(confirmPassword, 'confirmPassword')
                       useValidateInput().checkError(checkConfirmPass, () => {
                         onCheckPass(value, 'confirmPassword')
                       })
-                      showError("confirmPassword")
-                      console.log("xin chao")
+                      showError('confirmPassword')
+                      console.log('xin chao')
                     }
                   }}
                   returnKeyType="next"
@@ -270,7 +354,7 @@ export const RegisterScreen = () => {
                   {t('have_account')}?
                 </Text>
                 <Pressable
-                  onPress={goLogin}
+                  onPress={goLoginPress}
                   style={{ marginStart: normalize.h(3) }}
                 >
                   <Text size={'h4'} fontFamily="bold" color={colors.orangeDark}>

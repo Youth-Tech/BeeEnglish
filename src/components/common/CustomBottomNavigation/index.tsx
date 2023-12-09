@@ -17,7 +17,6 @@ type TBottomState = {
 const BOTTOM_ICON_STATE: Array<TBottomState> = [
   { iconName: 'Home', color: colors.dark.bluePrimary },
   { iconName: 'Dumbell', color: colors.dark.greenLighter },
-  { iconName: 'GamePad', color: colors.dark.purpleLight },
   { iconName: 'User', color: colors.dark.red },
 ]
 type Props = {
@@ -35,30 +34,23 @@ const BottomIcon = (props: Props) => {
     />
   )
 }
-const AnimtedPressable = Animated.createAnimatedComponent(Pressable)
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 export const CustomBottomNavigation: React.FC<BottomTabBarProps> = ({
   state,
   descriptors,
   navigation,
 }) => {
-  const { colors } = useTheme()
   const scaleYHomeIcon = useSharedValue(1)
-  const scaleYDumbellIcon = useSharedValue(1)
-  const scaleYGamePadIcon = useSharedValue(1)
+  const scaleYDumbbellIcon = useSharedValue(1)
   const scaleYProfileIcon = useSharedValue(1)
   const rStyleHome = useAnimatedStyle(() => {
     return {
       transform: [{ scale: scaleYHomeIcon.value }],
     }
   })
-  const rStyleDumbell = useAnimatedStyle(() => {
+  const rStyleDumbbell = useAnimatedStyle(() => {
     return {
-      transform: [{ scale: scaleYDumbellIcon.value }],
-    }
-  })
-  const rStyleGamePad = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: scaleYGamePadIcon.value }],
+      transform: [{ scale: scaleYDumbbellIcon.value }],
     }
   })
   const rStyleProfile = useAnimatedStyle(() => {
@@ -66,14 +58,13 @@ export const CustomBottomNavigation: React.FC<BottomTabBarProps> = ({
       transform: [{ scale: scaleYProfileIcon.value }],
     }
   })
-  const rStyleArray = [rStyleHome, rStyleDumbell, rStyleGamePad, rStyleProfile]
+  const rStyleArray = [rStyleHome, rStyleDumbbell, rStyleProfile]
   const scaleValueArray = [
     scaleYHomeIcon,
-    scaleYDumbellIcon,
-    scaleYGamePadIcon,
+    scaleYDumbbellIcon,
     scaleYProfileIcon,
   ]
-  const handleScaleAnimateion = (index: number) => {
+  const handleScaleAnimation = (index: number) => {
     scaleValueArray[index].value = withTiming(
       0.8,
       { duration: 50 },
@@ -83,7 +74,14 @@ export const CustomBottomNavigation: React.FC<BottomTabBarProps> = ({
     )
   }
   return (
-    <Block row height={80} alignCenter backgroundColor={colors.white}>
+    <Block
+      row
+      shadow
+      height={80}
+      alignCenter
+      elevation={20}
+      backgroundColor={'#fff'}
+    >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key]
         const isFocused = state.index === index
@@ -97,7 +95,7 @@ export const CustomBottomNavigation: React.FC<BottomTabBarProps> = ({
           if (!isFocused && !event.defaultPrevented) {
             navigation.navigate(route.name)
           }
-          handleScaleAnimateion(index)
+          handleScaleAnimation(index)
         }
         const onLongPress = () => {
           navigation.emit({
@@ -106,7 +104,7 @@ export const CustomBottomNavigation: React.FC<BottomTabBarProps> = ({
           })
         }
         return (
-          <AnimtedPressable
+          <AnimatedPressable
             key={route.key}
             accessibilityRole="button"
             accessibilityState={isFocused ? { selected: true } : {}}
@@ -123,7 +121,7 @@ export const CustomBottomNavigation: React.FC<BottomTabBarProps> = ({
               fill={BOTTOM_ICON_STATE[index].color}
               isFocused={isFocused}
             />
-          </AnimtedPressable>
+          </AnimatedPressable>
         )
       })}
     </Block>

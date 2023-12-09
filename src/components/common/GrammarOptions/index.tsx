@@ -1,14 +1,10 @@
 import React from 'react'
-import { Pressable, StyleSheet } from 'react-native'
-import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
+import { Pressable, StyleSheet, ViewStyle } from 'react-native'
+import { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
 
 import { images } from '@assets'
-import { Answer, Question } from '@screens'
 import { normalize, useTheme } from '@themes'
-import { Block, Image, Text } from '@components/bases'
-
-const AnimatedBlock = Animated.createAnimatedComponent(Block)
-const tempArr = new Array(4).fill(5)
+import { Block, BlockAnimated, Image, Text } from '@components/bases'
 
 export interface QuestionRefFunction {
   check: () => boolean
@@ -23,20 +19,55 @@ export const GrammarOptions = React.forwardRef<
   QuestionRefFunction,
   GrammarOptionProps
 >(({ data }, ref) => {
-  const { colors } = useTheme()
+  const { colors, normalize } = useTheme()
+  const isCheck = React.useRef(false)
   const [currentOption, setCurrentOption] = React.useState<number | null>(null)
+  const [backgroundColor, setBackgroundColor] = React.useState<
+    { overlay: string; text: string }[]
+  >([])
   const [ready, setReady] = React.useState(true)
+
+  React.useEffect(() => {
+    setBackgroundColor([
+      ...(data.answer as Answer[]).map(() => ({
+        overlay: colors.transparent,
+        text: colors.transparent,
+      })),
+    ])
+  }, [data])
 
   React.useImperativeHandle(ref, () => ({
     check() {
-      const result =
+      isCheck.current = true
+
+      const isCorrect =
         currentOption == null
           ? false
           : (data.answer as Answer[])[currentOption].isValid
-      return result
+      const correctAnswer = (data.answer as Answer[]).findIndex(
+        (item) => item.isValid,
+      )
+
+      const tempBackground = [...backgroundColor]
+      tempBackground[correctAnswer] = {
+        overlay: '#58CC02',
+        text: colors.white,
+      }
+
+      if (currentOption !== null) {
+        if (!isCorrect) {
+          tempBackground[currentOption] = {
+            overlay: colors.red,
+            text: colors.white,
+          }
+        }
+      }
+      setBackgroundColor(tempBackground)
+      return isCorrect
     },
 
     triggerChangeLayout() {
+      isCheck.current = false
       //reset component
       setReady(false)
       setCurrentOption(null)
@@ -47,7 +78,7 @@ export const GrammarOptions = React.forwardRef<
   return (
     <>
       {ready && (
-        <AnimatedBlock
+        <BlockAnimated
           exiting={FadeOutLeft.duration(500)}
           entering={FadeInRight.duration(500)}
           flex
@@ -57,15 +88,28 @@ export const GrammarOptions = React.forwardRef<
           </Text>
 
           <Image
-            source={images.BeeWithPencil}
             width={120}
             height={180}
             resizeMode="contain"
             style={styles.imageStyle}
+            source={images.BeeWithPencil}
           />
-
           <Block style={styles.blockOptions}>
-            {tempArr.map((_, index) => {
+            {(data.answer as Answer[]).map((item, index) => {
+              const overlayStyle: ViewStyle = {
+                backgroundColor:
+                  backgroundColor[index]?.overlay ?? colors.transparent,
+                borderRadius: normalize.m(48),
+              }
+
+              const textColor =
+                isCheck.current &&
+                backgroundColor[index].text !== colors.transparent
+                  ? backgroundColor[index].text
+                  : index === currentOption
+                  ? colors.orangeDark
+                  : colors.greyDark
+
               return (
                 <Pressable
                   key={index}
@@ -75,32 +119,32 @@ export const GrammarOptions = React.forwardRef<
                 >
                   <Block
                     height={52}
+                    radius={48}
+                    alignCenter
+                    justifyCenter
                     backgroundColor={
                       index === currentOption
                         ? colors.orangeLighter
                         : colors.greyLighter
                     }
-                    justifyCenter
-                    alignCenter
-                    radius={48}
                   >
                     <Text
-                      color={
-                        index === currentOption
-                          ? colors.orangeDark
-                          : colors.greyDark
-                      }
+                      color={textColor}
                       size={'h3'}
                       fontFamily="semiBold"
+                      style={{
+                        zIndex: 1,
+                      }}
                     >
-                      {(data.answer as Answer[])[index].option}
+                      {item.option as string}
                     </Text>
+                    <Block style={[StyleSheet.absoluteFill, overlayStyle]} />
                   </Block>
                 </Pressable>
               )
             })}
           </Block>
-        </AnimatedBlock>
+        </BlockAnimated>
       )}
     </>
   )

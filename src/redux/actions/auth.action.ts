@@ -1,39 +1,35 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { UserData, UserService } from '@services/UserService'
-import { defaultUserState } from '@redux/reducers/user.reducer'
-import { AuthService, SignUpParams } from '@services/AuthService'
 
-export interface SignUpResponse {
+import { RootState } from '@hooks'
+import { UserData } from '@services/UserService'
+import {
+  AuthService,
+  LoginForGuestRequest,
+  LoginParams,
+  OAuthRes,
+  SignUpParams,
+} from '@services/AuthService'
+import { DeviceInfoConfig, Provider } from '@configs'
+import { signingWithFacebook, signingWithGoogle } from '@utils/authUtils'
+
+export interface LoginResponse {
   data: {
+    user: UserData
     tokens: {
       accessToken: string
       refreshToken: string
     }
+    restored: boolean
   }
 }
 
-export const signIn = createAsyncThunk<
-  {
-    tokens: SignUpResponse
-    data: UserData
+export const signUp = createAsyncThunk<any, SignUpParams>(
+  'auth/signIn',
+  async (params) => {
+    const response = await AuthService.signUp(params)
+    return response.data
   },
-  SignUpParams
->('auth/signIn', async (params) => {
-  const response = await AuthService.signUp(params)
-  let dataUser = {
-    data: defaultUserState,
-  }
-  if (response.status === 200) {
-    dataUser = await UserService.getUserData(
-      response.data.data.tokens.accessToken,
-    ).then()
-    // console.log(dataUser)
-  }
-  return {
-    tokens: response.data,
-    data: dataUser.data,
-  }
-})
+)
 
 export const verifyAccount = createAsyncThunk(
   'auth/verifyAccount',
@@ -42,3 +38,84 @@ export const verifyAccount = createAsyncThunk(
     return response.status
   },
 )
+
+export const verifyForgotPassword = createAsyncThunk<
+  {
+    data: string
+  },
+  string
+>('auth/verifyForgotPassword', async (code) => {
+  const response = await AuthService.verifyForgotPassword({ code })
+  return response.data
+})
+export const resendVerifyCode = createAsyncThunk(
+  'auth/resendVerifyCode',
+  async (_, thunkAPI) => {
+    const email = (thunkAPI.getState() as RootState).root.auth.email
+    if (!email) return undefined
+    const response = await AuthService.resendVerifyEmail({ email })
+    return response.data
+  },
+)
+export const login = createAsyncThunk<
+  LoginResponse,
+  LoginParams,
+  { rejectValue: { code: number; subMessage: string } }
+>('auth/login', async (params, { rejectWithValue }) => {
+  try {
+    const response = await AuthService.login(params)
+    return response.data
+  } catch (e) {
+    return rejectWithValue(e.response.data)
+  }
+})
+
+export const resendVerifyEmail = createAsyncThunk<any, string>(
+  'auth/resend-verified-code-email',
+  async (email) => {
+    const response = await AuthService.resendVerifyEmail({ email })
+    return response.data
+  },
+)
+
+export const loginOAuthThunk = createAsyncThunk<
+  OAuthRes | undefined,
+  {
+    providerId: Provider
+  }
+>('auth/oAuthLogin', async ({ providerId }) => {
+  try {
+    const loginHandle =
+      providerId == Provider.facebook ? signingWithFacebook : signingWithGoogle
+
+    const resOAuth = await loginHandle()
+
+    const res = await AuthService.oAuthLogin({
+      accessToken: resOAuth as string,
+      deviceId: DeviceInfoConfig.deviceId,
+      deviceName: DeviceInfoConfig.deviceName,
+      provider: providerId,
+    })
+
+    return res.data
+  } catch (error) {
+    console.log(`Error login with ${Provider[providerId]}`, error.message)
+  }
+
+  return undefined
+})
+
+export const loginForGuest = createAsyncThunk<
+  LoginResponse | undefined,
+  LoginForGuestRequest
+>('auth/forGuest', async (body) => {
+  try {
+    const res = await AuthService.loginForGuest(body)
+
+    return res.data
+  } catch (e) {
+    console.log('Error when login with guest role', e)
+  }
+
+  return undefined
+})

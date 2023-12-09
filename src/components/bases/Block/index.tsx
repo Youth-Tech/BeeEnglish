@@ -12,6 +12,7 @@ import styles from './styles'
 import { BlockProps } from './types'
 import { normalize, useTheme } from 'themes'
 import { handleColor, isNumber } from '@components/utils'
+import Animated from 'react-native-reanimated'
 
 export const Block = React.forwardRef<any, BlockProps>((props, ref) => {
   const {
@@ -19,6 +20,7 @@ export const Block = React.forwardRef<any, BlockProps>((props, ref) => {
     flexShrink,
     flexGrow,
     row,
+    gap,
     column,
     space,
     alignStart,
@@ -147,6 +149,7 @@ export const Block = React.forwardRef<any, BlockProps>((props, ref) => {
     borderTopRightRadius && { borderTopRightRadius },
     borderBottomLeftRadius && { borderBottomLeftRadius },
     borderBottomRightRadius && { borderBottomRightRadius },
+    gap && { gap: normalize.m(gap) },
     { ...StyleSheet.flatten(style) },
   ]
 
@@ -156,3 +159,5 @@ export const Block = React.forwardRef<any, BlockProps>((props, ref) => {
     </View>
   )
 })
+
+export const BlockAnimated = Animated.createAnimatedComponent(Block)

@@ -1,69 +1,88 @@
 import React from 'react'
-import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
+import { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
 
 import { images } from '@assets'
 import { useTheme } from '@themes'
-import { Question } from '@screens'
-import { widthScreen } from '@utils/helpers'
-import { Block, Image, Text } from '@components/bases'
-import { WordList, WordListRefFunc } from '../WordList'
+import { WordList } from '../WordList'
+import { Block, BlockAnimated, Image, Text } from '@components/bases'
+import {useTranslation} from "react-i18next";
 
 export interface WordChoiceProps {
-  wordListRef: React.Ref<WordListRefFunc> | undefined
   data: Question
 }
 
-const AnimatedBlock = Animated.createAnimatedComponent(Block)
+export const WordChoice = React.forwardRef<WordListRefFunc, WordChoiceProps>(
+  ({ data }, ref) => {
+      const {t} = useTranslation()
+    const { colors } = useTheme()
+    const [visible, setVisible] = React.useState(true)
+    const wordListRef = React.useRef<WordListRefFunc>(null)
 
-export const WordChoice: React.FC<WordChoiceProps> = ({
-  wordListRef,
-  data,
-}) => {
-  const { colors, normalize } = useTheme()
-  return (
-    <AnimatedBlock
-      exiting={FadeOutLeft.duration(500)}
-      entering={FadeInRight.duration(500)}
-      flex
-    >
-      <Text size={'h1'} fontFamily="bold" marginTop={40}>
-        Viết lại câu bằng tiếng Anh
-      </Text>
+    React.useImperativeHandle(ref, () => ({
+      check(value) {
+        return !!wordListRef.current?.check(value)
+      },
+      onTriggerAnimation() {
+        setVisible(false)
+        setVisible(true)
+      },
+    }))
 
-      <Block row justifyStart alignCenter marginTop={30}>
-        <Image
-          source={images.BeeTeacher}
-          width={60}
-          height={60}
-          resizeMode="contain"
-        />
-        <Block
-          borderWidth={1}
-          borderColor={colors.greyLight}
-          radius={10}
-          alignCenter
-          justifyCenter
-          marginLeft={16}
-          // flex
-          style={{
-            maxWidth:
-              widthScreen - normalize.h(15) - normalize.h(60) - normalize.h(20),
-          }}
-        >
-          <Text
-            paddingHorizontal={20}
-            paddingVertical={14}
-            size={'h4'}
-            fontFamily="semiBold"
+    return (
+      <>
+        {visible && (
+          <BlockAnimated
+            flex
+            exiting={FadeOutLeft.duration(500)}
+            entering={FadeInRight.duration(500)}
           >
-            {data.question}
-          </Text>
-        </Block>
-      </Block>
+            <Text size={'h1'} fontFamily="bold" marginTop={40}>
+                {t('remake_sentence')}
+            </Text>
 
-      <Block flex justifyCenter marginTop={10}>
-        <WordList ref={wordListRef} sentence={data.answer as string} />
-      </Block>
-    </AnimatedBlock>
-  )
-}
+            <Block row justifyStart alignCenter marginTop={30}>
+              <Image
+                width={60}
+                height={60}
+                resizeMode="contain"
+                source={images.BeeTeacher}
+              />
+              <Block
+                flex
+                radius={10}
+                justifyCenter
+                borderWidth={1}
+                marginLeft={16}
+                borderColor={colors.greyLight}
+                // style={{
+                //   maxWidth:
+                //     widthScreen -
+                //     normalize.h(15) -
+                //     normalize.h(60) -
+                //     normalize.h(20),
+                // }}
+              >
+                <Text
+                  size={'h4'}
+                  paddingVertical={14}
+                  fontFamily="semiBold"
+                  paddingHorizontal={15}
+                >
+                  {data.question}
+                </Text>
+              </Block>
+            </Block>
+
+            <Block flex marginTop={10}>
+              <WordList
+                key={data.id}
+                ref={wordListRef}
+                answers={data.answer as string[]}
+              />
+            </Block>
+          </BlockAnimated>
+        )}
+      </>
+    )
+  },
+)

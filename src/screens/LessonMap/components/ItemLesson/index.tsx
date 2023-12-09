@@ -4,6 +4,7 @@ import Tooltip from 'rn-tooltip'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Pressable } from 'react-native'
 
+import { Quiz } from '@services'
 import { widthScreen } from '@utils/helpers'
 import { Icon, TIcon, images } from '@assets'
 import { normalize, useTheme } from '@themes'
@@ -12,40 +13,49 @@ import { Block, Image, ShadowButton, Text } from '@components/bases'
 export interface ItemLessonProps {
   id: string
   thumbnail: string
+  chapterId?: string
+  checkpoint?: Quiz[]
   lessonTitle: string
   isEndItem?: boolean
+  nextLessonId: string
   lessonDescription: string
   type?: 'normal' | 'checkpoint'
-  status: 'complete' | 'lock' | 'current'
-  onUnlockPress?: (lessonId: string) => void
-  onStartExaminationPress?: (lessonId: string) => void
-  onStartLessonPress?: (lessonId: string, isRestart?: boolean) => void
+  chapterStatus: 'lock' | 'unlock'
+  status: 'completed' | 'lock' | 'current'
+  onUnlockPress?: (item: Partial<ItemLessonProps>) => void
+  onTogglePopOver?: () => void
+  onStartExaminationPress?: (item: Partial<ItemLessonProps>) => void
+  onStartLessonPress?: (
+    item: Partial<ItemLessonProps & { isRestart: boolean }>,
+  ) => void
 }
 
 const getTypeOfModal = new Map([
   ['lock', i18next.t('lock_lesson')],
   ['current', i18next.t('new_lesson')],
   ['checkpoint', i18next.t('practice')],
-  ['complete', i18next.t('old_lesson')],
+  ['completed', i18next.t('old_lesson')],
 ])
 
 const getIconByType = new Map([
   ['current', 'Lighter' as TIcon],
-  ['complete', 'Lighter' as TIcon],
+  ['completed', 'Lighter' as TIcon],
   ['lock', 'IconLockSmall' as TIcon],
   ['checkpoint', 'Question' as TIcon],
 ])
 
-export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
-  id,
-  type,
-  status,
-  lessonTitle,
-  onUnlockPress,
-  lessonDescription,
-  onStartLessonPress,
-  onStartExaminationPress,
-}) => {
+export const PopOver: React.FC<Partial<ItemLessonProps>> = (props) => {
+  const {
+    type,
+    status,
+    lessonTitle,
+    onUnlockPress,
+    chapterStatus,
+    onTogglePopOver,
+    lessonDescription,
+    onStartLessonPress,
+    onStartExaminationPress,
+  } = props
   const { colors } = useTheme()
   const { t } = useTranslation()
 
@@ -60,34 +70,39 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
         <Icon
           state={
             (type === 'normal'
-              ? getIconByType.get(status || 'complete')
+              ? getIconByType.get(status || 'completed')
               : getIconByType.get('checkpoint')) as TIcon
           }
         />
         <Text fontFamily="bold" size={'h5'} style={styles.textTypeModal}>
-          {type === 'normal'
-            ? getTypeOfModal.get(status || 'complete')
+          {type === 'normal' && chapterStatus === 'lock'
+            ? getTypeOfModal.get(status || 'completed')
+            : type === 'normal'
+            ? getTypeOfModal.get(status || 'completed')
             : getTypeOfModal.get('checkpoint')}
         </Text>
       </Block>
 
       <Text fontFamily="bold" size={'h4'} style={styles.titleModal}>
-        {type === 'checkpoint'
-          ? t('practice_title')
-          : status === 'lock'
+        {(type === 'checkpoint' && chapterStatus === 'lock') ||
+        status === 'lock'
           ? t('lock_title')
+          : type === 'checkpoint'
+          ? t('practice_title')
           : lessonTitle}
       </Text>
+
       <Text size={'h5'}>
-        {type === 'checkpoint'
-          ? t('practice_description')
-          : status === 'lock'
+        {(type === 'checkpoint' && chapterStatus === 'lock') ||
+        status === 'lock'
           ? t('lock_description')
+          : type === 'checkpoint'
+          ? t('practice_description')
           : lessonDescription}
       </Text>
 
       <Block row space="between" marginTop={25} alignCenter>
-        {status === 'complete' ? (
+        {status === 'completed' ? (
           // button for old lesson
           <Block row space="between" marginLeft={-5}>
             <ShadowButton
@@ -98,7 +113,13 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
               buttonColor={colors.yellowDark}
               buttonBorderColor={colors.orangePrimary}
               shadowButtonColor={colors.orangePrimary}
-              onPress={() => onStartLessonPress?.(id!)}
+              onPress={() => {
+                onStartLessonPress?.({
+                  ...props,
+                  isRestart: false,
+                })
+                onTogglePopOver?.()
+              }}
             >
               <Text size={'h4'} fontFamily="bold" paddingHorizontal={10}>
                 {t('continue_learn')}
@@ -112,7 +133,13 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
               buttonColor={colors.white}
               buttonBorderColor={colors.orangePrimary}
               shadowButtonColor={colors.orangePrimary}
-              onPress={() => onStartLessonPress?.(id!, true)}
+              onPress={() => {
+                onStartLessonPress?.({
+                  ...props,
+                  isRestart: true,
+                })
+                onTogglePopOver?.()
+              }}
             >
               <Text size={'h4'} fontFamily="bold" paddingHorizontal={10}>
                 {t('learn_again')}
@@ -128,22 +155,23 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
             buttonBorderSize={0.5}
             buttonColor={colors.yellowDark}
             containerStyle={styles.buttonStart}
-            onPress={() =>
-              type === 'checkpoint'
-                ? onStartExaminationPress?.(id!)
-                : status === 'lock'
-                ? onUnlockPress?.(id!)
-                : onStartLessonPress?.(id!)
-            }
+            onPress={() => {
+              type === 'checkpoint' && chapterStatus === 'unlock'
+                ? onStartExaminationPress?.(props)
+                : status === 'lock' || chapterStatus === 'lock'
+                ? onUnlockPress?.(props)
+                : onStartLessonPress?.(props)
+
+              onTogglePopOver?.()
+            }}
             buttonBorderColor={colors.orangePrimary}
             shadowButtonColor={colors.orangePrimary}
           >
             <Text size={'h4'} fontFamily="bold">
-              {type === 'checkpoint'
-                ? t('start_practice')
-                : status === 'lock'
-                ? t('unlock')
-                : t('lets_start')}
+              {(type === 'checkpoint' || status === 'current') &&
+              chapterStatus === 'unlock'
+                ? t('lets_start')
+                : t('unlock')}
             </Text>
           </ShadowButton>
         )}
@@ -160,17 +188,25 @@ export const PopOver: React.FC<Partial<ItemLessonProps>> = ({
 export const ItemLesson: React.FC<ItemLessonProps> = ({
   id,
   status,
+  chapterId,
   thumbnail,
   isEndItem,
   lessonTitle,
-  onUnlockPress,
+  checkpoint,
   type = 'normal',
+  nextLessonId,
+  chapterStatus,
+  onUnlockPress,
   lessonDescription,
   onStartLessonPress,
   onStartExaminationPress,
 }) => {
   const { colors } = useTheme()
   const ref = React.useMemo(() => React.createRef<Tooltip>(), [])
+
+  const onTogglePopOver = () => {
+    ref.current?.toggleTooltip()
+  }
 
   return (
     <Pressable
@@ -193,8 +229,13 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
                 id={id}
                 type={type}
                 status={status}
+                chapterId={chapterId}
+                checkpoint={checkpoint}
                 lessonTitle={lessonTitle}
+                nextLessonId={nextLessonId}
+                chapterStatus={chapterStatus}
                 onUnlockPress={onUnlockPress}
+                onTogglePopOver={onTogglePopOver}
                 lessonDescription={lessonDescription}
                 onStartLessonPress={onStartLessonPress}
                 onStartExaminationPress={onStartExaminationPress}
@@ -208,17 +249,22 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
               padding={5}
               borderWidth={2}
               borderColor={
-                status === 'complete' ? colors.orangePrimary : '#DAE1EA'
+                status === 'completed' ? colors.orangePrimary : '#DAE1EA'
               }
             >
-              <Image
-                style={styles.lessonImage}
-                source={{
-                  uri: thumbnail,
-                }}
-              />
+              {type === 'checkpoint' ? (
+                <Image style={styles.lessonImage} source={images.Checkpoint} />
+              ) : (
+                <Image
+                  style={styles.lessonImage}
+                  source={{
+                    uri: thumbnail,
+                  }}
+                />
+              )}
 
-              {status === 'lock' && type === 'normal' && (
+              {((status !== 'current' && status !== 'completed') ||
+                chapterStatus === 'lock') && (
                 <Block
                   alignCenter
                   radius={68}
@@ -230,7 +276,7 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
                 </Block>
               )}
 
-              {status === 'complete' && !isEndItem && (
+              {status === 'completed' && !isEndItem && (
                 <Block absolute bottom={-8} alignSelf="center">
                   <Icon state="CheckSmall" />
                 </Block>
@@ -244,9 +290,9 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
               height={20}
               radius={10}
               alignSelf="center"
-              marginTop={status === 'complete' ? 6 : 4}
+              marginTop={status === 'completed' ? 6 : 4}
               backgroundColor={
-                status === 'complete' ? colors.orangePrimary : '#DAE1EA'
+                status === 'completed' ? colors.orangePrimary : '#DAE1EA'
               }
             />
           )}
@@ -257,10 +303,10 @@ export const ItemLesson: React.FC<ItemLessonProps> = ({
           height={68}
           justifyCenter
           backgroundColor={
-            status === 'current'
-              ? '#F3F8F3'
-              : type === 'checkpoint'
+            type === 'checkpoint'
               ? '#FFF2CE'
+              : status === 'current'
+              ? '#F3F8F3'
               : 'transparent'
           }
           style={styles.blockLabel}

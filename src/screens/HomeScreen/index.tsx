@@ -1,122 +1,165 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Block, Container, Image, Modal, Text } from '@components'
-import { useTheme } from '@themes'
-import { Icon } from '@assets'
-import { View, FlatList, ListRenderItemInfo, Pressable } from 'react-native'
+import { FadeIn } from 'react-native-reanimated'
+import { useFocusEffect } from '@react-navigation/native'
+import { FlatList, ListRenderItemInfo, Pressable, View } from 'react-native'
+
+import {
+  Text,
+  Block,
+  Image,
+  Container,
+  GuestModal,
+  BlockAnimated,
+} from '@components'
 import {
   NewsItem,
-  NewsItemProps,
-  NewsProgress,
-  NewsProgressProps,
+  ToolItem,
   DailyTask,
+  NewsProgress,
   LessonProgressItem,
   LessonProgressItemProps,
-  ToolItem,
 } from './components'
-import { Portal, Host } from 'react-native-portalize'
-import { widthScreen } from '@utils/helpers'
+import { Icon } from '@assets'
+import { navigate } from '@navigation'
+import { LoadingScreen } from '@screens'
+import { colorTopic, useTheme } from '@themes'
+import { getTaskThunk } from '@redux/actions'
+import { getDaySession } from '@utils/dateUtils'
+import { setIsAdjustPostData } from '@redux/reducers'
+import { PostServices, UserService } from '@services'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { getTask, getUserData } from '@redux/selectors'
 import { ModalFunction } from '@components/bases/Modal/type'
-const learningData = [
-  {
-    id: 1,
-    lessonLabel: `Lesson 1: Bữa sáng cùng gia đình`,
-    topicName: 'Gia đình',
-    topicImage: `https://clipart-library.com/image_gallery/372235.png`,
-    progress: 50,
-  },
-  {
-    id: 2,
-    lessonLabel: `Lesson 2: Bữa sáng cùng gia đình`,
-    topicName: 'Công sở',
-    topicImage: `https://clipart-library.com/2023/business-persons-meeting-clipart-md.png`,
-    progress: 10,
-  },
-  {
-    id: 3,
-    lessonLabel: `Lesson 6: Bữa sáng cùng gia đình`,
-    topicName: 'Trường học',
-    topicImage: `https://media.istockphoto.com/id/639973478/vector/people-and-education-group-of-happy-students-with-books.jpg?s=612x612&w=0&k=20&c=fVA-VABlOliuVKSWk1h6mOgH6PKimTfPEKG4qzueQQY=`,
-    progress: 23.5,
-  },
-  {
-    id: 4,
-    lessonLabel: `Lesson 3: Bữa sáng cùng gia đình`,
-    topicName: 'Tiệc tùng',
-    topicImage: `https://cutewallpaper.org/24/happy-people-clip-art/1375620031.jpg`,
-    progress: 75.5,
-  },
-  {
-    id: 5,
-    lessonLabel: `Lesson 4: Bữa sáng cùng gia đình`,
-    topicName: 'Du lịch',
-    topicImage: `https://clipart-library.com/image_gallery/372235.png`,
-    progress: 60,
-  },
-]
-const newsData = [
-  {
-    id: 1,
-    title: `Bữa sáng cùng gia đình`,
-    image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
-    progress: 50,
-  },
-  {
-    id: 2,
-    title: `Bữa sáng cùng gia đình`,
-    image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
-    progress: 50,
-  },
-  {
-    id: 3,
-    title: `Bữa sáng cùng gia đình`,
-    image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
-    progress: 50,
-  },
-  {
-    id: 4,
-    title: `Bữa sáng cùng gia đình`,
-    image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
-    progress: 50,
-  },
-  {
-    id: 5,
-    title: `Bữa sáng cùng gia đình`,
-    image: `https://media.saigontourist.edu.vn/Media/1_STHCHOME/FolderFunc/202303/Images/fine-dining-la-gi-20230320091553-e.jpg`,
-    progress: 50,
-  },
-]
+import { parseCurrentLesson, parsePostData } from '@screens/HomeScreen/utils'
+
 export const HomeScreen = () => {
+  const dispatch = useAppDispatch()
+  // const streak = useAppSelector(getStreak)
+  const taskData = useAppSelector(getTask)
+  const userData = useAppSelector(getUserData)
+  const isAdjustPostData = useAppSelector(
+    (state) => state.root.detailPost.isAdjustPostData,
+  )
+  const isLoginWithGuest = useAppSelector(
+    (state) => state.root.auth.isLoginWithGuest,
+  )
   const [t] = useTranslation()
-  const dispatch = useDispatch()
   const { colors, normalize } = useTheme()
-  const onPressDictionary = () => {}
-  const onPressVideo = () => {}
-  const onLearningWatchMore = () => {}
+  const guestModalRef = React.useRef<ModalFunction>(null)
+  const [isLoading, setIsLoading] = React.useState(true)
+  const [postData, setPostData] = React.useState<
+    (PostResponse & { textColor: string })[]
+  >([])
+  const [postDataRead, setPostDataRead] = React.useState<
+    (PostResponse & { textColor: string })[]
+  >([])
+  const [currentLesson, setCurrentLesson] = React.useState<
+    Array<LessonProgressItemProps>
+  >([])
+
+  React.useEffect(() => {
+    setIsLoading(false)
+    callPost()
+    callPostRead()
+    callCurrentLesson()
+  }, [])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (isAdjustPostData) {
+        callPost()
+        callPostRead()
+        // console.log('useFocusEffect')
+        dispatch(setIsAdjustPostData(false))
+      }
+    }, [isAdjustPostData]),
+  )
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(getTaskThunk())
+    }, []),
+  )
+
+  const callPost = async () => {
+    try {
+      const res = await PostServices.getAllPost({
+        type: 'text',
+      })
+      setPostData(parsePostData(res.data.data.posts, colorTopic))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const callCurrentLesson = async () => {
+    try {
+      const res = await UserService.getCurrentLesson()
+      if (res.status === 200) {
+        setCurrentLesson(parseCurrentLesson(res.data.data))
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const callPostRead = async () => {
+    try {
+      const res = await PostServices.getAllPost({
+        type: 'text',
+        read: true,
+      })
+      setPostDataRead(parsePostData(res.data.data.posts, colorTopic))
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const onPressDictionary = () => {
+    navigate('DICTIONARY_SCREEN')
+  }
+  const onPressVideo = () => {
+    navigate('CHOOSE_VIDEO_SCREEN')
+  }
+  const onPressRanking = () => {
+    navigate('RANKING_SCREEN')
+  }
+  const onLearningWatchMore = () => {
+    navigate('LEARNING_SCREEN')
+  }
+  const onReadMore = () => {
+    navigate('MORE_POST_SCREEN')
+  }
+
+  const onLearningPress = (item: LessonProgressItemProps) => {
+    navigate('DETAIL_LESSON_SCREEN', {
+      lessonId: item.lessonId,
+      chapterId: item.chapterId,
+    })
+  }
+
   const renderLessonProgressItem = ({
     index,
     item,
   }: ListRenderItemInfo<LessonProgressItemProps>) => {
     return (
       <View
+        key={`item-${index}`}
         style={[
           index === 0 ? { marginStart: normalize.h(20) } : {},
           { flexDirection: 'row', alignItems: 'center' },
         ]}
-        key={`item-${index}`}
       >
         <LessonProgressItem
-          lessonLabel={item.lessonLabel}
-          progress={item.progress}
-          topicImage={item.topicImage}
-          topicName={item.topicName}
-          onPress={() => {
-            console.log('item:' + index)
-          }}
           index={index}
+          lessonId={item.lessonId}
+          chapterId={item.chapterId}
+          topicName={item.topicName}
+          topicImage={item.topicImage}
+          lessonLabel={item.lessonLabel}
+          onPress={() => onLearningPress(item)}
         />
-        {index === learningData.length - 1 && (
+        {index === currentLesson.length - 1 && currentLesson.length > 5 && (
           <Pressable onPress={onLearningWatchMore}>
             <Block
               padding={10}
@@ -131,10 +174,11 @@ export const HomeScreen = () => {
       </View>
     )
   }
+
   const renderNewsProgressItem = ({
     index,
     item,
-  }: ListRenderItemInfo<NewsProgressProps>) => {
+  }: ListRenderItemInfo<PostResponse & { textColor: string }>) => {
     return (
       <View
         style={[
@@ -143,16 +187,17 @@ export const HomeScreen = () => {
             : { marginStart: normalize.h(10) },
           { flexDirection: 'row', alignItems: 'center' },
         ]}
-        key={`item-${index}`}
       >
         <NewsProgress
+          progress={50}
           title={item.title}
-          image={item.image}
-          progress={item.progress}
-          index={index}
+          topic={item.topic.name}
+          topicColor={item.textColor}
+          image={item.attachments?.[0]?.src ?? ''}
+          onPress={() => navigate('DETAIL_POST_SCREEN', { post: item })}
         />
-        {index === newsData.length - 1 && (
-          <Pressable onPress={onLearningWatchMore}>
+        {index === postDataRead.length - 1 && postDataRead.length > 5 && (
+          <Pressable onPress={onReadMore}>
             <Block
               padding={10}
               marginHorizontal={20}
@@ -166,139 +211,183 @@ export const HomeScreen = () => {
       </View>
     )
   }
+
   const renderNewsItem = ({
     index,
     item,
-  }: ListRenderItemInfo<NewsItemProps>) => {
+  }: ListRenderItemInfo<PostResponse & { textColor: string }>) => {
     return (
-      <View
+      <Pressable
+        onPress={() => navigate('DETAIL_POST_SCREEN', { post: item })}
         style={[
           { marginHorizontal: normalize.h(20) },
-          index === newsData.length - 1
+          index === postData.length - 1
             ? { marginBottom: normalize.v(19) }
             : {},
         ]}
-        key={`item-${index}`}
       >
-        <NewsItem title={item.title} image={item.image} />
-      </View>
+        <NewsItem
+          title={item.title}
+          topic={item.topic?.name}
+          createAt={item.createdAt}
+          textColor={item.textColor}
+          image={item.attachments?.[0]?.src ?? ''}
+        />
+      </Pressable>
     )
   }
+
+  if (isLoading || postData.length <= 0) {
+    return <LoadingScreen />
+  }
+
   return (
     <Container hasScroll>
-      <Block flex backgroundColor={colors.white} paddingHorizontal={20}>
-        <Block row alignCenter space="between">
-          <Block row>
+      <BlockAnimated flex entering={FadeIn}>
+        <Block flex backgroundColor={colors.white} paddingHorizontal={20}>
+          <Block row alignCenter space="between">
             <Block row>
-              <Image
-                width={45}
-                height={45}
-                radius={22.5}
-                source={{
-                  uri: 'https://i.pinimg.com/736x/9b/88/51/9b88513699abae664fc34b23c3d0a6d3.jpg',
-                }}
-                resizeMode="cover"
-              />
-              <Block justifyCenter marginLeft={8}>
-                <Text size={'h4'} fontFamily="semiBold" color={colors.black}>
-                  Hey, Duy Vo
-                </Text>
-                <Block row alignCenter marginTop={4}>
-                  <Text size={'h5'} fontFamily="semiBold">
-                    Chào buổi sáng
+              <Block row>
+                <Image
+                  width={45}
+                  height={45}
+                  radius={22.5}
+                  resizeMode="cover"
+                  source={{
+                    uri: userData?.avatar?.src ?? (userData.avatar as string),
+                  }}
+                />
+                <Block justifyCenter marginLeft={8}>
+                  <Text size={'h4'} fontFamily="semiBold" color={colors.black}>
+                    Hey, {userData.fullName}
                   </Text>
-                  <Icon
-                    state="Tree"
-                    fill={colors.greyPrimary}
-                    style={{ marginStart: normalize.h(3) }}
-                  />
+                  <Block row alignCenter marginTop={4}>
+                    <Text size={'h5'} fontFamily="semiBold">
+                      {getDaySession()}
+                    </Text>
+                    <Icon
+                      state="Tree"
+                      fill={colors.greyPrimary}
+                      style={{ marginStart: normalize.h(3) }}
+                    />
+                  </Block>
                 </Block>
               </Block>
             </Block>
+            {/*{(hasStreak ?? 0) > 3 && (*/}
+            {/*  <BlockAnimated entering={FadeIn} exiting={FadeOut}>*/}
+            {/*    <Icon state="Fire" />*/}
+            {/*  </BlockAnimated>*/}
+            {/*)}*/}
           </Block>
-          <Icon state="Fire" />
-        </Block>
-        <Block marginTop={10}>
-          <DailyTask
-            icon="LearnBook"
-            taskName="Học bài 15 phút"
-            finishedTask={0}
-            totalTask={5}
-            onPress={() => {
-              console.log('streak screen')
-            }}
-          />
+          <Block marginTop={10}>
+            <DailyTask
+              data={taskData ?? []}
+              onPress={() => {
+                if (isLoginWithGuest) {
+                  guestModalRef.current?.openModal()
+                } else {
+                  navigate('STREAK_SCREEN')
+                }
+              }}
+            />
+          </Block>
+          <Block marginTop={17}>
+            <Text size={'h2'} fontFamily="bold" color={colors.black}>
+              {t('tools')}
+            </Text>
+            <Block row marginTop={18} alignCenter justifyCenter>
+              <ToolItem
+                icon="DictionaryColorized"
+                name={t('dictionary')}
+                onPress={onPressDictionary}
+              />
+              <View style={{ marginStart: normalize.h(28) }}>
+                <ToolItem icon="Video" name="Video" onPress={onPressVideo} />
+              </View>
+              <View style={{ marginStart: normalize.h(28) }}>
+                <ToolItem
+                  icon="Ranking"
+                  name="Ranking"
+                  onPress={onPressRanking}
+                />
+              </View>
+            </Block>
+          </Block>
         </Block>
         <Block marginTop={17}>
-          <Text size={'h2'} fontFamily="bold" color={colors.black}>
-            {t('tools')}
+          <Text
+            size={'h2'}
+            fontFamily="bold"
+            color={colors.black}
+            marginLeft={20}
+          >
+            {t('learning')}
           </Text>
-          <Block row marginTop={18}>
-            <ToolItem
-              icon="DictionaryColorized"
-              name={t('dictionary')}
-              onPress={onPressDictionary}
-            />
-            <View style={{ marginStart: normalize.h(28) }}>
-              <ToolItem icon="Video" name="Video" onPress={onPressVideo} />
-            </View>
-          </Block>
+          <FlatList
+            horizontal
+            data={currentLesson}
+            renderItem={renderLessonProgressItem}
+            style={{ marginTop: normalize.v(10) }}
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(_, index) => `item-${index}`}
+          />
         </Block>
-      </Block>
-      <Block marginTop={17}>
-        <Text
-          size={'h2'}
-          fontFamily="bold"
-          color={colors.black}
-          marginLeft={20}
-        >
-          {t('learning')}
-        </Text>
-        <FlatList
-          data={learningData}
-          keyExtractor={(_, index) => `item-${index}`}
-          renderItem={renderLessonProgressItem}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={{ marginTop: normalize.v(10) }}
-        />
-      </Block>
-      <Block marginTop={17}>
-        <Text
-          size={'h2'}
-          fontFamily="bold"
-          color={colors.black}
-          marginLeft={20}
-        >
-          {t('watched')}
-        </Text>
-        <FlatList
-          data={newsData}
-          keyExtractor={(_, index) => `item-${index}`}
-          renderItem={renderNewsProgressItem}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={{ marginTop: normalize.v(10) }}
-        />
-      </Block>
-      <Block marginTop={17}>
-        <Text
-          size={'h2'}
-          fontFamily="bold"
-          color={colors.black}
-          marginLeft={20}
-        >
-          {t('news')}
-        </Text>
-        <FlatList
-          data={newsData}
-          keyExtractor={(_, index) => `item-${index}`}
-          renderItem={renderNewsItem}
-          scrollEnabled={false}
-          showsHorizontalScrollIndicator={false}
-          style={{ marginTop: normalize.v(10) }}
-        />
-      </Block>
+        {postDataRead.length > 0 ? (
+          <Block marginTop={17}>
+            <Text
+              size={'h2'}
+              fontFamily="bold"
+              color={colors.black}
+              marginLeft={20}
+            >
+              {t('watched')}
+            </Text>
+            <FlatList
+              horizontal
+              data={postDataRead}
+              renderItem={renderNewsProgressItem}
+              showsHorizontalScrollIndicator={false}
+              style={{ marginTop: normalize.v(10) }}
+              keyExtractor={(_, index) => `item-${index}`}
+            />
+          </Block>
+        ) : (
+          <></>
+        )}
+        <Block marginTop={17}>
+          <Block row space={'between'} paddingHorizontal={20}>
+            <Text
+              size={'h2'}
+              fontFamily="bold"
+              marginBottom={-10}
+              color={colors.black}
+            >
+              {t('news')}
+            </Text>
+            <Icon
+              state={'RightArrow'}
+              onPress={() => navigate('MORE_POST_SCREEN')}
+            />
+          </Block>
+          <FlatList
+            data={postData}
+            renderItem={renderNewsItem}
+            scrollEnabled={false}
+            style={{ marginTop: normalize.v(10) }}
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(_, index) => `item-${index}`}
+          />
+        </Block>
+      </BlockAnimated>
+      <GuestModal
+        ref={guestModalRef}
+        position={'center'}
+        onButtonPress={() => {
+          navigate('REGISTER_SCREEN', { isGuest: true })
+          guestModalRef?.current?.dismissModal()
+        }}
+      />
     </Container>
   )
 }

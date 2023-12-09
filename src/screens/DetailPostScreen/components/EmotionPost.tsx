@@ -1,40 +1,155 @@
-import { Icon } from '@assets'
 import { debounce } from 'lodash'
-import { useAppDispatch } from '@hooks'
 import React, { useState } from 'react'
-import { Block, Text } from '@components'
 import { useTranslation } from 'react-i18next'
-import { makeStyles, normalize, useTheme } from '@themes'
-import { Dimensions, TouchableHighlight } from 'react-native'
-import { changeShowComment } from '@redux/reducers'
+import { TouchableHighlight } from 'react-native'
 
-const EmotionPost: React.FC = () => {
+import {
+  setPostBookmark,
+  changeShowComment,
+  setIsAdjustPostData,
+} from '@redux/reducers'
+import { Icon } from '@assets'
+import { UserService } from '@services'
+import { navigate } from '@navigation'
+import { widthWindow } from '@utils/helpers'
+import { PostServices } from '@services/PostService'
+import { Block, GuestModal, Text } from '@components'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { makeStyles, normalize, useTheme } from '@themes'
+import { ModalFunction } from '@components/bases/Modal/type'
+import { getIsLoginWithGuest, getUserData } from '@redux/selectors'
+
+export interface IEmotionPost {
+  postId: string
+  liked: boolean
+  likeCount: number
+  userLiked: string[]
+  commentCount: number
+  setCurrentPost: React.Dispatch<React.SetStateAction<PostResponse>>
+}
+
+const EmotionPost: React.FC<IEmotionPost> = ({
+  liked,
+  postId,
+  likeCount,
+  commentCount,
+  setCurrentPost,
+}) => {
   const { colors } = useTheme()
-  const widthItem = Dimensions.get('window').width
-  const styles = useStyles({ widthItem })
+  const user = useAppSelector(getUserData)
+  const isLoginWithGuestRole = useAppSelector(getIsLoginWithGuest)
+  const isAdjustPostData = useAppSelector(
+    (state) => state.root.detailPost.isAdjustPostData,
+  )
+
+  const styles = useStyles({ widthItem: widthWindow })
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const [like, setLike] = useState(false)
+
+  const guestModalRef = React.useRef<ModalFunction>(null)
+
+  const [like, setLike] = useState(liked)
   const [bookmark, setBookmark] = useState(false)
+
+  React.useEffect(() => {
+    const isBookmark = user.postBookmarks.find((item) => item === postId)
+    if (isBookmark && !bookmark) {
+      React.startTransition(() => {
+        setBookmark(true)
+      })
+    }
+  }, [user])
+
   const setEmotion = debounce((type: 'LIKE' | 'COMMENT' | 'BOOKMARK') => {
+    if (isLoginWithGuestRole) {
+      guestModalRef.current?.openModal()
+      return
+    }
+
     switch (type) {
       case 'LIKE':
-        setLike(!like)
+        React.startTransition(() => {
+          setLike(!like)
+        })
+        updateLike(!like)
         break
       case 'COMMENT':
         dispatch(changeShowComment(true))
         break
       case 'BOOKMARK':
-        setBookmark(!bookmark)
+        handleBookmark()
         break
     }
+    if (!isAdjustPostData) {
+      dispatch(setIsAdjustPostData(true))
+    }
   }, 200)
+
+  const handleBookmark = async () => {
+    React.startTransition(() => {
+      setBookmark((prev) => !prev)
+    })
+    try {
+      const res = await UserService.bookmarkPost(postId)
+      if (res.status === 200) {
+        const resGetPostBookmark = await UserService.getPostBookmark()
+        if (res.status === 200) {
+          dispatch(
+            setPostBookmark({
+              postBookmarks: resGetPostBookmark.data.data.posts.map(
+                (item) => item._id,
+              ),
+            }),
+          )
+        }
+      }
+    } catch (e) {
+      console.log(e)
+      React.startTransition(() => {
+        setBookmark((prevState) => !prevState)
+      })
+    }
+  }
+
+  const updateLike = async (like: boolean) => {
+    try {
+      setCurrentPost((prev) => {
+        return {
+          ...prev,
+          likeCount: like ? prev.likeCount + 1 : prev.likeCount - 1,
+        }
+      })
+      await PostServices.updateLikePost({
+        postId,
+      })
+    } catch (e) {
+      React.startTransition(() => {
+        setLike(!like)
+      })
+      dispatch(setIsAdjustPostData(false))
+      console.log(e)
+    }
+  }
+
   const colorsUnderline = colors.orangeDark + '20'
+
+  const onButtonGuestModalPress = () => {
+    navigate('REGISTER_SCREEN', { isGuest: true })
+    guestModalRef?.current?.dismissModal()
+  }
+
   return (
     <Block style={styles.container}>
       <Block style={styles.countComment}>
-        <Text>Vu and 30 others</Text>
-        <Text>30 comments</Text>
+        <Text>
+          {like
+            ? t('post_emotion_status_user', {
+                user: user.fullName,
+                amount: likeCount,
+              })
+            : t('post_emotion_status', { amount: likeCount })}
+        </Text>
+        <Text>{t('comments', { amount: commentCount })}</Text>
       </Block>
       <Block style={styles.boxEmotion}>
         <TouchableHighlight
@@ -74,6 +189,13 @@ const EmotionPost: React.FC = () => {
           </Block>
         </TouchableHighlight>
       </Block>
+
+      <GuestModal
+        position={'center'}
+        ref={guestModalRef}
+        animationType={'fade'}
+        onButtonPress={onButtonGuestModalPress}
+      />
     </Block>
   )
 }
@@ -87,7 +209,7 @@ interface IEmotion {
 const useStyles = makeStyles<IEmotion>()(({ colors }) => ({
   container: {
     // marginHorizontal: normalize.m(20),
-    backgroundColor: "transparent"
+    backgroundColor: 'transparent',
   },
   countComment: {
     flexDirection: 'row',

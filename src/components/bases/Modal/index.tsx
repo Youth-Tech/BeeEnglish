@@ -15,7 +15,14 @@ const AnimatedBlock = Animated.createAnimatedComponent(Block)
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 export const Modal = React.forwardRef<ModalFunction, ModalProps>(
   (props, ref) => {
-    const { position, children, onShow, onDismiss } = props
+    const {
+      position,
+      children,
+      onShow,
+      onDismiss,
+      animationType = 'slide',
+      backdropStyle,
+    } = props
     const [visible, setVisible] = React.useState<boolean>(false)
     const STATUS_BAR_HEIGHT = getStatusBarHeight()
     const handleCloseModal = () => {
@@ -48,14 +55,15 @@ export const Modal = React.forwardRef<ModalFunction, ModalProps>(
               style={[
                 baseStyles.absoluteFill,
                 { backgroundColor: 'rgba(0,0,0,0.5)' },
+                backdropStyle,
               ]}
               entering={FadeIn}
               exiting={FadeOut}
               onPress={handleCloseModal}
             />
             <AnimatedBlock
-              entering={SlideInDown}
-              exiting={SlideOutDown}
+              entering={animationType === 'slide' ? SlideInDown : FadeIn}
+              exiting={animationType === 'slide' ? SlideOutDown : FadeOut}
               flex
               alignSelf={
                 position === 'top'

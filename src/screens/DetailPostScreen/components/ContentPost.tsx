@@ -3,16 +3,18 @@ import { Block } from '@components'
 import { useTheme } from '@themes'
 import { useStyles } from '@screens/DetailPostScreen/styles'
 import ItemWord from '@screens/DetailPostScreen/components/ItemWord'
-import TranslateVi from "@screens/DetailPostScreen/components/TranslateVi";
+import TranslateVi from '@screens/DetailPostScreen/components/TranslateVi'
 
 interface ParagraphProps {
-    data: PostResponse,
+  english: string
+  vietnamese: string
 }
-const ContentPost: React.FC<ParagraphProps> = ({ data}) => {
+const ContentPost: React.FC<ParagraphProps> = ({ english, vietnamese }) => {
   const { colors } = useTheme()
   const styles = useStyles(colors)
-  const pattern = /\S+(['".,!?;:]?)(?=\s|$)/g;
-  const words = data.english.match(pattern);
+  const pattern = /\S+(['".,!?;:]?)(?=\s|$)/g
+  const words = english.match(pattern)
+
   return (
     <Block>
       <Block style={styles.boxContent}>
@@ -21,14 +23,14 @@ const ContentPost: React.FC<ParagraphProps> = ({ data}) => {
             key={index}
             value={word}
             onPress={() => {
-              word = word.replace(/['".,!?;:]/g, '');
+              word = word.replace(/['".,!?;:]/g, '')
             }}
           />
         ))}
       </Block>
-      <TranslateVi value={data.vietnamese} />
+      <TranslateVi value={vietnamese} />
     </Block>
   )
 }
 
-export default React.memo(ContentPost);
+export default React.memo(ContentPost)

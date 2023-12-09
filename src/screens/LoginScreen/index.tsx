@@ -1,93 +1,127 @@
 import {
+  Keyboard,
   Pressable,
   KeyboardAvoidingView,
   DocumentSelectionState,
 } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigation } from '@react-navigation/native'
 
 import {
   Text,
   Block,
-  TextInput,
   Container,
+  TextInput,
   ShadowButton,
+  SocialLoginButton,
   DismissKeyBoardBlock,
 } from '@components'
+import {
+  login,
+  loginOAuthThunk,
+  resendVerifyEmail,
+} from '@redux/actions/auth.action'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
-import { useAppDispatch } from '@hooks'
-import { TokenService } from '@services'
-import { SocialLoginButton } from '@components'
-import { AuthService } from '@services/AuthService'
+import { UserService } from '@services'
+import { navigate, replace } from '@navigation'
 import { DeviceInfoConfig, Provider } from '@configs'
-import { goBack, navigate, replace } from '@navigation'
-import { setAuthState, setLoadingStatusAction } from '@redux/reducers'
-import { signingWithFacebook, signingWithGoogle } from '@utils/authUtils'
+import { getFCMToken } from '@utils/notificationUtils'
+import { useAppDispatch, useAppSelector } from '@hooks'
 import { useValidateInput } from '@utils/validateInput'
+import { defaultUserState, setAuthState, setUserState } from '@redux/reducers'
 
 export const LoginScreen = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const navigation = useNavigation()
   const { colors, normalize } = useTheme()
-  const [checkMail, setCheckMail] = useState(true)
-  const [checkPass, setCheckPass] = useState(true)
   const [email, setEmail] = React.useState('')
+  const [checkMail, setCheckMail] = React.useState(true)
+  const [checkPass, setCheckPass] = React.useState(true)
   const [password, setPassword] = React.useState('')
+  const dataUser = useAppSelector((state) => state.root.user)
+  const isResend = useAppSelector(
+    (state) => state.root.auth.isResendVerifyEmail,
+  )
 
   const [disabledLogin, setDisabledLogin] = React.useState(true)
-
+  const emailInputRef = React.useRef<DocumentSelectionState>()
   const passwordInputRef = React.useRef<DocumentSelectionState>()
 
+  React.useEffect(() => {
+    email.length > 0 && password.length > 0
+        ? setDisabledLogin(false)
+        : setDisabledLogin(true)
+  }, [email, password])
+
+  React.useEffect(() => {
+    if (dataUser.email && dataUser.isVerified) {
+      updateFCMToken()
+      if (dataUser.pretest) {
+        replace('BOTTOM_TAB')
+      } else {
+        replace('EXAM_TEST_SCREEN')
+      }
+    }
+    if (isResend && email) {
+      dispatch(resendVerifyEmail(email))
+      navigate('VERIFICATION_CODE_SCREEN', { type: 'signUp', email })
+    }
+  }, [dataUser, isResend])
+
+  const validate = useValidateInput()
+
+  const isErrorBeforeSubmit = () => {
+    if (!validate.validateEmail(email)) {
+      emailInputRef.current?.focus()
+      return true
+    }
+    if (!validate.validatePassword(password)) {
+      passwordInputRef.current?.focus()
+      return true
+    }
+
+    return false
+  }
+
   const onSubmit = () => {
-    navigate('EMAIL_REGISTRATION_SCREEN')
+    if (isErrorBeforeSubmit()) return
+    dispatch(setUserState(defaultUserState))
+    dispatch(setAuthState({ isResendVerifyEmail: false }))
+    if (email && password)
+      dispatch(
+        login({
+          email,
+          password,
+          deviceId: DeviceInfoConfig.deviceId,
+          deviceName: DeviceInfoConfig.deviceName,
+        }),
+      )
   }
   const goRegister = () => {
     navigate('REGISTER_SCREEN')
   }
-  const forgotPassword = () => {}
-
-  const handleLoginOAuth = async (providerId: number) => {
-    dispatch(setLoadingStatusAction(true))
-    try {
-      const loginHandle =
-        providerId == Provider.Facebook
-          ? signingWithFacebook
-          : signingWithGoogle
-
-      const resOAuth = await loginHandle()
-
-      const res = await AuthService.oAuthLogin({
-        accessToken: resOAuth as string,
-        deviceId: DeviceInfoConfig.deviceId,
-        deviceName: DeviceInfoConfig.deviceName,
-        provider: providerId,
-      })
-
-      if (res.status === 200 && res.data?.data) {
-        const { accessToken, refreshToken } = res.data.data
-        dispatch(
-          setAuthState({
-            providerId: providerId,
-          }),
-        )
-
-        TokenService.setAccessToken(accessToken)
-        TokenService.setRefreshToken(refreshToken)
-        replace('BOTTOM_TAB')
-      }
-    } catch (error) {
-      console.log(`Error login with ${Provider[providerId]}`, error.message)
-    }
-    dispatch(setLoadingStatusAction(false))
+  const forgotPassword = () => {
+    navigate('SEND_PASSWORD_SCREEN')
   }
 
-  React.useEffect(() => {
-    email.length > 0 && password.length > 0
-      ? setDisabledLogin(false)
-      : setDisabledLogin(true)
-  }, [email, password])
-  const validate = useValidateInput()
+  const updateFCMToken = async () => {
+    try {
+      const fcmToken = await getFCMToken()
+      await UserService.updateFCMToken({
+        fcmToken: fcmToken ?? '',
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const handleLoginOAuth = async (providerId: Provider) => {
+    dispatch(loginOAuthThunk({ providerId }))
+  }
+
   const onCheckEmail = (value: string) => {
     setCheckMail(validate.validateEmail(value))
     return
@@ -106,10 +140,15 @@ export const LoginScreen = () => {
       case 'password':
         if (password.length === 0) return `${t('password')}${t('is_required')}`
         if (password.length < 8) return `${t('password')}${t('is_too_short')}`
-        if (!checkPass) return `${t('password')}${t('is_invalid')}`
+        if (!checkPass)
+          return `${t('password')}${t('password_need_1_capital_normal_number')}`
         break
     }
     return 'hello'
+  }
+
+  const handleEndEditing = () => {
+    Keyboard.dismiss()
   }
 
   return (
@@ -118,7 +157,16 @@ export const LoginScreen = () => {
         <DismissKeyBoardBlock style={{ flex: 1 }}>
           <Block flex paddingHorizontal={24} paddingTop={10} space="between">
             <Block>
-              <Icon state="Back" onPress={goBack} />
+              <Icon
+                state="Back"
+                onPress={() => {
+                  if (navigation.canGoBack()) {
+                    navigation.goBack()
+                  } else {
+                    replace('NAVIGATE_SCREEN')
+                  }
+                }}
+              />
               <Text
                 color={colors.black}
                 size={'heading'}
@@ -129,6 +177,7 @@ export const LoginScreen = () => {
               </Text>
               <Block marginTop={25}>
                 <TextInput
+                  ref={emailInputRef}
                   label={'E-mail'}
                   placeholder="example@gmail.com"
                   onChangeText={(value) => {
@@ -172,6 +221,8 @@ export const LoginScreen = () => {
                   error={showError('password')}
                   showError={!checkPass}
                   onBlur={() => onCheckPass(password)}
+                  onEndEditing={handleEndEditing}
+                  onSubmitEditing={handleEndEditing}
                 />
               </Block>
               <Block alignCenter marginTop={125.4}>
@@ -236,12 +287,12 @@ export const LoginScreen = () => {
                 <SocialLoginButton
                   name="Google"
                   icon="google"
-                  onPress={() => handleLoginOAuth(Provider.Google)}
+                  onPress={() => handleLoginOAuth(Provider.google)}
                 />
                 <SocialLoginButton
                   name="Facebook"
                   icon="facebook"
-                  onPress={() => handleLoginOAuth(Provider.Facebook)}
+                  onPress={() => handleLoginOAuth(Provider.facebook)}
                 />
               </Block>
             </Block>

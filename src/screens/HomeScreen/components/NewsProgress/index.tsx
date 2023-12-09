@@ -1,27 +1,26 @@
 import React, { useState } from 'react'
-import { normalize, useTheme } from '@themes'
-import { Block, Text, Image } from '@components'
-import { Icon } from '@assets'
 import { Pressable } from 'react-native'
 
+import { Icon } from '@assets'
+import { Block, Text, Image } from '@components'
+import { makeStyles, normalize, useTheme } from '@themes'
+
 export interface NewsProgressProps {
-  index?: number
   title: string
   image: string
   progress: number
   onPressBookMark?: () => void
   onPress?: () => void
+  topicColor: string
+  topic: string
 }
 
-export const NewsProgress: React.FC<NewsProgressProps> = ({
-  index,
-  title,
-  image,
-  progress,
-  onPressBookMark,
-  onPress,
-}) => {
+export const NewsProgress: React.FC<NewsProgressProps> = (props) => {
+  const { title, image, onPress, progress, onPressBookMark, topic } = props
+
   const { colors } = useTheme()
+  const styles = useStyle(props)
+  // @ts-ignore
   const combinedText = `${progress}%`
   const [isBookmarked, setIsBookmarked] = useState(false)
 
@@ -33,18 +32,17 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
     <Pressable onPress={onPress} style={[{ marginVertical: normalize.v(5) }]}>
       <Block
         shadow
+        radius={8}
         width={142}
-        height={186}
-        radius={10}
-        elevation={5}
         overflow="hidden"
+        style={styles.container}
         backgroundColor={colors.white}
       >
-        <Block padding={3} flex>
+        <Block padding={4} flex>
           <Image
-            radius={10}
             width="100%"
             height={110}
+            radius={8 - 4}
             source={{
               uri: image,
             }}
@@ -56,11 +54,11 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
             <Block
               width={26}
               height={30}
-              backgroundColor={colors.white}
               alignCenter
               justifyCenter
               borderBottomLeftRadius={10}
               borderBottomRightRadius={10}
+              backgroundColor={colors.white}
             >
               <Icon
                 state="Bookmark"
@@ -70,26 +68,44 @@ export const NewsProgress: React.FC<NewsProgressProps> = ({
             </Block>
           </Pressable>
           <Text
-            paddingLeft={3}
-            fontFamily="regular"
             size={'h4'}
-            color={colors.black}
-            numberOfLines={3}
+            paddingLeft={3}
             lineHeight={18}
+            numberOfLines={3}
+            paddingVertical={5}
+            color={colors.black}
+            fontFamily="semiBold"
           >
             {title}
           </Text>
         </Block>
-        <Text
-          marginLeft={6}
-          marginBottom={5}
-          fontFamily="bold"
-          size={'h5'}
-          color={colors.orangeDark}
-        >
-          {combinedText}
-        </Text>
+        <Block row space="between" padding={6} alignEnd>
+          <Text
+            size={10}
+            paddingVertical={4}
+            fontFamily="semiBold"
+            paddingHorizontal={5}
+            style={styles.topicTextStyle}
+          >
+            {topic}
+          </Text>
+          <Text fontFamily="bold" size={'h5'} color={colors.orangeDark}>
+            {/*{combinedText}*/}
+          </Text>
+        </Block>
       </Block>
     </Pressable>
   )
 }
+
+const useStyle = makeStyles<NewsProgressProps>()(({ normalize }) => ({
+  container: {
+    height: normalize.v(200),
+  },
+  topicTextStyle: ({ topicColor }) => ({
+    flex: 0,
+    borderRadius: 5,
+    color: topicColor,
+    backgroundColor: `${topicColor}20`,
+  }),
+}))

@@ -1,99 +1,99 @@
-import { useTheme } from '@themes'
-import { Icon, images } from '@assets'
+import {
+  cancelAnimation,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated'
+import { Pressable } from 'react-native'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import FastImage from 'react-native-fast-image'
-import { Block, Container, Modal, ShadowButton, Text } from '@components'
-import TaskItem, {
-  TaskItemProps,
-} from '@screens/StreakScreen/components/TaskItem'
-import WeekCalendar from '@screens/StreakScreen/components/WeekCalendar'
-import StreakDay, {
-  StreakDayProps,
-} from '@screens/StreakScreen/components/StreakDay'
-import { ModalFunction } from '@components/bases/Modal/type'
-import Animated, {
-  withTiming,
-  withRepeat,
-  useSharedValue,
-  cancelAnimation,
-  useAnimatedStyle,
-} from 'react-native-reanimated'
 
-const CalendarData: StreakDayProps[] = [
-  { date: '09', type: 'normal' },
-  { date: '10', type: 'isAttendance' },
-  { date: '11', type: 'isAttendance' },
-  { date: '12', type: 'isAttendance' },
-  { date: '13', type: 'current' },
-  { date: '14', type: 'normal' },
-  { date: '15', type: 'normal' },
-]
-const TaskData: TaskItemProps[] = [
-  {
-    taskType: 'money',
-    taskName: 'Nạp 1 triệu vô tài khoản',
-    honeyAmount: 100,
-  },
-  {
-    taskType: 'learning',
-    taskName: 'Học 2 bài học',
-    honeyAmount: 30,
-  },
-  {
-    taskType: 'game',
-    taskName: 'Nạp 1 triệu vô tài khoản',
-    honeyAmount: 10,
-  },
-  {
-    taskType: 'game',
-    taskName: 'Hạ 2 đối thủ',
-    honeyAmount: 30,
-  },
-  {
-    taskType: 'learning',
-    taskName: 'Học 5 từ vựng mới',
-    honeyAmount: 56,
-  },
-  {
-    taskType: 'learning',
-    taskName: 'Học 5 từ vựng mới',
-    honeyAmount: 56,
-  },
-  {
-    taskType: 'learning',
-    taskName: 'Học 5 từ vựng mới',
-    honeyAmount: 56,
-  },
-  {
-    taskType: 'learning',
-    taskName: 'Học 5 từ vựng mới',
-    honeyAmount: 56,
-  },
-]
-const AnimatedBlock = Animated.createAnimatedComponent(Block)
-const StreakScreen = () => {
+import {
+  StreakDay,
+  TaskItem,
+  WeekCalendar,
+} from '@screens/StreakScreen/components'
+import { useTheme } from '@themes'
+import { Icon, images } from '@assets'
+import { getStreak, getTask } from '@redux/selectors'
+import { getTaskThunk, updateStreakThunk } from '@redux/actions'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { ModalFunction } from '@components/bases/Modal/type'
+import {
+  Block,
+  BlockAnimated,
+  Container,
+  Modal,
+  ShadowButton,
+  Text,
+} from '@components'
+import { Task } from '@services/TaskService'
+import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
+import { UserService } from '@services'
+
+export const StreakScreen = () => {
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
-  const rotateModal = useSharedValue(0)
+  const taskData = useAppSelector(getTask)
   const { colors, normalize } = useTheme()
-  const [isPresent, setIsPresent] = React.useState(false)
+  const [userCoins, setUserCoins] = React.useState(0)
   const modalRef = React.useRef<ModalFunction>(null)
+
+  const rotateModal = useSharedValue(0)
+  const streakDays = useAppSelector(getStreak).streaks
+
+  const isPresent = !!streakDays?.find(
+    (item) =>
+      new Date(item.date).toLocaleDateString() ===
+        new Date().toLocaleDateString() && item.type === 'isAttendance',
+  )
+
+  React.useEffect(() => {
+    if (taskData === undefined) {
+      dispatch(getTaskThunk())
+    }
+  }, [taskData])
+
   const handleOpenModal = useCallback(() => {
     rotateModal.value = withRepeat(withTiming(180, { duration: 1000 }), -1)
     modalRef.current?.openModal()
   }, [])
-  const handleAttend = () => {
-    setIsPresent(!isPresent)
-  }
+
   const onCloseModal = () => {
     cancelAnimation(rotateModal)
     rotateModal.value = 0
   }
+
   const rStyle = useAnimatedStyle(() => {
     return {
       transform: [{ rotate: `${rotateModal.value}deg` }],
     }
   })
+
+  const handleAttend = () => {
+    dispatch(updateStreakThunk())
+  }
+
+  const renderTaskItem = ({ index, item }: ListRenderItemInfo<Task>) => {
+    return (
+      <Block marginTop={14} key={`item-task-${index}`}>
+        <TaskItem data={item} />
+      </Block>
+    )
+  }
+  const getCoins = async () => {
+    try {
+      const response = await UserService.getCoins()
+      setUserCoins(response.data.data.coin)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  React.useEffect(() => {
+    getCoins()
+  }, [])
   return (
     <Container hasScroll>
       <Block paddingHorizontal={20} paddingTop={15}>
@@ -108,30 +108,29 @@ const StreakScreen = () => {
           </Text>
           <Icon state={'Present'} onPress={handleOpenModal} />
         </Block>
-        <Block marginTop={15}>
-          <WeekCalendar data={CalendarData} />
-        </Block>
+        <Pressable onPress={handleOpenModal}>
+          <Block marginTop={15}>
+            <WeekCalendar data={streakDays ?? []} />
+          </Block>
+        </Pressable>
         <Block marginTop={20} row space={'between'}>
           <Text size={'h3'} fontFamily={'bold'} color={colors.black}>
             {t('mission')}
           </Text>
           <Block row justifyCenter alignCenter>
             <Text size={'h5'} fontFamily={'bold'} lineHeight={18}>
-              200
+              {userCoins}
             </Text>
             <Icon state={'Honey'} />
           </Block>
         </Block>
-        <Block marginBottom={14}>
-          {TaskData.map((item, index) => (
-            <Block marginTop={14} key={`item-task-${index}`}>
-              <TaskItem
-                taskType={item.taskType}
-                taskName={item.taskName}
-                honeyAmount={item.honeyAmount}
-              />
-            </Block>
-          ))}
+        <Block marginBottom={14} style={{ minWidth: 5, minHeight: 5 }}>
+          <FlashList
+            data={taskData}
+            estimatedItemSize={69}
+            renderItem={renderTaskItem}
+            keyExtractor={(_, index) => `item-task-${index}`}
+          />
         </Block>
       </Block>
       <Modal ref={modalRef} position={'center'} onDismiss={onCloseModal}>
@@ -150,7 +149,7 @@ const StreakScreen = () => {
             borderColor={colors.orangeDark}
           >
             <Block marginTop={29} row>
-              {CalendarData.map((item, index) => (
+              {streakDays?.map((item, index) => (
                 <Block
                   key={`item-date-${index}`}
                   marginLeft={index > 0 ? 10 : 0}
@@ -160,7 +159,7 @@ const StreakScreen = () => {
               ))}
             </Block>
             <Block justifyCenter alignCenter>
-              <AnimatedBlock style={rStyle}>
+              <BlockAnimated style={rStyle}>
                 <FastImage
                   source={images.Light}
                   style={{
@@ -169,7 +168,7 @@ const StreakScreen = () => {
                   }}
                   resizeMode={FastImage.resizeMode.contain}
                 />
-              </AnimatedBlock>
+              </BlockAnimated>
               <FastImage
                 source={images.ChestBox}
                 style={{
@@ -184,18 +183,18 @@ const StreakScreen = () => {
               {isPresent ? t('comeback_tomorrow') : t('welcome_back')}
             </Text>
             <ShadowButton
-              onPress={handleAttend}
+              shadowHeight={7}
               buttonHeight={40}
               buttonWidth={263}
               buttonRadius={10}
-              shadowButtonColor={colors.orangeLighter}
-              buttonColor={colors.orangePrimary}
-              shadowHeight={7}
               containerStyle={{
                 alignSelf: 'center',
                 marginTop: normalize.v(26),
               }}
               disabled={isPresent}
+              onPress={handleAttend}
+              buttonColor={colors.orangePrimary}
+              shadowButtonColor={colors.orangeLighter}
             >
               <Text color="white" fontFamily="bold" size={'h3'}>
                 {t('attend')}
@@ -205,15 +204,15 @@ const StreakScreen = () => {
         </Block>
         <Block
           absolute
-          alignSelf={'center'}
           top={-10}
-          justifyCenter
           alignCenter
+          justifyCenter
+          alignSelf={'center'}
         >
           <FastImage
             source={images.StreakBox}
-            style={{ width: normalize.h(210.5), height: normalize.h(37.04) }}
             resizeMode={FastImage.resizeMode.contain}
+            style={{ width: normalize.h(210.5), height: normalize.h(37.04) }}
           />
           <Text
             size={'h3'}
@@ -228,5 +227,3 @@ const StreakScreen = () => {
     </Container>
   )
 }
-
-export default StreakScreen

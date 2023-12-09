@@ -1,19 +1,23 @@
 import {
-  Text,
   Block,
-  Image,
   Container,
-  ShadowButton,
+  Image,
   ShadowBlock,
+  ShadowButton,
+  Text,
 } from '@components'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@themes'
 import { Icon, images } from '@assets'
 import { Pressable } from 'react-native'
-import { goBack, navigate } from '@navigation'
+import { replace } from '@navigation'
+import { KnowledgeService } from '@services'
+import { useAppDispatch } from '@hooks'
+import { setUserState } from '@redux/reducers'
 
 export const ExamTestScreen = () => {
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const { colors } = useTheme()
   const [activeBlock, setActiveBlock] = useState(0)
@@ -22,11 +26,25 @@ export const ExamTestScreen = () => {
   }
   const goAboutTheTest = () => {
     if (activeBlock === 1) {
-      navigate('ABOUT_THE_TEST_SCREEN')
+      updateScorePreTest()
     } else if (activeBlock === 2) {
-      console.log('tôi chưa cập nhật màn hình này!')
+      replace('ABOUT_THE_TEST_SCREEN')
     } else {
       console.log('Bạn phải chọn một trình độ trước khi tiếp tục!')
+    }
+  }
+
+  const updateScorePreTest = async () => {
+    try {
+      const res = await KnowledgeService.sendResultPreTest({
+        score: 0,
+      })
+      if (res.status === 200) {
+        dispatch(setUserState(res.data.data))
+        replace('BOTTOM_TAB')
+      }
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -34,7 +52,7 @@ export const ExamTestScreen = () => {
     <Container>
       <Block flex>
         <Block row paddingHorizontal={25}>
-          <Icon state="Back" onPress={goBack} />
+          <Icon state="Back" />
         </Block>
         <Block marginTop={25} paddingHorizontal={25}>
           <Text size={'heading'} fontFamily="bold">

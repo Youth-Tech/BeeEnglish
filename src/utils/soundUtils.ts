@@ -1,7 +1,4 @@
-import Sound from 'react-native-sound'
-
-export const SoundUtils = {
-  success() {},
-  failure() {},
-  complete() {},
-} as const
+// export const SoundUtil = {
+//   soundSuccess: (errorCallback?: (e: any) => void) => {},
+//   soundFailure: (errorCallback?: (e: any) => void) => {},
+// } as const

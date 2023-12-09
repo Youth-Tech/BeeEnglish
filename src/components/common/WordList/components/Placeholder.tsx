@@ -1,6 +1,5 @@
 import React from 'react'
 import { Block } from '@components/bases'
-import { Offset } from '..'
 import { makeStyles } from '@themes'
 
 const Placeholder = (offset: Offset) => {
@@ -10,7 +9,7 @@ const Placeholder = (offset: Offset) => {
 
 export default Placeholder
 
-const useStyle = makeStyles<Offset>()(({ colors }) => ({
+const useStyle = makeStyles<Offset>()(({}) => ({
   placeholderStyle: (offset) => ({
     borderRadius: 15,
     position: 'absolute',

@@ -117,7 +117,7 @@ export const ShadowBlock: React.FC<ShadowBlockProps> = (props) => {
           </Block>
         )}
         <Block
-          flex 
+          flex
           {...rest}
           radius={radius}
           borderLeftWidth={borderWidth}

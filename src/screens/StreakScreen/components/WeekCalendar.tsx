@@ -1,23 +1,36 @@
 import React from 'react'
-import { Block, LinearGradient, Text } from '@components'
-import { baseStyles, useTheme } from '@themes'
-import StreakDay, {
+
+import {
+  StreakDay,
   StreakDayProps,
 } from '@screens/StreakScreen/components/StreakDay'
+import { useAppSelector } from '@hooks'
+import { getDateName } from '@utils/dateUtils'
+import { baseStyles, useTheme } from '@themes'
+import { getLangConfig } from '@redux/selectors'
+import { Block, LinearGradient, Text } from '@components'
 
 export interface WeekCalendarProps {
   data: StreakDayProps[]
 }
-const DAYS_OF_WEEK: string[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-const WeekCalendar: React.FC<WeekCalendarProps> = (props) => {
+
+export const WeekCalendar: React.FC<WeekCalendarProps> = (props) => {
   const { data } = props
   const { colors } = useTheme()
+  const lang = useAppSelector(getLangConfig)
+  const daysName = data.map((item) => {
+    return getDateName(new Date(item.date), lang, 'short').split(',')[0]
+  })
 
   return (
-    <Block height={100} radius={10} overflow={'hidden'}>
+    <Block
+      height={100}
+      radius={10}
+      overflow={'hidden'}
+    >
       <LinearGradient
-        colors={[colors.greyLight, colors.red]}
         containerStyle={{ flex: 1 }}
+        colors={[colors.greyLight, colors.red]}
       />
       <Block
         margin={1}
@@ -29,7 +42,7 @@ const WeekCalendar: React.FC<WeekCalendarProps> = (props) => {
         style={baseStyles.absoluteFill}
       >
         <Block row>
-          {DAYS_OF_WEEK.map((item, index) => (
+          {daysName.map((item, index) => (
             <Block key={`item-date-${index}`} marginLeft={index > 0 ? 10 : 0}>
               <Block width={30} height={30} justifyCenter alignCenter>
                 <Text size={'h5'} fontFamily={'semiBold'} lineHeight={18}>
@@ -50,5 +63,3 @@ const WeekCalendar: React.FC<WeekCalendarProps> = (props) => {
     </Block>
   )
 }
-
-export default WeekCalendar

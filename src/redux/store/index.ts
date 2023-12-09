@@ -1,26 +1,27 @@
 import {
-  persistStore,
-  persistReducer,
   FLUSH,
-  REHYDRATE,
+  PURGE,
   PAUSE,
   PERSIST,
-  PURGE,
   REGISTER,
+  REHYDRATE,
+  persistStore,
+  persistReducer,
 } from 'redux-persist'
 import { rootReducer } from '@redux/reducers'
 import { configureStore } from '@reduxjs/toolkit'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
+
 import reduxStorage from './storage'
 
 export type RootState = ReturnType<typeof rootReducer>
 
 const persistConfig = {
   key: 'root',
-  storage: reduxStorage,
   timeout: 30000,
-  whitelist: ['auth', 'themApp', 'config'],
+  storage: reduxStorage,
   stateReconciler: autoMergeLevel2,
+  whitelist: ['auth', 'themeApp', 'config', 'user', 'historyReducer'],
 }
 
 const persistedReducer = persistReducer<RootState>(persistConfig, rootReducer)

@@ -1,25 +1,73 @@
-import { useTheme } from '@themes'
-import { goBack } from '@navigation'
-import { Icon, images } from '@assets'
-import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import FastImage from 'react-native-fast-image'
 import { ImageBackground, Pressable } from 'react-native'
-import { Text, Block, Container, Image } from '@components'
 
-export const DetailLessonScreen = () => {
-  const { colors, normalize } = useTheme()
+import { useTheme } from '@themes'
+import { Icon, images } from '@assets'
+import React, { useState } from 'react'
+import {useAppDispatch, useAppSelector} from '@hooks'
+import { ReviewService, UserService } from '@services'
+import { goBack, RootStackParamList } from '@navigation'
+import { Block, Container, Image, Text } from '@components'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { updateBookmarkWords, updateReviewWords } from '@redux/reducers'
+
+export type DetailLessonScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'DETAIL_LESSON_SCREEN'
+>
+
+export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
+  route,
+  navigation,
+}) => {
+  const { lessonId, chapterId, checkpointLesson } = route.params
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+  const { colors, normalize } = useTheme()
   const [activeBlock, setActiveBlock] = useState(0)
-
+  const isLoginWithGuest = useAppSelector(
+    (state) => state.root.auth.isLoginWithGuest,
+  )
+  const getWordBookmarksByLesson = async () => {
+    try {
+      const response = await UserService.getWordsBookmark({ lessonId })
+      //TODO: add to redux
+      dispatch(updateBookmarkWords(response.data.data.words))
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const getWordReviewsByLesson = async () => {
+    try {
+      const response = await ReviewService.getAllWordReviews({
+        lesson: lessonId,
+      })
+      //TODO: add to redux
+      dispatch(updateReviewWords(response.data.data.wordsReview))
+    } catch (e) {
+      console.log(e)
+    }
+  }
   const onPressChange = (blockNumber: number) => {
     setActiveBlock(blockNumber)
     if (blockNumber === 1) {
-      console.log('Chúng tôi chưa cập nhật màn hình này hehe')
+      navigation.navigate('VOCAB_SCREEN', { lessonId })
     } else if (blockNumber === 2) {
-      console.log('Chúng tôi chưa cập nhật màn hình này hehe haha')
+      navigation.navigate('GRAMMAR_SCREEN', {
+        lessonId,
+        chapterId,
+        checkpointLesson,
+      })
     }
   }
+  React.useEffect(() => {
+    if (!isLoginWithGuest) {
+      getWordBookmarksByLesson()
+      getWordReviewsByLesson()
+    }
+  }, [])
+
   return (
     <Container>
       <ImageBackground
@@ -28,7 +76,7 @@ export const DetailLessonScreen = () => {
       >
         <Block space="between" row paddingHorizontal={20}>
           <Icon state="Back" onPress={goBack}></Icon>
-          <Icon state="MenuHeading" onPress={() => {}}></Icon>
+          <Icon state="MenuHeading" onPress={() => {}} />
         </Block>
 
         <Block
@@ -98,11 +146,7 @@ export const DetailLessonScreen = () => {
               }}
             >
               <Block alignCenter>
-                <Image
-                  source={images.MultipleChoice}
-                  width={75}
-                  height={75}
-                ></Image>
+                <Image source={images.MultipleChoice} width={75} height={75} />
                 <Text center fontFamily="bold" size={'h3'}>
                   {t('multiple_choice')}
                 </Text>

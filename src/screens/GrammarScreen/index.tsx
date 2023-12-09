@@ -1,141 +1,133 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Portal } from 'react-native-portalize'
-import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
+import { SlideInDown, SlideOutDown } from 'react-native-reanimated'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import {
   Text,
   Block,
   Progress,
   Container,
-  ShadowButton,
-  WordListRefFunc,
-  GrammarOptions,
   WordChoice,
+  ShadowButton,
+  BlockAnimated,
+  GrammarOptions,
+  VocabularyChoice,
+  LeaveProcessModal,
+  VocabularyOptions,
   QuestionRefFunction,
+  VocabularyChoiceFunc,
+  VocabularyOptionsFunc,
 } from '@components'
+import {
+  UserService,
+  KnowledgeService,
+  UpdateProgressLearningRequest,
+} from '@services'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
-import { goBack } from '@navigation'
+import { QuestionType } from './constants'
+import { parseQuizDataToQuestion } from './utils'
+import { TaskService } from '@services/TaskService'
+import { useAppDispatch, useBackHandler } from '@hooks'
+import { LoadingScreen } from '@screens/LoadingScreen'
+import { RootStackParamList, goBack } from '@navigation'
+import { setLoadingStatusAction } from '@redux/reducers'
+import { ModalFunction } from '@components/bases/Modal/type'
 
-export interface Question {
-  id: string
-  question: string
-  answer: string | Answer[]
-  type: QuestionType
-}
+export type GrammarScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'GRAMMAR_SCREEN'
+>
 
-export enum QuestionType {
-  OPTION = 'OPTION',
-  WORD_CHOICE = 'WORD_CHOICE',
-}
-
-export interface Answer {
-  option: string
-  isValid: boolean
-}
-
-const QUESTION: Question[] = [
-  {
-    id: '1',
-    question: 'Tôi làm việc ở đây 1',
-    answer: 'I go to school by bike1',
-    type: QuestionType.WORD_CHOICE,
-  },
-  {
-    id: '4',
-    question: 'I drink coffee_______.',
-    answer: [
-      {
-        isValid: false,
-        option: 'three times for a days',
-      },
-      {
-        isValid: false,
-        option: 'three time for a day',
-      },
-      {
-        isValid: true,
-        option: 'three times for a day',
-      },
-      {
-        isValid: false,
-        option: 'three time for a days',
-      },
-    ],
-    type: QuestionType.OPTION,
-  },
-  {
-    id: '4',
-    question: 'I drink soda_______.',
-    answer: [
-      {
-        isValid: false,
-        option: 'three times for a days',
-      },
-      {
-        isValid: false,
-        option: 'three time for a day',
-      },
-      {
-        isValid: true,
-        option: 'three times for a day',
-      },
-      {
-        isValid: false,
-        option: 'three time for a days',
-      },
-    ],
-    type: QuestionType.OPTION,
-  },
-  {
-    id: '2',
-    question: 'Tôi làm việc ở đây 2',
-    answer: 'I go to school by bike2',
-    type: QuestionType.WORD_CHOICE,
-  },
-  {
-    id: '3',
-    question: 'Tôi làm việc ở đây 3',
-    answer: 'I go to school by bike3',
-    type: QuestionType.WORD_CHOICE,
-  },
-]
-
-export interface ResultType {
-  questionId: string
-  result: 'correct' | 'incorrect'
-}
-
-export interface ModalStatus {
-  show: boolean
-  status: 'correct' | 'incorrect' | 'no_status'
-}
-
-const BlockAnimated = Animated.createAnimatedComponent(Block)
-
-export const GrammarScreen: React.FC = () => {
+export const GrammarScreen: React.FC<GrammarScreenProps> = ({
+  route,
+  navigation,
+}) => {
+  const { lessonId, chapterId, checkpointLesson } = route.params
+  const leaveModalRef = React.useRef<ModalFunction>(null)
   const wordChoiceRef = React.useRef<WordListRefFunc>(null)
   const optionRef = React.useRef<QuestionRefFunction>(null)
+  const vocabChoiceRef = React.useRef<VocabularyChoiceFunc>(null)
+  const vocabOptionRef = React.useRef<VocabularyOptionsFunc>(null)
 
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const { colors, normalize } = useTheme()
 
   const [step, setStep] = React.useState(0)
-  const [questions] = React.useState(QUESTION)
   const [result, setResult] = React.useState<ResultType[]>()
-
+  const [questions, setQuestions] = React.useState<Question[]>([])
   const [modalStatus, setModalStatus] = React.useState<ModalStatus>({
     show: false,
     status: 'no_status',
   })
-  const [currentQuestion, setCurrentQuestion] = React.useState({
-    index: 0,
-    data: questions[0],
+
+  const [currentQuestion, setCurrentQuestion] = React.useState<CurrentQuestion>(
+    {
+      index: 0,
+      data: null,
+    },
+  )
+
+  const checkpointScore =
+    result?.reduce((total, current) => {
+      if (current.result === 'correct') {
+        return total + 1
+      }
+      return total
+    }, 0) ?? 0
+
+  React.useEffect(() => {
+    if (checkpointLesson !== undefined && checkpointLesson?.length > 0) {
+      const parseRes = parseQuizDataToQuestion(checkpointLesson)
+      setCurrentQuestion({
+        index: 0,
+        data: parseRes[0],
+      })
+      setQuestions(parseRes)
+    } else {
+      getQuizByLessonId()
+    }
+  }, [])
+
+  React.useEffect(() => {
+    console.log(result)
+  }, [result])
+
+  React.useEffect(() => {
+    //##Count time for task##
+    startCountingTime()
+  }, [])
+
+  useBackHandler({
+    enabled: true,
+    callback() {
+      onClosePress()
+    },
   })
 
+  const startCountingTime = async () => {
+    try {
+      const response = await TaskService.startTime()
+      console.log(response.data.message)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const stopCountingTime = async () => {
+    try {
+      const response = await TaskService.stopTime()
+      console.log(response.data.message)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const onClosePress = () => {
-    goBack()
+    leaveModalRef.current?.openModal()
   }
 
   const onCheckPress = () => {
@@ -152,22 +144,28 @@ export const GrammarScreen: React.FC = () => {
       ...prev,
       show: false,
     }))
-    nextQuestion()
+    handleNextQuestion()
   }
 
-  React.useEffect(() => {
-    console.log(result)
-  }, [result])
-
   const checkResult = () => {
-    let result: boolean = !!null
-    if (currentQuestion.data.type === QuestionType.OPTION) {
-      result = !!optionRef.current?.check()
+    if (currentQuestion.data === null) return
+
+    let result: boolean = false
+
+    if (currentQuestion.data.type === QuestionType.multipleWord) {
+      if (currentQuestion.data.wordImage) {
+        result = !!vocabOptionRef.current?.check()
+      } else {
+        result = !!optionRef.current?.check()
+      }
+    } else if (currentQuestion.data.type === QuestionType.multipleImage) {
+      result = !!vocabChoiceRef.current?.check()
     } else {
       result = !!wordChoiceRef.current?.check(
-        currentQuestion.data.answer as string,
+        currentQuestion.data.correctAnswer!,
       )
     }
+
     setModalStatus((prev) => ({
       ...prev,
       status: result ? 'correct' : 'incorrect',
@@ -177,22 +175,31 @@ export const GrammarScreen: React.FC = () => {
 
     setResult((prev) => {
       const prevState = prev || []
-
       return [
         ...prevState,
         {
-          questionId: currentQuestion.data.id,
+          questionId: currentQuestion.data!.id,
           result: result ? 'correct' : 'incorrect',
         },
       ]
     })
   }
 
-  React.useEffect(() => {
-    console.log(result)
-  }, [result])
+  const getQuizByLessonId = async () => {
+    try {
+      const res = await KnowledgeService.getQuizByLessonId(lessonId)
+      const parseRes = parseQuizDataToQuestion(res.data.data.quizzes)
+      setCurrentQuestion({
+        index: 0,
+        data: parseRes[0],
+      })
+      setQuestions(parseRes)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-  const nextQuestion = () => {
+  const handleNextQuestion = () => {
     //next question
     const nextQuestion =
       currentQuestion.index + 1 >= questions.length
@@ -201,20 +208,91 @@ export const GrammarScreen: React.FC = () => {
 
     if (nextQuestion == -1) {
       console.log('complete quiz')
+      stopCountingTime()
+      updateLessonComplete()
       setStep(100)
-
-      //TODO: go to complete screen
     } else {
-      if (questions[nextQuestion].type === QuestionType.OPTION) {
+      if (questions[nextQuestion].type === QuestionType.multipleWord) {
         optionRef.current?.triggerChangeLayout()
+      } else if (questions[nextQuestion].type === QuestionType.multipleImage) {
+        vocabChoiceRef.current?.onTriggerAnimation()
+      } else if (
+        questions[nextQuestion].type === QuestionType.multipleImage &&
+        questions[nextQuestion].wordImage
+      ) {
+        vocabOptionRef.current?.onTriggerAnimation()
+      } else if (questions[nextQuestion].type === QuestionType.cloze) {
+        wordChoiceRef.current?.onTriggerAnimation()
       }
-      setCurrentQuestion((_) => {
+
+      setCurrentQuestion(() => {
         return {
           index: nextQuestion,
           data: questions[nextQuestion],
         }
       })
     }
+  }
+
+  const updateLessonComplete = async () => {
+    const finalPoint = (checkpointScore / questions.length) * 100
+    console.log('checkpointScore', finalPoint)
+    dispatch(setLoadingStatusAction(true))
+    const body: UpdateProgressLearningRequest =
+      checkpointLesson !== undefined
+        ? {
+            chapter: chapterId,
+            checkpointScore: finalPoint,
+          }
+        : {
+            chapter: chapterId,
+            lesson: lessonId,
+            score: finalPoint,
+          }
+
+    try {
+      await UserService.updateProgressLearning(body)
+      navigation.replace('CONGRATULATION_SCREEN', {
+        status:
+          finalPoint >= (checkpointLesson !== undefined ? 80 : 60)
+            ? 'success'
+            : 'failure',
+        point: finalPoint,
+        type: checkpointLesson !== undefined ? 'checkpoint' : 'normal',
+      })
+    } catch (error) {
+      console.log(error)
+    }
+    dispatch(setLoadingStatusAction(false))
+  }
+
+  const renderQuestion = (question: Question) => {
+    if (currentQuestion.data === null) return <></>
+
+    switch (question.type) {
+      case QuestionType.cloze:
+        return <WordChoice data={question} ref={wordChoiceRef} />
+      case QuestionType.multipleWord:
+        if (question.wordImage !== '') {
+          return (
+            <VocabularyOptions
+              ref={vocabOptionRef}
+              data={currentQuestion.data}
+            />
+          )
+        }
+        return <GrammarOptions ref={optionRef} data={currentQuestion.data} />
+      case QuestionType.multipleImage:
+        return (
+          <VocabularyChoice ref={vocabChoiceRef} data={currentQuestion.data} />
+        )
+    }
+
+    return <></>
+  }
+
+  if (questions.length <= 0 && currentQuestion.data === null) {
+    return <LoadingScreen />
   }
 
   return (
@@ -234,21 +312,17 @@ export const GrammarScreen: React.FC = () => {
           />
         </Block>
 
-        {currentQuestion.data.type === QuestionType.WORD_CHOICE ? (
-          <WordChoice wordListRef={wordChoiceRef} data={currentQuestion.data} />
-        ) : (
-          <GrammarOptions ref={optionRef} data={currentQuestion.data} />
-        )}
+        {renderQuestion(currentQuestion.data!)}
 
         <Block flex />
 
         <ShadowButton
-          buttonHeight={40}
-          buttonColor="#58CC02"
-          shadowButtonColor="#58A700"
-          buttonRadius={10}
           shadowHeight={6}
+          buttonHeight={40}
+          buttonRadius={10}
+          buttonColor="#58CC02"
           onPress={onCheckPress}
+          shadowButtonColor="#58A700"
           containerStyle={{
             marginBottom: normalize.v(20),
           }}
@@ -261,16 +335,16 @@ export const GrammarScreen: React.FC = () => {
           <Portal>
             <BlockAnimated
               row
-              height={100}
-              paddingHorizontal={20}
-              entering={SlideInDown}
-              exiting={SlideOutDown}
-              bottom={0}
               absolute
               left={0}
               right={0}
+              bottom={0}
               alignCenter
+              height={100}
               space={'between'}
+              paddingHorizontal={20}
+              entering={SlideInDown}
+              exiting={SlideOutDown}
               backgroundColor={
                 modalStatus.status === 'correct' ? '#D7FFB8' : '#FFDFE0'
               }
@@ -322,6 +396,16 @@ export const GrammarScreen: React.FC = () => {
           </Portal>
         )}
       </Block>
+      <LeaveProcessModal
+        ref={leaveModalRef}
+        onPressApprove={() => {
+          leaveModalRef.current?.dismissModal()
+          goBack()
+        }}
+        onPressCancel={() => {
+          leaveModalRef.current?.dismissModal()
+        }}
+      />
     </Container>
   )
 }

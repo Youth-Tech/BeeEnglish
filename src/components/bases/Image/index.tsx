@@ -70,8 +70,8 @@ export const Image: React.FC<ImageProps> = (props) => {
     const placeHolderBg = { backgroundColor: '#FFF' }
     return (
       <ImageComponent
-        source={placeholderImage || images.placeholder}
-        resizeMode="contain"
+        source={placeholderImage || images.ImagePlaceholder}
+        resizeMode="cover"
         {...placeholderImageProps}
         style={[
           imageStyle,

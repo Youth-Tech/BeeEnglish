@@ -1,136 +1,149 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { FlatList, ListRenderItemInfo, StyleSheet } from 'react-native'
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  ListRenderItemInfo as RNListRenderItemInfo,
+  ScrollView,
+} from 'react-native'
 
 import {
-  Text,
   Block,
-  TextInput,
-  Container,
   DismissKeyBoardBlock,
+  Image,
+  Text,
+  TextInput,
+  VoiceDectectorModal,
 } from '@components'
-import { Icon } from '@assets'
+import { Icon, images } from '@assets'
 import { useTheme } from '@themes'
-import { goBack } from '@navigation'
+import { goBack, navigate } from '@navigation'
 import { LearnWordItem } from './components/LearnWordItem'
 import { SavedWordItem } from './components/SavedWordItem'
-import { DataSavedWordProps, DataLearnProps } from './const'
+import { KnowledgeService, UserService, Word } from '@services'
+import { ModalFunction } from '@components/bases/Modal/type'
 
-const learnData: DataLearnProps[] = [
-  {
-    id: 1,
-    word: 'Chicken',
-    wordType: 'ˈtʃɪk.ɪn',
-    translation: 'Con gà',
-  },
-  {
-    id: 2,
-    word: 'Chicken',
-    wordType: 'ˈtʃɪk.ɪn',
-    translation: 'Con gà',
-  },
-  {
-    id: 3,
-    word: 'Chicken',
-    wordType: 'ˈtʃɪk.ɪn',
-    translation: 'Con gà',
-  },
-  {
-    id: 4,
-    word: 'Chicken',
-    wordType: 'ˈtʃɪk.ɪn',
-    translation: 'Con gà',
-  },
-]
-
-const savedWordData: DataSavedWordProps[] = [
-  {
-    id: 1,
-    word: 'Chicken',
-    wordType: 'noun',
-    wordPronounce: 'ˈtʃɪk.ɪn',
-  },
-  {
-    id: 2,
-    word: 'Chicken',
-    wordType: 'noun',
-    wordPronounce: 'ˈtʃɪk.ɪn',
-  },
-  {
-    id: 3,
-    word: 'Chicken',
-    wordType: 'noun',
-    wordPronounce: 'ˈtʃɪk.ɪn',
-  },
-  {
-    id: 4,
-    word: 'Chicken',
-    wordType: 'noun',
-    wordPronounce: 'ˈtʃɪk.ɪn',
-  },
-  {
-    id: 5,
-    word: 'Chicken',
-    wordType: 'noun',
-    wordPronounce: 'ˈtʃɪk.ɪn',
-  },
-]
+import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
 
 export const SavedWordScreen = () => {
   const { t } = useTranslation()
   const { colors } = useTheme()
-  const [textSearch, setTextSearch] = React.useState('')
-
-  const onDeleteWordPress = (word: DataSavedWordProps) => {
-    console.log('onDeleteWordPress', word.id)
-  }
-
-  const renderSavedWordItem = ({
-    index,
-    item,
-  }: ListRenderItemInfo<DataSavedWordProps>) => {
+  const [isLoading, setIsLoading] = React.useState(false)
+  const [searchText, setSearchText] = React.useState('')
+  const modalRef = React.useRef<ModalFunction>(null)
+  const flag = React.useRef(0)
+  const [savedWordData, setSavedWordData] = React.useState<Word[]>([])
+  const [suggestionWord, setSuggestionWord] = React.useState<Word[]>([])
+  const renderSavedWordItem = ({ index, item }: RNListRenderItemInfo<Word>) => {
     return (
-      <SavedWordItem
-        data={item}
-        key={index}
-        onDeletePress={() => onDeleteWordPress(item)}
-      />
+      <Block key={`item-saved-word-${index}`}>
+        <SavedWordItem
+          data={item}
+          onDeletePress={() => {
+            callAPIDeleteSavedWord(item._id)
+          }}
+        />
+        <Block backgroundColor={colors.greyLight} height={1} width="100%" />
+      </Block>
     )
   }
-
-  const renderLearnItem = ({
-    index,
-    item,
-  }: ListRenderItemInfo<DataLearnProps>) => {
-    return <LearnWordItem data={item} key={index} />
+  const callAPI = async () => {
+    setIsLoading(true)
+    try {
+      const response = await UserService.getWordsBookmark()
+      setSavedWordData(response.data.data.words)
+      setIsLoading(false)
+    } catch (e) {
+      console.log(e)
+    }
   }
+  const callAPIDeleteSavedWord = async (wordId: string) => {
+    setIsLoading(true)
+    try {
+      const response = await UserService.bookmarkWord(wordId)
+      setSavedWordData(response.data.data.wordBookmarks)
+      setIsLoading(false)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const callAPIGetAllWords = async () => {
+    try {
+      const response = await KnowledgeService.getAllWord({ page: 1, limit: 5 })
+      setSuggestionWord(response.data.data.words)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const renderLearnItem = ({ index, item }: ListRenderItemInfo<Word>) => {
+    return (
+      <Block key={`item-learned-${index}`} marginTop={10}>
+        <LearnWordItem
+          data={item}
+          onPress={() => {
+            navigate('DETAIL_WORD_SCREEN', { wordId: item._id })
+          }}
+        />
+      </Block>
+    )
+  }
+  const searchApi = async (searchText: string) => {
+    setIsLoading(true)
+    try {
+      const response = await UserService.getWordsBookmark({
+        search: searchText,
+      })
+      setSavedWordData(response.data.data.words)
+      setIsLoading(false)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  React.useEffect(() => {
+    if (flag.current === 1) {
+      const timeOutSearch = setTimeout(() => {
+        if (searchText.length > 0) {
+          searchApi(searchText)
+        } else {
+          callAPI()
+        }
+      }, 2000)
+      return () => clearTimeout(timeOutSearch)
+    }
+    flag.current = 1
+    return
+  }, [searchText])
+  React.useEffect(() => {
+    callAPI()
+    callAPIGetAllWords()
+  }, [])
   return (
-    <Container statusColor={colors.orangePrimary}>
+    <ScrollView style={{ backgroundColor: '#FFFFFF' }}>
       <DismissKeyBoardBlock>
         <Block flex>
           <Block
             left={0}
             right={0}
-            height={220}
+            height={130}
             borderBottomLeftRadius={50}
             borderBottomRightRadius={50}
             backgroundColor={colors.orangePrimary}
             absolute
           />
           <Block
+            paddingVertical={10}
             paddingHorizontal={20}
-            marginTop={10}
             backgroundColor="transparent"
           >
-            <Block row alignCenter>
-              <Icon state="Back" onPress={goBack} stroke={colors.white}></Icon>
+            <Block row alignCenter marginTop={20}>
+              <Icon state="Back" onPress={goBack} stroke={colors.black}></Icon>
               <Text
                 center
-                marginRight={25}
                 flex
                 size={'h2'}
                 fontFamily="bold"
-                color={colors.white}
+                color={colors.black}
               >
                 {t('saved_vocabulary')}
               </Text>
@@ -146,26 +159,61 @@ export const SavedWordScreen = () => {
                 inputContainerStyle={styles.inputStyle}
                 placeholder={t('english_vocabulary')}
                 placeholderTextColor={colors.greyPrimary}
-                value={textSearch}
-                onChangeText={setTextSearch}
+                value={searchText}
+                onChangeText={setSearchText}
                 rightIcon={
                   <Icon
                     state="Microphone"
                     stroke={colors.greyPrimary}
-                    onPress={() => {}}
+                    onPress={() => {
+                      modalRef.current?.openModal()
+                    }}
                   />
                 }
               />
             </Block>
-            <Block marginTop={20}>
-              <Block shadow radius={15} overflow="hidden">
-                <FlatList
-                  scrollEnabled={false}
-                  data={savedWordData}
-                  keyExtractor={(item) => item.id.toString()}
-                  renderItem={renderSavedWordItem}
-                  showsHorizontalScrollIndicator={false}
-                />
+
+            <Block marginTop={30}>
+              <Block
+                borderWidth={savedWordData.length === 0 ? 0 : 1}
+                borderColor={colors.borderColor}
+                radius={15}
+                overflow="hidden"
+              >
+                {isLoading ? (
+                  <Block height={200} justifyCenter alignCenter>
+                    <ActivityIndicator
+                      size={'large'}
+                      color={colors.orangePrimary}
+                    />
+                  </Block>
+                ) : (
+                  <FlatList
+                    scrollEnabled={false}
+                    data={savedWordData}
+                    keyExtractor={(_, index) => `item-saved-word-${index}`}
+                    renderItem={renderSavedWordItem}
+                    ListEmptyComponent={
+                      <Block alignCenter marginTop={20}>
+                        <Image
+                          source={images.BeeReading}
+                          width={150}
+                          height={150}
+                          resizeMode={'contain'}
+                        />
+                        <Text
+                          size={'h2'}
+                          fontFamily={'semiBold'}
+                          center
+                          marginTop={15}
+                        >
+                          {t('havent_saved_a_word')}
+                        </Text>
+                      </Block>
+                    }
+                    showsHorizontalScrollIndicator={false}
+                  />
+                )}
               </Block>
             </Block>
             <Block row alignCenter marginTop={17}>
@@ -174,19 +222,27 @@ export const SavedWordScreen = () => {
                 {t('library_vocabulary')}
               </Text>
             </Block>
-            <Block marginVertical={15}>
-              <FlatList
-                horizontal={true}
-                data={learnData}
-                keyExtractor={(item) => item.id.toString()}
+            <Block marginVertical={15} style={{ minWidth: 5, minHeight: 5 }}>
+              <FlashList
+                data={suggestionWord}
+                estimatedItemSize={40}
+                keyExtractor={(_, index) => `item-suggest-word-${index}`}
                 renderItem={renderLearnItem}
                 showsHorizontalScrollIndicator={false}
               />
             </Block>
           </Block>
+          <VoiceDectectorModal
+            modalRef={modalRef}
+            setText={setSearchText}
+            onFinishRecord={() => {
+              console.log('finished')
+              modalRef.current?.dismissModal()
+            }}
+          />
         </Block>
       </DismissKeyBoardBlock>
-    </Container>
+    </ScrollView>
   )
 }
 

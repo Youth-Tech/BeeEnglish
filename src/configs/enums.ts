@@ -1,6 +1,6 @@
 export enum Provider {
-  Google,
-  Facebook,
+  google = 'google',
+  facebook = 'facebook',
 }
 
 export enum ChannelId {

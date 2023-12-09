@@ -1,68 +1,126 @@
 import { Block, Text } from '@components'
 import React from 'react'
-
-const Content = () => {
+import { Senses } from '@services'
+import i18next from 'i18next'
+import { useTranslation } from 'react-i18next'
+export interface ContentProps {
+  data: Senses[]
+}
+// Noun = 'noun',
+//     Verb = 'verb',
+//     Adjective = 'adjective',
+//     Adverb = 'adverb',
+//     Pronoun = 'pronoun',
+//     Preposition = 'preposition',
+//     Conjunction = 'conjunction',
+//     Interjection = 'interjection',
+const Content = (props: ContentProps) => {
+  const { data } = props
+  const { t } = useTranslation()
+  const wordType = (type: string) => {
+    switch (type) {
+      case 'noun':
+        return i18next.t('noun') + '(n)'
+      case 'verb':
+        return i18next.t('verb') + '(v)'
+      case 'adjective':
+        return i18next.t('adjective') + '(adj)'
+      case 'pronoun':
+        return i18next.t('pronoun') + '(pron)'
+      case 'preposition':
+        return i18next.t('preposition') + '(prep)'
+      case 'conjunction':
+        return i18next.t('conjunction') + '(conj)'
+      case 'interjection':
+        return i18next.t('interjection') + '(interj)'
+      default:
+        return ''
+    }
+  }
   return (
     <Block paddingHorizontal={20} flex>
-      <Block marginTop={20}>
-        <Text
-          marginTop={10}
-          color="red"
-          fontFamily="bold"
-          size={'h4'}
-          lineHeight={18}
-        >
-          Danh từ (noun)
-        </Text>
-        <Text marginTop={10} fontFamily="bold" size={'h4'} lineHeight={18}>
-          Con gà, gà
-        </Text>
-        <Block marginTop={10} row>
-          <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
-            Ví dụ:{' '}
+      {data.map((item, index) => (
+        <Block marginTop={20} key={`item-sensen-${index}`}>
+          <Text
+            marginTop={10}
+            color="red"
+            fontFamily="bold"
+            size={'h4'}
+            lineHeight={18}
+          >
+            {wordType(item.type)}
           </Text>
-          <Text fontFamily="bold" size={'h4'} flex lineHeight={18}>
-            There are three chickens in the garden and they are eating.
+          <Text marginTop={10} fontFamily="bold" size={'h4'} lineHeight={18}>
+            {item.vietnamese}
           </Text>
-        </Block>
+          {item.exampleEnglish?.length > 0 && (
+            <Block marginTop={10} row>
+              <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
+                {t('example')}:
+              </Text>
+              <Text
+                flex
+                size={'h4'}
+                marginLeft={5}
+                fontFamily="bold"
+                lineHeight={18}
+              >
+                {item.exampleEnglish}
+              </Text>
+            </Block>
+          )}
+          {item.exampleVietnamese?.length > 0 && (
+            <Block marginTop={10} row>
+              <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
+                {t('meaning')}:
+              </Text>
+              <Text
+                marginLeft={5}
+                fontFamily="bold"
+                size={'h4'}
+                flex
+                lineHeight={18}
+              >
+                {item.exampleVietnamese}
+              </Text>
+            </Block>
+          )}
 
-        <Block marginTop={10} row>
-          <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
-            Nghĩa:{' '}
-          </Text>
-          <Text fontFamily="bold" size={'h4'} flex lineHeight={18}>
-            Trong vườn có ba con gà và chúng đang ăn.
-          </Text>
+          {item.synonyms.length > 0 && (
+            <Block marginTop={10} row>
+              <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
+                {t('synonyms')}:
+              </Text>
+              <Text
+                marginLeft={5}
+                fontFamily="bold"
+                size={'h4'}
+                flex
+                lineHeight={18}
+              >
+                {item.synonyms.join(', ')}
+              </Text>
+            </Block>
+          )}
+
+          {item.antonyms.length > 0 && (
+            <Block marginTop={10} row>
+              <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
+                {t('antonyms')}:
+              </Text>
+              <Text
+                marginLeft={5}
+                fontFamily="bold"
+                size={'h4'}
+                flex
+                lineHeight={18}
+              >
+                {item.antonyms.join(', ')}
+              </Text>
+            </Block>
+          )}
         </Block>
-      </Block>
-      <Text
-        marginTop={20}
-        color="red"
-        fontFamily="bold"
-        size={'h4'}
-        lineHeight={18}
-      >
-        Tính từ (adjective)
-      </Text>
-      <Text marginTop={10} fontFamily="bold" size={'h4'} lineHeight={18}>
-        yếu bóng vía, nhát gan
-      </Text>
-      <Block marginTop={10} row>
-        <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
-          Ví dụ:{' '}
-        </Text>
-        <Text fontFamily="bold" size={'h4'} flex lineHeight={18}>
-          When it comes to heights, I'm chicken. I'm scared.
-        </Text>
-      </Block>
-      <Block marginTop={10} row>
-        <Text color="blue" fontFamily="bold" size={'h4'} lineHeight={18}>
-          Nghĩa:{' '}
-        </Text>
-        <Text fontFamily="bold" size={'h4'} flex lineHeight={18}>
-          Khi nhắc về độ cao, tôi rất nhát gan, tôi rất sợ.
-        </Text>
-      </Block>
+      ))}
     </Block>
   )
 }

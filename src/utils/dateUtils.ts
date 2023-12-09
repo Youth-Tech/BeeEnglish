@@ -1,6 +1,6 @@
+import { t } from 'i18next'
+
 /**
- *
- * @param current: `Date` This is day that you want to handle
  * @returns `Array<Date>` Array contain all day of week
  *
  * @example
@@ -14,12 +14,19 @@
  *      5: Sat Sep 30 2023 00:00:00 GMT+0700 (Indochina Time) {}
  *      6: Sun Oct 01 2023 00:00:00 GMT+0700 (Indochina Time) {}
  * ]
+ * @param current
  */
 export const getDatesOfWeek = (current: Date) => {
-  var week = new Array()
+  const week = []
   // Starting Monday not Sunday
-  current.setDate(current.getDate() - current.getDay() + 1)
-  for (var i = 0; i < 7; i++) {
+  // 0 = sunday
+  // 1 = monday
+
+  //make week start in Monday: 1
+  // current.setDate(current.getDate() - (current.getDay() || 7) + 1)
+  //make week start in Sunday: 0
+  current.setDate(current.getDate() - (current.getDay() || 7))
+  for (let i = 0; i < 7; i++) {
     week.push(new Date(current))
     current.setDate(current.getDate() + 1)
   }
@@ -27,10 +34,9 @@ export const getDatesOfWeek = (current: Date) => {
 }
 
 /**
- *
+ * @returns `Date`
  * @param current: `Date` this is the day that you want to handle.
  * @param amount: `number` this is how many days you want to add to the `current` variable.
- * @returns `Date`
  */
 export const addDay = (current: Date, amount: number) => {
   return current.setDate(current.getDate() + amount)
@@ -55,4 +61,19 @@ export const getDateName = (
   nameOptions: 'long' | 'short' | 'narrow' = 'short',
 ) => {
   return date.toLocaleDateString(locale, { weekday: nameOptions })
+}
+
+export const getDaySession = () => {
+  const currentHours = new Date().getHours() + 1
+  if (currentHours >= 0 && currentHours <= 12) {
+    return t('good_morning')
+  } else if (currentHours >= 13 && currentHours <= 18) {
+    return t('good_afternoon')
+  } else {
+    return t('good_evening')
+  }
+}
+
+export const formatDate = (date: Date) => {
+  return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 }

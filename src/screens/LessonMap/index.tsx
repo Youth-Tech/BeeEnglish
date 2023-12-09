@@ -1,107 +1,98 @@
-import React from 'react'
 import {
-  Pressable,
   StyleSheet,
   SectionList,
+  RefreshControl,
   SectionListData,
   SectionListRenderItem,
 } from 'react-native'
+import React from 'react'
+import { StackActions } from '@react-navigation/native'
+import { FadeIn, FadeOut } from 'react-native-reanimated'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
-import { Icon } from '@assets'
-import { normalize, useTheme } from '@themes'
-import { Text, Block, Container } from '@components'
-import { ItemLesson, ItemLessonProps } from './components'
+import {
+  ItemLesson,
+  ChooseCourse,
+  SectionHeader,
+  ItemLessonProps,
+} from './components'
+import { images } from '@assets'
+import { normalize } from '@themes'
+import { useAppSelector } from '@hooks'
+import { LoadingScreen } from '@screens'
+import { parseDataToSectionData } from './utils'
+import { KnowledgeService, Quiz } from '@services'
+import { navigate, RootStackParamList } from '@navigation'
+import { getCurrentCourse, getIsPreTest } from '@redux/selectors'
+import { Block, BlockAnimated, Container, Image } from '@components'
 
-export const MOCK_DATA: ItemLessonProps[] = [
-  {
-    id: 'id1',
-    lessonTitle: 'Hello!',
-    lessonDescription: 'Learn greetings for meeting people',
-    thumbnail:
-      'https://kenh14cdn.com/thumb_w/660/2019/12/26/garlicheaven79728792465586074371474299227813850164136n-1577341862556288584887.jpg',
-    status: 'complete',
-  },
-  {
-    id: 'id2',
-    lessonTitle: 'Introducing yourself',
-    lessonDescription: 'Say your name',
-    thumbnail:
-      'https://kenh14cdn.com/thumb_w/660/2019/12/26/garlicheaven79728792465586074371474299227813850164136n-1577341862556288584887.jpg',
-    status: 'current',
-  },
-  {
-    id: 'id3',
-    lessonTitle: 'Saying how you are',
-    lessonDescription: 'Talk about how you feel',
-    thumbnail:
-      'https://kenh14cdn.com/thumb_w/660/2019/12/26/garlicheaven79728792465586074371474299227813850164136n-1577341862556288584887.jpg',
-    status: 'lock',
-  },
-  {
-    id: 'id4',
-    lessonTitle: 'Developing fluency',
-    lessonDescription: 'Introduce yourself',
-    thumbnail:
-      'https://kenh14cdn.com/thumb_w/660/2019/12/26/garlicheaven79728792465586074371474299227813850164136n-1577341862556288584887.jpg',
-    status: 'lock',
-  },
-  {
-    id: 'id5',
-    lessonTitle: 'Check point Introduce',
-    lessonDescription: 'Test your skills to access the next chapter',
-    thumbnail:
-      'https://kenh14cdn.com/thumb_w/660/2019/12/26/garlicheaven79728792465586074371474299227813850164136n-1577341862556288584887.jpg',
-    status: 'lock',
-    type: 'checkpoint',
-  },
-]
+export type SectionData = {
+  lessonComplete: number
+  data: ItemLessonProps[]
+  title: string
+  status: 'lock' | 'unlock'
+  index: number
+  chapterId: string
+  checkpoint?: Quiz[]
+}
 
-const MOCK_DATA_LESSON = [
-  {
-    lessonComplete: 1,
-    data: MOCK_DATA,
-    title: 'Introduce my self',
-    status: 'unlock',
-    index: 0,
-  },
-  {
-    lessonComplete: 1,
-    data: MOCK_DATA,
-    title: 'Introduce my self 2',
-    status: 'lock',
-    index: 1,
-  },
-  {
-    lessonComplete: 1,
-    data: MOCK_DATA,
-    title: 'Introduce my self 3',
-    status: 'lock',
-    index: 2,
-  },
-  {
-    lessonComplete: 1,
-    data: MOCK_DATA,
-    title: 'Introduce my self 4',
-    status: 'lock',
-    index: 3,
-  },
-]
+export type LessonMapScreen = NativeStackScreenProps<
+  RootStackParamList,
+  'LEARNING_SCREEN'
+>
 
-export type SectionData = (typeof MOCK_DATA_LESSON)[number]
+export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
+  const isPreTest = useAppSelector(getIsPreTest)
+  const currentCourse = useAppSelector(getCurrentCourse)
 
-export const LessonMap = () => {
-  const { colors } = useTheme()
+  const [data, setData] = React.useState<SectionData[]>([])
+  const [isRefresh, setIsRefresh] = React.useState(false)
 
-  const onStartExaminationPress = (id: string) => {
-    console.log('onStartExamination', id)
+  React.useEffect(() => {
+    if (!isPreTest) {
+      // console.log('to pre test')
+      navigation.dispatch(StackActions.replace('EXAM_TEST_SCREEN'))
+    }
+  }, [isPreTest])
+
+  React.useEffect(() => {
+    if (currentCourse !== undefined && currentCourse._id !== '') {
+      callApi()
+    }
+  }, [currentCourse])
+
+  const onStartExaminationPress = ({
+    chapterId,
+    id: lessonId,
+    checkpoint: checkpointLesson,
+  }: Partial<ItemLessonProps>) => {
+    // console.log('onStartExamination', lessonId)
+    navigate('GRAMMAR_SCREEN', { lessonId, checkpointLesson, chapterId })
   }
 
-  const onStartLessonPress = (id: string, isRestart?: boolean) => {
-    console.log('onStartLesson', id, 'with isRestart', !!isRestart)
+  const onStartLessonPress = ({
+    id: lessonId,
+    chapterId,
+  }: Partial<ItemLessonProps>) => {
+    navigate('DETAIL_LESSON_SCREEN', {
+      lessonId,
+      chapterId,
+    })
   }
 
-  const onUnlockPress = (id: string) => {
+  const onUnlockPress = ({ id }: Partial<ItemLessonProps>) => {
     console.log('onUnlockPress', id)
+  }
+
+  const callApi = async () => {
+    try {
+      setIsRefresh(true)
+      const res = await KnowledgeService.getChapterAndLesson(currentCourse!._id)
+      setData(parseDataToSectionData(res.data.data.chapters))
+    } catch (error) {
+      console.log(error)
+    }
+    setIsRefresh(false)
   }
 
   const renderMapItem: SectionListRenderItem<ItemLessonProps, SectionData> = ({
@@ -114,6 +105,9 @@ export const LessonMap = () => {
         {...item}
         key={index}
         onUnlockPress={onUnlockPress}
+        chapterId={section.chapterId}
+        nextLessonId={item.nextLessonId}
+        checkpoint={section?.checkpoint || []}
         onStartLessonPress={onStartLessonPress}
         isEndItem={index === section.data.length - 1}
         onStartExaminationPress={onStartExaminationPress}
@@ -124,81 +118,61 @@ export const LessonMap = () => {
   const renderSectionHeader = (item: {
     section: SectionListData<ItemLessonProps, SectionData>
   }) => {
+    return <SectionHeader item={item} />
+  }
+
+  const onRefresh = () => {
+    if (currentCourse !== undefined && currentCourse._id !== '') {
+      callApi()
+    }
+  }
+
+  const renderListChapter = () => {
+    if (isRefresh) {
+      return <LoadingScreen />
+    }
+
+    if (data?.length <= 0) {
+      return (
+        <Image
+          width={200}
+          height={200}
+          alignSelf={'center'}
+          resizeMode={'contain'}
+          source={images.BeeDiscovery}
+        />
+      )
+    }
+
     return (
-      <Pressable key={item.section.title}>
-        <Block
-          row
-          radius={8}
-          height={68}
-          alignCenter
-          style={styles.header}
-          paddingHorizontal={25}
-          backgroundColor={
-            item.section.status === 'lock' ? '#F3F8F3' : '#70773A'
-          }
-        >
-          <Text
-            size={64}
-            fontFamily="cutie"
-            color={
-              item.section.status === 'unlock'
-                ? colors.white
-                : colors.greyPrimary
-            }
-          >
-            {item.section.index! + 1}
-          </Text>
-          <Block style={styles.headerLabelBlock}>
-            <Text
-              size={'h3'}
-              fontFamily="bold"
-              color={
-                item.section.status === 'unlock'
-                  ? colors.white
-                  : colors.greyPrimary
-              }
-            >
-              {item.section.title}
-            </Text>
-
-            <Text
-              size={'h3'}
-              fontFamily="bold"
-              color={
-                item.section.status === 'unlock'
-                  ? colors.white
-                  : colors.greyPrimary
-              }
-            >
-              Lessons completed: {item.section.lessonComplete}/
-              {item.section.data.length}
-            </Text>
-          </Block>
-
-          {item.section.status === 'lock' && (
-            <Block absolute alignSelf="center" right={25}>
-              <Icon state="Lock" fill={colors.greyPrimary} />
-            </Block>
-          )}
-        </Block>
-      </Pressable>
+      <SectionList
+        refreshControl={
+          <RefreshControl refreshing={isRefresh} onRefresh={onRefresh} />
+        }
+        sections={data}
+        removeClippedSubviews
+        renderItem={renderMapItem}
+        stickySectionHeadersEnabled={true}
+        showsVerticalScrollIndicator={false}
+        renderSectionHeader={renderSectionHeader}
+        SectionSeparatorComponent={() => <Block height={10} />}
+        keyExtractor={(item, index) => item.lessonTitle + index}
+      />
     )
   }
 
   return (
     <Container>
-      <Block style={styles.listContainer}>
-        <SectionList
-          removeClippedSubviews
-          renderItem={renderMapItem}
-          sections={MOCK_DATA_LESSON}
-          stickySectionHeadersEnabled={true}
-          showsVerticalScrollIndicator={false}
-          renderSectionHeader={renderSectionHeader}
-          SectionSeparatorComponent={() => <Block height={10} />}
-          keyExtractor={(item, index) => item.lessonTitle + index}
-        />
-      </Block>
+      <BlockAnimated
+        entering={FadeIn}
+        exiting={FadeOut}
+        style={styles.listContainer}
+      >
+        <ChooseCourse />
+        {/*<Animated.View entering={FadeIn} exiting={FadeOut}>*/}
+        {renderListChapter()}
+        {/*</Animated.View>*/}
+      </BlockAnimated>
     </Container>
   )
 }
@@ -217,4 +191,8 @@ const styles = StyleSheet.create({
     gap: normalize.h(20),
   },
   headerLabelBlock: { gap: 5 },
+  loadingAnimation: {
+    height: normalize.v(500),
+    aspectRatio: 1,
+  },
 })
