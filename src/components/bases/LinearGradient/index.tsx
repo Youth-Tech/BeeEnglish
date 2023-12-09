@@ -20,7 +20,7 @@ export const LinearGradient: React.FC<LinearGradientProps> = ({
 }) => {
   const { colors: colorsTheme } = useTheme()
   return (
-    <Block style={[{...containerStyle}]}>
+    <Block style={[containerStyle]}>
       <Svg height="100%" width="100%" style={StyleSheet.absoluteFillObject}>
         <Defs>
           <LGSVG

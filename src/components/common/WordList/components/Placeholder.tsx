@@ -9,7 +9,7 @@ const Placeholder = (offset: Offset) => {
 
 export default Placeholder
 
-const useStyle = makeStyles<Offset>()(({ colors }) => ({
+const useStyle = makeStyles<Offset>()(({}) => ({
   placeholderStyle: (offset) => ({
     borderRadius: 15,
     position: 'absolute',

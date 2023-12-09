@@ -22,7 +22,6 @@ import {
 import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
 import { goBack, replace } from '@navigation'
 import { handleErrorMessage } from '@utils/errorUtils'
-import { useAppDispatch } from '@hooks'
 
 export const SubcriptionPlanScreen: React.FC = () => {
   const [currentPlan, setCurrentPlan] = React.useState<Plan>()

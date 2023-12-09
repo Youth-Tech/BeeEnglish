@@ -1,17 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useTheme } from '@themes'
 import { Block, Text } from '@components'
 import { Pressable } from 'react-native'
-import { Icon } from '@assets'
 import { Word } from '@services'
 
-export interface DictonaryItemProps {
+export interface DictionaryItemProps {
   data: Word
   // onPressBookMark?: () => void
   onPress?: () => void
 }
 
-export const DictionaryItem: React.FC<DictonaryItemProps> = ({
+export const DictionaryItem: React.FC<DictionaryItemProps> = ({
   data,
   // onPressBookMark,
   onPress,

@@ -88,6 +88,7 @@ interface Script {
   end: string
   content: string
 }
+
 interface Attachment {
   id?: any
   thumbnail?: string
@@ -98,9 +99,9 @@ interface Attachment {
 }
 
 interface Pagination {
-  total: number,
-  page: number,
-  hasPrev: boolean,
+  total: number
+  page: number
+  hasPrev: boolean
   hasNext: boolean
 }
 

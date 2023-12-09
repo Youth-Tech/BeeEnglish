@@ -10,7 +10,6 @@ import {
 
 import {
   Block,
-  Container,
   DismissKeyBoardBlock,
   Image,
   Text,
