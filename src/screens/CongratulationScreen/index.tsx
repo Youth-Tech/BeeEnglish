@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import { animation } from '@assets'
+import { useAppDispatch } from '@hooks'
 import { updateProfile } from '@redux/actions'
 import { makeStyles, useTheme } from '@themes'
-import { useAppDispatch } from '@hooks'
+import { updateFetchNewLessonState } from '@redux/reducers'
 import { Block, Container, ShadowButton, Text } from '@components'
 import { navigateAndReset, pop, RootStackParamList } from '@navigation'
 
@@ -24,10 +25,11 @@ export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
   const styles = useStyle()
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
- 
+
   const onContinuePress = () => {
     if (status === 'success') {
       dispatch(updateProfile())
+      dispatch(updateFetchNewLessonState(true))
       navigateAndReset(
         [
           {

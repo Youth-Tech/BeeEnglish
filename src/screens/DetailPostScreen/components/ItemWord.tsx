@@ -3,14 +3,14 @@ import { Text, TouchableHighlight } from 'react-native'
 import { useTheme } from '@themes'
 import { useStyles } from '@screens/DetailPostScreen/styles'
 import { useAppDispatch } from '@hooks'
-import {changeBottomSheetState, setWord} from '@redux/reducers'
+import { changeBottomSheetState, setWord } from '@redux/reducers'
 
 interface WordProps {
   onPress?: () => void
   value: string
 }
 
-const ItemWord: React.FC<WordProps> = ({ value }) => {
+export const ItemWord: React.FC<WordProps> = React.memo(({ value }) => {
   const { colors } = useTheme()
   const [isClick, setIsClick] = useState(false)
   const styles = useStyles()
@@ -36,6 +36,4 @@ const ItemWord: React.FC<WordProps> = ({ value }) => {
       <Text style={styles.wordValue}>{value}</Text>
     </TouchableHighlight>
   )
-}
-
-export default React.memo(ItemWord)
+})

@@ -5,6 +5,7 @@ export * from './PokemonService'
 export * from './KnowledgeService'
 export * from './ReviewService'
 export * from './PostService'
+export * from './SpeechService'
 
 export interface DefaultResponse {
   message: string

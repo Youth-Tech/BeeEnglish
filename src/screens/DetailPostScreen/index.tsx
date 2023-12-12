@@ -6,31 +6,43 @@ import {
   ListRenderItemInfo,
 } from 'react-native'
 import React from 'react'
+import Video from 'react-native-video'
 import { useTranslation } from 'react-i18next'
 import { FadeIn, FadeOut } from 'react-native-reanimated'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import {
+  Text,
+  Block,
+  Image,
+  Container,
+  ShadowButton,
+  BlockAnimated,
+} from '@components'
+import {
   changeShowComment,
   setParentCommentId,
   changeBottomSheetState,
 } from '@redux/reducers'
+import {
+  ContentPost,
+  EmotionPost,
+  BottomSheetWord,
+  BottomSheetComment,
+} from '@screens/DetailPostScreen/components'
+import { Icon } from '@assets'
 import { useStyles } from './styles'
-import { PostServices } from '@services'
-import { colorTopic, normalize } from '@themes'
+import PauseIcon from '@assets/icons/PauseIcon'
 import { RootStackParamList } from '@navigation'
 import { LoadingScreen } from '@screens/LoadingScreen'
 import { useAppDispatch, useAppSelector } from '@hooks'
+import { PostServices, SpeechService } from '@services'
+import { colorTopic, normalize, useTheme } from '@themes'
 import { parsePostData } from '@screens/HomeScreen/utils'
 import { NewsItem } from '@screens/HomeScreen/components'
 import HeaderApp from '@components/common/HeaderComponent'
 import { newsData } from '@screens/DetailPostScreen/const'
 import BottomSheetApp from '@components/common/BottomSheetComponent'
-import ContentPost from '@screens/DetailPostScreen/components/ContentPost'
-import EmotionPost from '@screens/DetailPostScreen/components/EmotionPost'
-import { Block, BlockAnimated, Container, Image, Text } from '@components'
-import BottomSheetWord from '@screens/DetailPostScreen/components/BottomSheetWord'
-import BottomSheetComment from '@screens/DetailPostScreen/components/BottomSheetComment'
 
 export type DetailPostScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -40,12 +52,16 @@ export type DetailPostScreenProps = NativeStackScreenProps<
 export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
   const dispatch = useAppDispatch()
   const styles = useStyles()
+  const { colors } = useTheme()
   const { t } = useTranslation()
   const data = useAppSelector((state) => state.root.detailPost)
 
   const scrollViewRef = React.useRef<ScrollView>(null)
+  const audioPlayerRef = React.useRef<Video>(null)
 
+  const [isAudioPlay, setIsAudioPlay] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(true)
+  const [hlsSpeechContent, setHlsSpeechContent] = React.useState('')
   const [currentPost, setCurrentPost] = React.useState(route.params.post)
   const [postData, setPostData] = React.useState<
     (PostResponse & {
@@ -58,15 +74,40 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
   }, [])
 
   React.useEffect(() => {
+    // get speech from post content
+    handleGetHlsSpeechContent(currentPost.english.join(' '))
     const timeOutApi = setTimeout(() => {
       markPostAsRead(currentPost._id)
     }, 60 * 1000)
-    return () => clearTimeout(timeOutApi)
+    return () => {
+      clearTimeout(timeOutApi)
+
+      //delete speech audio file was created
+      console.log('clean up function run!!')
+      SpeechService.clearAudio(hlsSpeechContent)
+        .then((res) => {
+          console.log('delete audio success!!')
+          console.log(res.data.message)
+        })
+        .catch((e) => console.log(e))
+    }
   }, [currentPost._id])
 
   React.useEffect(() => {
     setIsLoading(false)
   }, [currentPost])
+
+  const handleGetHlsSpeechContent = async (content: string) => {
+    setIsAudioPlay(false)
+    try {
+      const res = await SpeechService.textToSpeech(content)
+      if (res.status === 200) {
+        setHlsSpeechContent(res.data.data)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   const markPostAsRead = async (id: string) => {
     try {
@@ -106,6 +147,20 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const onAudioPlayerError = () => {
+    console.log('error', hlsSpeechContent)
+    setIsAudioPlay(false)
+  }
+
+  const onAudioPlayerEnd = () => {
+    setIsAudioPlay(false)
+    audioPlayerRef?.current?.seek(0)
+  }
+
+  const onPlayButtonPress = () => {
+    setIsAudioPlay((prevState) => !prevState)
   }
 
   const renderNewsItem = ({
@@ -197,6 +252,36 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
               </Text>
             </Block>
           </Block>
+
+          <ShadowButton
+            buttonWidth={40}
+            buttonHeight={40}
+            onPress={onPlayButtonPress}
+            buttonColor={colors.orangeLighter}
+            shadowButtonColor={colors.orangePrimary}
+            containerStyle={styles.playButtonContainer}
+          >
+            {isAudioPlay ? (
+              <PauseIcon fill={colors.orangeDark} width={20} height={20} />
+            ) : (
+              <Icon state={'Player'} fill={colors.orangeDark} />
+            )}
+          </ShadowButton>
+
+          {hlsSpeechContent !== '' ? (
+            <Video
+              audioOnly
+              source={{
+                uri: hlsSpeechContent,
+              }}
+              ref={audioPlayerRef}
+              paused={!isAudioPlay}
+              onEnd={onAudioPlayerEnd}
+              onError={onAudioPlayerError}
+            />
+          ) : (
+            <></>
+          )}
           {renderDetailPost}
           <EmotionPost
             postId={currentPost._id}

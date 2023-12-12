@@ -20,30 +20,36 @@ import {
   LessonProgressItem,
   LessonProgressItemProps,
 } from './components'
+import {
+  getTask,
+  getUserData,
+  getRequireFetchCurrentLesson,
+} from '@redux/selectors'
 import { Icon } from '@assets'
 import { navigate } from '@navigation'
 import { LoadingScreen } from '@screens'
 import { colorTopic, useTheme } from '@themes'
 import { getTaskThunk } from '@redux/actions'
 import { getDaySession } from '@utils/dateUtils'
-import { setIsAdjustPostData } from '@redux/reducers'
 import { PostServices, UserService } from '@services'
 import { useAppDispatch, useAppSelector } from '@hooks'
-import { getTask, getUserData } from '@redux/selectors'
 import { ModalFunction } from '@components/bases/Modal/type'
 import { parseCurrentLesson, parsePostData } from '@screens/HomeScreen/utils'
+import { setIsAdjustPostData, updateFetchNewLessonState } from '@redux/reducers'
 
 export const HomeScreen = () => {
   const dispatch = useAppDispatch()
   // const streak = useAppSelector(getStreak)
   const taskData = useAppSelector(getTask)
   const userData = useAppSelector(getUserData)
+  const requireFetchCurrentLesson = useAppSelector(getRequireFetchCurrentLesson)
   const isAdjustPostData = useAppSelector(
     (state) => state.root.detailPost.isAdjustPostData,
   )
   const isLoginWithGuest = useAppSelector(
     (state) => state.root.auth.isLoginWithGuest,
   )
+
   const [t] = useTranslation()
   const { colors, normalize } = useTheme()
   const guestModalRef = React.useRef<ModalFunction>(null)
@@ -70,11 +76,20 @@ export const HomeScreen = () => {
       if (isAdjustPostData) {
         callPost()
         callPostRead()
-        // console.log('useFocusEffect')
         dispatch(setIsAdjustPostData(false))
       }
     }, [isAdjustPostData]),
   )
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (requireFetchCurrentLesson) {
+        callCurrentLesson()
+        dispatch(updateFetchNewLessonState(false))
+      }
+    }, [requireFetchCurrentLesson]),
+  )
+
   useFocusEffect(
     React.useCallback(() => {
       dispatch(getTaskThunk())
