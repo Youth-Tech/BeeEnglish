@@ -16,15 +16,14 @@ import {
   SectionHeader,
   ItemLessonProps,
 } from './components'
-import { images } from '@assets'
 import { normalize } from '@themes'
 import { useAppSelector } from '@hooks'
 import { LoadingScreen } from '@screens'
 import { parseDataToSectionData } from './utils'
 import { KnowledgeService, Quiz } from '@services'
 import { navigate, RootStackParamList } from '@navigation'
+import { Block, BlockAnimated, Container } from '@components'
 import { getCurrentCourse, getIsPreTest } from '@redux/selectors'
-import { Block, BlockAnimated, Container, Image } from '@components'
 
 export type SectionData = {
   lessonComplete: number
@@ -46,7 +45,7 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
   const currentCourse = useAppSelector(getCurrentCourse)
 
   const [data, setData] = React.useState<SectionData[]>([])
-  const [isRefresh, setIsRefresh] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(false)
 
   React.useEffect(() => {
     if (!isPreTest) {
@@ -86,13 +85,13 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
 
   const callApi = async () => {
     try {
-      setIsRefresh(true)
+      setIsLoading(true)
       const res = await KnowledgeService.getChapterAndLesson(currentCourse!._id)
       setData(parseDataToSectionData(res.data.data.chapters))
     } catch (error) {
       console.log(error)
     }
-    setIsRefresh(false)
+    setIsLoading(false)
   }
 
   const renderMapItem: SectionListRenderItem<ItemLessonProps, SectionData> = ({
@@ -128,27 +127,24 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
   }
 
   const renderListChapter = () => {
-    if (isRefresh) {
+    if (isLoading || data?.length <= 0) {
       return <LoadingScreen />
     }
 
-    if (data?.length <= 0) {
-      return (
-        <Image
-          width={200}
-          height={200}
-          alignSelf={'center'}
-          resizeMode={'contain'}
-          source={images.BeeDiscovery}
-        />
-      )
-    }
+    // if (data?.length <= 0) {
+    //   return (
+    //     <Image
+    //       width={200}
+    //       height={200}
+    //       alignSelf={'center'}
+    //       resizeMode={'contain'}
+    //       source={images.BeeDiscovery}
+    //     />
+    //   )
+    // }
 
     return (
       <SectionList
-        refreshControl={
-          <RefreshControl refreshing={isRefresh} onRefresh={onRefresh} />
-        }
         sections={data}
         removeClippedSubviews
         renderItem={renderMapItem}
@@ -156,6 +152,9 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         renderSectionHeader={renderSectionHeader}
         SectionSeparatorComponent={() => <Block height={10} />}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+        }
         keyExtractor={(item, index) => item.lessonTitle + index}
       />
     )

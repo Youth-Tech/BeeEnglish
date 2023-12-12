@@ -66,16 +66,13 @@ export const HomeScreen = () => {
 
   React.useEffect(() => {
     setIsLoading(false)
-    callPost()
-    callPostRead()
-    callCurrentLesson()
+    Promise.all([callPost(), callPostRead(), callCurrentLesson()])
   }, [])
 
   useFocusEffect(
     React.useCallback(() => {
       if (isAdjustPostData) {
-        callPost()
-        callPostRead()
+        Promise.all([callPost(), callPostRead()])
         dispatch(setIsAdjustPostData(false))
       }
     }, [isAdjustPostData]),
@@ -100,6 +97,7 @@ export const HomeScreen = () => {
     try {
       const res = await PostServices.getAllPost({
         type: 'text',
+        read: false,
       })
       setPostData(parsePostData(res.data.data.posts, colorTopic))
     } catch (error) {
