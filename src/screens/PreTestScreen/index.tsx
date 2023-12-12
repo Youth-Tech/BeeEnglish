@@ -27,9 +27,10 @@ import { LoadingScreen } from '@screens/LoadingScreen'
 import { useAppDispatch, useBackHandler } from '@hooks'
 import { ModalFunction } from '@components/bases/Modal/type'
 import { QuestionType } from '@screens/GrammarScreen/constants'
-import {parseQuizDataToQuestion} from "@screens/GrammarScreen/utils";
+import { parseQuizDataToQuestion } from '@screens/GrammarScreen/utils'
 import { setLoadingStatusAction, setUserState } from '@redux/reducers'
 import { goBack, navigateAndReset, RootStackParamList } from '@navigation'
+import { SoundUtil } from '@utils/soundUtils'
 
 export type PreTestScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -141,6 +142,11 @@ export const PreTestScreen: React.FC<PreTestScreenProps> = () => {
         },
       ]
     })
+    if (result) {
+      SoundUtil.correct.play()
+    } else {
+      SoundUtil.incorrect.play()
+    }
   }
 
   const getPreTest = async () => {
