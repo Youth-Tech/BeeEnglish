@@ -3,6 +3,7 @@ import { Course } from '@services'
 
 export interface LessonMapReducer {
   currentCourse: Course | undefined
+  requireFetchNewCurrentLesson: boolean
 }
 
 const initialState: LessonMapReducer = {
@@ -21,8 +22,9 @@ const initialState: LessonMapReducer = {
     status: false,
     description: '',
     completed: 0,
-    progress: 0
+    progress: 0,
   },
+  requireFetchNewCurrentLesson: false,
 }
 
 const lessonMapReducer = createSlice({
@@ -38,9 +40,19 @@ const lessonMapReducer = createSlice({
         currentCourse: action.payload,
       }
     },
+    updateFetchNewLessonState(
+      state: LessonMapReducer,
+      action: PayloadAction<boolean>,
+    ) {
+      return {
+        ...state,
+        requireFetchNewCurrentLesson: action.payload,
+      }
+    },
   },
 })
 
-export const { updateCurrentCourse } = lessonMapReducer.actions
+export const { updateCurrentCourse, updateFetchNewLessonState } =
+  lessonMapReducer.actions
 
 export const LessonMapReducer = lessonMapReducer.reducer

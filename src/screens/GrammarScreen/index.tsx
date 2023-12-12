@@ -28,6 +28,7 @@ import {
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { QuestionType } from './constants'
+import { SoundUtil } from '@utils/soundUtils'
 import { parseQuizDataToQuestion } from './utils'
 import { TaskService } from '@services/TaskService'
 import { useAppDispatch, useBackHandler } from '@hooks'
@@ -35,7 +36,6 @@ import { LoadingScreen } from '@screens/LoadingScreen'
 import { RootStackParamList, goBack } from '@navigation'
 import { setLoadingStatusAction } from '@redux/reducers'
 import { ModalFunction } from '@components/bases/Modal/type'
-import { SoundUtil } from '@utils/soundUtils'
 
 export type GrammarScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -106,25 +106,24 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
     enabled: true,
     callback() {
       onClosePress()
+      stopCountingTime()
     },
   })
 
-  const startCountingTime = async () => {
-    try {
-      const response = await TaskService.startTime()
-      console.log(response.data.message)
-    } catch (e) {
-      console.log(e)
-    }
+  const startCountingTime = () => {
+    TaskService.startTime()
+      .then((res) => console.log(res.data))
+      .catch((e) => {
+        console.log(e)
+      })
   }
 
-  const stopCountingTime = async () => {
-    try {
-      const response = await TaskService.stopTime()
-      console.log(response.data.message)
-    } catch (e) {
-      console.log(e)
-    }
+  const stopCountingTime = () => {
+    TaskService.stopTime()
+      .then((res) => console.log(res.data))
+      .catch((e) => {
+        console.log(e)
+      })
   }
 
   const onClosePress = () => {
@@ -133,11 +132,6 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
   const onCheckPress = () => {
     checkResult()
-
-    setModalStatus((prev) => ({
-      ...prev,
-      show: true,
-    }))
   }
 
   const onContinuePress = () => {
@@ -167,11 +161,6 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
       )
     }
 
-    setModalStatus((prev) => ({
-      ...prev,
-      status: result ? 'correct' : 'incorrect',
-    }))
-
     setStep((_) => ((currentQuestion.index + 1) * 100) / questions.length)
 
     setResult((prev) => {
@@ -184,12 +173,18 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
         },
       ]
     })
-    console.log('result', result)
+    // console.log('result', result)
+
     if (result) {
       SoundUtil.correct.play()
     } else {
       SoundUtil.incorrect.play()
     }
+
+    setModalStatus({
+      show: true,
+      status: result ? 'correct' : 'incorrect',
+    })
   }
 
   const getQuizByLessonId = async () => {

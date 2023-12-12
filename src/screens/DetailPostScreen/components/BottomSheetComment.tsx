@@ -28,7 +28,9 @@ export interface CommentNested extends Comment {
   comments: Array<CommentNested>
 }
 
-const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({ postId }) => {
+export const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({
+  postId,
+}) => {
   const parentCommentId = useAppSelector(
     (state) => state.root.detailPost.parentCommentId,
   )
@@ -258,5 +260,3 @@ const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({ postId }) => {
     </Block>
   )
 }
-
-export default BottomSheetComment

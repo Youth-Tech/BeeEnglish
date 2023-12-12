@@ -4,12 +4,13 @@ import { useTranslation } from 'react-i18next'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import { animation } from '@assets'
-import { updateProfile } from '@redux/actions'
-import { makeStyles, useTheme } from '@themes'
 import { useAppDispatch } from '@hooks'
+import { SoundUtil } from '@utils/soundUtils'
+import { makeStyles, useTheme } from '@themes'
+import { updateProfile } from '@redux/actions'
+import { updateFetchNewLessonState } from '@redux/reducers'
 import { Block, Container, ShadowButton, Text } from '@components'
 import { navigateAndReset, pop, RootStackParamList } from '@navigation'
-import { SoundUtil } from '@utils/soundUtils'
 
 export type CongratulationScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -25,14 +26,17 @@ export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
   const styles = useStyle()
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
+
   if (status === 'success') {
     SoundUtil.testSuccessful.play()
   } else {
     SoundUtil.testFailure.play()
   }
+
   const onContinuePress = () => {
     if (status === 'success') {
       dispatch(updateProfile())
+      dispatch(updateFetchNewLessonState(true))
       navigateAndReset(
         [
           {

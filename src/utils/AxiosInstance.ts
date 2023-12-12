@@ -5,9 +5,16 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios'
 
+import {
+  setAuthState,
+  setUserState,
+  defaultAuthState,
+  defaultUserState,
+} from '@redux/reducers'
 import { BASE_URL } from '@configs'
-import { replace } from '@navigation'
+import { store } from '@redux/store'
 import { TokenService } from '@services'
+import { navigateAndReset } from '@navigation'
 import { handleErrorMessage } from '@utils/errorUtils'
 
 export interface RefreshTokenRes {
@@ -16,12 +23,15 @@ export interface RefreshTokenRes {
     refreshToken: string
     accessToken: string
   }
+  code: number
 }
 
 export type AxiosInstanceType = {
   contentType?: 'application/json' | 'multipart/form-data'
   headers?: AxiosRequestHeaders
 }
+
+let isRefreshToken = false
 
 const AxiosInstance = ({
   contentType = 'application/json',
@@ -56,30 +66,43 @@ const AxiosInstance = ({
     async (error) => {
       const originalConfig = error.config
 
-      if (error?.response?.status === 401 && !originalConfig._retry) {
+      if (
+        error?.response?.status === 401 &&
+        !originalConfig._retry &&
+        !isRefreshToken
+      ) {
         originalConfig._retry = true
+        isRefreshToken = true
+
+        //refresh token
+        const currentRefreshToken = TokenService.getRefreshToken()
+        const res = await fetch(`${BASE_URL}/auth/refresh-token`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ refreshToken: currentRefreshToken }),
+        })
 
         try {
-          //refresh token
-          const refreshToken = TokenService.getRefreshToken()
-          // console.log(refreshToken)
-          const res = await axiosInstance.post<RefreshTokenRes>(
-            '/auth/refresh-token',
-            {
-              refreshToken,
-            },
-          )
+          const parseRes = (await res.json()) as RefreshTokenRes
 
-          if (res.status === 200) {
-            const { accessToken, refreshToken } = res.data.data
-
+          if (parseRes?.data?.refreshToken && parseRes?.data?.accessToken) {
+            console.log(res)
+            const { accessToken, refreshToken } = parseRes.data
             TokenService.setAccessToken(accessToken)
             TokenService.setRefreshToken(refreshToken)
+            originalConfig.headers['Authorization'] = `Bearer ${accessToken}`
+            return axiosInstance(originalConfig)
           }
-
-          return axiosInstance(originalConfig)
-        } catch (_error) {
-          replace("LOGIN_SCREEN")
+        } catch (e) {
+          console.log(e)
+          TokenService.clearToken()
+          store.dispatch(setUserState(defaultUserState))
+          store.dispatch(setAuthState(defaultAuthState))
+          navigateAndReset([{ name: 'NAVIGATE_SCREEN' }], 0)
+        } finally {
+          isRefreshToken = false
         }
       }
       handleErrorMessage(

@@ -8,7 +8,7 @@ import RenderHTML from 'react-native-render-html'
 import React, { useEffect, useState } from 'react'
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 
-const BottomSheetWord: React.FC = () => {
+export const BottomSheetWord: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true)
   const { colors } = useTheme()
   useEffect(() => {
@@ -44,5 +44,3 @@ const BottomSheetWord: React.FC = () => {
     </>
   )
 }
-
-export default BottomSheetWord
