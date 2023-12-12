@@ -26,7 +26,7 @@ export const LoadingScreen = () => {
       <Block
         justifyEnd
         alignCenter
-        marginBottom={130}
+        marginBottom={80}
         paddingHorizontal={20}
         style={baseStyles.absoluteFill}
       >

@@ -35,6 +35,7 @@ import { LoadingScreen } from '@screens/LoadingScreen'
 import { RootStackParamList, goBack } from '@navigation'
 import { setLoadingStatusAction } from '@redux/reducers'
 import { ModalFunction } from '@components/bases/Modal/type'
+import { SoundUtil } from '@utils/soundUtils'
 
 export type GrammarScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -172,6 +173,12 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
         },
       ]
     })
+    console.log('result', result)
+    if (result) {
+      SoundUtil.correct.play()
+    } else {
+      SoundUtil.incorrect.play()
+    }
 
     setModalStatus({
       show: true,

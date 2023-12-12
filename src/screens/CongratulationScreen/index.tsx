@@ -10,6 +10,7 @@ import { makeStyles, useTheme } from '@themes'
 import { updateFetchNewLessonState } from '@redux/reducers'
 import { Block, Container, ShadowButton, Text } from '@components'
 import { navigateAndReset, pop, RootStackParamList } from '@navigation'
+import { SoundUtil } from '@utils/soundUtils'
 
 export type CongratulationScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -25,7 +26,11 @@ export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
   const styles = useStyle()
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
-
+if (status === 'success') {
+    SoundUtil.testSuccessful.play()
+  } else {
+    SoundUtil.testFailure.play()
+  }
   const onContinuePress = () => {
     if (status === 'success') {
       dispatch(updateProfile())
