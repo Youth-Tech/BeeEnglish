@@ -226,6 +226,7 @@
     "customerId": "Mã khách hàng",
     "you_no_longer_subscribe_to_premium": "Bạn đã không còn đăng ký gói premium, sẽ không tự động chi trả gói",
     "detail_post_title": "Luyện kỹ năng đọc hiểu",
-    "chapter": "Chương"
+    "chapter": "Chương",
+    "collect_coin_premium": "Bạn được nhận thêm {{coin}} xu"
   }
 }

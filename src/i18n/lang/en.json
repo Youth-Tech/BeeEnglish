@@ -224,6 +224,7 @@
     "customerId": "Customer ID",
   "you_no_longer_subscribe_to_premium": "You are no longer subscribed to the premium plan, no automatically recharge",
     "detail_post_title": "Reading practice",
-    "chapter": "Chapter"
+    "chapter": "Chapter",
+    "collect_coin_premium": "You have been given {{coin}} coins"
   }
 }
