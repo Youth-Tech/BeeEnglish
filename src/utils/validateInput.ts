@@ -3,8 +3,7 @@ import { debounce } from 'lodash'
 export const useValidateInput = () => {
   return {
     validateEmail: (email: string): boolean => {
-      const pattern =
-        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+      const pattern = /^\S+@\S+\.\S+$/
       return pattern.test(email)
     },
     validatePassword: (password: string): boolean => {
@@ -22,20 +21,14 @@ export const useValidateInput = () => {
     },
     validateFullName: (fullName: string): boolean => {
       const pattern =
-          /^([a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+){2,}$/
+        /^([a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+){2,}$/
       return pattern.test(fullName)
     },
-    checkError: debounce(
-      (
-        isCheck: boolean,
-        onCheck: () => void,
-      ) => {
-        if (!isCheck)
-          if (onCheck) {
-            onCheck()
-          }
-      },
-      100,
-    ),
+    checkError: debounce((isCheck: boolean, onCheck: () => void) => {
+      if (!isCheck)
+        if (onCheck) {
+          onCheck()
+        }
+    }, 100),
   }
 }

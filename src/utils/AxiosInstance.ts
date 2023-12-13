@@ -39,7 +39,7 @@ const AxiosInstance = ({
 }: AxiosInstanceType) => {
   const axiosInstance = axios.create({
     baseURL: BASE_URL,
-    timeout: 7000,
+    timeout: 15000,
   })
 
   axiosInstance.interceptors.request.use(
