@@ -81,17 +81,21 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
     }, 60 * 1000)
     return () => {
       clearTimeout(timeOutApi)
-
-      //delete speech audio file was created
-      console.log('clean up function run!!')
-      SpeechService.clearAudio(hlsSpeechContent)
-        .then((res) => {
-          console.log('delete audio success!!')
-          console.log(res.data.message)
-        })
-        .catch((e) => console.log(e))
     }
   }, [currentPost._id])
+
+  React.useEffect(() => {
+    return () => {
+      //delete speech audio file was created
+      if (hlsSpeechContent !== '') {
+        SpeechService.clearAudio(hlsSpeechContent)
+          .then((res) => {
+            console.log(res.data.message)
+          })
+          .catch((e) => console.log('error when delete audio', e))
+      }
+    }
+  }, [hlsSpeechContent])
 
   React.useEffect(() => {
     setIsLoading(false)

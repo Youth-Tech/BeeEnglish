@@ -2,8 +2,7 @@ import React from 'react'
 import { Block } from '@components'
 import { useTheme } from '@themes'
 import { useStyles } from '@screens/DetailPostScreen/styles'
-import ItemWord from '@screens/DetailPostScreen/components/ItemWord'
-import TranslateVi from '@screens/DetailPostScreen/components/TranslateVi'
+import { ItemWord, TranslateVi } from '@screens/DetailPostScreen/components'
 
 interface ParagraphProps {
   english: string

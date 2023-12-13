@@ -3,7 +3,6 @@ import APIUtils from '@utils/AxiosInstance'
 import { DefaultResponse, Word } from '@services'
 import { GetAllPostResponse } from '@services/PostService'
 
-
 const UserEndPoint = {
   getUserData: 'user/me',
   updateUserAvatar: '/user/me',
@@ -21,7 +20,7 @@ const UserEndPoint = {
   bookmarkWord: (wordId: string) => `/user/bookmark-word/${wordId}`,
   getBoard: (levelId: string) =>
     `/user/${levelId}/board?timeStamp=${new Date()}`,
-    getCoins : '/user/coins',
+  getCoins: '/user/coins',
 } as const
 
 export interface Level {
@@ -109,6 +108,7 @@ export interface GetStreakResponse extends DefaultResponse {
   data: {
     streaks: string[]
     streakCount: number
+    score?: number
   }
 }
 
