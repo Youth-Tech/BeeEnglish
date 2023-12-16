@@ -1,12 +1,12 @@
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
-import { sourceHTML } from '../const'
 import { useAppSelector } from '@hooks'
 import { Block, Text } from '@components'
-import { widthScreen } from '@utils/helpers'
-import RenderHTML from 'react-native-render-html'
 import React, { useEffect, useState } from 'react'
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
+import { WebView } from 'react-native-webview'
+import { widthScreen } from '@utils/helpers'
+import { NativeViewGestureHandler } from 'react-native-gesture-handler'
 
 export const BottomSheetWord: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -18,10 +18,7 @@ export const BottomSheetWord: React.FC = () => {
   return (
     <>
       {!isLoading && (
-        <BottomSheetScrollView
-          stickyHeaderIndices={[0]}
-          showsVerticalScrollIndicator={false}
-        >
+        <Block flex>
           <Block row padding={20} backgroundColor={colors.white}>
             <Text
               size={'h2'}
@@ -29,17 +26,20 @@ export const BottomSheetWord: React.FC = () => {
               children={word}
               marginRight={10}
             />
-            <Icon state="WaveAudio" fill={colors.orangeDark} />
+            {/*<Icon state="WaveAudio" fill={colors.orangeDark} />*/}
           </Block>
           <Block paddingHorizontal={20} flex>
-            <Block flex>
-              <RenderHTML
-                contentWidth={widthScreen - 100}
-                source={sourceHTML}
-              />
-            </Block>
+            <WebView
+              style={{
+                flex: 1,
+              }}
+              javaScriptEnabled
+              source={{
+                uri: `https://translate.yandex.com/?source_lang=en&target_lang=vi&text=${word}`,
+              }}
+            />
           </Block>
-        </BottomSheetScrollView>
+        </Block>
       )}
     </>
   )
