@@ -5,12 +5,12 @@ import {
   Extrapolation,
   useAnimatedStyle,
 } from 'react-native-reanimated'
-import {StyleSheet} from "react-native";
+import { ScrollView, StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { Course } from '@services'
 import { useTheme } from '@themes'
-import {COURSE_ITEM_WIDTH, SPACING} from '@screens/LessonMap/components'
+import { COURSE_ITEM_WIDTH, SPACING } from '@screens/LessonMap/components'
 import { Block, BlockAnimated, Progress, ShadowButton, Text } from '@components'
 
 export interface CourseItemProps {
@@ -46,9 +46,7 @@ export const CourseItem = ({
   })
 
   return (
-    <Block
-      style={styles.itemContainer}
-    >
+    <Block style={styles.itemContainer}>
       <BlockAnimated
         radius={20}
         height={250}
@@ -82,14 +80,14 @@ export const CourseItem = ({
           }}
         />
 
-        <Text
-          center
-          color={colors.white}
-          marginTop={15}
-          fontFamily={'semiBold'}
+        <ScrollView
+          style={styles.textScrollView}
+          showsVerticalScrollIndicator={false}
         >
-          {data.description}
-        </Text>
+          <Text center color={colors.white} fontFamily={'semiBold'}>
+            {data.description}
+          </Text>
+        </ScrollView>
         <Block flex />
 
         <ShadowButton
@@ -114,7 +112,11 @@ export const CourseItem = ({
 }
 
 const styles = StyleSheet.create({
-  itemContainer:{
-    width: COURSE_ITEM_WIDTH
-  }
+  itemContainer: {
+    width: COURSE_ITEM_WIDTH,
+  },
+  textScrollView: {
+    maxHeight: 130,
+    marginTop: 10,
+  },
 })

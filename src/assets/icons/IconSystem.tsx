@@ -1923,6 +1923,15 @@ const StreakOn = (props: SvgProps) => (
   </Svg>
 )
 
+const Warning = (props: Props) => (
+  <Svg width={18} height={18} fill="none" {...props}>
+    <Path
+      fill="#F4B80A"
+      d="M9 1.125a7.875 7.875 0 1 1 0 15.75 7.875 7.875 0 0 1 0-15.75ZM9 4.5a1.027 1.027 0 0 0-1.024 1.12l.41 4.507a.617.617 0 0 0 1.227 0l.41-4.507A1.027 1.027 0 0 0 9 4.5Zm0 9a.9.9 0 1 0 0-1.8.9.9 0 0 0 0 1.8Z"
+    />
+  </Svg>
+)
+
 const Icons = {
   LeftArrow: {
     state: 'LeftArrow',
@@ -2220,6 +2229,10 @@ const Icons = {
     state: 'StreakOn',
     icon: StreakOn,
   },
+  Warning: {
+    state: Warning,
+    icon: Warning,
+  },
 }
 
 export type TIcon = keyof typeof Icons
@@ -2304,4 +2317,5 @@ export {
   Top3Badge,
   StreakOff,
   StreakOn,
+  Warning,
 }

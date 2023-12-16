@@ -5,25 +5,25 @@ import { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import {
-  Text,
   Block,
-  Progress,
-  Container,
-  WordChoice,
-  ShadowButton,
   BlockAnimated,
+  Container,
   GrammarOptions,
-  VocabularyChoice,
   LeaveProcessModal,
-  VocabularyOptions,
+  Progress,
   QuestionRefFunction,
+  ShadowButton,
+  Text,
+  VocabularyChoice,
   VocabularyChoiceFunc,
+  VocabularyOptions,
   VocabularyOptionsFunc,
+  WordChoice,
 } from '@components'
 import {
-  UserService,
   KnowledgeService,
   UpdateProgressLearningRequest,
+  UserService,
 } from '@services'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
@@ -33,7 +33,7 @@ import { parseQuizDataToQuestion } from './utils'
 import { TaskService } from '@services/TaskService'
 import { useAppDispatch, useBackHandler } from '@hooks'
 import { LoadingScreen } from '@screens/LoadingScreen'
-import { RootStackParamList, goBack } from '@navigation'
+import { goBack, RootStackParamList } from '@navigation'
 import { setLoadingStatusAction } from '@redux/reducers'
 import { ModalFunction } from '@components/bases/Modal/type'
 
@@ -147,18 +147,22 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
     let result: boolean = false
 
-    if (currentQuestion.data.type === QuestionType.multipleWord) {
-      if (currentQuestion.data.wordImage) {
-        result = !!vocabOptionRef.current?.check()
-      } else {
-        result = !!optionRef.current?.check()
-      }
-    } else if (currentQuestion.data.type === QuestionType.multipleImage) {
-      result = !!vocabChoiceRef.current?.check()
-    } else {
-      result = !!wordChoiceRef.current?.check(
-        currentQuestion.data.correctAnswer!,
-      )
+    switch (currentQuestion.data.type) {
+      case QuestionType.multipleWord:
+        if (currentQuestion.data.wordImage) {
+          result = !!vocabOptionRef.current?.check()
+        } else {
+          result = !!optionRef.current?.check()
+        }
+        break
+      case QuestionType.cloze:
+        result = !!wordChoiceRef.current?.check(
+          currentQuestion.data.correctAnswer!,
+        )
+        break
+      case QuestionType.multipleImage:
+        result = !!vocabChoiceRef.current?.check()
+        break
     }
 
     setStep((_) => ((currentQuestion.index + 1) * 100) / questions.length)
@@ -316,7 +320,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
         {renderQuestion(currentQuestion.data!)}
 
-        <Block flex />
+        {/*<Block flex />*/}
 
         <ShadowButton
           shadowHeight={6}

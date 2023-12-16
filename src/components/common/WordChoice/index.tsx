@@ -1,11 +1,12 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
 
 import { images } from '@assets'
 import { useTheme } from '@themes'
 import { WordList } from '../WordList'
+import { GrammarView } from '@components/common'
 import { Block, BlockAnimated, Image, Text } from '@components/bases'
-import {useTranslation} from "react-i18next";
 
 export interface WordChoiceProps {
   data: Question
@@ -13,7 +14,7 @@ export interface WordChoiceProps {
 
 export const WordChoice = React.forwardRef<WordListRefFunc, WordChoiceProps>(
   ({ data }, ref) => {
-      const {t} = useTranslation()
+    const { t } = useTranslation()
     const { colors } = useTheme()
     const [visible, setVisible] = React.useState(true)
     const wordListRef = React.useRef<WordListRefFunc>(null)
@@ -29,7 +30,7 @@ export const WordChoice = React.forwardRef<WordListRefFunc, WordChoiceProps>(
     }))
 
     return (
-      <>
+      <Block flex>
         {visible && (
           <BlockAnimated
             flex
@@ -37,7 +38,7 @@ export const WordChoice = React.forwardRef<WordListRefFunc, WordChoiceProps>(
             entering={FadeInRight.duration(500)}
           >
             <Text size={'h1'} fontFamily="bold" marginTop={40}>
-                {t('remake_sentence')}
+              {t('remake_sentence')}
             </Text>
 
             <Block row justifyStart alignCenter marginTop={30}>
@@ -47,42 +48,36 @@ export const WordChoice = React.forwardRef<WordListRefFunc, WordChoiceProps>(
                 resizeMode="contain"
                 source={images.BeeTeacher}
               />
-              <Block
-                flex
-                radius={10}
-                justifyCenter
-                borderWidth={1}
-                marginLeft={16}
-                borderColor={colors.greyLight}
-                // style={{
-                //   maxWidth:
-                //     widthScreen -
-                //     normalize.h(15) -
-                //     normalize.h(60) -
-                //     normalize.h(20),
-                // }}
-              >
-                <Text
-                  size={'h4'}
-                  paddingVertical={14}
-                  fontFamily="semiBold"
-                  paddingHorizontal={15}
+
+              <Block flex row>
+                <Block
+                  radius={10}
+                  justifyCenter
+                  borderWidth={1}
+                  marginLeft={16}
+                  borderColor={colors.greyLight}
                 >
-                  {data.question}
-                </Text>
+                  <Text
+                    size={'h4'}
+                    paddingVertical={14}
+                    fontFamily="semiBold"
+                    paddingHorizontal={15}
+                  >
+                    {data.question}
+                  </Text>
+                </Block>
               </Block>
             </Block>
+            <GrammarView data={data.grammar} />
 
-            <Block flex marginTop={10}>
-              <WordList
-                key={data.id}
-                ref={wordListRef}
-                answers={data.answer as string[]}
-              />
-            </Block>
+            <WordList
+              key={data.id}
+              ref={wordListRef}
+              answers={data.answer as string[]}
+            />
           </BlockAnimated>
         )}
-      </>
+      </Block>
     )
   },
 )

@@ -40,7 +40,7 @@ export interface LessonProgressItemProps {
 }
 
 export const LessonProgressItem = (props: LessonProgressItemProps) => {
-  const { index, topicImage, topicName, lessonLabel, onPress } = props
+  const { topicImage, topicName, lessonLabel, onPress } = props
   const { colors } = useTheme()
   const [theme, setTheme] = React.useState<TThemeColor>()
   const getRandomColor = React.useCallback(() => {
@@ -52,13 +52,7 @@ export const LessonProgressItem = (props: LessonProgressItemProps) => {
   }, [])
 
   return (
-    <Pressable
-      style={[
-        styles.container,
-        index! > 0 ? { marginStart: normalize.h(15) } : {},
-      ]}
-      onPress={onPress}
-    >
+    <Pressable style={styles.container} onPress={onPress}>
       <Block
         backgroundColor="transparent"
         zIndex={1}
@@ -172,5 +166,6 @@ const styles = StyleSheet.create({
   container: {
     width: normalize.h(262),
     height: normalize.h(107),
+    marginEnd: normalize.h(15),
   },
 })

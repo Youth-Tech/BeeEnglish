@@ -6,11 +6,12 @@ export const parseQuizDataToQuestion = (quizzes: Quiz[]): Question[] => {
     return {
       id: item._id,
       answer: item.answer,
+      grammar: item.grammar,
       question: item.question,
-      type: QuestionType[item.type],
       attachment: item.attachments,
-      wordImage: item.attachments?.[0]?.src || '',
+      type: QuestionType[item.type],
       correctAnswer: item.correctAnswer,
+      wordImage: item.attachments?.[0]?.src || '',
     }
   })
 }

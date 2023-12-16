@@ -23,10 +23,15 @@ import {
 import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
 import Sound from 'react-native-sound'
 import Clipboard from '@react-native-clipboard/clipboard'
+import Video from 'react-native-video'
 type Props = NativeStackScreenProps<RootStackParamList, 'DETAIL_WORD_SCREEN'>
 export const DetailWordScreen = ({ route }: Props) => {
   const { wordId } = route.params
   const { t } = useTranslation()
+
+  const audioPlayerRef = React.useRef<Video>(null)
+
+  const [isAudioPlay, setIsAudioPlay] = React.useState(false)
   const [wordData, setWordData] = React.useState<Word>()
   const soundUrl = wordData?.attachments.find((o) => o.type === 'audio')
   console.log(soundUrl?.src)
@@ -47,15 +52,17 @@ export const DetailWordScreen = ({ route }: Props) => {
 
   const onPronunciationPress = () => {
     console.log('onPronunciationPress')
-    soundProgressRef.current?.start()
-    sound.play((success) => {
-      if (success) {
-        console.log('successfully finished playing')
-        soundProgressRef.current?.pause()
-      } else {
-        console.log('playback failed due to audio decoding errors')
-      }
-    })
+    // soundProgressRef.current?.start()
+    // sound.play((success) => {
+    //   if (success) {
+    //     console.log('successfully finished playing')
+    //     soundProgressRef.current?.pause()
+    //   } else {
+    //     console.log('playback failed due to audio decoding errors')
+    //   }
+    // })
+
+    setIsAudioPlay((prev) => !prev)
   }
   const callGetWordByIdAPI = async () => {
     try {
@@ -68,8 +75,31 @@ export const DetailWordScreen = ({ route }: Props) => {
   React.useEffect(() => {
     callGetWordByIdAPI()
   }, [])
+
+  const onAudioPlayerError = () => {
+    setIsAudioPlay(false)
+  }
+
+  const onAudioPlayerEnd = () => {
+    setIsAudioPlay(false)
+    audioPlayerRef?.current?.seek(0)
+  }
+
   return (
     <Block flex>
+      <Video
+        audioOnly
+        source={{
+          uri:
+            soundUrl?.src ??
+            'https://api.dictionaryapi.dev/media/pronunciations/en/default-uk.mp3',
+        }}
+        ref={audioPlayerRef}
+        paused={!isAudioPlay}
+        onEnd={onAudioPlayerEnd}
+        onError={onAudioPlayerError}
+      />
+
       <Image
         width={'100%'}
         resizeMode="contain"

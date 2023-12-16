@@ -18,6 +18,7 @@ import {
   Container,
   ShadowButton,
   BlockAnimated,
+  PremiumModal,
 } from '@components'
 import {
   changeShowComment,
@@ -33,7 +34,7 @@ import {
 import { Icon } from '@assets'
 import { useStyles } from './styles'
 import PauseIcon from '@assets/icons/PauseIcon'
-import { RootStackParamList } from '@navigation'
+import { navigate, RootStackParamList } from '@navigation'
 import { LoadingScreen } from '@screens/LoadingScreen'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { PostServices, SpeechService } from '@services'
@@ -43,6 +44,8 @@ import { NewsItem } from '@screens/HomeScreen/components'
 import HeaderApp from '@components/common/HeaderComponent'
 import { newsData } from '@screens/DetailPostScreen/const'
 import BottomSheetApp from '@components/common/BottomSheetComponent'
+import { getUserRole } from '@redux/selectors'
+import { ModalFunction } from '@components/bases/Modal/type'
 
 export type DetailPostScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -50,14 +53,18 @@ export type DetailPostScreenProps = NativeStackScreenProps<
 >
 
 export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
-  const dispatch = useAppDispatch()
+  const { isRead } = route.params
+
   const styles = useStyles()
+  const dispatch = useAppDispatch()
   const { colors } = useTheme()
   const { t } = useTranslation()
   const data = useAppSelector((state) => state.root.detailPost)
+  const userRole = useAppSelector(getUserRole)
 
   const scrollViewRef = React.useRef<ScrollView>(null)
   const audioPlayerRef = React.useRef<Video>(null)
+  const premiumRefModal = React.useRef<ModalFunction>(null)
 
   const [isAudioPlay, setIsAudioPlay] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(true)
@@ -75,10 +82,17 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
 
   React.useEffect(() => {
     // get speech from post content
-    handleGetHlsSpeechContent(currentPost.english.join(' '))
-    const timeOutApi = setTimeout(() => {
-      markPostAsRead(currentPost._id)
-    }, 60 * 1000)
+    if (userRole === 'premium') {
+      handleGetHlsSpeechContent(currentPost.english.join(' '))
+    }
+
+    let timeOutApi: NodeJS.Timeout
+
+    if (!isRead) {
+      timeOutApi = setTimeout(() => {
+        markPostAsRead(currentPost._id)
+      }, 60 * 1000)
+    }
     return () => {
       clearTimeout(timeOutApi)
     }
@@ -87,7 +101,7 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
   React.useEffect(() => {
     return () => {
       //delete speech audio file was created
-      if (hlsSpeechContent !== '') {
+      if (hlsSpeechContent !== '' && userRole === 'premium') {
         SpeechService.clearAudio(hlsSpeechContent)
           .then((res) => {
             console.log(res.data.message)
@@ -164,7 +178,16 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
   }
 
   const onPlayButtonPress = () => {
-    setIsAudioPlay((prevState) => !prevState)
+    if (userRole === 'premium') {
+      setIsAudioPlay((prevState) => !prevState)
+    } else {
+      premiumRefModal?.current?.openModal()
+    }
+  }
+
+  const onPremiumModalPress = () => {
+    navigate('SUBSCRIPTION_SCREEN')
+    premiumRefModal?.current?.dismissModal()
   }
 
   const renderNewsItem = ({
@@ -321,6 +344,11 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
         >
           <BottomSheetComment postId={currentPost._id} />
         </BottomSheetApp>
+        <PremiumModal
+          position={'center'}
+          ref={premiumRefModal}
+          onButtonPress={onPremiumModalPress}
+        />
       </BlockAnimated>
     </Container>
   )

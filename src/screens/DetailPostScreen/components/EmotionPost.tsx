@@ -133,17 +133,29 @@ export const EmotionPost: React.FC<IEmotionPost> = React.memo(
       guestModalRef?.current?.dismissModal()
     }
 
+    const renderTextLike = () => {
+      if (like) {
+        if (likeCount > 1) {
+          return t('post_emotion_status_user', {
+            user: user.fullName,
+            amount: likeCount,
+          })
+        } else {
+          return user.fullName
+        }
+      } else {
+        if (likeCount > 0) {
+          return t('post_emotion_status', { amount: likeCount })
+        } else {
+          return t('no_like')
+        }
+      }
+    }
+
     return (
       <Block style={styles.container}>
         <Block style={styles.countComment}>
-          <Text>
-            {like
-              ? t('post_emotion_status_user', {
-                  user: user.fullName,
-                  amount: likeCount,
-                })
-              : t('post_emotion_status', { amount: likeCount })}
-          </Text>
+          <Text>{renderTextLike()}</Text>
           <Text>{t('comments', { amount: commentCount })}</Text>
         </Block>
         <Block style={styles.boxEmotion}>

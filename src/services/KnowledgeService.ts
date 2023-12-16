@@ -7,7 +7,8 @@ const KnowledgeEndPoint = {
   getPreTest: '/knowledge/quiz/pretest/generate',
   sendResultPreTest: '/knowledge/quiz/pretest/send-result',
 
-  getChapterAndLesson: (courseId: string) => `/knowledge/chapter/${courseId}/get-chapters-and-lessons`,
+  getChapterAndLesson: (courseId: string) =>
+    `/knowledge/chapter/${courseId}/get-chapters-and-lessons`,
   getQuizByLessonId: (lessonId: string) =>
     `/knowledge/quiz/${lessonId}/get-quizzes-by-lesson`,
   getWordByLessonId: (lessonId: string) =>
@@ -50,10 +51,11 @@ export interface GetChapterAndLessonRes extends DefaultResponse {
 export interface Quiz {
   _id: any
   answer: any[]
-  type: QuizType
   flag?: boolean
+  type: QuizType
   question: string
   correctAnswer?: string
+  grammar: Grammar | null
   attachments?: Attachment[]
 }
 
@@ -207,10 +209,14 @@ export const KnowledgeService = {
   },
 
   getAlCourse: () => {
-    return ApiUtil.get<GetAllCourseResponse>(KnowledgeEndPoint.getAllCourse, undefined, {
-      params: {
-        timestamp: new Date().getTime()
-      }
-    })
+    return ApiUtil.get<GetAllCourseResponse>(
+      KnowledgeEndPoint.getAllCourse,
+      undefined,
+      {
+        params: {
+          timestamp: new Date().getTime(),
+        },
+      },
+    )
   },
 } as const

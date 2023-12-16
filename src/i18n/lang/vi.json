@@ -227,6 +227,10 @@
     "you_no_longer_subscribe_to_premium": "Bạn đã không còn đăng ký gói premium, sẽ không tự động chi trả gói",
     "detail_post_title": "Luyện kỹ năng đọc hiểu",
     "chapter": "Chương",
-    "collect_coin_premium": "Bạn được nhận thêm {{coin}} xu"
+    "collect_coin_premium": "Bạn được nhận thêm {{coin}} xu",
+    "premium_modal_desc": "Nâng cấp tải khoản để có được trải nghiệm trọn vẹn hơn!",
+    "premium_modal_button": "Nâng cấp tài khoản ngay!",
+    "no_like": "0 lượt thích",
+    "sentence_structure": "Cấu trúc câu: "
   }
 }

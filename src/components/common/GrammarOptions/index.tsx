@@ -76,12 +76,12 @@ export const GrammarOptions = React.forwardRef<
   }))
 
   return (
-    <>
+    <Block flex paddingBottom={25}>
       {ready && (
         <BlockAnimated
+          flex
           exiting={FadeOutLeft.duration(500)}
           entering={FadeInRight.duration(500)}
-          flex
         >
           <Text size={'h2'} fontFamily="bold" marginTop={20}>
             {data.question}
@@ -94,6 +94,9 @@ export const GrammarOptions = React.forwardRef<
             style={styles.imageStyle}
             source={images.BeeWithPencil}
           />
+
+          <Block flex />
+
           <Block style={styles.blockOptions}>
             {(data.answer as Answer[]).map((item, index) => {
               const overlayStyle: ViewStyle = {
@@ -121,6 +124,7 @@ export const GrammarOptions = React.forwardRef<
                     height={52}
                     radius={48}
                     alignCenter
+                    padding={10}
                     justifyCenter
                     backgroundColor={
                       index === currentOption
@@ -146,7 +150,7 @@ export const GrammarOptions = React.forwardRef<
           </Block>
         </BlockAnimated>
       )}
-    </>
+    </Block>
   )
 })
 

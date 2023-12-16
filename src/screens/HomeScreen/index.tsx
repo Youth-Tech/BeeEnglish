@@ -207,7 +207,9 @@ export const HomeScreen = () => {
           topic={item.topic.name}
           topicColor={item.textColor}
           image={item.attachments?.[0]?.src ?? ''}
-          onPress={() => navigate('DETAIL_POST_SCREEN', { post: item })}
+          onPress={() =>
+            navigate('DETAIL_POST_SCREEN', { post: item, isRead: true })
+          }
         />
         {index === postDataRead.length - 1 && postDataRead.length > 5 && (
           <Pressable onPress={onReadMore}>
@@ -328,24 +330,28 @@ export const HomeScreen = () => {
             </Block>
           </Block>
         </Block>
-        <Block marginTop={17}>
-          <Text
-            size={'h2'}
-            fontFamily="bold"
-            color={colors.black}
-            marginLeft={20}
-          >
-            {t('learning')}
-          </Text>
-          <FlatList
-            horizontal
-            data={currentLesson}
-            renderItem={renderLessonProgressItem}
-            style={{ marginTop: normalize.v(10) }}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(_, index) => `item-${index}`}
-          />
-        </Block>
+        {currentLesson.length > 0 ? (
+          <Block marginTop={17}>
+            <Text
+              size={'h2'}
+              fontFamily="bold"
+              color={colors.black}
+              marginLeft={20}
+            >
+              {t('learning')}
+            </Text>
+            <FlatList
+              horizontal
+              data={currentLesson}
+              renderItem={renderLessonProgressItem}
+              style={{ marginTop: normalize.v(10) }}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(_, index) => `item-${index}`}
+            />
+          </Block>
+        ) : (
+          <></>
+        )}
         {postDataRead.length > 0 ? (
           <Block marginTop={17}>
             <Text
