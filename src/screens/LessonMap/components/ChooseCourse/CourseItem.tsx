@@ -84,7 +84,12 @@ export const CourseItem = ({
           style={styles.textScrollView}
           showsVerticalScrollIndicator={false}
         >
-          <Text center color={colors.white} fontFamily={'semiBold'}>
+          <Text
+            center
+            color={colors.white}
+            fontFamily={'semiBold'}
+            numberOfLines={5}
+          >
             {data.description}
           </Text>
         </ScrollView>

@@ -67,7 +67,7 @@ export const LearnWordItem: React.FC<Props> = ({ data, onPress }) => {
                 color={colors.greyPrimary}
                 lineHeight={30}
               >
-                /{data.pronunciation}/
+                {data.pronunciation}
               </Text>
             </Block>
             <Text fontFamily="semiBold" size={'h3'} lineHeight={30}>

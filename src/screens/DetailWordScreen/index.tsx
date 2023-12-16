@@ -151,7 +151,7 @@ export const DetailWordScreen = ({ route }: Props) => {
                 lineHeight={18}
                 fontFamily="regular"
               >
-                /{wordData?.pronunciation}/
+                {wordData?.pronunciation}
               </Text>
             </Block>
 

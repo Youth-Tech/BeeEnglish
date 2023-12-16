@@ -61,7 +61,7 @@ export const DictionaryItem: React.FC<DictionaryItemProps> = ({
             {/*</Pressable>*/}
           </Block>
           <Text size={'h5'} fontFamily="regular" color={colors.greyDark}>
-            /{data.pronunciation}/
+            {data.pronunciation}
           </Text>
         </Block>
         <Block
