@@ -1,12 +1,8 @@
-import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { useAppSelector } from '@hooks'
 import { Block, Text } from '@components'
 import React, { useEffect, useState } from 'react'
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import { WebView } from 'react-native-webview'
-import { widthScreen } from '@utils/helpers'
-import { NativeViewGestureHandler } from 'react-native-gesture-handler'
 
 export const BottomSheetWord: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true)
