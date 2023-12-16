@@ -50,6 +50,7 @@ export const handleErrorMessage = (
   if (message) {
     showErrorMessage(message)
   } else {
-    showErrorMessage(messageFromServer)
+    console.log(messageFromServer)
+    // showErrorMessage(messageFromServer)
   }
 }
