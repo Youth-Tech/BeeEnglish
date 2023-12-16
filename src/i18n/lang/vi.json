@@ -231,6 +231,10 @@
     "premium_modal_desc": "Nâng cấp tải khoản để có được trải nghiệm trọn vẹn hơn!",
     "premium_modal_button": "Nâng cấp tài khoản ngay!",
     "no_like": "0 lượt thích",
-    "sentence_structure": "Cấu trúc câu: "
+    "sentence_structure": "Cấu trúc câu: ",
+    "receive_honey_now": "Nhận ngay {{val}} mật ong",
+    "receive_honey_everyday": "Nhận ngay {{val}} mật ong mỗi ngày khi bạn điểm danh",
+    "unlimited_access_premium_feature": "Nhận các tính năng premium không giới hạn"
+
   }
 }

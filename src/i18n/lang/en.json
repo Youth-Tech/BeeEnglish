@@ -229,6 +229,10 @@
     "premium_modal_desc": "Enhance your experience by upgrade your account!",
     "premium_modal_button": "Upgrade Account!",
     "no_like": "0 like",
-    "sentence_structure": "Structure: "
+    "sentence_structure": "Structure: ",
+    "receive_honey_now": "Receive {{val}} honey now",
+    "receive_honey_everyday": "Receive {{val}} honey every day when you attend",
+    "unlimited_access_premium_feature": "Access to premium features unlimited"
+
   }
 }

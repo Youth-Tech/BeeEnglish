@@ -20,12 +20,15 @@ import {
   SubscribePremiumReq,
 } from '@services/PaymentService'
 import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
-import { goBack, replace } from '@navigation'
+import { goBack, pop, replace } from '@navigation'
 import { handleErrorMessage } from '@utils/errorUtils'
+import { setRoleUser, TPaymentStatus, updateStatus } from '@redux/reducers'
+import { useAppDispatch } from '@hooks'
 
 export const SubcriptionPlanScreen: React.FC = () => {
   const [currentPlan, setCurrentPlan] = React.useState<Plan>()
   const { colors, normalize } = useTheme()
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const [packagePlans, setPackagePlans] = React.useState<Plan[]>([])
   const [selectedNumber, setSelectedNumber] = React.useState<number>(-1)
@@ -82,7 +85,9 @@ export const SubcriptionPlanScreen: React.FC = () => {
     try {
       const response = await PaymentService.subcribePremium(subcribeInfo)
       console.log(response.data.message)
-      replace('INVOICE_SCREEN', { getMe: true })
+      dispatch(setRoleUser({ role: 'premium' }))
+      pop(1)
+      // replace('INVOICE_SCREEN', { getMe: true })
     } catch (e) {
       console.log(e)
     }
