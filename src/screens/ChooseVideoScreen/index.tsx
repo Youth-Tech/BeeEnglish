@@ -67,7 +67,10 @@ export const ChooseVideoScreen: React.FC<ChooseVideoScreenProps> = () => {
   }
   const callGetAllVideoAPI = async () => {
     try {
-      const response = await PostServices.getAllPost({ type: 'video' })
+      const response = await PostServices.getAllPost({
+        type: 'video',
+        limit: 100,
+      })
       setVideoData(response.data.data.posts)
       dispatch(updateVideos(response.data.data.posts))
     } catch (e) {

@@ -95,10 +95,7 @@ export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
             radius={20 - 7}
           >
             <Text size={'h3'} fontFamily="bold" center marginBottom={10}>
-              Bạn nhận được 100 star points ✨
-            </Text>
-            <Text size={'h3'} fontFamily="bold" center>
-              Bạn nhận được 100 Beecoin ✨
+              Bạn nhận được 10 star points ✨
             </Text>
           </Block>
         </Block>

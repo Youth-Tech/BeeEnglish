@@ -15,7 +15,7 @@ import { useTheme } from '@themes'
 import { useAppSelector } from '@hooks'
 import { useTranslation } from 'react-i18next'
 import { LoadingScreen } from '@screens/LoadingScreen'
-import { navigate, RootStackParamList } from '@navigation'
+import { navigate, pop, RootStackParamList } from '@navigation'
 import { ModalFunction } from '@components/bases/Modal/type'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { VocabularyFunc } from '@components/common/VocabularyWord/type'
@@ -156,14 +156,10 @@ export const VocabScreen: React.FC<VocabScreenProps> = ({
   }
   const handleNextVocab = () => {
     if (currentPos + 1 > wordData.length - 1) {
-      navigate('CONGRATULATION_SCREEN', {
-        status: 'success',
-        point: 0,
-        type: 'normal',
-      })
       handleCallApi()
       callMultipleWordReview()
       stopCountingTime()
+      pop()
       return
     }
     setCurrentPos((prev) => prev + 1)
