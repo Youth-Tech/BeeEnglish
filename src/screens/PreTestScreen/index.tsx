@@ -227,7 +227,9 @@ export const PreTestScreen: React.FC<PreTestScreenProps> = () => {
 
     switch (question.type) {
       case QuestionType.cloze:
-        return <WordChoice data={question} ref={wordChoiceRef} />
+        return (
+          <WordChoice data={question} ref={wordChoiceRef} isPreTest={true} />
+        )
       case QuestionType.multipleWord:
         if (question.wordImage !== '') {
           return (

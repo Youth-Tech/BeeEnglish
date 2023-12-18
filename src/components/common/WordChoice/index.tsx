@@ -10,10 +10,11 @@ import { Block, BlockAnimated, Image, Text } from '@components/bases'
 
 export interface WordChoiceProps {
   data: Question
+  isPreTest?: boolean
 }
 
 export const WordChoice = React.forwardRef<WordListRefFunc, WordChoiceProps>(
-  ({ data }, ref) => {
+  ({ data, isPreTest }, ref) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const [visible, setVisible] = React.useState(true)
@@ -68,7 +69,7 @@ export const WordChoice = React.forwardRef<WordListRefFunc, WordChoiceProps>(
                 </Block>
               </Block>
             </Block>
-            <GrammarView data={data.grammar} />
+            <GrammarView isPreTest={isPreTest} data={data.grammar} />
 
             <WordList
               key={data.id}

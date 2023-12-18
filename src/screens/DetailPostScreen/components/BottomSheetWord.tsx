@@ -3,6 +3,7 @@ import { useAppSelector } from '@hooks'
 import { Block, Text } from '@components'
 import React, { useEffect, useState } from 'react'
 import { WebView } from 'react-native-webview'
+import { ScrollView } from 'react-native-gesture-handler'
 
 export const BottomSheetWord: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -25,15 +26,17 @@ export const BottomSheetWord: React.FC = () => {
             {/*<Icon state="WaveAudio" fill={colors.orangeDark} />*/}
           </Block>
           <Block paddingHorizontal={20} flex>
-            <WebView
-              style={{
-                flex: 1,
-              }}
-              javaScriptEnabled
-              source={{
-                uri: `https://translate.yandex.com/?source_lang=en&target_lang=vi&text=${word}`,
-              }}
-            />
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+              <WebView
+                style={{
+                  flex: 1,
+                }}
+                javaScriptEnabled
+                source={{
+                  uri: `https://translate.yandex.com/?source_lang=en&target_lang=vi&text=${word}`,
+                }}
+              />
+            </ScrollView>
           </Block>
         </Block>
       )}

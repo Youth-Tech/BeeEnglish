@@ -55,7 +55,7 @@ export const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({
     getListComment()
   }, [])
 
-  const getListComment = async () => {
+  const getListComment = async (isInit?: boolean) => {
     setIsFetchingComment(true)
     try {
       const res = await PostServices.getPostComments({
@@ -71,7 +71,11 @@ export const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({
             comments: [],
           }),
         )
-        setListComment((prevState) => [...prevState, ...commentData])
+        if (isInit) {
+          setListComment((prevState) => [...prevState, ...commentData])
+        } else {
+          setListComment(commentData)
+        }
         pagination.current = res.data.data.pagination
         setIsFetchingComment(false)
       }

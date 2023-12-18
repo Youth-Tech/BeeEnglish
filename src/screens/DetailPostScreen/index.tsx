@@ -330,7 +330,7 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
           onClose={onCloseBottomSheet}
           children={<BottomSheetWord />}
           visible={data.isShowBottomSheet}
-          snapPoints={['20%', '20%', '50%', '70%']}
+          snapPoints={['20%', '20%', '50%', '80%']}
           backgroundStyle={{ borderRadius: normalize.m(10), elevation: 10 }}
         />
 

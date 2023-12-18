@@ -43,7 +43,7 @@ export const StreakBall = () => {
       justifyCenter
       borderWidth={4}
       backgroundColor={'#fff'}
-      borderColor={streakCount ?? 0 > 0 ? colors.orangeThick : '#efefef'}
+      borderColor={(streakCount ?? 0) > 0 ? colors.orangeThick : '#efefef'}
       exiting={SlideOutRight.delay(500).springify().damping(100)}
       entering={SlideInRight.delay(1000).springify().damping(100)}
     >
@@ -53,9 +53,9 @@ export const StreakBall = () => {
           size={'h5'}
           alignSelf={'center'}
           fontFamily={'bold'}
-          color={streakCount ?? 0 > 0 ? colors.orangeThick : '#C7C5C3'}
+          color={(streakCount ?? 0) > 0 ? colors.orangeThick : '#C7C5C3'}
         >
-          {streakCount ?? 0}
+          {(streakCount ?? 0) > 0 ? streakCount : 0}
         </Text>
       </Pressable>
     </BlockAnimated>

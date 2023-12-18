@@ -85,7 +85,7 @@ export interface UpdateProgressLearningResponse extends DefaultResponse {
 export interface RankUser {
   streaks: string[]
   _id: string
-  avatar: string
+  avatar: { src: string }
   level: string
   score: number
   username: string
@@ -208,7 +208,10 @@ export const UserService = {
   },
   getStreak(params: GetStreakRequest) {
     return APIUtils.get<GetStreakResponse>(UserEndPoint.getStreak, undefined, {
-      params,
+      params: {
+        ...params,
+        timestamp: new Date().getTime(),
+      },
     })
   },
 

@@ -22,8 +22,11 @@ import { LoadingScreen } from '@screens'
 import { parseDataToSectionData } from './utils'
 import { KnowledgeService, Quiz } from '@services'
 import { navigate, RootStackParamList } from '@navigation'
-import { Block, BlockAnimated, Container } from '@components'
-import { getCurrentCourse, getIsPreTest } from '@redux/selectors'
+import { Block, BlockAnimated, Container, GuestModal } from '@components'
+import { getCurrentCourse, getIsPreTest, getUserRole } from '@redux/selectors'
+import Toast from 'react-native-toast-message'
+import { useTranslation } from 'react-i18next'
+import { ModalFunction } from '@components/bases/Modal/type'
 
 export type SectionData = {
   lessonComplete: number
@@ -41,8 +44,13 @@ export type LessonMapScreen = NativeStackScreenProps<
 >
 
 export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
+  const { t } = useTranslation()
+
+  const userRole = useAppSelector(getUserRole)
   const isPreTest = useAppSelector(getIsPreTest)
   const currentCourse = useAppSelector(getCurrentCourse)
+
+  const guestModalRef = React.useRef<ModalFunction>(null)
 
   const [data, setData] = React.useState<SectionData[]>([])
   const [isLoading, setIsLoading] = React.useState(false)
@@ -59,6 +67,11 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
       callApi()
     }
   }, [currentCourse])
+
+  const onButtonGuestModalPress = () => {
+    navigate('REGISTER_SCREEN', { isGuest: true })
+    guestModalRef?.current?.dismissModal()
+  }
 
   const onStartExaminationPress = ({
     chapterId,
@@ -81,6 +94,16 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
 
   const onUnlockPress = ({ id }: Partial<ItemLessonProps>) => {
     console.log('onUnlockPress', id)
+    if (userRole === 'guest') {
+      guestModalRef?.current?.openModal()
+    } else {
+      Toast.show({
+        type: 'info',
+        text1: 'Oh! no',
+        position: 'top',
+        text2: t('function_in_develop'),
+      })
+    }
   }
 
   const callApi = async () => {
@@ -172,6 +195,12 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
         {renderListChapter()}
         {/*</Animated.View>*/}
       </BlockAnimated>
+      <GuestModal
+        position={'center'}
+        ref={guestModalRef}
+        animationType={'fade'}
+        onButtonPress={onButtonGuestModalPress}
+      />
     </Container>
   )
 }

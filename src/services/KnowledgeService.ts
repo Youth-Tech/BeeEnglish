@@ -56,6 +56,7 @@ export interface Quiz {
   question: string
   correctAnswer?: string
   grammar: Grammar | null
+  wordImage?: string
   attachments?: Attachment[]
 }
 

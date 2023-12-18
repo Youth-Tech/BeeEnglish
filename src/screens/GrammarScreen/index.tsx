@@ -149,7 +149,10 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
     switch (currentQuestion.data.type) {
       case QuestionType.multipleWord:
-        if (currentQuestion.data.wordImage) {
+        if (
+          currentQuestion.data.wordImage &&
+          currentQuestion.data.wordImage !== 'null'
+        ) {
           result = !!vocabOptionRef.current?.check()
         } else {
           result = !!optionRef.current?.check()
@@ -277,9 +280,15 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
     switch (question.type) {
       case QuestionType.cloze:
-        return <WordChoice data={question} ref={wordChoiceRef} />
+        return (
+          <WordChoice data={question} ref={wordChoiceRef} isPreTest={false} />
+        )
       case QuestionType.multipleWord:
-        if (question.wordImage !== '') {
+        if (
+          question.wordImage &&
+          question.wordImage !== '' &&
+          question.wordImage !== 'null'
+        ) {
           return (
             <VocabularyOptions
               ref={vocabOptionRef}

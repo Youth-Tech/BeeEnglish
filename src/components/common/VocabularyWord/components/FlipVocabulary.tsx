@@ -178,7 +178,7 @@ const FlipVocabulary: React.FC<FlipVocabularyProps> = (props) => {
                 color={colors.greyPrimary}
                 marginTop={5}
               >
-                {pronunciation ?? 'dɪˈfɒlt'}
+                {pronunciation ?? '/dɪˈfɒlt/'}
               </Text>
               <Text
                 size={'h2'}

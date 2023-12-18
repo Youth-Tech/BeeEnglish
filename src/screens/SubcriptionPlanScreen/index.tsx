@@ -20,9 +20,9 @@ import {
   SubscribePremiumReq,
 } from '@services/PaymentService'
 import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
-import { goBack, pop, replace } from '@navigation'
+import { goBack, pop } from '@navigation'
 import { handleErrorMessage } from '@utils/errorUtils'
-import { setRoleUser, TPaymentStatus, updateStatus } from '@redux/reducers'
+import { setLoadingStatusAction, setRoleUser } from '@redux/reducers'
 import { useAppDispatch } from '@hooks'
 
 export const SubcriptionPlanScreen: React.FC = () => {
@@ -82,13 +82,16 @@ export const SubcriptionPlanScreen: React.FC = () => {
   }
 
   const subcribePremium = async (subcribeInfo: SubscribePremiumReq) => {
+    dispatch(setLoadingStatusAction(true))
     try {
       const response = await PaymentService.subcribePremium(subcribeInfo)
       console.log(response.data.message)
       dispatch(setRoleUser({ role: 'premium' }))
+      dispatch(setLoadingStatusAction(false))
       pop(1)
       // replace('INVOICE_SCREEN', { getMe: true })
     } catch (e) {
+      dispatch(setLoadingStatusAction(false))
       console.log(e)
     }
   }

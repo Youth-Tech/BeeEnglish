@@ -47,9 +47,11 @@ export const StreakScreen = () => {
 
   const isPresent = !!streakDays?.find(
     (item) =>
-      new Date(item.date).toLocaleDateString() ===
-        new Date().toLocaleDateString() && item.type === 'isAttendance',
+      new Date(item.date).getDate() === new Date().getDate() &&
+      item.type === 'isAttendance',
   )
+
+  console.log(isPresent)
 
   React.useEffect(() => {
     if (taskData === undefined) {

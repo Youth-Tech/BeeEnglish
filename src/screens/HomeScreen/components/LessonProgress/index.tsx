@@ -67,17 +67,17 @@ export const LessonProgressItem = (props: LessonProgressItemProps) => {
             <Image
               width={67}
               height={70}
+              resizeMode="contain"
               source={{ uri: topicImage }}
               backgroundColor="transparent"
-              resizeMode="contain"
             />
 
             <Block flex>
               <Text
-                numberOfLines={1}
                 size={'h3'}
-                fontFamily="bold"
                 marginLeft={5}
+                fontFamily="bold"
+                numberOfLines={1}
                 marginBottom={13}
               >
                 {topicName}

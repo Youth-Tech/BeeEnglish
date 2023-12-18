@@ -11,13 +11,13 @@ import { ListRenderItemInfo, Pressable, StyleSheet } from 'react-native'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { CourseItem } from './CourseItem'
-import { getCurrentCourse } from '@redux/selectors'
+import { getCurrentCourse, getUserRole } from '@redux/selectors'
 import { Course, KnowledgeService } from '@services'
 import { updateCurrentCourse } from '@redux/reducers'
 import { Block, BlockAnimated, Text } from '@components'
 import { heightScreen, widthScreen } from '@utils/helpers'
-import {useAppDispatch, useAppSelector, useBackHandler} from '@hooks'
-import { CourseImage, Indicator} from '@screens/LessonMap/components'
+import { useAppDispatch, useAppSelector, useBackHandler } from '@hooks'
+import { CourseImage, Indicator } from '@screens/LessonMap/components'
 
 interface ICourseItem {
   type: 'spacer' | 'data'
@@ -31,6 +31,8 @@ export const EMPTY_ITEM_SIZE = (widthScreen - COURSE_ITEM_WIDTH) / 2
 export const ChooseCourse = () => {
   const dispatch = useAppDispatch()
   const { colors } = useTheme()
+
+  const roleUser = useAppSelector(getUserRole)
   const currentCourse = useAppSelector(getCurrentCourse)
 
   const animatedControl = useSharedValue(0)
@@ -40,9 +42,9 @@ export const ChooseCourse = () => {
 
   useBackHandler({
     enabled: visible,
-    callback(){
+    callback() {
       setVisible(false)
-    }
+    },
   })
 
   React.useEffect(() => {
@@ -52,9 +54,12 @@ export const ChooseCourse = () => {
         if (res.status === 200) {
           const arr: Array<ICourseItem> = [
             { type: 'spacer' },
-            ...(res.data.data.courses.map((item) => ({
+            ...(res.data.data.courses.map((item, index) => ({
               type: 'data',
-              data: item,
+              data:
+                roleUser === 'guest' && index !== 0
+                  ? { ...item, status: false }
+                  : item,
             })) as Array<ICourseItem>),
             { type: 'spacer' },
           ]

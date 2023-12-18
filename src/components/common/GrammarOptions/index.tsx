@@ -133,12 +133,11 @@ export const GrammarOptions = React.forwardRef<
                     }
                   >
                     <Text
-                      color={textColor}
+                      center
                       size={'h3'}
+                      color={textColor}
                       fontFamily="semiBold"
-                      style={{
-                        zIndex: 1,
-                      }}
+                      style={styles.textItem}
                     >
                       {item.option as string}
                     </Text>
@@ -162,5 +161,8 @@ const styles = StyleSheet.create({
   blockOptions: {
     gap: normalize.v(16),
     marginTop: normalize.v(20),
+  },
+  textItem: {
+    zIndex: 1,
   },
 })

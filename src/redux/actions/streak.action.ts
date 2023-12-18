@@ -15,11 +15,12 @@ const parseToStreakDay = (
 ): StreakDayProps[] => {
   return currentWeek.map((item) => {
     const isAttendance = streakDays.includes(item.toLocaleDateString())
+
     return {
       date: item.toString(),
       type: isAttendance
         ? 'isAttendance'
-        : item.toLocaleDateString() === new Date().toLocaleDateString()
+        : item.getDate() === new Date().getDate()
         ? 'current'
         : 'normal',
     }

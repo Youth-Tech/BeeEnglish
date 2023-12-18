@@ -44,7 +44,7 @@ const RankItem: React.FC<RankItemProps> = (props) => {
       <Block shadow marginLeft={7}>
         <Image
           source={{
-            uri: data.avatar.toString(),
+            uri: data?.avatar?.src ?? data.avatar,
           }}
           width={61}
           height={61}

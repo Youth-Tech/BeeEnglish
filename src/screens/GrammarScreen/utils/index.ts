@@ -11,7 +11,7 @@ export const parseQuizDataToQuestion = (quizzes: Quiz[]): Question[] => {
       attachment: item.attachments,
       type: QuestionType[item.type],
       correctAnswer: item.correctAnswer,
-      wordImage: item.attachments?.[0]?.src || '',
+      wordImage: item.wordImage || '',
     }
   })
 }

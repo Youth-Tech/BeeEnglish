@@ -9,20 +9,26 @@ import { widthScreen } from '@utils/helpers'
 
 export interface GrammarViewProps {
   data: Grammar | null
+  isPreTest?: boolean
 }
+//
+// const isGrammarObj = (obj: any): obj is Grammar => {
+//   return 'structure' in obj
+// }
 
-export const GrammarView = ({ data }: GrammarViewProps) => {
+export const GrammarView = ({ data, isPreTest }: GrammarViewProps) => {
   const { colors } = useTheme()
   const { t } = useTranslation()
 
   const toolTipRef = React.useRef<Tooltip>(null)
 
-  if (data === null) {
+  if (data === null || !data?.structure) {
     return <></>
   }
 
   const renderExample = () => {
     if (
+      isPreTest ||
       data.exampleEnglish.length === 0 ||
       data.exampleVietnamese.length === 0
     ) {
