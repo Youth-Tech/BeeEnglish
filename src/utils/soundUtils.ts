@@ -1,7 +1,7 @@
 import { audio } from '@assets'
 import Sound from 'react-native-sound'
 
-const soundInstance = (url: string) => {
+export const soundInstance = (url: string) => {
   return new Sound(url, '', (error) => {
     if (error) console.log('Fail to load sound')
   })

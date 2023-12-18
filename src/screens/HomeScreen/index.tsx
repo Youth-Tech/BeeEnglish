@@ -259,7 +259,12 @@ export const HomeScreen = () => {
   return (
     <Container hasScroll>
       <BlockAnimated flex entering={FadeIn}>
-        <Block flex backgroundColor={colors.white} paddingHorizontal={20}>
+        <Block
+          flex
+          backgroundColor={colors.white}
+          paddingHorizontal={20}
+          paddingTop={5}
+        >
           <Block row alignCenter space="between">
             <Block row>
               <Block row>
@@ -295,7 +300,7 @@ export const HomeScreen = () => {
             {/*  </BlockAnimated>*/}
             {/*)}*/}
           </Block>
-          <Block marginTop={10}>
+          <Block marginTop={15}>
             <DailyTask
               data={taskData ?? []}
               onPress={() => {

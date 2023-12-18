@@ -17,7 +17,13 @@ import { goBack, navigate } from '@navigation'
 import { DictionaryItem, VocabularyItem } from './components'
 import { KnowledgeService, Word } from '@services'
 import { SearchItem } from '@screens/DictionaryScreen/components/SearchItem'
-import { FlatList, ListRenderItemInfo, ScrollView, View } from 'react-native'
+import {
+  FlatList,
+  ListRenderItemInfo,
+  ScrollView,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native'
 import { ModalFunction } from '@components/bases/Modal/type'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { updateHistory } from '@redux/reducers/historyWord.reducer'
@@ -34,6 +40,7 @@ export const DictionaryScreen = () => {
   const [searchList, setSearchList] = React.useState<Word[]>([])
   const history = useAppSelector((state) => state.root.historyReducer.history)
   const guestModalRef = React.useRef<ModalFunction>(null)
+  const [isShowSearchBlock, setIsShowSearchBlock] = React.useState(false)
   const renderDictionaryItem = ({ index, item }: ListRenderItemInfo<Word>) => {
     return (
       <View key={`item-${index}`}>
@@ -78,132 +85,151 @@ export const DictionaryScreen = () => {
   return (
     <Container>
       <DismissKeyBoardBlock>
-        <Block row paddingHorizontal={20} alignCenter marginTop={10}>
-          <Icon state="Back" onPress={goBack}></Icon>
-          <Text center flex fontFamily="bold" size={'h2'}>
-            {t('dictionary')}
-          </Text>
-          <Block width={25}></Block>
-        </Block>
-        <Block>
-          <Block
-            marginTop={22}
-            marginBottom={10}
-            paddingHorizontal={25}
-            row
-            alignCenter
-          >
-            <Image source={images.BeeDiscovery} width={33.18} height={37.01} />
-            <Block marginLeft={15} flex height={35} shadow radius={30}>
-              <TextInput
-                containerStyle={{ height: '100%', width: '100%' }}
-                placeholderTextColor={colors.greyPrimary}
-                value={search}
-                onChangeText={setSearch}
-                inputContainerStyle={{
-                  height: '100%',
-                  width: '100%',
-                  borderRadius: 30,
-                }}
-                placeholder={t('english_vocabulary')}
-                rightIcon={
-                  <Icon
-                    state="Microphone"
-                    stroke={colors.greyPrimary}
-                    onPress={() => {
-                      modalRef.current?.openModal()
-                    }}
-                  ></Icon>
-                }
-              />
-            </Block>
-          </Block>
-
-          <Block
-            paddingHorizontal={30}
-            height={searchList.length > 5 ? 60 * 5 : 'auto'}
-            top={70}
-            left={0}
-            right={0}
-            zIndex={1}
-            absolute
-          >
-            <Block
-              backgroundColor={colors.white}
-              radius={20}
-              borderWidth={searchList.length > 0 ? 1 : 0}
-              borderColor={colors.borderColor}
-            >
-              <FlatList data={searchList} renderItem={renderSearchItem} />
-            </Block>
-          </Block>
-        </Block>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          overScrollMode={'never'}
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setIsShowSearchBlock(false)
+            console.log('disable')
+          }}
         >
           <Block flex>
-            <Block row alignCenter marginTop={24} paddingLeft={20}>
-              <Icon state="History"></Icon>
-              <Text
-                fontFamily="semiBold"
-                marginLeft={5}
-                size={'h3'}
-                lineHeight={20}
-              >
-                {t('history')}
+            <Block row paddingHorizontal={20} alignCenter marginTop={10}>
+              <Icon state="Back" onPress={goBack}></Icon>
+              <Text center flex fontFamily="bold" size={'h2'}>
+                {t('dictionary')}
               </Text>
+              <Block width={25}></Block>
             </Block>
-            <Block marginTop={15} paddingHorizontal={20}>
-              <Block shadow radius={15} overflow="hidden">
-                <FlatList
-                  scrollEnabled={false}
-                  data={history}
-                  keyExtractor={(item) => item._id}
-                  renderItem={renderDictionaryItem}
-                  showsHorizontalScrollIndicator={false}
+            <Block>
+              <Block
+                marginTop={22}
+                marginBottom={10}
+                paddingHorizontal={25}
+                row
+                alignCenter
+              >
+                <Image
+                  source={images.BeeDiscovery}
+                  width={33.18}
+                  height={37.01}
                 />
+                <Block marginLeft={15} flex height={35} shadow radius={30}>
+                  <TextInput
+                    containerStyle={{ height: '100%', width: '100%' }}
+                    placeholderTextColor={colors.greyPrimary}
+                    value={search}
+                    onChangeText={setSearch}
+                    inputContainerStyle={{
+                      height: '100%',
+                      width: '100%',
+                      borderRadius: 30,
+                    }}
+                    placeholder={t('english_vocabulary')}
+                    rightIcon={
+                      <Icon
+                        state="Microphone"
+                        stroke={colors.greyPrimary}
+                        onPress={() => {
+                          modalRef.current?.openModal()
+                        }}
+                      ></Icon>
+                    }
+                    onFocus={() => {
+                      console.log('focused')
+                      setIsShowSearchBlock(true)
+                    }}
+                  />
+                </Block>
+              </Block>
+
+              <Block
+                paddingHorizontal={30}
+                height={searchList.length > 5 ? 60 * 5 : 'auto'}
+                top={70}
+                left={0}
+                right={0}
+                zIndex={1}
+                absolute
+              >
+                {isShowSearchBlock && (
+                  <Block
+                    backgroundColor={colors.white}
+                    radius={20}
+                    borderWidth={searchList.length > 0 ? 1 : 0}
+                    borderColor={colors.borderColor}
+                  >
+                    <FlatList data={searchList} renderItem={renderSearchItem} />
+                  </Block>
+                )}
               </Block>
             </Block>
-            <Block row alignCenter marginTop={17} paddingLeft={20}>
-              <Icon state="Dictionary"></Icon>
-              <Text
-                fontFamily="bold"
-                marginLeft={5}
-                size={'h3'}
-                lineHeight={20}
-              >
-                {t('library_vocabulary')}
-              </Text>
-            </Block>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <Block paddingLeft={20} marginVertical={15} row>
-                <VocabularyItem
-                  name={t('vocabulary_learned')}
-                  image={images.BeeReading}
-                  onPress={() => {
-                    if (isLoginWithGuest) {
-                      guestModalRef.current?.openModal()
-                    } else {
-                      navigate('LEARNED_WORD_SCREEN')
-                    }
-                  }}
-                />
-                <VocabularyItem
-                  name={t('saved_vocabulary')}
-                  image={images.BeePencil}
-                  onPress={() => {
-                    if (isLoginWithGuest) {
-                      guestModalRef.current?.openModal()
-                    } else {
-                      navigate('SAVED_WORD_SCREEN')
-                    }
-                  }}
-                />
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              overScrollMode={'never'}
+            >
+              <Block flex>
+                <Block row alignCenter marginTop={24} paddingLeft={20}>
+                  <Icon state="History"></Icon>
+                  <Text
+                    fontFamily="semiBold"
+                    marginLeft={5}
+                    size={'h3'}
+                    lineHeight={20}
+                  >
+                    {t('history')}
+                  </Text>
+                </Block>
+                <Block marginTop={15} paddingHorizontal={20}>
+                  <Block shadow radius={15} overflow="hidden">
+                    <FlatList
+                      scrollEnabled={false}
+                      data={history}
+                      keyExtractor={(item) => item._id}
+                      renderItem={renderDictionaryItem}
+                      showsHorizontalScrollIndicator={false}
+                    />
+                  </Block>
+                </Block>
+                <Block row alignCenter marginTop={17} paddingLeft={20}>
+                  <Icon state="Dictionary"></Icon>
+                  <Text
+                    fontFamily="bold"
+                    marginLeft={5}
+                    size={'h3'}
+                    lineHeight={20}
+                  >
+                    {t('library_vocabulary')}
+                  </Text>
+                </Block>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <Block paddingLeft={20} marginVertical={15} row>
+                    <VocabularyItem
+                      name={t('vocabulary_learned')}
+                      image={images.BeeReading}
+                      onPress={() => {
+                        if (isLoginWithGuest) {
+                          guestModalRef.current?.openModal()
+                        } else {
+                          navigate('LEARNED_WORD_SCREEN')
+                        }
+                      }}
+                    />
+                    <VocabularyItem
+                      name={t('saved_vocabulary')}
+                      image={images.BeePencil}
+                      onPress={() => {
+                        if (isLoginWithGuest) {
+                          guestModalRef.current?.openModal()
+                        } else {
+                          navigate('SAVED_WORD_SCREEN')
+                        }
+                      }}
+                    />
+                  </Block>
+                </ScrollView>
               </Block>
             </ScrollView>
           </Block>
-        </ScrollView>
+        </TouchableWithoutFeedback>
       </DismissKeyBoardBlock>
       <VoiceDectectorModal
         modalRef={modalRef}

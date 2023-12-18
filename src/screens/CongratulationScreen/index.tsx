@@ -87,17 +87,18 @@ export const CongratulationScreen: React.FC<CongratulationScreenProps> = ({
           >
             {t('reward')}
           </Text>
-
-          <Block
-            backgroundColor="white"
-            paddingVertical={25}
-            paddingHorizontal={20}
-            radius={20 - 7}
-          >
-            <Text size={'h3'} fontFamily="bold" center marginBottom={10}>
-              Bạn nhận được 10 star points ✨
-            </Text>
-          </Block>
+          {status === 'success' && (
+            <Block
+              backgroundColor="white"
+              paddingVertical={25}
+              paddingHorizontal={20}
+              radius={20 - 7}
+            >
+              <Text size={'h3'} fontFamily="bold" center marginBottom={10}>
+                {t('you_receive_star_points', { point: 10 })} ✨
+              </Text>
+            </Block>
+          )}
         </Block>
 
         <ShadowButton

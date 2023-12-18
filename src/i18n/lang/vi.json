@@ -223,7 +223,7 @@
     "unsubscribe": "Hủy đăng ký",
     "later": "Để sau",
     "status": "Trạng thái",
-    "customerId": "Mã khách hàng",
+    "customerId": "Mã KH",
     "you_no_longer_subscribe_to_premium": "Bạn đã không còn đăng ký gói premium, sẽ không tự động chi trả gói",
     "detail_post_title": "Luyện kỹ năng đọc hiểu",
     "chapter": "Chương",
@@ -234,7 +234,7 @@
     "sentence_structure": "Cấu trúc câu: ",
     "receive_honey_now": "Nhận ngay {{val}} mật ong",
     "receive_honey_everyday": "Nhận ngay {{val}} mật ong mỗi ngày khi bạn điểm danh",
-    "unlimited_access_premium_feature": "Nhận các tính năng premium không giới hạn"
-
+    "unlimited_access_premium_feature": "Nhận các tính năng premium không giới hạn",
+    "you_receive_star_points": "Bạn nhận được {{point}} star points"
   }
 }

@@ -5,7 +5,7 @@ import PlanPackageItem, {
 } from '@screens/SubcriptionPlanScreen/components/PlanPackageItem'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
-import { ScrollView, TextInput } from 'react-native'
+import { ActivityIndicator, ScrollView, TextInput } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import {
   BottomSheetBackdrop,
@@ -39,6 +39,7 @@ export const SubcriptionPlanScreen: React.FC = () => {
   const [disabledPayButton, setDisabledPayButton] = React.useState(false)
   const expiryDateRef = React.useRef<TextInput>(null)
   const cvcRef = React.useRef<TextInput>(null)
+  const [paymentLoading, setPaymentLoading] = React.useState<boolean>(false)
   // variables
   const snapPoints = React.useMemo(() => ['1%', '50%'], [])
 
@@ -83,15 +84,15 @@ export const SubcriptionPlanScreen: React.FC = () => {
 
   const subcribePremium = async (subcribeInfo: SubscribePremiumReq) => {
     dispatch(setLoadingStatusAction(true))
+    setPaymentLoading(true)
     try {
       const response = await PaymentService.subcribePremium(subcribeInfo)
       console.log(response.data.message)
       dispatch(setRoleUser({ role: 'premium' }))
-      dispatch(setLoadingStatusAction(false))
+      setPaymentLoading(false)
       pop(1)
-      // replace('INVOICE_SCREEN', { getMe: true })
     } catch (e) {
-      dispatch(setLoadingStatusAction(false))
+      setPaymentLoading(false)
       console.log(e)
     }
   }
@@ -289,14 +290,19 @@ export const SubcriptionPlanScreen: React.FC = () => {
             onPress={handleSubmitPayment}
             disabled={disabledPayButton}
           >
-            <Text size={'h3'} fontFamily="bold" color="black">
-              {t('pay_for')}
-              {' ' +
-                currencyFormat(
-                  currentPlan?.unitAmount ?? 0,
-                  currentPlan?.currency ?? 'VND',
-                )}
-            </Text>
+            <Block row gap={5}>
+              <Text size={'h3'} fontFamily="bold" color="black">
+                {t('pay_for')}
+                {' ' +
+                  currencyFormat(
+                    currentPlan?.unitAmount ?? 0,
+                    currentPlan?.currency ?? 'VND',
+                  )}
+              </Text>
+              {paymentLoading && (
+                <ActivityIndicator size={'small'} color={colors.black} />
+              )}
+            </Block>
           </ShadowButton>
         </Block>
       </BottomSheetModal>

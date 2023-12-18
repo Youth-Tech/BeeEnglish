@@ -36,7 +36,7 @@ export const DictionaryItem: React.FC<DictionaryItemProps> = ({
               lineHeight={40}
               color={colors.greyDark}
             >
-              ({data.attachments[0].type})
+              ({data.senses[0].type})
             </Text>
             {/*<Pressable*/}
             {/*  onPress={toggleBookmark}*/}

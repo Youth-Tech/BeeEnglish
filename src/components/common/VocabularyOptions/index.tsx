@@ -122,6 +122,7 @@ export const VocabularyOptions = React.forwardRef<
                 }}
                 style={styles.image}
                 resizeMode={'contain'}
+                radius={5}
               />
             </Block>
           </Block>

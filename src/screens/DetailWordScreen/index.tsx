@@ -184,17 +184,7 @@ export const DetailWordScreen = ({ route }: Props) => {
                 </Block>
               </Pressable>
             </Block>
-
             <Content data={wordData?.senses ?? []} />
-
-            <Block row alignCenter justifyCenter marginBottom={70}>
-              <Text color="black" size={12} fontFamily="bold" margin={5}>
-                {t('video')}
-              </Text>
-              <TouchableOpacity>
-                <RightArrowIcon />
-              </TouchableOpacity>
-            </Block>
           </Block>
         </Block>
       </ScrollView>

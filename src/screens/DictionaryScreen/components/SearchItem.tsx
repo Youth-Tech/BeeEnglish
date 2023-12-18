@@ -37,7 +37,7 @@ export const SearchItem: React.FC<DictonaryItemProps> = ({ data, onPress }) => {
             </Text>
           </Block>
           <Text size={'h5'} fontFamily="regular" color={colors.greenLighter}>
-            /{data.pronunciation}/
+            {data.pronunciation}
           </Text>
         </Block>
       </Block>
