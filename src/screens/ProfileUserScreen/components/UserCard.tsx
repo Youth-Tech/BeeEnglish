@@ -40,7 +40,12 @@ const UserCard: React.FC = () => {
       <Block style={styles.boxAvatar}>
         <Image
           style={styles.avatarUser}
-          source={{ uri: userData?.avatar?.src ?? (userData.avatar as string) }}
+          source={{
+            uri:
+              userData._id === ''
+                ? ''
+                : userData?.avatar?.src ?? (userData.avatar as string),
+          }}
         />
         <Block shadow style={styles.buttonBrush}>
           <TouchableOpacity onPress={onUpdateImagePress}>

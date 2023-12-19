@@ -98,7 +98,9 @@ export const ProfileUserScreen: React.FC = () => {
   }, [userProfile])
 
   React.useEffect(() => {
-    getUserLearningStats()
+    if (userProfile._id !== '') {
+      getUserLearningStats()
+    }
   }, [userProfile])
 
   React.useEffect(() => {

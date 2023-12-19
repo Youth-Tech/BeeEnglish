@@ -19,6 +19,7 @@ import {
   ShadowButton,
   BlockAnimated,
   PremiumModal,
+  GuestModal,
 } from '@components'
 import {
   changeShowComment,
@@ -62,8 +63,9 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
   const data = useAppSelector((state) => state.root.detailPost)
   const userRole = useAppSelector(getUserRole)
 
-  const scrollViewRef = React.useRef<ScrollView>(null)
+  const guestModalRef = React.useRef<ModalFunction>(null)
   const audioPlayerRef = React.useRef<Video>(null)
+  const scrollViewRef = React.useRef<ScrollView>(null)
   const premiumRefModal = React.useRef<ModalFunction>(null)
 
   const [isAudioPlay, setIsAudioPlay] = React.useState(false)
@@ -180,14 +182,21 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
   const onPlayButtonPress = () => {
     if (userRole === 'premium') {
       setIsAudioPlay((prevState) => !prevState)
-    } else {
+    } else if (userRole !== 'guest') {
       premiumRefModal?.current?.openModal()
+    } else {
+      guestModalRef?.current?.openModal()
     }
   }
 
   const onPremiumModalPress = () => {
     navigate('SUBSCRIPTION_SCREEN')
     premiumRefModal?.current?.dismissModal()
+  }
+
+  const onButtonGuestModalPress = () => {
+    navigate('REGISTER_SCREEN', { isGuest: true })
+    guestModalRef?.current?.dismissModal()
   }
 
   const renderNewsItem = ({
@@ -347,7 +356,14 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
         <PremiumModal
           position={'center'}
           ref={premiumRefModal}
+          animationType={'fade'}
           onButtonPress={onPremiumModalPress}
+        />
+        <GuestModal
+          position={'center'}
+          ref={guestModalRef}
+          animationType={'fade'}
+          onButtonPress={onButtonGuestModalPress}
         />
       </BlockAnimated>
     </Container>

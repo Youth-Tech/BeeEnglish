@@ -54,6 +54,9 @@ export const Word: React.FC<WordProps> = ({
   const handleWordTranslation = () => {
     runOnUI(() => {
       'worklet'
+
+      console.log('word')
+
       if (offset.order.value === -1) {
         offset.order.value =
           offsets?.filter((item) => item.order.value !== -1).length || 0
@@ -118,8 +121,8 @@ export const Word: React.FC<WordProps> = ({
   return (
     <>
       <Placeholder {...offset} />
-      <Pressable onPress={handleWordTranslation}>
-        <BlockAnimated style={blockStyle} absolute>
+      <BlockAnimated style={blockStyle} absolute>
+        <Pressable onPress={handleWordTranslation}>
           <ShadowBlock
             radius={15}
             alignCenter
@@ -137,8 +140,8 @@ export const Word: React.FC<WordProps> = ({
               {word}
             </Text>
           </ShadowBlock>
-        </BlockAnimated>
-      </Pressable>
+        </Pressable>
+      </BlockAnimated>
     </>
   )
 }

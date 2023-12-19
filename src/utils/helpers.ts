@@ -131,5 +131,8 @@ export function timeSince(date: Date) {
   if (interval > 1) {
     return Math.floor(interval) + ' '.concat(t('minute').concat(' ' + t('ago')))
   }
-  return Math.floor(seconds) + ' '.concat(t('second').concat(' ' + t('ago')))
+  return (
+    (Math.floor(seconds) >= 0 ? Math.floor(seconds) : 0) +
+    ' '.concat(t('second').concat(' ' + t('ago')))
+  )
 }

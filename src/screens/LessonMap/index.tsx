@@ -6,6 +6,8 @@ import {
   SectionListRenderItem,
 } from 'react-native'
 import React from 'react'
+import Toast from 'react-native-toast-message'
+import { useTranslation } from 'react-i18next'
 import { StackActions } from '@react-navigation/native'
 import { FadeIn, FadeOut } from 'react-native-reanimated'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
@@ -24,8 +26,6 @@ import { KnowledgeService, Quiz } from '@services'
 import { navigate, RootStackParamList } from '@navigation'
 import { Block, BlockAnimated, Container, GuestModal } from '@components'
 import { getCurrentCourse, getIsPreTest, getUserRole } from '@redux/selectors'
-import Toast from 'react-native-toast-message'
-import { useTranslation } from 'react-i18next'
 import { ModalFunction } from '@components/bases/Modal/type'
 
 export type SectionData = {
@@ -56,7 +56,7 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
   const [isLoading, setIsLoading] = React.useState(false)
 
   React.useEffect(() => {
-    if (!isPreTest) {
+    if (!isPreTest && userRole !== '') {
       // console.log('to pre test')
       navigation.dispatch(StackActions.replace('EXAM_TEST_SCREEN'))
     }

@@ -33,10 +33,10 @@ type TErrorStatus =
   | 'INVALID_CODE_403'
   | 'INVALID_AUTH_403'
   | 'LOG_OUT_FAILED_403'
-  | 'NO_PERMISSION_403'
+  // | 'NO_PERMISSION_403'
   | 'UPLOAD_FAILED_500'
   | 'RESEND_LIMIT_403'
-  | 'USER_NOT_FOUND_400'
+// | 'USER_NOT_FOUND_400'
 
 const exceptionErrors = ['READ POST_ALREADY_EXIST_400']
 export const handleErrorMessage = (
