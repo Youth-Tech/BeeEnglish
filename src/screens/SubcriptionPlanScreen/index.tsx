@@ -83,7 +83,6 @@ export const SubcriptionPlanScreen: React.FC = () => {
   }
 
   const subcribePremium = async (subcribeInfo: SubscribePremiumReq) => {
-    dispatch(setLoadingStatusAction(true))
     setPaymentLoading(true)
     try {
       const response = await PaymentService.subcribePremium(subcribeInfo)
