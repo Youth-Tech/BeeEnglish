@@ -99,6 +99,9 @@ export function notificationListener() {
         'notification on foreground state',
         remoteMessage.notification,
       )
+
+      // console.log(remoteMessage)
+
       displayDefaultNotify(remoteMessage.notification, remoteMessage.data)
     })
 

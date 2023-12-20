@@ -6,6 +6,8 @@ import {
   SectionListRenderItem,
 } from 'react-native'
 import React from 'react'
+import Toast from 'react-native-toast-message'
+import { useTranslation } from 'react-i18next'
 import { StackActions } from '@react-navigation/native'
 import { FadeIn, FadeOut } from 'react-native-reanimated'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
@@ -16,15 +18,15 @@ import {
   SectionHeader,
   ItemLessonProps,
 } from './components'
-import { images } from '@assets'
 import { normalize } from '@themes'
 import { useAppSelector } from '@hooks'
 import { LoadingScreen } from '@screens'
 import { parseDataToSectionData } from './utils'
 import { KnowledgeService, Quiz } from '@services'
 import { navigate, RootStackParamList } from '@navigation'
-import { getCurrentCourse, getIsPreTest } from '@redux/selectors'
-import { Block, BlockAnimated, Container, Image } from '@components'
+import { Block, BlockAnimated, Container, GuestModal } from '@components'
+import { getCurrentCourse, getIsPreTest, getUserRole } from '@redux/selectors'
+import { ModalFunction } from '@components/bases/Modal/type'
 
 export type SectionData = {
   lessonComplete: number
@@ -42,14 +44,19 @@ export type LessonMapScreen = NativeStackScreenProps<
 >
 
 export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
+  const { t } = useTranslation()
+
+  const userRole = useAppSelector(getUserRole)
   const isPreTest = useAppSelector(getIsPreTest)
   const currentCourse = useAppSelector(getCurrentCourse)
 
+  const guestModalRef = React.useRef<ModalFunction>(null)
+
   const [data, setData] = React.useState<SectionData[]>([])
-  const [isRefresh, setIsRefresh] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(false)
 
   React.useEffect(() => {
-    if (!isPreTest) {
+    if (!isPreTest && userRole !== '') {
       // console.log('to pre test')
       navigation.dispatch(StackActions.replace('EXAM_TEST_SCREEN'))
     }
@@ -60,6 +67,11 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
       callApi()
     }
   }, [currentCourse])
+
+  const onButtonGuestModalPress = () => {
+    navigate('REGISTER_SCREEN', { isGuest: true })
+    guestModalRef?.current?.dismissModal()
+  }
 
   const onStartExaminationPress = ({
     chapterId,
@@ -82,17 +94,27 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
 
   const onUnlockPress = ({ id }: Partial<ItemLessonProps>) => {
     console.log('onUnlockPress', id)
+    if (userRole === 'guest') {
+      guestModalRef?.current?.openModal()
+    } else {
+      Toast.show({
+        type: 'info',
+        text1: 'Oh! no',
+        position: 'top',
+        text2: t('function_in_develop'),
+      })
+    }
   }
 
   const callApi = async () => {
     try {
-      setIsRefresh(true)
+      setIsLoading(true)
       const res = await KnowledgeService.getChapterAndLesson(currentCourse!._id)
       setData(parseDataToSectionData(res.data.data.chapters))
     } catch (error) {
       console.log(error)
     }
-    setIsRefresh(false)
+    setIsLoading(false)
   }
 
   const renderMapItem: SectionListRenderItem<ItemLessonProps, SectionData> = ({
@@ -128,27 +150,24 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
   }
 
   const renderListChapter = () => {
-    if (isRefresh) {
+    if (isLoading || data?.length <= 0) {
       return <LoadingScreen />
     }
 
-    if (data?.length <= 0) {
-      return (
-        <Image
-          width={200}
-          height={200}
-          alignSelf={'center'}
-          resizeMode={'contain'}
-          source={images.BeeDiscovery}
-        />
-      )
-    }
+    // if (data?.length <= 0) {
+    //   return (
+    //     <Image
+    //       width={200}
+    //       height={200}
+    //       alignSelf={'center'}
+    //       resizeMode={'contain'}
+    //       source={images.BeeDiscovery}
+    //     />
+    //   )
+    // }
 
     return (
       <SectionList
-        refreshControl={
-          <RefreshControl refreshing={isRefresh} onRefresh={onRefresh} />
-        }
         sections={data}
         removeClippedSubviews
         renderItem={renderMapItem}
@@ -156,6 +175,9 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         renderSectionHeader={renderSectionHeader}
         SectionSeparatorComponent={() => <Block height={10} />}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+        }
         keyExtractor={(item, index) => item.lessonTitle + index}
       />
     )
@@ -173,6 +195,12 @@ export const LessonMap: React.FC<LessonMapScreen> = ({ navigation }) => {
         {renderListChapter()}
         {/*</Animated.View>*/}
       </BlockAnimated>
+      <GuestModal
+        position={'center'}
+        ref={guestModalRef}
+        animationType={'fade'}
+        onButtonPress={onButtonGuestModalPress}
+      />
     </Container>
   )
 }

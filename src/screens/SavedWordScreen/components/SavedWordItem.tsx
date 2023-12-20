@@ -43,7 +43,7 @@ export const SavedWordItem: React.FC<SavedWordItemProps> = ({
             </Text>
           </Block>
           <Text size={'h5'} fontFamily="regular" color={colors.greyDark}>
-            /{data.pronunciation}/
+            {data.pronunciation}
           </Text>
         </Block>
 

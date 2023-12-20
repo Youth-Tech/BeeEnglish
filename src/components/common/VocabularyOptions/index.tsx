@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, ViewStyle } from 'react-native'
 import { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
 
+import { images } from '@assets'
 import { makeStyles, useTheme } from '@themes'
-import { images, SoundProgress } from '@assets'
 import { Block, BlockAnimated, Image, Text } from '@components/bases'
 
 export interface VocabularyOptionsFunc {
@@ -87,7 +87,7 @@ export const VocabularyOptions = React.forwardRef<
       {visible && (
         <BlockAnimated
           flex
-          paddingTop={30}
+          paddingTop={20}
           space={'between'}
           exiting={FadeOutLeft.duration(500)}
           entering={FadeInRight.duration(500)}
@@ -110,10 +110,10 @@ export const VocabularyOptions = React.forwardRef<
               >
                 {data.question}
               </Text>
-              <SoundProgress
-                fill={colors.orangePrimary}
-                style={{ marginStart: normalize.h(15) }}
-              />
+              {/*<SoundProgress*/}
+              {/*  fill={colors.orangePrimary}*/}
+              {/*  style={{ marginStart: normalize.h(15) }}*/}
+              {/*/>*/}
             </Block>
             <Block alignCenter marginTop={30}>
               <Image
@@ -122,6 +122,7 @@ export const VocabularyOptions = React.forwardRef<
                 }}
                 style={styles.image}
                 resizeMode={'contain'}
+                radius={5}
               />
             </Block>
           </Block>
@@ -191,7 +192,8 @@ const useStyle = makeStyles()(({ normalize }) => ({
     height: normalize.h(180),
   },
   blockOptions: {
+    flex: 0,
     gap: normalize.v(16),
-    marginTop: normalize.v(80),
+    marginBottom: normalize.v(20),
   },
 }))

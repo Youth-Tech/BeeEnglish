@@ -20,30 +20,36 @@ import {
   LessonProgressItem,
   LessonProgressItemProps,
 } from './components'
+import {
+  getTask,
+  getUserData,
+  getRequireFetchCurrentLesson,
+} from '@redux/selectors'
 import { Icon } from '@assets'
 import { navigate } from '@navigation'
 import { LoadingScreen } from '@screens'
 import { colorTopic, useTheme } from '@themes'
 import { getTaskThunk } from '@redux/actions'
 import { getDaySession } from '@utils/dateUtils'
-import { setIsAdjustPostData } from '@redux/reducers'
 import { PostServices, UserService } from '@services'
 import { useAppDispatch, useAppSelector } from '@hooks'
-import { getTask, getUserData } from '@redux/selectors'
 import { ModalFunction } from '@components/bases/Modal/type'
 import { parseCurrentLesson, parsePostData } from '@screens/HomeScreen/utils'
+import { setIsAdjustPostData, updateFetchNewLessonState } from '@redux/reducers'
 
 export const HomeScreen = () => {
   const dispatch = useAppDispatch()
   // const streak = useAppSelector(getStreak)
   const taskData = useAppSelector(getTask)
   const userData = useAppSelector(getUserData)
+  const requireFetchCurrentLesson = useAppSelector(getRequireFetchCurrentLesson)
   const isAdjustPostData = useAppSelector(
     (state) => state.root.detailPost.isAdjustPostData,
   )
   const isLoginWithGuest = useAppSelector(
     (state) => state.root.auth.isLoginWithGuest,
   )
+
   const [t] = useTranslation()
   const { colors, normalize } = useTheme()
   const guestModalRef = React.useRef<ModalFunction>(null)
@@ -60,21 +66,27 @@ export const HomeScreen = () => {
 
   React.useEffect(() => {
     setIsLoading(false)
-    callPost()
-    callPostRead()
-    callCurrentLesson()
+    Promise.all([callPost(), callPostRead(), callCurrentLesson()])
   }, [])
 
   useFocusEffect(
     React.useCallback(() => {
       if (isAdjustPostData) {
-        callPost()
-        callPostRead()
-        // console.log('useFocusEffect')
+        Promise.all([callPost(), callPostRead()])
         dispatch(setIsAdjustPostData(false))
       }
     }, [isAdjustPostData]),
   )
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (requireFetchCurrentLesson) {
+        callCurrentLesson()
+        dispatch(updateFetchNewLessonState(false))
+      }
+    }, [requireFetchCurrentLesson]),
+  )
+
   useFocusEffect(
     React.useCallback(() => {
       dispatch(getTaskThunk())
@@ -85,6 +97,7 @@ export const HomeScreen = () => {
     try {
       const res = await PostServices.getAllPost({
         type: 'text',
+        // read: false,
       })
       setPostData(parsePostData(res.data.data.posts, colorTopic))
     } catch (error) {
@@ -194,7 +207,9 @@ export const HomeScreen = () => {
           topic={item.topic.name}
           topicColor={item.textColor}
           image={item.attachments?.[0]?.src ?? ''}
-          onPress={() => navigate('DETAIL_POST_SCREEN', { post: item })}
+          onPress={() =>
+            navigate('DETAIL_POST_SCREEN', { post: item, isRead: true })
+          }
         />
         {index === postDataRead.length - 1 && postDataRead.length > 5 && (
           <Pressable onPress={onReadMore}>
@@ -244,7 +259,12 @@ export const HomeScreen = () => {
   return (
     <Container hasScroll>
       <BlockAnimated flex entering={FadeIn}>
-        <Block flex backgroundColor={colors.white} paddingHorizontal={20}>
+        <Block
+          flex
+          backgroundColor={colors.white}
+          paddingHorizontal={20}
+          paddingTop={5}
+        >
           <Block row alignCenter space="between">
             <Block row>
               <Block row>
@@ -280,7 +300,7 @@ export const HomeScreen = () => {
             {/*  </BlockAnimated>*/}
             {/*)}*/}
           </Block>
-          <Block marginTop={10}>
+          <Block marginTop={15}>
             <DailyTask
               data={taskData ?? []}
               onPress={() => {
@@ -315,24 +335,28 @@ export const HomeScreen = () => {
             </Block>
           </Block>
         </Block>
-        <Block marginTop={17}>
-          <Text
-            size={'h2'}
-            fontFamily="bold"
-            color={colors.black}
-            marginLeft={20}
-          >
-            {t('learning')}
-          </Text>
-          <FlatList
-            horizontal
-            data={currentLesson}
-            renderItem={renderLessonProgressItem}
-            style={{ marginTop: normalize.v(10) }}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(_, index) => `item-${index}`}
-          />
-        </Block>
+        {currentLesson.length > 0 ? (
+          <Block marginTop={17}>
+            <Text
+              size={'h2'}
+              fontFamily="bold"
+              color={colors.black}
+              marginLeft={20}
+            >
+              {t('learning')}
+            </Text>
+            <FlatList
+              horizontal
+              data={currentLesson}
+              renderItem={renderLessonProgressItem}
+              style={{ marginTop: normalize.v(10) }}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(_, index) => `item-${index}`}
+            />
+          </Block>
+        ) : (
+          <></>
+        )}
         {postDataRead.length > 0 ? (
           <Block marginTop={17}>
             <Text

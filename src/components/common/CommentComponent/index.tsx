@@ -114,7 +114,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({
           )}
         </Block>
         <Block style={styles.contentComment}>
-          <Text size={'h5'} fontFamily={'regular'}>
+          <Text size={'h5'} fontFamily={'regular'} flex>
             {comment.content}
           </Text>
           <ReplyComment

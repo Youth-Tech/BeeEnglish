@@ -9,7 +9,8 @@ import '@configs'
 import './i18n/i18n'
 import { RootApp } from '@navigation'
 import { persistor, store } from '@redux/store'
-
+import { soundInstance } from '@utils/soundUtils'
+soundInstance('')
 const App = () => {
   return (
     <Provider store={store}>

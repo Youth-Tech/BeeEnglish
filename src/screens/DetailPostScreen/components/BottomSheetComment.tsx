@@ -28,7 +28,9 @@ export interface CommentNested extends Comment {
   comments: Array<CommentNested>
 }
 
-const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({ postId }) => {
+export const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({
+  postId,
+}) => {
   const parentCommentId = useAppSelector(
     (state) => state.root.detailPost.parentCommentId,
   )
@@ -53,7 +55,7 @@ const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({ postId }) => {
     getListComment()
   }, [])
 
-  const getListComment = async () => {
+  const getListComment = async (isInit?: boolean) => {
     setIsFetchingComment(true)
     try {
       const res = await PostServices.getPostComments({
@@ -69,7 +71,11 @@ const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({ postId }) => {
             comments: [],
           }),
         )
-        setListComment((prevState) => [...prevState, ...commentData])
+        if (isInit) {
+          setListComment((prevState) => [...prevState, ...commentData])
+        } else {
+          setListComment(commentData)
+        }
         pagination.current = res.data.data.pagination
         setIsFetchingComment(false)
       }
@@ -258,5 +264,3 @@ const BottomSheetComment: React.FC<BottomSheetCommentProps> = ({ postId }) => {
     </Block>
   )
 }
-
-export default BottomSheetComment

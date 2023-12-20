@@ -25,7 +25,11 @@ export const getDatesOfWeek = (current: Date) => {
   //make week start in Monday: 1
   // current.setDate(current.getDate() - (current.getDay() || 7) + 1)
   //make week start in Sunday: 0
-  current.setDate(current.getDate() - (current.getDay() || 7))
+  const currentDay = current.getDay()
+  if (currentDay) {
+    current.setDate(current.getDate() - currentDay)
+  }
+
   for (let i = 0; i < 7; i++) {
     week.push(new Date(current))
     current.setDate(current.getDate() + 1)

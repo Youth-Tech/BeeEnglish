@@ -6,6 +6,7 @@ import { SectionData } from '@screens'
 import { Block, Text } from '@components'
 import { normalize, useTheme } from '@themes'
 import { ItemLessonProps } from '@screens/LessonMap/components'
+import { useTranslation } from 'react-i18next'
 
 export interface SectionHeaderProps {
   item: {
@@ -14,6 +15,7 @@ export interface SectionHeaderProps {
 }
 
 export const SectionHeader = ({ item }: SectionHeaderProps) => {
+  const { t } = useTranslation()
   const { colors } = useTheme()
 
   return (
@@ -59,7 +61,7 @@ export const SectionHeader = ({ item }: SectionHeaderProps) => {
                 : colors.greyPrimary
             }
           >
-            Lessons completed:{' '}
+            {t('lesson_completed')}{' '}
             {
               item.section.data.filter(
                 (item) =>

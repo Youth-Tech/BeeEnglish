@@ -86,7 +86,7 @@ export type RootStackParamList = {
   [PUBLIC_ROUTE.STREAK_SCREEN]: undefined
   [PUBLIC_ROUTE.EXAM_TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.TEST_SCREEN]: undefined
-  [PUBLIC_ROUTE.DETAIL_POST_SCREEN]: { post: PostResponse }
+  [PUBLIC_ROUTE.DETAIL_POST_SCREEN]: { post: PostResponse; isRead?: boolean }
   [PUBLIC_ROUTE.ABOUT_THE_TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.TEST_SCREEN]: undefined
   [PUBLIC_ROUTE.NAVIGATE_SCREEN]: undefined

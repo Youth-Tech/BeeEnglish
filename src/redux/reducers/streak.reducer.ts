@@ -18,6 +18,7 @@ export const streakBallBlackListRoute: Array<keyof RootStackParamList> = [
   'PRE_TEST_SCREEN',
   'DETAIL_LESSON_SCREEN',
   'ABOUT_THE_TEST_SCREEN',
+  'CONGRATULATION_SCREEN',
 
   //auth route
   'LOGIN_SCREEN',

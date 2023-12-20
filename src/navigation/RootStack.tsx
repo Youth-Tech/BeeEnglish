@@ -63,6 +63,9 @@ const linking: LinkingOptions<RootStackParamList> | undefined = {
       STREAK_SCREEN: {
         path: 'task/get-daily-task',
       },
+      INVOICE_SCREEN: {
+        path: 'payment-intent',
+      },
     },
   },
 }

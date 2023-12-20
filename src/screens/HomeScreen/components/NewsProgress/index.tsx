@@ -31,11 +31,12 @@ export const NewsProgress: React.FC<NewsProgressProps> = (props) => {
   return (
     <Pressable onPress={onPress} style={[{ marginVertical: normalize.v(5) }]}>
       <Block
-        shadow
         radius={8}
         width={142}
         overflow="hidden"
         style={styles.container}
+        borderWidth={2}
+        borderColor={colors.borderColor}
         backgroundColor={colors.white}
       >
         <Block padding={4} flex>
@@ -47,26 +48,26 @@ export const NewsProgress: React.FC<NewsProgressProps> = (props) => {
               uri: image,
             }}
           />
-          <Pressable
-            onPress={toggleBookmark}
-            style={{ position: 'absolute', right: 10 }}
-          >
-            <Block
-              width={26}
-              height={30}
-              alignCenter
-              justifyCenter
-              borderBottomLeftRadius={10}
-              borderBottomRightRadius={10}
-              backgroundColor={colors.white}
-            >
-              <Icon
-                state="Bookmark"
-                stroke={colors.orangeDark}
-                fill={isBookmarked ? colors.orangeDark : 'transparent'}
-              />
-            </Block>
-          </Pressable>
+          {/*<Pressable*/}
+          {/*  onPress={toggleBookmark}*/}
+          {/*  style={{ position: 'absolute', right: 10 }}*/}
+          {/*>*/}
+          {/*  <Block*/}
+          {/*    width={26}*/}
+          {/*    height={30}*/}
+          {/*    alignCenter*/}
+          {/*    justifyCenter*/}
+          {/*    borderBottomLeftRadius={10}*/}
+          {/*    borderBottomRightRadius={10}*/}
+          {/*    backgroundColor={colors.white}*/}
+          {/*  >*/}
+          {/*    <Icon*/}
+          {/*      state="Bookmark"*/}
+          {/*      stroke={colors.orangeDark}*/}
+          {/*      fill={isBookmarked ? colors.orangeDark : 'transparent'}*/}
+          {/*    />*/}
+          {/*  </Block>*/}
+          {/*</Pressable>*/}
           <Text
             size={'h4'}
             paddingLeft={3}

@@ -1,37 +1,38 @@
 import {
+  withTiming,
+  withRepeat,
+  useSharedValue,
   cancelAnimation,
   useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
 } from 'react-native-reanimated'
 import { Pressable } from 'react-native'
 import React, { useCallback } from 'react'
+import Toast from 'react-native-toast-message'
 import { useTranslation } from 'react-i18next'
 import FastImage from 'react-native-fast-image'
 
 import {
-  StreakDay,
+  Text,
+  Block,
+  Modal,
+  Container,
+  ShadowButton,
+  BlockAnimated,
+} from '@components'
+import {
   TaskItem,
+  StreakDay,
   WeekCalendar,
 } from '@screens/StreakScreen/components'
 import { useTheme } from '@themes'
 import { Icon, images } from '@assets'
+import { UserService } from '@services'
+import { Task } from '@services/TaskService'
 import { getStreak, getTask } from '@redux/selectors'
-import { getTaskThunk, updateStreakThunk } from '@redux/actions'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { ModalFunction } from '@components/bases/Modal/type'
-import {
-  Block,
-  BlockAnimated,
-  Container,
-  Modal,
-  ShadowButton,
-  Text,
-} from '@components'
-import { Task } from '@services/TaskService'
+import { getTaskThunk, updateStreakThunk } from '@redux/actions'
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
-import { UserService } from '@services'
 
 export const StreakScreen = () => {
   const dispatch = useAppDispatch()
@@ -46,9 +47,11 @@ export const StreakScreen = () => {
 
   const isPresent = !!streakDays?.find(
     (item) =>
-      new Date(item.date).toLocaleDateString() ===
-        new Date().toLocaleDateString() && item.type === 'isAttendance',
+      new Date(item.date).getDate() === new Date().getDate() &&
+      item.type === 'isAttendance',
   )
+
+  console.log(isPresent)
 
   React.useEffect(() => {
     if (taskData === undefined) {
@@ -224,6 +227,7 @@ export const StreakScreen = () => {
           </Text>
         </Block>
       </Modal>
+      <Toast />
     </Container>
   )
 }

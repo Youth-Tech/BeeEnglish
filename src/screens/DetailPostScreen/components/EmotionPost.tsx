@@ -28,179 +28,185 @@ export interface IEmotionPost {
   setCurrentPost: React.Dispatch<React.SetStateAction<PostResponse>>
 }
 
-const EmotionPost: React.FC<IEmotionPost> = ({
-  liked,
-  postId,
-  likeCount,
-  commentCount,
-  setCurrentPost,
-}) => {
-  const { colors } = useTheme()
-  const user = useAppSelector(getUserData)
-  const isLoginWithGuestRole = useAppSelector(getIsLoginWithGuest)
-  const isAdjustPostData = useAppSelector(
-    (state) => state.root.detailPost.isAdjustPostData,
-  )
+export const EmotionPost: React.FC<IEmotionPost> = React.memo(
+  ({ liked, postId, likeCount, commentCount, setCurrentPost }) => {
+    const { colors } = useTheme()
+    const user = useAppSelector(getUserData)
+    const isLoginWithGuestRole = useAppSelector(getIsLoginWithGuest)
+    const isAdjustPostData = useAppSelector(
+      (state) => state.root.detailPost.isAdjustPostData,
+    )
 
-  const styles = useStyles({ widthItem: widthWindow })
-  const { t } = useTranslation()
-  const dispatch = useAppDispatch()
+    const styles = useStyles({ widthItem: widthWindow })
+    const { t } = useTranslation()
+    const dispatch = useAppDispatch()
 
-  const guestModalRef = React.useRef<ModalFunction>(null)
+    const guestModalRef = React.useRef<ModalFunction>(null)
 
-  const [like, setLike] = useState(liked)
-  const [bookmark, setBookmark] = useState(false)
+    const [like, setLike] = useState(liked)
+    const [bookmark, setBookmark] = useState(false)
 
-  React.useEffect(() => {
-    const isBookmark = user.postBookmarks.find((item) => item === postId)
-    if (isBookmark && !bookmark) {
+    React.useEffect(() => {
+      const isBookmark = user.postBookmarks.find((item) => item === postId)
+      if (isBookmark && !bookmark) {
+        React.startTransition(() => {
+          setBookmark(true)
+        })
+      }
+    }, [user])
+
+    const setEmotion = debounce((type: 'LIKE' | 'COMMENT' | 'BOOKMARK') => {
+      if (isLoginWithGuestRole) {
+        guestModalRef.current?.openModal()
+        return
+      }
+
+      switch (type) {
+        case 'LIKE':
+          React.startTransition(() => {
+            setLike(!like)
+          })
+          updateLike(!like)
+          break
+        case 'COMMENT':
+          dispatch(changeShowComment(true))
+          break
+        case 'BOOKMARK':
+          handleBookmark()
+          break
+      }
+      if (!isAdjustPostData) {
+        dispatch(setIsAdjustPostData(true))
+      }
+    }, 200)
+
+    const handleBookmark = async () => {
       React.startTransition(() => {
-        setBookmark(true)
+        setBookmark((prev) => !prev)
       })
+      try {
+        const res = await UserService.bookmarkPost(postId)
+        if (res.status === 200) {
+          const resGetPostBookmark = await UserService.getPostBookmark()
+          if (res.status === 200) {
+            dispatch(
+              setPostBookmark({
+                postBookmarks: resGetPostBookmark.data.data.posts.map(
+                  (item) => item._id,
+                ),
+              }),
+            )
+          }
+        }
+      } catch (e) {
+        console.log(e)
+        React.startTransition(() => {
+          setBookmark((prevState) => !prevState)
+        })
+      }
     }
-  }, [user])
 
-  const setEmotion = debounce((type: 'LIKE' | 'COMMENT' | 'BOOKMARK') => {
-    if (isLoginWithGuestRole) {
-      guestModalRef.current?.openModal()
-      return
-    }
-
-    switch (type) {
-      case 'LIKE':
+    const updateLike = async (like: boolean) => {
+      try {
+        setCurrentPost((prev) => {
+          return {
+            ...prev,
+            likeCount: like ? prev.likeCount + 1 : prev.likeCount - 1,
+          }
+        })
+        await PostServices.updateLikePost({
+          postId,
+        })
+      } catch (e) {
         React.startTransition(() => {
           setLike(!like)
         })
-        updateLike(!like)
-        break
-      case 'COMMENT':
-        dispatch(changeShowComment(true))
-        break
-      case 'BOOKMARK':
-        handleBookmark()
-        break
+        dispatch(setIsAdjustPostData(false))
+        console.log(e)
+      }
     }
-    if (!isAdjustPostData) {
-      dispatch(setIsAdjustPostData(true))
-    }
-  }, 200)
 
-  const handleBookmark = async () => {
-    React.startTransition(() => {
-      setBookmark((prev) => !prev)
-    })
-    try {
-      const res = await UserService.bookmarkPost(postId)
-      if (res.status === 200) {
-        const resGetPostBookmark = await UserService.getPostBookmark()
-        if (res.status === 200) {
-          dispatch(
-            setPostBookmark({
-              postBookmarks: resGetPostBookmark.data.data.posts.map(
-                (item) => item._id,
-              ),
-            }),
-          )
+    const colorsUnderline = colors.orangeDark + '20'
+
+    const onButtonGuestModalPress = () => {
+      navigate('REGISTER_SCREEN', { isGuest: true })
+      guestModalRef?.current?.dismissModal()
+    }
+
+    const renderTextLike = () => {
+      if (like) {
+        if (likeCount > 1) {
+          return t('post_emotion_status_user', {
+            user: user.fullName,
+            amount: likeCount,
+          })
+        } else {
+          return user.fullName
+        }
+      } else {
+        if (likeCount > 0) {
+          return t('post_emotion_status', { amount: likeCount })
+        } else {
+          return t('no_like')
         }
       }
-    } catch (e) {
-      console.log(e)
-      React.startTransition(() => {
-        setBookmark((prevState) => !prevState)
-      })
     }
-  }
 
-  const updateLike = async (like: boolean) => {
-    try {
-      setCurrentPost((prev) => {
-        return {
-          ...prev,
-          likeCount: like ? prev.likeCount + 1 : prev.likeCount - 1,
-        }
-      })
-      await PostServices.updateLikePost({
-        postId,
-      })
-    } catch (e) {
-      React.startTransition(() => {
-        setLike(!like)
-      })
-      dispatch(setIsAdjustPostData(false))
-      console.log(e)
-    }
-  }
+    return (
+      <Block style={styles.container}>
+        <Block style={styles.countComment}>
+          <Text>{renderTextLike()}</Text>
+          <Text>{t('comments', { amount: commentCount })}</Text>
+        </Block>
+        <Block style={styles.boxEmotion}>
+          <TouchableHighlight
+            onPress={() => setEmotion('LIKE')}
+            style={styles.boxItem}
+            underlayColor={colorsUnderline}
+          >
+            <Block style={styles.itemEmotion}>
+              <Icon
+                state={like ? 'Like' : 'DisLike'}
+                fill={like ? colors.orangeDark : undefined}
+              />
+              <Text>{t('like')}</Text>
+            </Block>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => setEmotion('COMMENT')}
+            style={styles.boxItem}
+            underlayColor={colorsUnderline}
+          >
+            <Block style={styles.itemEmotion}>
+              <Icon state={'Comment'} />
+              <Text>{t('comment')}</Text>
+            </Block>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => setEmotion('BOOKMARK')}
+            style={styles.boxItem}
+            underlayColor={colorsUnderline}
+          >
+            <Block style={styles.itemEmotion}>
+              <Icon
+                state={bookmark ? 'BookmarkEmotion' : 'BookmarkEmotionOutline'}
+                fill={bookmark ? colors.orangeDark : undefined}
+              />
+              <Text>{t('bookmark')}</Text>
+            </Block>
+          </TouchableHighlight>
+        </Block>
 
-  const colorsUnderline = colors.orangeDark + '20'
-
-  const onButtonGuestModalPress = () => {
-    navigate('REGISTER_SCREEN', { isGuest: true })
-    guestModalRef?.current?.dismissModal()
-  }
-
-  return (
-    <Block style={styles.container}>
-      <Block style={styles.countComment}>
-        <Text>
-          {like
-            ? t('post_emotion_status_user', {
-                user: user.fullName,
-                amount: likeCount,
-              })
-            : t('post_emotion_status', { amount: likeCount })}
-        </Text>
-        <Text>{t('comments', { amount: commentCount })}</Text>
+        <GuestModal
+          position={'center'}
+          ref={guestModalRef}
+          animationType={'fade'}
+          onButtonPress={onButtonGuestModalPress}
+        />
       </Block>
-      <Block style={styles.boxEmotion}>
-        <TouchableHighlight
-          onPress={() => setEmotion('LIKE')}
-          style={styles.boxItem}
-          underlayColor={colorsUnderline}
-        >
-          <Block style={styles.itemEmotion}>
-            <Icon
-              state={like ? 'Like' : 'DisLike'}
-              fill={like ? colors.orangeDark : undefined}
-            />
-            <Text>{t('like')}</Text>
-          </Block>
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={() => setEmotion('COMMENT')}
-          style={styles.boxItem}
-          underlayColor={colorsUnderline}
-        >
-          <Block style={styles.itemEmotion}>
-            <Icon state={'Comment'} />
-            <Text>{t('comment')}</Text>
-          </Block>
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={() => setEmotion('BOOKMARK')}
-          style={styles.boxItem}
-          underlayColor={colorsUnderline}
-        >
-          <Block style={styles.itemEmotion}>
-            <Icon
-              state={bookmark ? 'BookmarkEmotion' : 'BookmarkEmotionOutline'}
-              fill={bookmark ? colors.orangeDark : undefined}
-            />
-            <Text>{t('bookmark')}</Text>
-          </Block>
-        </TouchableHighlight>
-      </Block>
-
-      <GuestModal
-        position={'center'}
-        ref={guestModalRef}
-        animationType={'fade'}
-        onButtonPress={onButtonGuestModalPress}
-      />
-    </Block>
-  )
-}
-
-export default React.memo(EmotionPost)
+    )
+  },
+)
 
 interface IEmotion {
   widthItem: number

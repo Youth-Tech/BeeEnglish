@@ -46,8 +46,8 @@ export const parseDataToSectionData = (data: Chapter[]): SectionData[] => {
     return {
       data,
       lessonComplete,
-      index: item.order,
       title: item.name,
+      index: item.order + 1,
       status: item.status ? 'unlock' : 'lock',
       chapterId: item._id,
       checkpoint: item?.checkpoint?.questions || [],

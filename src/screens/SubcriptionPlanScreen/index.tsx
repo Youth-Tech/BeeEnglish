@@ -5,7 +5,7 @@ import PlanPackageItem, {
 } from '@screens/SubcriptionPlanScreen/components/PlanPackageItem'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
-import { ScrollView, TextInput } from 'react-native'
+import { ActivityIndicator, ScrollView, TextInput } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import {
   BottomSheetBackdrop,
@@ -20,12 +20,15 @@ import {
   SubscribePremiumReq,
 } from '@services/PaymentService'
 import { getStatusBarHeight } from '@components/bases/StatusBar/status_bar_height'
-import { goBack, replace } from '@navigation'
+import { goBack, pop } from '@navigation'
 import { handleErrorMessage } from '@utils/errorUtils'
+import { setLoadingStatusAction, setRoleUser } from '@redux/reducers'
+import { useAppDispatch } from '@hooks'
 
 export const SubcriptionPlanScreen: React.FC = () => {
   const [currentPlan, setCurrentPlan] = React.useState<Plan>()
   const { colors, normalize } = useTheme()
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const [packagePlans, setPackagePlans] = React.useState<Plan[]>([])
   const [selectedNumber, setSelectedNumber] = React.useState<number>(-1)
@@ -36,6 +39,7 @@ export const SubcriptionPlanScreen: React.FC = () => {
   const [disabledPayButton, setDisabledPayButton] = React.useState(false)
   const expiryDateRef = React.useRef<TextInput>(null)
   const cvcRef = React.useRef<TextInput>(null)
+  const [paymentLoading, setPaymentLoading] = React.useState<boolean>(false)
   // variables
   const snapPoints = React.useMemo(() => ['1%', '50%'], [])
 
@@ -79,11 +83,15 @@ export const SubcriptionPlanScreen: React.FC = () => {
   }
 
   const subcribePremium = async (subcribeInfo: SubscribePremiumReq) => {
+    setPaymentLoading(true)
     try {
       const response = await PaymentService.subcribePremium(subcribeInfo)
       console.log(response.data.message)
-      replace('INVOICE_SCREEN', { getMe: true })
+      dispatch(setRoleUser({ role: 'premium' }))
+      setPaymentLoading(false)
+      pop(1)
     } catch (e) {
+      setPaymentLoading(false)
       console.log(e)
     }
   }
@@ -281,14 +289,19 @@ export const SubcriptionPlanScreen: React.FC = () => {
             onPress={handleSubmitPayment}
             disabled={disabledPayButton}
           >
-            <Text size={'h3'} fontFamily="bold" color="black">
-              {t('pay_for')}
-              {' ' +
-                currencyFormat(
-                  currentPlan?.unitAmount ?? 0,
-                  currentPlan?.currency ?? 'VND',
-                )}
-            </Text>
+            <Block row gap={5}>
+              <Text size={'h3'} fontFamily="bold" color="black">
+                {t('pay_for')}
+                {' ' +
+                  currencyFormat(
+                    currentPlan?.unitAmount ?? 0,
+                    currentPlan?.currency ?? 'VND',
+                  )}
+              </Text>
+              {paymentLoading && (
+                <ActivityIndicator size={'small'} color={colors.black} />
+              )}
+            </Block>
           </ShadowButton>
         </Block>
       </BottomSheetModal>

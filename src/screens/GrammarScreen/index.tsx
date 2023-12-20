@@ -5,34 +5,35 @@ import { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import {
-  Text,
   Block,
-  Progress,
-  Container,
-  WordChoice,
-  ShadowButton,
   BlockAnimated,
+  Container,
   GrammarOptions,
-  VocabularyChoice,
   LeaveProcessModal,
-  VocabularyOptions,
+  Progress,
   QuestionRefFunction,
+  ShadowButton,
+  Text,
+  VocabularyChoice,
   VocabularyChoiceFunc,
+  VocabularyOptions,
   VocabularyOptionsFunc,
+  WordChoice,
 } from '@components'
 import {
-  UserService,
   KnowledgeService,
   UpdateProgressLearningRequest,
+  UserService,
 } from '@services'
 import { Icon } from '@assets'
 import { useTheme } from '@themes'
 import { QuestionType } from './constants'
+import { SoundUtil } from '@utils/soundUtils'
 import { parseQuizDataToQuestion } from './utils'
 import { TaskService } from '@services/TaskService'
 import { useAppDispatch, useBackHandler } from '@hooks'
 import { LoadingScreen } from '@screens/LoadingScreen'
-import { RootStackParamList, goBack } from '@navigation'
+import { goBack, RootStackParamList } from '@navigation'
 import { setLoadingStatusAction } from '@redux/reducers'
 import { ModalFunction } from '@components/bases/Modal/type'
 
@@ -105,25 +106,24 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
     enabled: true,
     callback() {
       onClosePress()
+      stopCountingTime()
     },
   })
 
-  const startCountingTime = async () => {
-    try {
-      const response = await TaskService.startTime()
-      console.log(response.data.message)
-    } catch (e) {
-      console.log(e)
-    }
+  const startCountingTime = () => {
+    TaskService.startTime()
+      .then((res) => console.log(res.data))
+      .catch((e) => {
+        console.log(e)
+      })
   }
 
-  const stopCountingTime = async () => {
-    try {
-      const response = await TaskService.stopTime()
-      console.log(response.data.message)
-    } catch (e) {
-      console.log(e)
-    }
+  const stopCountingTime = () => {
+    TaskService.stopTime()
+      .then((res) => console.log(res.data))
+      .catch((e) => {
+        console.log(e)
+      })
   }
 
   const onClosePress = () => {
@@ -132,11 +132,6 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
   const onCheckPress = () => {
     checkResult()
-
-    setModalStatus((prev) => ({
-      ...prev,
-      show: true,
-    }))
   }
 
   const onContinuePress = () => {
@@ -152,24 +147,26 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
     let result: boolean = false
 
-    if (currentQuestion.data.type === QuestionType.multipleWord) {
-      if (currentQuestion.data.wordImage) {
-        result = !!vocabOptionRef.current?.check()
-      } else {
-        result = !!optionRef.current?.check()
-      }
-    } else if (currentQuestion.data.type === QuestionType.multipleImage) {
-      result = !!vocabChoiceRef.current?.check()
-    } else {
-      result = !!wordChoiceRef.current?.check(
-        currentQuestion.data.correctAnswer!,
-      )
+    switch (currentQuestion.data.type) {
+      case QuestionType.multipleWord:
+        if (
+          currentQuestion.data.wordImage &&
+          currentQuestion.data.wordImage !== 'null'
+        ) {
+          result = !!vocabOptionRef.current?.check()
+        } else {
+          result = !!optionRef.current?.check()
+        }
+        break
+      case QuestionType.cloze:
+        result = !!wordChoiceRef.current?.check(
+          currentQuestion.data.correctAnswer!,
+        )
+        break
+      case QuestionType.multipleImage:
+        result = !!vocabChoiceRef.current?.check()
+        break
     }
-
-    setModalStatus((prev) => ({
-      ...prev,
-      status: result ? 'correct' : 'incorrect',
-    }))
 
     setStep((_) => ((currentQuestion.index + 1) * 100) / questions.length)
 
@@ -182,6 +179,18 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
           result: result ? 'correct' : 'incorrect',
         },
       ]
+    })
+    // console.log('result', result)
+
+    if (result) {
+      SoundUtil.correct.play()
+    } else {
+      SoundUtil.incorrect.play()
+    }
+
+    setModalStatus({
+      show: true,
+      status: result ? 'correct' : 'incorrect',
     })
   }
 
@@ -271,9 +280,15 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
     switch (question.type) {
       case QuestionType.cloze:
-        return <WordChoice data={question} ref={wordChoiceRef} />
+        return (
+          <WordChoice data={question} ref={wordChoiceRef} isPreTest={false} />
+        )
       case QuestionType.multipleWord:
-        if (question.wordImage !== '') {
+        if (
+          question.wordImage &&
+          question.wordImage !== '' &&
+          question.wordImage !== 'null'
+        ) {
           return (
             <VocabularyOptions
               ref={vocabOptionRef}
@@ -314,7 +329,7 @@ export const GrammarScreen: React.FC<GrammarScreenProps> = ({
 
         {renderQuestion(currentQuestion.data!)}
 
-        <Block flex />
+        {/*<Block flex />*/}
 
         <ShadowButton
           shadowHeight={6}

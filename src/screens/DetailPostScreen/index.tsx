@@ -6,31 +6,47 @@ import {
   ListRenderItemInfo,
 } from 'react-native'
 import React from 'react'
+import Video from 'react-native-video'
 import { useTranslation } from 'react-i18next'
 import { FadeIn, FadeOut } from 'react-native-reanimated'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import {
+  Text,
+  Block,
+  Image,
+  Container,
+  ShadowButton,
+  BlockAnimated,
+  PremiumModal,
+  GuestModal,
+} from '@components'
+import {
   changeShowComment,
   setParentCommentId,
   changeBottomSheetState,
 } from '@redux/reducers'
+import {
+  ContentPost,
+  EmotionPost,
+  BottomSheetWord,
+  BottomSheetComment,
+} from '@screens/DetailPostScreen/components'
+import { Icon } from '@assets'
 import { useStyles } from './styles'
-import { PostServices } from '@services'
-import { colorTopic, normalize } from '@themes'
-import { RootStackParamList } from '@navigation'
+import PauseIcon from '@assets/icons/PauseIcon'
+import { navigate, RootStackParamList } from '@navigation'
 import { LoadingScreen } from '@screens/LoadingScreen'
 import { useAppDispatch, useAppSelector } from '@hooks'
+import { PostServices, SpeechService } from '@services'
+import { colorTopic, normalize, useTheme } from '@themes'
 import { parsePostData } from '@screens/HomeScreen/utils'
 import { NewsItem } from '@screens/HomeScreen/components'
 import HeaderApp from '@components/common/HeaderComponent'
 import { newsData } from '@screens/DetailPostScreen/const'
 import BottomSheetApp from '@components/common/BottomSheetComponent'
-import ContentPost from '@screens/DetailPostScreen/components/ContentPost'
-import EmotionPost from '@screens/DetailPostScreen/components/EmotionPost'
-import { Block, BlockAnimated, Container, Image, Text } from '@components'
-import BottomSheetWord from '@screens/DetailPostScreen/components/BottomSheetWord'
-import BottomSheetComment from '@screens/DetailPostScreen/components/BottomSheetComment'
+import { getUserRole } from '@redux/selectors'
+import { ModalFunction } from '@components/bases/Modal/type'
 
 export type DetailPostScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -38,14 +54,23 @@ export type DetailPostScreenProps = NativeStackScreenProps<
 >
 
 export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
-  const dispatch = useAppDispatch()
+  const { isRead } = route.params
+
   const styles = useStyles()
+  const dispatch = useAppDispatch()
+  const { colors } = useTheme()
   const { t } = useTranslation()
   const data = useAppSelector((state) => state.root.detailPost)
+  const userRole = useAppSelector(getUserRole)
 
+  const guestModalRef = React.useRef<ModalFunction>(null)
+  const audioPlayerRef = React.useRef<Video>(null)
   const scrollViewRef = React.useRef<ScrollView>(null)
+  const premiumRefModal = React.useRef<ModalFunction>(null)
 
+  const [isAudioPlay, setIsAudioPlay] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(true)
+  const [hlsSpeechContent, setHlsSpeechContent] = React.useState('')
   const [currentPost, setCurrentPost] = React.useState(route.params.post)
   const [postData, setPostData] = React.useState<
     (PostResponse & {
@@ -58,15 +83,51 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
   }, [])
 
   React.useEffect(() => {
-    const timeOutApi = setTimeout(() => {
-      markPostAsRead(currentPost._id)
-    }, 60 * 1000)
-    return () => clearTimeout(timeOutApi)
+    // get speech from post content
+    if (userRole === 'premium') {
+      handleGetHlsSpeechContent(currentPost.english.join(' '))
+    }
+
+    let timeOutApi: NodeJS.Timeout
+
+    if (!isRead) {
+      timeOutApi = setTimeout(() => {
+        markPostAsRead(currentPost._id)
+      }, 60 * 1000)
+    }
+    return () => {
+      clearTimeout(timeOutApi)
+    }
   }, [currentPost._id])
+
+  React.useEffect(() => {
+    return () => {
+      //delete speech audio file was created
+      if (hlsSpeechContent !== '' && userRole === 'premium') {
+        SpeechService.clearAudio(hlsSpeechContent)
+          .then((res) => {
+            console.log(res.data.message)
+          })
+          .catch((e) => console.log('error when delete audio', e))
+      }
+    }
+  }, [hlsSpeechContent])
 
   React.useEffect(() => {
     setIsLoading(false)
   }, [currentPost])
+
+  const handleGetHlsSpeechContent = async (content: string) => {
+    setIsAudioPlay(false)
+    try {
+      const res = await SpeechService.textToSpeech(content)
+      if (res.status === 200) {
+        setHlsSpeechContent(res.data.data)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   const markPostAsRead = async (id: string) => {
     try {
@@ -106,6 +167,36 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const onAudioPlayerError = () => {
+    console.log('error', hlsSpeechContent)
+    setIsAudioPlay(false)
+  }
+
+  const onAudioPlayerEnd = () => {
+    setIsAudioPlay(false)
+    audioPlayerRef?.current?.seek(0)
+  }
+
+  const onPlayButtonPress = () => {
+    if (userRole === 'premium') {
+      setIsAudioPlay((prevState) => !prevState)
+    } else if (userRole !== 'guest') {
+      premiumRefModal?.current?.openModal()
+    } else {
+      guestModalRef?.current?.openModal()
+    }
+  }
+
+  const onPremiumModalPress = () => {
+    navigate('SUBSCRIPTION_SCREEN')
+    premiumRefModal?.current?.dismissModal()
+  }
+
+  const onButtonGuestModalPress = () => {
+    navigate('REGISTER_SCREEN', { isGuest: true })
+    guestModalRef?.current?.dismissModal()
   }
 
   const renderNewsItem = ({
@@ -197,6 +288,36 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
               </Text>
             </Block>
           </Block>
+
+          <ShadowButton
+            buttonWidth={40}
+            buttonHeight={40}
+            onPress={onPlayButtonPress}
+            buttonColor={colors.orangeLighter}
+            shadowButtonColor={colors.orangePrimary}
+            containerStyle={styles.playButtonContainer}
+          >
+            {isAudioPlay ? (
+              <PauseIcon fill={colors.orangeDark} width={20} height={20} />
+            ) : (
+              <Icon state={'Player'} fill={colors.orangeDark} />
+            )}
+          </ShadowButton>
+
+          {hlsSpeechContent !== '' ? (
+            <Video
+              audioOnly
+              source={{
+                uri: hlsSpeechContent,
+              }}
+              ref={audioPlayerRef}
+              paused={!isAudioPlay}
+              onEnd={onAudioPlayerEnd}
+              onError={onAudioPlayerError}
+            />
+          ) : (
+            <></>
+          )}
           {renderDetailPost}
           <EmotionPost
             postId={currentPost._id}
@@ -218,7 +339,7 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
           onClose={onCloseBottomSheet}
           children={<BottomSheetWord />}
           visible={data.isShowBottomSheet}
-          snapPoints={['20%', '20%', '50%', '70%']}
+          snapPoints={['20%', '20%', '50%', '80%']}
           backgroundStyle={{ borderRadius: normalize.m(10), elevation: 10 }}
         />
 
@@ -232,6 +353,18 @@ export const DetailPost: React.FC<DetailPostScreenProps> = ({ route }) => {
         >
           <BottomSheetComment postId={currentPost._id} />
         </BottomSheetApp>
+        <PremiumModal
+          position={'center'}
+          ref={premiumRefModal}
+          animationType={'fade'}
+          onButtonPress={onPremiumModalPress}
+        />
+        <GuestModal
+          position={'center'}
+          ref={guestModalRef}
+          animationType={'fade'}
+          onButtonPress={onButtonGuestModalPress}
+        />
       </BlockAnimated>
     </Container>
   )

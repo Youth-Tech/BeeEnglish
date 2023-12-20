@@ -41,7 +41,7 @@ export const TaskItem: React.FC<TaskItemProps> = (props) => {
         break
       }
       case 'read': {
-        navigate('HOME_SCREEN')
+        navigate('MORE_POST_SCREEN')
         break
       }
     }

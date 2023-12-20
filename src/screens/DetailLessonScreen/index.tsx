@@ -5,7 +5,7 @@ import { ImageBackground, Pressable } from 'react-native'
 import { useTheme } from '@themes'
 import { Icon, images } from '@assets'
 import React, { useState } from 'react'
-import {useAppDispatch, useAppSelector} from '@hooks'
+import { useAppDispatch, useAppSelector } from '@hooks'
 import { ReviewService, UserService } from '@services'
 import { goBack, RootStackParamList } from '@navigation'
 import { Block, Container, Image, Text } from '@components'
@@ -76,7 +76,6 @@ export const DetailLessonScreen: React.FC<DetailLessonScreenProps> = ({
       >
         <Block space="between" row paddingHorizontal={20}>
           <Icon state="Back" onPress={goBack}></Icon>
-          <Icon state="MenuHeading" onPress={() => {}} />
         </Block>
 
         <Block

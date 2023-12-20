@@ -24,6 +24,7 @@ import { UserService } from '@services'
 import { updateProfile } from '@redux/actions'
 import { Block, StreakBall, Text } from '@components'
 import { useAppDispatch, useAppSelector } from '@hooks'
+import { soundInstance } from '@utils/soundUtils'
 
 export const RootApp = () => {
   const dispatch = useAppDispatch()

@@ -1,9 +1,10 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { Pressable } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { makeStyles, useTheme } from '@themes'
 import { FadeInRight, FadeOutLeft } from 'react-native-reanimated'
-import { images, SoundProgress, SoundProgressFcRef } from '@assets'
+
+import { images } from '@assets'
+import { makeStyles, useTheme } from '@themes'
 import { Block, BlockAnimated, Image, Text } from '@components/bases'
 import ImageAnswer from '@components/common/VocabularyChoice/components/ImageAnswer'
 
@@ -25,7 +26,7 @@ export const VocabularyChoice = React.forwardRef<
   const { t } = useTranslation()
   const { colors, normalize } = useTheme()
 
-  const soundProgressRef = useRef<SoundProgressFcRef>(null)
+  // const soundProgressRef = useRef<SoundProgressFcRef>(null)
   const isCheck = React.useRef(false)
   const [visible, setVisible] = React.useState(true)
   const [userAnswer, setUserAnswer] = React.useState<number | null>(null)
@@ -34,9 +35,9 @@ export const VocabularyChoice = React.forwardRef<
   )
   const tempData = data.answer as Answer[]
 
-  const handlePressSound = () => {
-    soundProgressRef.current?.start()
-  }
+  // const handlePressSound = () => {
+  //   soundProgressRef.current?.start()
+  // }
 
   React.useEffect(() => {
     setListBorderColor([...tempData.map(() => colors.transparent)])
@@ -90,12 +91,12 @@ export const VocabularyChoice = React.forwardRef<
             <Text size={'h2'} fontFamily={'bold'}>
               {data.question}
             </Text>
-            <SoundProgress
-              ref={soundProgressRef}
-              fill={colors.orangePrimary}
-              style={styles.soundIcon}
-              onPress={handlePressSound}
-            />
+            {/*<SoundProgress*/}
+            {/*  ref={soundProgressRef}*/}
+            {/*  fill={colors.orangePrimary}*/}
+            {/*  style={styles.soundIcon}*/}
+            {/*  onPress={handlePressSound}*/}
+            {/*/>*/}
           </Block>
           <Block row wrap style={{ gap: 10 }} marginTop={60}>
             {tempData.map((item, index) => {

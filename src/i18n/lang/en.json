@@ -40,7 +40,7 @@
     "tools": "Tools",
     "learning": "Learning",
     "watched": "Watched",
-    "news": "News",
+    "news": "Posts",
     "dictionary": "Dictionary",
     "your_current_level": "Your current level ?",
     "first_time_you_learn_english": "First time you learn English?",
@@ -72,7 +72,7 @@
     "history": "History",
     "library_vocabulary": "Vocabulary Library",
     "vocabulary_learned": "Learned Vocabularies",
-    "saved_vocabulary": "Saved Vocabularíes",
+    "saved_vocabulary": "Saved Vocabularies",
     "lesson": "Lesson",
     "vocabulary": "Vocabulary",
     "multiple_choice": "Multiple choice",
@@ -222,8 +222,18 @@
     "later": "Later",
     "status": "Status",
     "customerId": "Customer ID",
-  "you_no_longer_subscribe_to_premium": "You are no longer subscribed to the premium plan, no automatically recharge",
+    "you_no_longer_subscribe_to_premium": "You are no longer subscribed to the premium plan, no automatically recharge",
     "detail_post_title": "Reading practice",
-    "chapter": "Chapter"
+    "chapter": "Chapter",
+    "collect_coin_premium": "You have been given {{coin}} coins",
+    "premium_modal_desc": "Enhance your experience by upgrade your account!",
+    "premium_modal_button": "Upgrade Account!",
+    "no_like": "0 like",
+    "sentence_structure": "Structure: ",
+    "receive_honey_now": "Receive {{val}} honey now",
+    "receive_honey_everyday": "Receive {{val}} honey every day when you attend",
+    "unlimited_access_premium_feature": "Access to premium features unlimited",
+    "you_receive_star_points": "You receive {{point}} star points",
+    "lesson_completed": "Lesson completed: "
   }
 }

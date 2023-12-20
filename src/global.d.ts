@@ -105,5 +105,16 @@ interface Pagination {
   hasNext: boolean
 }
 
+interface Grammar {
+  _id: string
+  vietnamese: string
+  english: string
+  exampleEnglish: Array<string>
+  exampleVietnamese: Array<string>
+  note: string
+  structure: string
+  attachments: Array<Attachment>
+}
+
 // Quiz Enum
 type QuizType = 'multipleWord' | 'multipleImage' | 'cloze' | 'matching'

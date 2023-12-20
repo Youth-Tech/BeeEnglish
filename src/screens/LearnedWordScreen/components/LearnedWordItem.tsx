@@ -89,7 +89,7 @@ export const LearnedWordItem: React.FC<LearnedWordItemProps> = ({
               color={colors.greyPrimary}
               marginLeft={3}
             >
-              /{data.word.pronunciation}/
+              {data.word.pronunciation}
             </Text>
           </Block>
 

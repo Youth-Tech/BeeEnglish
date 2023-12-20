@@ -53,6 +53,7 @@ export const CourseImage = ({
       height={height}
       borderWidth={2}
       style={imageStyle}
+      backgroundColor={'#fff'}
       borderColor={colors.borderColor}
     >
       <Image
@@ -69,5 +70,6 @@ const styles = StyleSheet.create({
     borderRadius: normalize.m(10),
     width: '100%',
     height: '100%',
+    backgroundColor: '#fff',
   },
 })

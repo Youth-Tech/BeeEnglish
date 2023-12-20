@@ -6,6 +6,7 @@ import {
   defaultAuthState,
   defaultUserState,
   setAuthState,
+  setLoadingStatusAction,
   setRoleUser,
   setUserState,
   updateConfigAction,
@@ -66,6 +67,7 @@ export const SettingScreen = () => {
   const clearUserData = () => {
     dispatch(setAuthState(defaultAuthState))
     dispatch(setUserState(defaultUserState))
+
     TokenService.clearToken()
     Toast.show({
       type: 'success',
@@ -73,6 +75,12 @@ export const SettingScreen = () => {
       text2: t('logout_successfully'),
       position: 'bottom',
     })
+
+    navigateAndReset([{ name: 'NAVIGATE_SCREEN' }], 0)
+
+    //re-gen deviceId
+    initRun()
+    dispatch(setLoadingStatusAction(false))
   }
   const logOutAPI = async () => {
     try {
@@ -85,6 +93,7 @@ export const SettingScreen = () => {
   }
 
   const onPressLogout = () => {
+    dispatch(setLoadingStatusAction(true))
     if (isSignedInOAuth && userData.provider !== null) {
       oAuthSignOut(userData.provider, () => {
         clearUserData()
@@ -93,10 +102,6 @@ export const SettingScreen = () => {
     } else {
       logOutAPI()
     }
-    navigateAndReset([{ name: 'NAVIGATE_SCREEN' }], 0)
-
-    //re-gen deviceId
-    initRun()
   }
 
   const onPressLanguage = () => {

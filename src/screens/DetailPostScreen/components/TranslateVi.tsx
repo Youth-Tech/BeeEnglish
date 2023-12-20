@@ -9,7 +9,7 @@ interface TranslateViProps {
   value: string
 }
 
-const TranslateVi: React.FC<TranslateViProps> = ({ value }) => {
+export const TranslateVi: React.FC<TranslateViProps> = ({ value }) => {
   const [isShow, setIsShow] = useState(false)
   const styles = useStyles()
   const { colors } = useTheme()
@@ -27,5 +27,3 @@ const TranslateVi: React.FC<TranslateViProps> = ({ value }) => {
     </Block>
   )
 }
-
-export default TranslateVi

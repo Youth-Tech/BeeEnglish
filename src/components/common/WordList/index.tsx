@@ -65,63 +65,69 @@ export const WordList = React.forwardRef<WordListRefFunc, WordListProps>(
 
     if (!ready) {
       return (
-        <Block row alignCenter flex wrap opacity={0}>
-          {data.map((word, index) => {
-            return (
-              <View
-                key={index}
-                onLayout={(e) => {
-                  const { width, height, x, y } = e.nativeEvent.layout
-                  const offset = offsets[index]
+        <Block marginTop={20} flex>
+          <Block row alignCenter flex wrap opacity={0}>
+            {data.map((word, index) => {
+              return (
+                <View
+                  key={index}
+                  onLayout={(e) => {
+                    const { width, height, x, y } = e.nativeEvent.layout
+                    const offset = offsets[index]
 
-                  offset.order.value = -1
-                  offset.originalX.value = x
-                  offset.originalY.value = y
-                  offset.width.value = width
-                  offset.height.value = height
+                    console.log({ width, height, x, y })
 
-                  runOnUI(() => {
-                    'worklet'
-                    if (
-                      offsets.filter((o) => o.order.value !== -1).length === 0
-                    ) {
-                      const amountOfWidth = offsets.reduce((acc, o) => {
-                        return acc + o.width.value + 10
-                      }, 0)
+                    offset.order.value = -1
+                    offset.originalX.value = x
+                    offset.originalY.value = y
+                    offset.width.value = width
+                    offset.height.value = height
 
-                      runOnJS(setLines)(
-                        Math.ceil(amountOfWidth / CONTAINER_WIDTH),
-                      )
-                      runOnJS(setReady)(true)
-                    }
-                  })()
-                }}
-                style={styles.wordStyle}
-              >
-                <ShadowBlock
-                  radius={15}
-                  alignCenter
-                  justifyCenter
-                  height={WORD_HEIGHT}
+                    runOnUI(() => {
+                      'worklet'
+                      if (
+                        offsets.filter((o) => o.order.value !== -1).length === 0
+                      ) {
+                        const amountOfWidth = offsets.reduce((acc, o) => {
+                          return acc + o.width.value + 10
+                        }, 0)
+
+                        runOnJS(setLines)(
+                          Math.ceil(amountOfWidth / CONTAINER_WIDTH),
+                        )
+                        runOnJS(setReady)(true)
+                      }
+                    })()
+                  }}
+                  style={styles.wordStyle}
                 >
-                  <Text
-                    fontFamily="bold"
-                    style={{
-                      paddingHorizontal: 15,
-                    }}
+                  <ShadowBlock
+                    radius={15}
+                    alignCenter
+                    justifyCenter
+                    height={WORD_HEIGHT}
                   >
-                    {word.word}
-                  </Text>
-                </ShadowBlock>
-              </View>
-            )
-          })}
+                    <Text
+                      fontFamily="bold"
+                      style={{
+                        paddingHorizontal: 15,
+                      }}
+                    >
+                      {word.word}
+                    </Text>
+                  </ShadowBlock>
+                </View>
+              )
+            })}
+          </Block>
         </Block>
       )
     }
 
     return (
       <BlockAnimated
+        flex
+        marginTop={20}
         exiting={FadeOutLeft.duration(500)}
         entering={FadeInRight.duration(500)}
       >

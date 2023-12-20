@@ -1,6 +1,8 @@
-import { UserService } from '@services'
+import i18next from 'i18next'
+import Toast from 'react-native-toast-message'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
+import { UserService } from '@services'
 import { StreakReducerType } from '@redux/reducers'
 import { formatDate, getDatesOfWeek } from '@utils/dateUtils'
 import { StreakDayProps } from '@screens/StreakScreen/components'
@@ -13,11 +15,12 @@ const parseToStreakDay = (
 ): StreakDayProps[] => {
   return currentWeek.map((item) => {
     const isAttendance = streakDays.includes(item.toLocaleDateString())
+
     return {
       date: item.toString(),
       type: isAttendance
         ? 'isAttendance'
-        : item.toLocaleDateString() === new Date().toLocaleDateString()
+        : item.getDate() === new Date().getDate()
         ? 'current'
         : 'normal',
     }
@@ -59,6 +62,17 @@ export const updateStreakThunk = createAsyncThunk<StreakReducerType>(
       const resStreakWithBeautyData = resUpdateStreak.data.data.streaks.map(
         (item) => new Date(item).toLocaleDateString(),
       )
+
+      if (resUpdateStreak.data.data.score) {
+        Toast.show({
+          type: 'success',
+          text2: i18next.t('collect_coin_premium', {
+            coin: resUpdateStreak.data.data.score,
+          }),
+          text1: i18next.t('congratulation'),
+          position: 'top',
+        })
+      }
 
       return {
         streaks: parseToStreakDay(currentWeek, resStreakWithBeautyData),

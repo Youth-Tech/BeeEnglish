@@ -6,6 +6,7 @@ interface Question {
   correctAnswer?: string
   type: import('./constants').QuestionType
   attachment?: Attachment[]
+  grammar: Grammar | null
 }
 
 interface Answer {

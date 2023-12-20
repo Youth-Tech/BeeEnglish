@@ -82,11 +82,15 @@ const PlanPackageItem: React.FC<PlanPackageItemProps> = (props) => {
           </Text>
           <Block>
             <Text size={'h4'} fontFamily={'semiBold'}>
-              Nhận 50 điểm mật ong hằng ngày
+              {type === 'lifetime'
+                ? t('unlimited_access_premium_feature')
+                : t('receive_honey_now', { val: 600 })}
             </Text>
-            <Text size={'h4'} fontFamily={'semiBold'} color={colors.black}>
-              Nhân đôi số điểm nhận được khi làm nhiệm vụ
-            </Text>
+            {type !== 'lifetime' && (
+              <Text size={'h4'} fontFamily={'semiBold'} color={colors.black}>
+                {t('receive_honey_everyday', { val: 600 })}
+              </Text>
+            )}
           </Block>
           <Text size={'h2'} fontFamily={'bold'} color={colors.orangeThick}>
             {currencyFormat(data.unitAmount, data.currency)}
